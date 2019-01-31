@@ -86,7 +86,7 @@ async function submit_login(username, password, apache_token, session_id) {
             "mode":"cors"}); 
 }
 
-// Returns object with classes (name, percentage, id) and student oid
+// Returns object with classes (name, grade, id) and student oid
 async function scrape_academics(session_id) {
     let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
         {"credentials":"include",
@@ -106,7 +106,15 @@ async function scrape_academics(session_id) {
             "body":null,
             "method":"GET",
             "mode":"cors"}));
-    $("#dataGrid a").each(function(i, elem) { console.log($(this).text()); });
+    let data = {"classes": []};
+    $("#dataGrid a").each(function(i, elem) {
+        data.classes[i] = {};
+        data.classes[i].name = $(this).text();
+        data.classes[i].id = $(this).parent().attr("id");
+    });
+    console.log(data);
+    //$("#dataGrid
+    return data;
 }
 
 // Returns object with categories (name, weight) as a dictionary and apache_token
@@ -118,6 +126,11 @@ function scrape_assignments(session_id) {}
 // Returns body of fetch
 async function fetch_body(url, options) {
     return (await fetch(url, options)).text();
+}
+
+// Logger can easily be turned off or on and modified
+function log(text) {
+    console.log(text);
 }
 
 // -------------------------------------------
