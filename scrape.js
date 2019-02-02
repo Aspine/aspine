@@ -26,6 +26,8 @@ async function scrape_student(username, password) {
     console.log(await Promise.all(scrapers));
 }
 
+let academics;
+
 // Returns promise that contains object of all class data
 function scrape_class(username, password, i) {
     return new Promise(async function(resolve, reject) {
@@ -33,11 +35,15 @@ function scrape_class(username, password, i) {
         let session = await scrape_login();
         await submit_login(username, password,
             session.apache_token, session.session_id);
-        // If first to login, get academics page, else wait
-        // ^^^ So that we only make one request to academics page -- slight speed improvement
-        //    ^^^ ignoring this for now
-        let academics = await scrape_academics(session.session_id);
 
+        // If first to login, get academics page, else wait
+        if(academics == undefined) {
+            console.log("thread " + i + " is scraping academics");
+            academics = scrape_academics(session.session_id);
+        }
+        academics = await academics;
+
+        // Check if thread is extra
         if(academics.classes[i] == undefined) {
             resolve(undefined);
             return;
