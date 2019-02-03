@@ -9,6 +9,8 @@ const THREADS = 10;
 // --------------- Includes ------------------
 const fetch = require('node-fetch');
 const cheerio = require('cheerio')
+var http = require('http');
+var fs = require('fs'); //require filesystem module
 
 // -------------------------------------------
 
@@ -23,7 +25,7 @@ async function scrape_student(username, password) {
     }
 
     // Await on all class scrapers
-    console.log(await Promise.all(scrapers));
+    return (await Promise.all(scrapers)).filter(Boolean);
 }
 
 let academics;
@@ -38,7 +40,6 @@ function scrape_class(username, password, i) {
 
         // If first to login, get academics page, else wait
         if(academics == undefined) {
-            console.log("thread " + i + " is scraping academics");
             academics = scrape_academics(session.session_id);
         }
         academics = await academics;
@@ -137,7 +138,7 @@ async function scrape_academics(session_id) {
 
 // Returns object with categories (name, weight) as a dictionary
 async function scrape_details(session_id, apache_token, class_id, oid) {
-    $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
         {"credentials":"include",
             "headers":{"Connection": "keep-alive",
                 "Cache-Control": "max-age=0",
@@ -170,7 +171,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
 
 // Returns list of assignments (name, category, score, max_score)
 async function scrape_assignments(session_id) {
-    $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
         {"credentials":"include",
             "headers":{"Connection": "keep-alive",
                 "Upgrade-Insecure-Requests": "1",
@@ -216,25 +217,56 @@ function log(text) {
 // -------------------------------------------
 
 
-// ------------ TESTING ONLY -----------------
-var prompt = require('prompt');
-var schema = {
-    properties: {
-        username: {
-            pattern: /^[0-9]+$/,
-            message: 'Username must be your student id',
-            required: true
-        },
-        password: {
-            hidden: true,
-            required: true
-        }
-    }
-};
 
-prompt.start();
-prompt.get(schema, function(err, result) {
-    scrape_student(result.username, result.password);
-});
+// ------------ Web Server -------------------
+function handler(req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+
+    // write a response to the client
+    //res.write(JSON.stringify({"hello": [1, 3], "world":{"hi":"hello"}}));
+    if(req.url == "/") {
+        fs.readFile(__dirname + '/public/index.html', function(err, data) { //read file index.html in public folder
+            if (err) {
+                res.writeHead(404, {'Content-Type': 'text/html'}); //display 404 on error
+                res.write("404 Not Found");
+                return res.end("404 Not Found");
+            } 
+            res.writeHead(200, {'Content-Type': 'text/html'}); //write HTML
+            res.write(data); //write data from index.html
+            return res.end();
+        });
+    }
+
+    // end the response
+    res.end();
+}
+
+// the server object listens on port 8080
+http.createServer(handler).listen(8080);
+
+// -------------------------------------------
+
+
+// ------------ TESTING ONLY -----------------
+//var prompt = require('prompt');
+//var schema = {
+//    properties: {
+//        username: {
+//            pattern: /^[0-9]+$/,
+//            message: 'Username must be your student id',
+//            required: true
+//        },
+//        password: {
+//            hidden: true,
+//            required: true
+//        }
+//    }
+//};
+//
+//prompt.start();
+//prompt.get(schema, async function(err, result) {
+//    //console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+//    console.log(JSON.stringify({"hello": [1, 3], "world":{"hi":"hello"}}));
+//});
 
 // -------------------------------------------
