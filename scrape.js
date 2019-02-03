@@ -8,12 +8,17 @@ const THREADS = 10;
 
 // --------------- Includes ------------------
 const fetch = require('node-fetch');
-const cheerio = require('cheerio')
-var http = require('http');
-var fs = require('fs'); //require filesystem module
+const cheerio = require('cheerio');
+const express = require('express');
 
 // -------------------------------------------
 
+// --------------- Exports -------------------
+module.exports = {
+    scrape_student: scrape_student
+};
+
+// -------------------------------------------
 
 // --------------- Scraping ------------------
 // Returns object of classes
@@ -49,16 +54,16 @@ function scrape_class(username, password, i) {
             resolve(undefined);
             return;
         }
-        
+
         // Get class data page by page
         let categories = await scrape_details(session.session_id,
             academics.apache_token, academics.classes[i].id,
             academics.oid);
         let assignments = await scrape_assignments(session.session_id);
         resolve({"name": academics.classes[i].name,
-                "grade": academics.classes[i].grade,
-                "categories": categories,
-                "assignments": assignments});
+            "grade": academics.classes[i].grade,
+            "categories": categories,
+            "assignments": assignments});
     });
 }
 
@@ -217,36 +222,6 @@ function log(text) {
 // -------------------------------------------
 
 
-
-// ------------ Web Server -------------------
-function handler(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-
-    // write a response to the client
-    //res.write(JSON.stringify({"hello": [1, 3], "world":{"hi":"hello"}}));
-    if(req.url == "/") {
-        fs.readFile(__dirname + '/public/index.html', function(err, data) { //read file index.html in public folder
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'}); //display 404 on error
-                res.write("404 Not Found");
-                return res.end("404 Not Found");
-            } 
-            res.writeHead(200, {'Content-Type': 'text/html'}); //write HTML
-            res.write(data); //write data from index.html
-            return res.end();
-        });
-    }
-
-    // end the response
-    res.end();
-}
-
-// the server object listens on port 8080
-http.createServer(handler).listen(8080);
-
-// -------------------------------------------
-
-
 // ------------ TESTING ONLY -----------------
 //var prompt = require('prompt');
 //var schema = {
@@ -265,8 +240,7 @@ http.createServer(handler).listen(8080);
 //
 //prompt.start();
 //prompt.get(schema, async function(err, result) {
-//    //console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-//    console.log(JSON.stringify({"hello": [1, 3], "world":{"hi":"hello"}}));
+//    console.log(JSON.stringify(await scrape_student(result.username, result.password)));
 //});
 
 // -------------------------------------------
