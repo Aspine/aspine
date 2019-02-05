@@ -233,24 +233,26 @@ function log(thread, name, obj) {
 
 
 // ------------ TESTING ONLY -----------------
-var prompt = require('prompt');
-var schema = {
-    properties: {
-        username: {
-            pattern: /^[0-9]+$/,
-            message: 'Username must be your student id',
-            required: true
-        },
-        password: {
-            hidden: true,
-            required: true
+if(require.main === module) {
+    var prompt = require('prompt');
+    var schema = {
+        properties: {
+            username: {
+                pattern: /^[0-9]+$/,
+                message: 'Username must be your student id',
+                required: true
+            },
+            password: {
+                hidden: true,
+                required: true
+            }
         }
-    }
-};
+    };
 
-prompt.start();
-prompt.get(schema, async function(err, result) {
-    console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-});
+    prompt.start();
+    prompt.get(schema, async function(err, result) {
+        console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+    });
+}
 
 // -------------------------------------------
