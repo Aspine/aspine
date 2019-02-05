@@ -29,4 +29,26 @@ h4#title {
     font-size: 66px;
     letter-spacing: 0.1em;
     color: #1D2B4E;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+div#login-bubble {
+    background-color: #ffffcc;
+    border-radius: 25px;
+    padding-bottom: 20px;
+    width: 50%;
+    min-width: 650px;
+    vertical-align: middle;
+    height: 225px;
+}
+.center-div
+{
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
 }
