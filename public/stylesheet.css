@@ -18,7 +18,8 @@ input:hover {
 input#login {
     border: 1px solid blue;
     background-color: lightblue;
-    padding: 5px 10px;
+    padding: 5px 50px;
+    margin: 50px 0px;
 }
 input#login:hover {
     background-color: blue;
