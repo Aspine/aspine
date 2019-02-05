@@ -1,4 +1,10 @@
 body {
     background-image: url("background.webp");
     background-color: #cccccc;
+    text-align: center;
+}
+input {
+   text-align: center;
+   margin-left: 5%;
+   margin-right: 5%;
 }
