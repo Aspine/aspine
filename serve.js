@@ -4,6 +4,7 @@
 const express = require('express');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
+const Tabulator = require('tabulator-tables');
 
 // -------------------------------------------
 
