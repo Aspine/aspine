@@ -22,11 +22,8 @@ module.exports = {
 // -------------------------------------------
 
 // --------------- Scraping ------------------
-let academics;
-
 // Returns object of classes
 async function scrape_student(username, password) {
-    academics = undefined;
     let scrapers = [];
     // Spawn class scrapers
     for(let i = 0; i < THREADS; i++) {
@@ -46,14 +43,9 @@ function scrape_class(username, password, i) {
             session.apache_token, session.session_id);
         log(i, "session", session);
 
-        // If first to login, get academics page, else wait
-        if(academics == undefined) {
-            academics = scrape_academics(session.session_id);
-            academics = await academics;
-            log(i, "academics", academics);
-        } else {
-            academics = await academics;
-        }
+        // Academics Page
+        academics = await scrape_academics(session.session_id);
+        log(i, "academics", academics);
 
         // Check if thread is extra
         if(academics.classes[i] == undefined) {
@@ -157,7 +149,6 @@ async function scrape_academics(session_id) {
 
 // Returns object with categories (name, weight) as a dictionary
 async function scrape_details(session_id, apache_token, class_id, oid) {
-    console.log(`scrape_details: ${session_id}, ${apache_token}, ${class_id}, ${oid}`);
     let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
         {"credentials":"include",
             "headers":{"Connection": "keep-alive",
@@ -179,9 +170,6 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
             "method":"POST",
             "mode":"cors"}));
     let data = {};
-    //console.log("hello world");
-    //console.log($.html());
-    //$("#dataGrid").each((i, elem) => {console.log($(this).html());});
     $("tr[class=listCell]", "#dataGrid").slice(3).each(function(i, elem) {
         if(i % 2 === 0) {
             let category = $(this).children().first().text();
