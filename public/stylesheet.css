@@ -3,6 +3,7 @@ body {
     background-color: #cccccc;
     text-align: center;
 }
+
 input {
     text-align: center;
     margin-left: 5%;
@@ -12,18 +13,22 @@ input {
     border: 1px solid orange;
     font-family: serif;
 }
+
 input:hover {
     background-color: orange;
 }
+
 input#login {
     border: 1px solid blue;
     background-color: lightblue;
     padding: 5px 50px;
     margin: 50px 0px;
 }
+
 input#login:hover {
     background-color: blue;
 }
+
 h4#title {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 66px;
@@ -32,17 +37,18 @@ h4#title {
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
 div#login-bubble {
     background-color: #ffffcc;
-    border-radius: 0px;
+    border-radius: 10px;
     padding-bottom: 20px;
     width: 50%;
     min-width: 650px;
     vertical-align: middle;
     height: 265px;
 }
-.center-div
-{
+
+.center-div {
     position: absolute;
     margin: auto;
     top: 0;
