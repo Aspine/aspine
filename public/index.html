@@ -10,7 +10,7 @@
     <body>
         <div id="login-bubble" class="center-div">
             <h4 id="title">Aspine</h1>
-            <form action="/data" method="POST">
+            <form action="/login" method="POST">
                 <input type="text" name="username" placeholder="Student ID">
                 <input type="password" name="password" placeholder="Aspen Password">
                 <br><br>
@@ -25,7 +25,7 @@
             //create Tabulator on DOM element with id "example-table"
             var table2 = new Tabulator("#example-table2", {
                 height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-                data:tabledata[4].assignments, //assign data to table
+                data:tabledata[0].assignments, //assign data to table
                 layout:"fitColumns", //fit columns to width of table (optional)
                 columns:[ //Define Table Columns
                     {title:"Name", field:"name"},
