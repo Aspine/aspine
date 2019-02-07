@@ -246,11 +246,13 @@ async function scrape_schedule(username, password, i) {
                 "mode":"cors"}));
         let data = [];
         $('td[style="width: 125px"]').each(function(i, elem) {
+            const parts = $(this).html().trim().split('<br>').slice(1, 4);
+            const block = {name: parts[0], teacher: parts[1], room: parts[2]};
             if(i % 2 == 0) {
                 data[i/2] = {};
-                data[i/2].black = $(this).html().trim().split('<br>').slice(1, 4);
+                data[i/2].black = block;
             } else {
-                data[Math.floor(i/2)].silver = $(this).html().trim().split('<br>').slice(1, 4);
+                data[Math.floor(i/2)].silver = block;
             }
         });
         log(i, "schedule", data);

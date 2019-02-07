@@ -11,7 +11,9 @@
 	<h4 id="title">Aspine</h4>
         <div id="example-table"></div>
         <div id="example-table2"></div>
+        <div id="example-table3"></div>
         <script type="text/javascript">
+            let tableData = {};
             //create Tabulator on DOM element with id "example-table"
             let table2 = new Tabulator("#example-table2", {
                 //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -27,6 +29,31 @@
                     alert("Row " + row.getData().id + " Clicked!!!!");
                 },
             });
+            //create Tabulator on DOM element with id "example-table"
+            let table3 = new Tabulator("#example-table3", {
+                layout:"fitColumns", //fit columns to width of table (optional)
+                columns:[ //Define Table Columns
+                    {
+                        title:"Black",
+                        columns:[
+                            {title:"Class", field:"black_name"},
+                            {title:"Teacher", field:"black_teacher"},
+                            {title:"Room", field:"black_room"},
+                        ],
+                    },
+                    {
+                        title:"Silver",
+                        columns:[
+                            {title:"Class", field:"silver_name"},
+                            {title:"Teacher", field:"silver_teacher"},
+                            {title:"Room", field:"silver_room"},
+                        ],
+                    },
+                ],
+                rowClick:function(e, row){ //trigger an alert message when the row is clicked
+                    alert("Row " + row.getData().id + " Clicked!!!!");
+                },
+            });
             let table = new Tabulator("#example-table", {
                 //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
                 ajaxURL:"/data",
@@ -36,6 +63,21 @@
                     //url - the URL of the request
                     //params - the parameters passed with the request
                     //response - the JSON object returned in the body of the response.
+                    tableData = response;
+                    let schedule = [];
+                    for(i in response.schedule) {
+                        console.log(response.schedule[i]);
+                        schedule[i] = {
+                            black_name: response.schedule[i].black.name,
+                            black_teacher: response.schedule[i].black.teacher,
+                            black_room: response.schedule[i].black.room,
+                            silver_name: response.schedule[i].silver.name,
+                            silver_teacher: response.schedule[i].silver.teacher,
+                            silver_room: response.schedule[i].silver.room,
+                        };
+                    }
+                    console.log(schedule);
+                    table3.setData(schedule);
                     return response.classes; //return the tableData property of a response json object
                 },
                 //ajaxParams:{key1:"value1", key2:"value2"},
