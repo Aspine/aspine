@@ -215,6 +215,37 @@ async function scrape_assignments(session_id) {
     return data;
 }
 
+// Returns list of black/silver day pairs of class names and room numbers
+async function scrape_schedule(session_id) {
+	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+        {"credentials":"include",
+            "headers":{"Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+                "X-Do-Not-Track": "1",
+                "Accept-Language": "en-US,en",
+                "DNT": "1",
+                "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
+            "referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+            "referrerPolicy":"strict-origin-when-cross-origin",
+            "body":null,
+            "method":"GET",
+            "mode":"cors"}));
+    let data = [];
+    $('td[style="width: 125px"]').each(function(i, elem) {
+        if(i % 2 == 0) {
+            data[i/2] = {};
+            data[i/2].black = $(this).html().trim().split('<br>').slice(1, 4);
+        } else {
+            data[Math.floor(i/2)].silver = $(this).html().trim().split('<br>').slice(1, 4);
+        }
+    });
+    return data;
+}
+
 // Returns body of fetch
 async function fetch_body(url, options) {
     return (await fetch(url, options)).text();
@@ -234,8 +265,8 @@ function log(thread, name, obj) {
 
 // ------------ TESTING ONLY -----------------
 if(require.main === module) {
-    var prompt = require('prompt');
-    var schema = {
+    let prompt = require('prompt');
+    let schema = {
         properties: {
             username: {
                 pattern: /^[0-9]+$/,
@@ -251,7 +282,11 @@ if(require.main === module) {
 
     prompt.start();
     prompt.get(schema, async function(err, result) {
-        console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+        //console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+        let session = await scrape_login();
+        await submit_login(result.username, result.password, session.apache_token, session.session_id);
+        console.log(session);
+        console.log(JSON.stringify(await scrape_schedule(session.session_id)));
     });
 }
 
