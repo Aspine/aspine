@@ -43,7 +43,19 @@
                 layout:"fitColumns", //fit columns to width of table (optional)
                 columns:[ //Define Table Columns
                     {title:"Class", field:"name"},
-                    {title:"Grade", field:"grade", align:"left"},
+                    {title:"Grade", field:"grade", align:"center", formatter:function(cell, formatterParams){
+		       var value = cell.getValue();
+			  if(parseFloat(value) > 90){
+        		    	return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
+        		} if(parseFloat(value) > 80){
+        		    	return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
+        		} if(parseFloat(value) > 70){
+        		    	return "<span style='color:yellow; font-weight:bold;'>" + value + "</span>";
+        		} if(parseFloat(value) > 60){
+        		    	return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
+        		} else{
+        		    return value;
+			}}},
                 ],
                 rowClick:function(e, row){ //trigger an alert message when the row is clicked
                     tabledata = table.getData();
