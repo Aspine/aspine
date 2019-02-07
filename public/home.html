@@ -44,18 +44,26 @@
                 columns:[ //Define Table Columns
                     {title:"Class", field:"name"},
                     {title:"Grade", field:"grade", align:"center", formatter:function(cell, formatterParams){
-		       var value = cell.getValue();
-			  if(parseFloat(value) > 90){
+			    let numberGrade = parseFloat(cell.getValue());
+
+			    if (isNaN(numberGrade)) {
+				    return "No Grade";
+
+			    } else {
+
+			    
+		       let value = parseFloat(cell.getValue()) + " " + getLetterGrade(cell.getValue());
+			  if(parseFloat(numberGrade) > 90){
         		    	return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
-        		} if(parseFloat(value) > 80){
+        		} if(parseFloat(numberGrade) > 80){
         		    	return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
-        		} if(parseFloat(value) > 70){
+        		} if(parseFloat(numberGrade) > 70){
         		    	return "<span style='color:yellow; font-weight:bold;'>" + value + "</span>";
-        		} if(parseFloat(value) > 60){
+        		} if(parseFloat(numberGrade) > 60){
         		    	return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
         		} else{
         		    return value;
-			}}},
+			}}}},
                 ],
                 rowClick:function(e, row){ //trigger an alert message when the row is clicked
                     tabledata = table.getData();
@@ -67,6 +75,36 @@
                     }
                 },
             });
+   	    function getLetterGrade(gradeToBeLettered) {
+		let parsed = parseFloat(gradeToBeLettered);
+		if (parsed >= 97) {
+			return "A+";
+		} else if (parsed >= 93) {
+			return "A";
+		} else if (parsed >= 90) {
+			return "A-";
+		} else if (parsed >= 87) {
+			return "B+";
+		} else if (parsed >= 83) {
+			return "B";
+		} else if (parsed >= 80) {
+			return "B-";
+		} else if (parsed >= 77) {
+			return "C+";
+		} else if (parsed >= 73) {
+			return "C";
+		} else if (parsed >= 70) {
+			return "C-";
+		} else if (parsed >= 67) {
+			return "D+";
+		} else if (parsed >= 63) {
+			return "D";
+		} else if (parsed >= 60) {
+			return "D-";
+		} else {
+			return "F";
+		}
+	}
         </script>
     </body>
 </html>
