@@ -25,13 +25,20 @@ module.exports = {
 // Returns object of classes
 async function scrape_student(username, password) {
     let scrapers = [];
+
+    // Spawn schedule scraper
+    scrapers[0] = scrape_schedule(username, password, 0);
+
     // Spawn class scrapers
-    for(let i = 0; i < THREADS; i++) {
+    for(let i = 1; i < THREADS; i++) {
         scrapers[i] = scrape_class(username, password, i);
     }
 
     // Await on all class scrapers
-    return (await Promise.all(scrapers)).filter(Boolean);
+    return {
+        classes: (await Promise.all(scrapers.slice(1))).filter(Boolean),
+        schedule: await scrapers[0]
+    }
 }
 
 // Returns promise that contains object of all class data
@@ -65,11 +72,11 @@ function scrape_class(username, password, i) {
         log(i, "assignments", assignments);
         
         // Return promise
+        log(i, "closing");
         resolve({"name": academics.classes[i].name,
             "grade": academics.classes[i].grade,
             "categories": categories,
             "assignments": assignments});
-        log(i, "closing");
     });
 }
 
@@ -216,34 +223,39 @@ async function scrape_assignments(session_id) {
 }
 
 // Returns list of black/silver day pairs of class names and room numbers
-async function scrape_schedule(session_id) {
-	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
-        {"credentials":"include",
-            "headers":{"Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1",
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-                "X-Do-Not-Track": "1",
-                "Accept-Language": "en-US,en",
-                "DNT": "1",
-                "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
-            "referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-            "referrerPolicy":"strict-origin-when-cross-origin",
-            "body":null,
-            "method":"GET",
-            "mode":"cors"}));
-    let data = [];
-    $('td[style="width: 125px"]').each(function(i, elem) {
-        if(i % 2 == 0) {
-            data[i/2] = {};
-            data[i/2].black = $(this).html().trim().split('<br>').slice(1, 4);
-        } else {
-            data[Math.floor(i/2)].silver = $(this).html().trim().split('<br>').slice(1, 4);
-        }
+async function scrape_schedule(username, password, i) {
+    return new Promise(async function(resolve, reject) {
+        let session = await scrape_login();
+        await submit_login(username, password, session.apache_token, session.session_id);
+        let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+            {"credentials":"include",
+                "headers":{"Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1",
+                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+                    "X-Do-Not-Track": "1",
+                    "Accept-Language": "en-US,en",
+                    "DNT": "1",
+                    "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
+                "referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                "referrerPolicy":"strict-origin-when-cross-origin",
+                "body":null,
+                "method":"GET",
+                "mode":"cors"}));
+        let data = [];
+        $('td[style="width: 125px"]').each(function(i, elem) {
+            if(i % 2 == 0) {
+                data[i/2] = {};
+                data[i/2].black = $(this).html().trim().split('<br>').slice(1, 4);
+            } else {
+                data[Math.floor(i/2)].silver = $(this).html().trim().split('<br>').slice(1, 4);
+            }
+        });
+        log(i, "schedule", data);
+        resolve(data);
     });
-    return data;
 }
 
 // Returns body of fetch
@@ -282,11 +294,11 @@ if(require.main === module) {
 
     prompt.start();
     prompt.get(schema, async function(err, result) {
-        //console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-        let session = await scrape_login();
-        await submit_login(result.username, result.password, session.apache_token, session.session_id);
-        console.log(session);
-        console.log(JSON.stringify(await scrape_schedule(session.session_id)));
+        console.log(await scrape_student(result.username, result.password));
+        //let session = await scrape_login();
+        //await submit_login(result.username, result.password, session.apache_token, session.session_id);
+        //console.log(session);
+        //console.log(JSON.stringify(await scrape_schedule(session.session_id)));
     });
 }
 
