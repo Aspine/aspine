@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="Aspine" content="Aspen Scraper and Beautifier">
-        <link href="/tabulator/css/tabulator.min.css" rel="stylesheet">
+        <link href="tabulator.css" rel="stylesheet">
         <script type="text/javascript" src="/tabulator/js/tabulator.min.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
     </head>
@@ -15,7 +15,7 @@
             //var tabledata = JSON.parse('[{"name":"Community Meeting","grade":"","categories":{},"assignments":[{"name":"","category":""}]},{"name":"PE Athletics","grade":"","categories":{},"assignments":[{"name":"","category":""}]},{"name":"TC Basic Home Repair","grade":"98.8 A+","categories":{"Daily grade":"0.6","Homework/classwork":"0.2","Tests":"0.2"},"assignments":[{"name":"Daily Grade","category":"Daily grade","score":"24.7 ","max_score":" 25.0"},{"name":"homework-classwork","category":"Homework/classwork"},{"name":"Test Q3","category":"Tests"}]},{"name":"Film Studies","grade":"","categories":{"Effort":"0.05","Final":"0.1","Homework":"0.2","Movie Reviews & Critiques":"0.25","Participation":"0.1","Quizzes":"0.3"},"assignments":[{"name":"1910-1920","category":"Homework"},{"name":"Charlie Chaplin","category":"Homework"},{"name":"1895-1910","category":"Homework"}]},{"name":"Organic Chemistry","grade":"100.0 A+","categories":{"Homework Done":"0.05","Lab Grades":"0.25","Quiz Grade":"0.7"},"assignments":[{"name":"Chapter 1 Quiz","category":"Quiz Grade"},{"name":"Chapter 1 Homework problem set","category":"Homework Done","score":"1.0 ","max_score":" 1.0"}]},{"name":"IN Marine Sci Intern","grade":"","categories":{},"assignments":[{"name":"","category":""}]}]');
             //create Tabulator on DOM element with id "example-table"
             let table2 = new Tabulator("#example-table2", {
-                height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+                //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
                 //data:tabledata[0].assignments, //assign data to table
                 layout:"fitColumns", //fit columns to width of table (optional)
                 columns:[ //Define Table Columns
@@ -29,7 +29,7 @@
                 },
             });
             let table = new Tabulator("#example-table", {
-                height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+                //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
                 ajaxURL:"/data",
                 ajaxConfig:"post", //ajax HTTP request type
                 ajaxContentType:"json", // send parameters to the server as a JSON encoded string
