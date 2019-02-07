@@ -13,7 +13,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "./scrape.js"
+    "serve": "./serve.js",
+    "scrape": "./scrape.js"
   },
   "repository": {
     "type": "git",
