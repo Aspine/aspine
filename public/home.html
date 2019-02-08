@@ -22,12 +22,9 @@
                 columns:[ //Define Table Columns
                     {title:"Assignment", field:"name"},
                     {title:"Category", field:"category"},
-                    {title:"Score", field:"score"},
-                    {title:"Max Score", field:"max_score"},
+                    {title:"Score", field:"score", editor:"range", editorParams:{min:0, max:100, step:.1,}},
+                    {title:"Max Score", field:"max_score", editor:"range", editorParams:{min:0, max:100, step:.1,}},
                 ],
-                rowClick:function(e, row){ //trigger an alert message when the row is clicked
-                    alert("Row " + row.getData().id + " Clicked!!!!");
-                },
             });
             //create Tabulator on DOM element with id "example-table"
             let table3 = new Tabulator("#example-table3", {

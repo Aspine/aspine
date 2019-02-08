@@ -21,7 +21,11 @@ app.use(session({ // Allows for sessions, and signs them with the (arbitrary) se
 
 app.post('/data', async (req, res) => {
     console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
-    res.send(await scraper.scrape_student(req.session.username, req.session.password));
+    // USE REAL DATA:
+    //res.send(await scraper.scrape_student(req.session.username, req.session.password));
+
+    // USE FAKE DATA:
+    res.sendFile('sample.json', {root:"public"});
 });
 app.post('/login', async (req, res) => {
     req.session.username = req.body.username;
