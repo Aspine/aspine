@@ -23,7 +23,7 @@ app.post('/data', async (req, res) => {
     console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
     // USE REAL DATA:
     let capturingData = await scraper.scrape_student(req.session.username, req.session.password);
-    console.log(JSON.parse(capturingData));
+    //console.log(JSON.parse(capturingData)); was trying to get output sample data but couldn't get it to work and had to go
     res.send(capturingData);
 
     // USE FAKE DATA:
