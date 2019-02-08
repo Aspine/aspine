@@ -23,8 +23,8 @@
                 columns:[ //Define Table Columns
                     {title:"Assignment", field:"name"},
                     {title:"Category", field:"category"},
-                    {title:"Score", field:"score", editor:"range", editorParams:{min:0, max:100, step:.1,}},
-                    {title:"Max Score", field:"max_score", editor:"range", editorParams:{min:0, max:100, step:.1,}},
+                    {title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:.1,}},
+                    {title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:.1,}},
                 ],
             });
             //create Tabulator on DOM element with id "example-table"
@@ -64,7 +64,6 @@
                     tableData = response;
                     let schedule = [];
                     for(i in response.schedule) {
-                        console.log(response.schedule[i]);
                         schedule[i] = {
                             black_name: response.schedule[i].black.name,
                             black_teacher: response.schedule[i].black.teacher,
@@ -74,7 +73,6 @@
                             silver_room: response.schedule[i].silver.room,
                         };
                     }
-                    console.log(schedule);
                     table3.setData(schedule);
                     return response.classes; //return the tableData property of a response json object
                 },
