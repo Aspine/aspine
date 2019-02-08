@@ -9,7 +9,8 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "node-fetch": "^2.3.0",
-    "prompt": "^1.0.0"
+    "prompt": "^1.0.0",
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {},
   "scripts": {
