@@ -214,8 +214,8 @@ async function scrape_assignments(session_id) {
         let scores = $(this).find("div[class=percentFieldContainer]")
             .parent().next().text().split('/');
         if(scores[0] != "") { // No score
-            row["score"] = scores[0];
-            row["max_score"] = scores[1];
+            row["score"] = Number(scores[0]);
+            row["max_score"] = Number(scores[1]);
         }
         data.push(row);
     });
