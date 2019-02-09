@@ -57,7 +57,7 @@ function getLightColor(gradeToBeColored) {
 	} else if (parseFloat(gradeToBeColored) >= 0) {
 		return "#ff4d4d";
 	} else {
-		return "white";
+		return "black";
 	}
 }
 
@@ -115,13 +115,15 @@ let gradeFormatter = function(cell, formatterParams) {
 		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
 		if(parseFloat(numberGrade) > 90){
 			return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
-		} if(parseFloat(numberGrade) > 80){
+		} else if(parseFloat(numberGrade) > 80){
 			return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
-		} if(parseFloat(numberGrade) > 70){
+		} else if(parseFloat(numberGrade) > 70){
 			return "<span style='color:yellow; font-weight:bold;'>" + value + "</span>";
-		} if(parseFloat(numberGrade) > 60){
+		} else if(parseFloat(numberGrade) > 60){
 			return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
-		} else{
+		} else if (parseFloat(numberGrade) >= 0) {
+			return "<span style='color:red; font-weight:bold;'>" + value + "</span>";
+		} else {
 			return value;
 		}
 	}
