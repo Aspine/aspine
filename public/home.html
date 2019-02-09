@@ -99,8 +99,36 @@ let table = new Tabulator("#example-table", {
 					return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
 				} else{
 					return value;
-				}}}},
-		{title:"Calculated Grade", field:"calculated_grade"},
+				}
+			}
+			
+		}
+		},
+		{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:function(cell, formatterParams) {
+			let numberGrade = parseFloat(cell.getValue());
+
+			if (isNaN(numberGrade)) {
+				return "No Grade";
+
+			} else {
+
+
+				let value = parseFloat(cell.getValue()) + " " + getLetterGrade(cell.getValue());
+				if(parseFloat(numberGrade) > 90){
+					return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
+				} if(parseFloat(numberGrade) > 80){
+					return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
+				} if(parseFloat(numberGrade) > 70){
+					return "<span style='color:yellow; font-weight:bold;'>" + value + "</span>";
+				} if(parseFloat(numberGrade) > 60){
+					return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
+				} else{
+					return value;
+				}
+			}	
+
+		}
+		},
 	],
 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
         selected_class_i = row.getPosition();
