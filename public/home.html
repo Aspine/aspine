@@ -111,6 +111,7 @@ let table = new Tabulator("#example-table", {
 				} else{
 					return value;
 				}}}},
+		{title:"Calculated Grade", field:"calculated_grade"},
 	],
 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
 		tabledata = table.getData();
