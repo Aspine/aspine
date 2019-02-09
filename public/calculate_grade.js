@@ -92,6 +92,9 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 
 	let totalPercent = totalScore / totalMaxScore;
 
+	categoryPercent = Math.round(categoryPercent * 1000) / 1000;
+	totalPercent = Math.round(totalPercent * 1000) / 1000;
+
 	console.log(categoryPercent);
 	console.log(totalPercent);
 
