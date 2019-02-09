@@ -29,12 +29,12 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 				}
 			}
 		}
-		
-		
+
+
 		let categoryPercent = 0, counterWeight = 1;
 
 		for (let i = 0; i < constCategories.length; i++) {
-			
+
 			if (categoryMaxScores[i] === 0) {
 				counterWeight -= parseFloat(getWeight(constCategories[i], constCategories, constWeights));
 			} else {
@@ -51,7 +51,7 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 			return "" +  Math.round(totalPercent * Math.pow(10, 3)) / Math.pow(10, 1);
 		}
 	}
-	
+
 }
 
 
@@ -75,11 +75,11 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 		}
 	}
 
-	
+
 	let categoryPercent = 0, counterWeight = 1;
 
 	for (let i = 0; i < constCategories.length; i++) {
-		
+
 		if (categoryMaxScores[i] === 0) {
 			counterWeight -= parseFloat(getWeight(constCategories[i], constCategories, constWeights));
 
@@ -91,7 +91,7 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 	categoryPercent /= counterWeight;
 
 	let totalPercent = totalScore / totalMaxScore;
-	
+
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) < Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
 		return 1;
 	} else {

@@ -69,10 +69,10 @@ let rowFormatter = function(cell, formatterParams) {
 	if (rowColor === "black") {
 		return value;
 	} else {
-	return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+		return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
 	}
-		
-		
+
+
 }
 
 let rowGradeFormatter = function(cell, formatterParams) {
@@ -86,9 +86,9 @@ let rowGradeFormatter = function(cell, formatterParams) {
 	} else {
 		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
 		return "<span style='color:"+rowColor+"; font-weight:bold;'>" + value + "</span>";
-		
+
 	}
-		
+
 }
 
 let gradeFormatter = function(cell, formatterParams) {
@@ -112,7 +112,7 @@ let gradeFormatter = function(cell, formatterParams) {
 			return value;
 		}
 	}
-		
+
 }
 
 let colorFormatter = function(cell, formatterParams) {

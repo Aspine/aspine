@@ -10,54 +10,53 @@
 	</head>
 	<body>
 		<h4 id="title">Aspine</h4>
-		<div id="example-table"></div>
-        <div id="example-table2"></div>
-	<!--<button id="addAssignment" onclick="table2.addRow()">Add Assignment</button> -->
-	<div align="center"><button class="addAssignment" onclick="table2.addRow()">Add Assignment</button></div> 
-        <br><br><br>
-        <!-- Rounded switch -->
-        <label class="switch">
-            <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
-            <span class="slider round"></span>
-        </label>
-        <br><br>
-        <div id="example-table3"></div>
+		<div id="classesTable"></div>
+		<div id="assignmentsTable"></div>
+		<div align="center"><button class="addAssignment" onclick="assignmentsTable.addRow()">Add Assignment</button></div> 
+		<br><br><br>
+		<!-- Rounded switch -->
+		<label class="switch">
+			<input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
+			<span class="slider round"></span>
+		</label>
+		<br><br>
+		<div id="scheduleTable"></div>
 		<script type="text/javascript">
 
 			let tableData = {};
-            let selected_class_i = 0;
-//create Tabulator on DOM element with id "example-table"
-let table2 = new Tabulator("#example-table2", {
+let selected_class_i = 0;
+//create Tabulator on DOM element with id "assignmentsTable"
+let assignmentsTable = new Tabulator("#assignmentsTable", {
 	//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 	//data:tabledata[0].assignments, //assign data to table
 	layout:"fitColumns", //fit columns to width of table (optional)
 	//rowFormatter:function(row) {
 	//	row.getElement().style.backgroundColor = row.getData().color;
-    	//},
+	//},
 	columns:[ //Define Table Columns
 		{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter,},
-        	{title:"Category", field:"category", editor:"select",
-        	    editorParams:function(cell) {
-        	        console.log(tableData.classes[selected_class_i].categories);
-        	        return {values:Object.keys(tableData.classes[selected_class_i].categories)};
-        	    }, 
-		    formatter: rowFormatter,
-        	},
+		{title:"Category", field:"category", editor:"select",
+			editorParams:function(cell) {
+				console.log(tableData.classes[selected_class_i].categories);
+				return {values:Object.keys(tableData.classes[selected_class_i].categories)};
+			}, 
+			formatter: rowFormatter,
+		},
 		{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 		{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 		{title:"Percentage", field: "percentage", formatter: rowGradeFormatter},
 	],
 });
-//create Tabulator on DOM element with id "example-table"
-let table3 = new Tabulator("#example-table3", {
+//create Tabulator on DOM element with id "scheduleTable"
+let scheduleTable = new Tabulator("#scheduleTable", {
 	layout:"fitColumns", //fit columns to width of table (optional)
 	columns:[ //Define Table Columns
-        {title:"Class", field:"name"},
-        {title:"Teacher", field:"teacher"},
-        {title:"Room", field:"room"},
+		{title:"Class", field:"name"},
+		{title:"Teacher", field:"teacher"},
+		{title:"Room", field:"room"},
 	],
 });
-let table = new Tabulator("#example-table", {
+let classesTable = new Tabulator("#classesTable", {
 	//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 	ajaxURL:"/data",
 	ajaxConfig:"post", //ajax HTTP request type
@@ -67,62 +66,62 @@ let table = new Tabulator("#example-table", {
 		//params - the parameters passed with the request
 		//response - the JSON object returned in the body of the response.
 		tableData = response;
-    
+
 		for(let i = 0; i < tableData.classes.length; i++) {
 			if (tableData.classes[i].grade != "") {
 
-			let computingClassData = tableData.classes[i];
-			tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
+				let computingClassData = tableData.classes[i];
+				tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
 
-			tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type);
+				tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type);
 			}
 
 			for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
-				tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
-				tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
+			tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
+			tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
 
-				if (isNaN(tableData.classes[i].assignments[j].score)) {
-					tableData.classes[i].assignments[j].score = "None";
-					tableData.classes[i].assignments[j].max_score = "None";
-				}
+			if (isNaN(tableData.classes[i].assignments[j].score)) {
+			tableData.classes[i].assignments[j].score = "None";
+			tableData.classes[i].assignments[j].max_score = "None";
+			}
 
 			}
-		}
-		
-		table3.setData(response.schedule.black);
+			}
 
-		return response.classes; //return the tableData property of a response json object
-		
-	},
-	//ajaxParams:{key1:"value1", key2:"value2"},
-	//data:tabledata, //assign data to table
-	layout:"fitColumns", //fit columns to width of table (optional)
-	columns:[ //Define Table Columns
-		{title:"Class", field:"name"},
-		{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter},
-		{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter},
-	],
-	rowClick:function(e, row){ //trigger an alert message when the row is clicked
-        selected_class_i = row.getPosition();
-        tabledata = table.getData();
-		for(let i in tabledata) {
+			scheduleTable.setData(response.schedule.black);
+
+			return response.classes; //return the tableData property of a response json object
+
+			},
+			//ajaxParams:{key1:"value1", key2:"value2"},
+			//data:tabledata, //assign data to table
+			layout:"fitColumns", //fit columns to width of table (optional)
+			columns:[ //Define Table Columns
+			{title:"Class", field:"name"},
+			{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter},
+			{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter},
+			],
+			rowClick:function(e, row){ //trigger an alert message when the row is clicked
+			selected_class_i = row.getPosition();
+			tabledata = classesTable.getData();
+			for(let i in tabledata) {
 			if(tabledata[i].name == row.getData().name) {
-				table2.setData(tabledata[i].assignments);
-				return;
+			assignmentsTable.setData(tabledata[i].assignments);
+			return;
 			}
-		}
-	},
-});
-function schedule_toggle() {
-    if(document.getElementById("schedule_toggle").checked) {
-        table3.setData(tableData.schedule.silver);
-    } else {
-        table3.setData(tableData.schedule.black);
-    }
-}
+			}
+			},
+			});
+			function schedule_toggle() {
+			if(document.getElementById("schedule_toggle").checked) {
+			scheduleTable.setData(tableData.schedule.silver);
+			} else {
+			scheduleTable.setData(tableData.schedule.black);
+			}
+			}
 		</script>
 		<script type="text/javascript" src="calculate_grade.js"></script>
-		
+
 
 	</body>
 </html>
