@@ -11,21 +11,26 @@
 	</head>
 	<body>
 		<h4 id="title">Aspine</h4>
-		<div id="classesTable"></div>
-		<div id="assignmentsTable"></div>
-		<div align="center"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button></div> 
-		<br><br><br>
-		<h5 id="title">Schedule</h4>
-		<!-- Rounded switch -->
-		<label class="switch">
-			<input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
-			<span class="slider round"></span>
-			<!--<h1>Black Day</h1> -->
-		</label>
-		<br><br>
-		<div id="scheduleTable"></div>
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
+            <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
+        </div>
+        <div id="grades" class="tabcontent">
+            <div id="classesTable"></div>
+            <div id="assignmentsTable"></div>
+            <div align="center"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button></div> 
+        </div>
+        <div id="schedule" class="tabcontent">
+            <!-- Rounded switch -->
+            <label class="switch">
+                <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
+                <span class="slider round"></span>
+                <!--<h1>Black Day</h1> -->
+            </label>
+            <br><br>
+            <div id="scheduleTable"></div>
+        </div>
 		<script type="text/javascript">
-
 			let tableData = {};
 			let selected_class_i = 0;
 			//create Tabulator on DOM element with id "assignmentsTable"
@@ -123,11 +128,30 @@
 					scheduleTable.setData(tableData.schedule.silver);
 				} else {
 					scheduleTable.setData(tableData.schedule.black);
-				}
-			}
-		</script>
+                }
+            }
+function openTab(evt, tab_name) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tab_name).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+document.getElementById("default_open").click();
+        </script>
 		<script type="text/javascript" src="calculate_grade.js"></script>
-
-
 	</body>
 </html>
