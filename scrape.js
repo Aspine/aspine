@@ -245,15 +245,15 @@ async function scrape_schedule(username, password, i) {
                 "body":null,
                 "method":"GET",
                 "mode":"cors"}));
-        let data = [];
+        let data = {black:[], silver:[]};
         $('td[style="width: 125px"]').each(function(i, elem) {
+            console.log("hello world");
             const parts = $(this).html().trim().split('<br>').slice(1, 4);
             const block = {name: parts[0], teacher: parts[1], room: parts[2]};
             if(i % 2 == 0) {
-                data[i/2] = {};
-                data[i/2].black = block;
+                data.black[i/2] = block;
             } else {
-                data[Math.floor(i/2)].silver = block;
+                data.silver[Math.floor(i/2)] = block;
             }
         });
         log(i, "schedule", data);
