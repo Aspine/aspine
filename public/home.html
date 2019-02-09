@@ -14,7 +14,7 @@
         <br>
         <!-- Rounded switch -->
         <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
             <span class="slider round"></span>
         </label>
         <br><br>
@@ -98,6 +98,13 @@ let table = new Tabulator("#example-table", {
 		}
 	},
 });
+function schedule_toggle() {
+    if(document.getElementById("schedule_toggle").checked) {
+        table3.setData(tableData.schedule.silver);
+    } else {
+        table3.setData(tableData.schedule.black);
+    }
+}
 		</script>
 		<script type="text/javascript" src="extraFunctions.js"></script>
 	</body>

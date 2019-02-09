@@ -63,7 +63,7 @@ div#login-bubble {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 600px;
   height: 34px;
 }
 
@@ -108,9 +108,9 @@ div#login-bubble {
 }
 
 .switch input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(565px);
+  -ms-transform: translateX(565px);
+  transform: translateX(565px);
 }
 
 /* Rounded sliders */
