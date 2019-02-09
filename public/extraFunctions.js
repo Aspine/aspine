@@ -29,6 +29,22 @@ function getLetterGrade(gradeToBeLettered) {
 	}
 }
 
+function getColor(gradeToBeColored) {
+	if (parseFloat(gradeToBeColored) >= 90) {
+		return "green";
+	} else if (parseFloat(gradeToBeColored) >= 80) {
+		return "blue";
+	} else if (parseFloat(gradeToBeColored) >= 70) {
+		return "yellow";
+	} else if (parseFloat(gradeToBeColored) >= 60) {
+		return "orange";
+	} else if (parseFloat(gradeToBeColored) >= 0) {
+		return "red";
+	} else {
+		return "white";
+	}
+}
+
 let gradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
 
@@ -53,3 +69,6 @@ let gradeFormatter = function(cell, formatterParams) {
 		
 }
 
+let colorFormatter = function(cell, formatterParams) {
+
+}
