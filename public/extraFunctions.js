@@ -45,6 +45,48 @@ function getColor(gradeToBeColored) {
 	}
 }
 
+function getLightColor(gradeToBeColored) {
+	if (parseFloat(gradeToBeColored) >= 90) {
+		return "#99ff66";
+	} else if (parseFloat(gradeToBeColored) >= 80) {
+		return "#66ccff";
+	} else if (parseFloat(gradeToBeColored) >= 70) {
+		return "#ffff66";
+	} else if (parseFloat(gradeToBeColored) >= 60) {
+		return "#ff8533";
+	} else if (parseFloat(gradeToBeColored) >= 0) {
+		return "#ff4d4d";
+	} else {
+		return "white";
+	}
+}
+
+let rowFormatter = function(cell, formatterParams) {
+	let numberGrade = parseFloat(cell.getValue());
+	let rowColor = cell.getRow().getData().color;
+
+	let value = cell.getValue();
+	return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+		
+		
+}
+
+let rowGradeFormatter = function(cell, formatterParams) {
+	let numberGrade = parseFloat(cell.getValue());
+	let rowColor = cell.getRow().getData().color;
+
+
+	if (isNaN(numberGrade)) {
+		return "No Grade";
+
+	} else {
+		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
+		return "<span style='color:"+rowColor+"; font-weight:bold;'>" + value + "</span>";
+		
+	}
+		
+}
+
 let gradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
 
