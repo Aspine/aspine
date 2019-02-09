@@ -45,7 +45,6 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 		categoryPercent /= counterWeight;
 
 		let totalPercent = totalScore / totalMaxScore;
-		//console.log(session.getItem("gradeType"));
 		if (type === 1) {
 			return "" + Math.round(categoryPercent * Math.pow(10, 3)) / Math.pow(10, 1);
 		} else {
@@ -92,9 +91,6 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 	categoryPercent /= counterWeight;
 
 	let totalPercent = totalScore / totalMaxScore;
-	console.log(Math.abs(categoryPercent - parseFloat(currentGrade)));
-	console.log(Math.abs(totalPercent - parseFloat(currentGrade)));
-	console.log(Math.abs(categoryPercent - parseFloat(currentGrade)) < Math.abs(totalPercent - parseFloat(currentGrade)));
 	
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) < Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
 		return 1;
