@@ -61,6 +61,19 @@ function getLightColor(gradeToBeColored) {
 	}
 }
 
+let classesRowFormatter = function(cell, formatterParams) {
+	let rowColor = cell.getRow().getData().color;
+
+	let value = cell.getValue();
+	if (rowColor === "black") {
+		return value;
+	} else {
+		return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+	}
+
+
+}
+
 let rowFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
 	let rowColor = cell.getRow().getData().color;

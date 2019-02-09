@@ -75,6 +75,8 @@
 							tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
 
 							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type);
+
+							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
 
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
@@ -98,7 +100,7 @@
 				//data:tabledata, //assign data to table
 				layout:"fitColumns", //fit columns to width of table (optional)
 				columns:[ //Define Table Columns
-					{title:"Class", field:"name"},
+					{title:"Class", field:"name", formatter: classesRowFormatter},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter},
 					{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter},
 				],
