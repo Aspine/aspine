@@ -71,6 +71,13 @@ let table = new Tabulator("#example-table", {
 		//params - the parameters passed with the request
 		//response - the JSON object returned in the body of the response.
 		tableData = response;
+		for(let i = 0; i < tableData.classes.length; i++) {
+			if (tableData.classes[i].grade != "") {
+
+			let computingClassData = tableData.classes[i];
+			tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories));
+			}
+		}
 		let schedule = [];
 		for(i in response.schedule) {
 			schedule[i] = {
@@ -125,5 +132,7 @@ let table = new Tabulator("#example-table", {
 });
 		</script>
 		<script type="text/javascript" src="extraFunctions.js"></script>
+		<script type="text/javascript" src="calculate_grade.js"></script>
+
 	</body>
 </html>
