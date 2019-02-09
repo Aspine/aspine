@@ -216,7 +216,7 @@ async function scrape_assignments(session_id) {
         if(scores[0] != "") { // No score
             row["score"] = Number(scores[0]);
             row["max_score"] = Number(scores[1]);
-	    row["percentage"] = Math.round(parseFloat(scores[0]) / parseFloat(scores[1]) * 1000) / 10 + "%";
+            row["percentage"] = Math.round(parseFloat(scores[0]) / parseFloat(scores[1]) * 1000) / 10 + "%";
         }
         data.push(row);
     });
