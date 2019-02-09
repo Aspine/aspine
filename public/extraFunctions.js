@@ -41,7 +41,7 @@ function getColor(gradeToBeColored) {
 	} else if (parseFloat(gradeToBeColored) >= 0) {
 		return "red";
 	} else {
-		return "white";
+		return "black";
 	}
 }
 
@@ -66,7 +66,11 @@ let rowFormatter = function(cell, formatterParams) {
 	let rowColor = cell.getRow().getData().color;
 
 	let value = cell.getValue();
+	if (rowColor === "black") {
+		return value;
+	} else {
 	return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+	}
 		
 		
 }

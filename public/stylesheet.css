@@ -48,6 +48,22 @@ div#login-bubble {
     height: 265px;
 }
 
+.addAssignment {
+	color: #494949 !important;
+	background: #ffffff;
+	padding: 10px;
+	border: 4px solid #494949 !important;
+	border-radius: 6px;
+	display: inline-block;
+}
+
+.addAssignment:hover {
+	color: #ffffff !important;
+	background: #f6b93b;
+	border-color: #f6b93b !important;
+	transition: all 0.4s ease 0s;
+}
+
 .center-div {
     position: absolute;
     margin: auto;

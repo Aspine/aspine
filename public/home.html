@@ -12,7 +12,8 @@
 		<h4 id="title">Aspine</h4>
 		<div id="example-table"></div>
         <div id="example-table2"></div>
-        <button onclick="table2.addRow()">Add Assignment</button>
+	<!--<button id="addAssignment" onclick="table2.addRow()">Add Assignment</button> -->
+	<div align="center"><button class="addAssignment" onclick="table2.addRow()">Add Assignment</button></div> 
         <br><br><br>
         <!-- Rounded switch -->
         <label class="switch">
@@ -79,6 +80,11 @@ let table = new Tabulator("#example-table", {
 			for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 				tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
 				tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
+
+				if (isNaN(tableData.classes[i].assignments[j].score)) {
+					tableData.classes[i].assignments[j].score = "None";
+					tableData.classes[i].assignments[j].max_score = "None";
+				}
 
 			}
 		}
