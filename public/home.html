@@ -58,7 +58,9 @@ let table = new Tabulator("#example-table", {
 			if (tableData.classes[i].grade != "") {
 
 			let computingClassData = tableData.classes[i];
-			tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories));
+			let type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
+
+			tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === undefined ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === undefined ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), type);
 			}
 		}
 		

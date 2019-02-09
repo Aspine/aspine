@@ -1,9 +1,5 @@
-function computeGrade(categories, scores, maxScores, constCategories, constWeights) {
-	console.log(categories);
-	console.log(scores);
-	console.log(maxScores);
-	console.log(constCategories);
-	console.log(constWeights);
+function computeGrade(categories, scores, maxScores, constCategories, constWeights, type) {
+
 
 	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
 
@@ -50,17 +46,18 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 
 		let totalPercent = totalScore / totalMaxScore;
 		//console.log(session.getItem("gradeType"));
-		//if (session.getItem("gradeType") === "category") {
-			return "" + Math.round(categoryPercent * Math.pow(10, 2 )) / Math.pow(10, 0);
-		//} else {
-		//	return "" +  Math.round(totalPercent * Math.pow(10, 2 + allDecimalPlaces[currentClassIndex])) / Math.pow(10, allDecimalPlaces[currentClassIndex]);
-		//}
+		if (type === 1) {
+			return "" + Math.round(categoryPercent * Math.pow(10, 3)) / Math.pow(10, 1);
+		} else {
+			return "" +  Math.round(totalPercent * Math.pow(10, 3)) / Math.pow(10, 1);
+		}
 	}
 	
 }
 
 
-function determineGradeType(categories, scores, maxScores, constCategories, constWeights) {
+function determineGradeType(categories, scores, maxScores, constCategories, constWeights, currentGrade) {
+	currentGrade = parseFloat(currentGrade);
 	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
 
 	for (let i = 0; i < constCategories.length; i++) {
@@ -100,12 +97,9 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 	console.log(Math.abs(categoryPercent - parseFloat(currentGrade)) < Math.abs(totalPercent - parseFloat(currentGrade)));
 	
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) < Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
-		console.log("set to category");
-		//session.setItem("gradeType", "category");
-
+		return 1;
 	} else {
-		console.log("set to total");
-		//session.setItem("gradeType", "total");
+		return 0;
 	}
 }
 
