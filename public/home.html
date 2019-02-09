@@ -21,14 +21,20 @@
         <div id="example-table3"></div>
 		<script type="text/javascript">
 			let tableData = {};
+            let selected_class_i = 0;
 //create Tabulator on DOM element with id "example-table"
 let table2 = new Tabulator("#example-table2", {
 	//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 	//data:tabledata[0].assignments, //assign data to table
 	layout:"fitColumns", //fit columns to width of table (optional)
 	columns:[ //Define Table Columns
-		{title:"Assignment", field:"name"},
-		{title:"Category", field:"category"},
+		{title:"Assignment", field:"name", editor:"input"},
+        {title:"Category", field:"category", editor:"select",
+            editorParams:function(cell) {
+                console.log(tableData.classes[selected_class_i].categories);
+                return {values:Object.keys(tableData.classes[selected_class_i].categories)};
+            }
+        },
 		{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}},
 		{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}},
 		{title:"Percentage", field: "percentage"},
@@ -97,7 +103,8 @@ let table = new Tabulator("#example-table", {
 		{title:"Calculated Grade", field:"calculated_grade"},
 	],
 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
-		tabledata = table.getData();
+        selected_class_i = row.getPosition();
+        tabledata = table.getData();
 		for(let i in tabledata) {
 			if(tabledata[i].name == row.getData().name) {
 				table2.setData(tabledata[i].assignments);
