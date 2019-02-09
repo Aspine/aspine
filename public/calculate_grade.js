@@ -92,6 +92,9 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 
 	let totalPercent = totalScore / totalMaxScore;
 
+	console.log(categoryPercent);
+	console.log(totalPercent);
+
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
 		return 1;
 	} else {

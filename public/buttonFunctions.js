@@ -29,16 +29,14 @@ let editAssignment = function(data) {
 
 		if (isNaN(tableData.classes[selected_class_i].assignments[j].score) || tableData.classes[selected_class_i].assignments[j].score === "") {
 			tableData.classes[selected_class_i].assignments[j].score = "None";
-			console.log(tableData.classes[selected_class_i].assignments[j].score);
-			console.log(tableData.classes[selected_class_i].assignments);
 		}
+
 
 		if (isNaN(tableData.classes[selected_class_i].assignments[j].max_score) || tableData.classes[selected_class_i].assignments[j].max_score === "") {
 			tableData.classes[selected_class_i].assignments[j].max_score = "None";
 		}
 	}
 
-	console.log(tableData.classes[selected_class_i].assignments);
 	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
 
 	let computingClassData = tableData.classes[selected_class_i];

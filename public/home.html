@@ -41,7 +41,6 @@
 					{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter,},
 					{title:"Category", field:"category", editor:"select",
 						editorParams:function(cell) {
-							console.log(tableData.classes[selected_class_i].categories);
 							return {values:Object.keys(tableData.classes[selected_class_i].categories)};
 						}, 
 						formatter: rowFormatter,

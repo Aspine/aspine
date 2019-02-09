@@ -113,13 +113,13 @@ let gradeFormatter = function(cell, formatterParams) {
 
 	} else {
 		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
-		if(parseFloat(numberGrade) > 90){
+		if(parseFloat(numberGrade) >= 90){
 			return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) > 80){
+		} else if(parseFloat(numberGrade) >= 80){
 			return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) > 70){
+		} else if(parseFloat(numberGrade) >= 70){
 			return "<span style='color:#ff9900; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) > 60){
+		} else if(parseFloat(numberGrade) >= 60){
 			return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
 		} else if (parseFloat(numberGrade) >= 0) {
 			return "<span style='color:red; font-weight:bold;'>" + value + "</span>";
