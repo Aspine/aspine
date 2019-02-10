@@ -126,8 +126,8 @@ button {
 	left: 4px;
 	bottom: 4px;
 	background-color: white;
-	-webkit-transition: .4s;
-	transition: .4s;
+	-webkit-transition: 3s;
+	transition: 3s;
 }
 
 .switch input:checked + .slider {
@@ -190,11 +190,18 @@ button {
 }
 
 .tabcontent {
-  animation: fadeEffect .1s; /* Fading effect takes 1 second */
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
 }
 
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
   from {opacity: 0;}
   to {opacity: 1;}
+}
+
+.switch p {
+    color: white;
+    display: inline;
+    position: relative;
+    font-size: 25px;
 }
