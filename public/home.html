@@ -53,6 +53,9 @@
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter},
+					{formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
+					    cell.getRow().delete();
+					}},
 				],
 			});
 			//create Tabulator on DOM element with id "scheduleTable"
