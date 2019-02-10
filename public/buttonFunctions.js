@@ -1,4 +1,5 @@
 let newAssignment = function() {
+
 	tableData.classes[selected_class_i].assignments.push({
 		"name": "Assignment",
 		"category": Object.keys(tableData.classes[selected_class_i].categories)[0],
@@ -47,6 +48,15 @@ let editAssignment = function(data) {
 
 	classesTable.setData(tableData.classes);
 
+
+
+}
+
+let resetTableData = function() {
+	console.log("resetTableData");
+	tableData = JSON.parse(JSON.stringify(tableDataReset));
+	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+	classesTable.setData(tableData.classes);
 
 
 }

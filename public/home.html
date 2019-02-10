@@ -18,7 +18,7 @@
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
             <div id="assignmentsTable"></div>
-            <div align="center"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button></div> 
+	    <div align="center"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button><button class="addAssignment" onclick="resetTableData()">Reset Changes</button></div> 
         </div>
         <div id="schedule" class="tabcontent">
             <!-- Rounded switch -->
@@ -33,6 +33,7 @@
 		<script type="text/javascript">
 			let tableData = {};
 			let selected_class_i = 0;
+			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
@@ -83,6 +84,7 @@
 					//response - the JSON object returned in the body of the response.
 					tableData = response;
 
+
 					for(let i = 0; i < tableData.classes.length; i++) {
 
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
@@ -121,6 +123,8 @@
 						tableData.schedule.silver[i].time = times[i];
 						tableData.schedule.silver[i].color = colors[i];
 					}
+			
+					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 					scheduleTable.setData(response.schedule.black);
 
