@@ -91,8 +91,10 @@ button {
 .switch {
 	position: relative;
 	display: inline-block;
-	width: 50%;
+	width: 200px;
 	height: 34px;
+    margin-top: 3px;
+    margin-bottom: 10px;
 }
 
 /* Hide default HTML checkbox */
@@ -136,9 +138,9 @@ button {
 }
 
 .switch input:checked + .slider:before {
-	-webkit-transform: translateX(100%);
-	-ms-transform: translateX(100%);
-	transform: translateX(100%);
+	-webkit-transform: translateX(165px);
+	-ms-transform: translateX(165px);
+	transform: translateX(165px);
 }
 
 /* Rounded sliders */
