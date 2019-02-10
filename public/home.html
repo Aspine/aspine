@@ -43,19 +43,19 @@
 				//},
 				dataEdited: editAssignment,
 				columns:[ //Define Table Columns
-					{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter,},
+					{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter, headerSort:false},
 					{title:"Category", field:"category", editor:"select",
 						editorParams:function(cell) {
 							return {values:Object.keys(tableData.classes[selected_class_i].categories)};
 						}, 
-						formatter: rowFormatter,
+						formatter: rowFormatter, headerSort:false,
 					},
-					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
-					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
-					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter},
+					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
+					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
+					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
 					    cell.getRow().delete();
-					}},
+					}, headerSort:false,},
 				],
 			});
 			//create Tabulator on DOM element with id "scheduleTable"
@@ -65,11 +65,11 @@
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
-					{title:"Period", field:"period"},
-					{title:"Time", field:"time"},
-					{title:"Class", field:"name"},
-					{title:"Teacher", field:"teacher"},
-					{title:"Room", field:"room"},
+					{title:"Period", field:"period", headerSort:false},
+					{title:"Time", field:"time", headerSort:false},
+					{title:"Class", field:"name", headerSort:false},
+					{title:"Teacher", field:"teacher", headerSort:false},
+					{title:"Room", field:"room", headerSort:false},
 				],
 			});
 			let classesTable = new Tabulator("#classesTable", {
@@ -134,9 +134,9 @@
 				//data:tabledata, //assign data to table
 				layout:"fitColumns", //fit columns to width of table (optional)
 				columns:[ //Define Table Columns
-					{title:"Class", field:"name", formatter: classesRowFormatter},
-					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter},
-					{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter},
+					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
+					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
+					{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
 					selected_class_i = row.getPosition();
