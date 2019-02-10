@@ -3,7 +3,7 @@ body {
     background-size: cover;
 	background-color: #cccccc;
 	text-align: center;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 }
 
 
@@ -14,7 +14,7 @@ input.login {
 	padding: 5px 0px;
 	font-size: 20px;
 	border: 1px solid orange;
-	font-family: serif;
+	font-family: Poppins-Bold, serif;
 }
 
 input:hover.login {
@@ -36,11 +36,11 @@ input#login:hover.login {
 h4#title {
 	font-weight: bold;
 	display: inline-block;
-	-webkit-text-stroke-width: 1px;
+	-webkit-text-stroke-width: 2px;
    	-webkit-text-stroke-color: white;
 	position: relative;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 70px;
+	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+	font-size: 80px;
 	letter-spacing: 0.1em;
 	color: #1D2B4E;
 	margin-bottom: 20px;
@@ -58,7 +58,7 @@ h4#title {
 	/*border-radius: 6px;*/
 	position: absolute;
 	left: 8px;
-	top: 30px;
+	top: 45px;
 
 }
 
@@ -80,7 +80,7 @@ div#login-bubble {
 }
 
 button {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
 }
