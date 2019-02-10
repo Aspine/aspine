@@ -2,15 +2,36 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<!--===============================================================================================-->
 		<meta name="Aspine" content="Aspen Scraper and Beautifier">
+		<!--===============================================================================================-->
 		<link href="tabulator.css" rel="stylesheet">
+		<!--===============================================================================================-->
 		<script type="text/javascript" src="/tabulator/js/tabulator.min.js"></script>
+		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="stylesheet.css">
+		<!--===============================================================================================-->
 		<script type="text/javascript" src="extraFunctions.js"></script>
+		<!--===============================================================================================-->
 		<script type="text/javascript" src="buttonFunctions.js"></script>
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="css/util.css">
+		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+
+
 	</head>
 	<body>
-		<h4 id="title">Aspine</h4>
+		<div id="header">
+			<form action="/logout" method="POST">	
+				<input id="logout" type="submit" value="Logout"></button>
+			</form>
+			<h4 id="title">
+				Aspine
+			</h4>
+		</div>
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
