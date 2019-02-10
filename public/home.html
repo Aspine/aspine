@@ -149,6 +149,9 @@ function openTab(evt, tab_name) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tab_name).style.display = "block";
     evt.currentTarget.className += " active";
+    classesTable.redraw();
+    assignmentsTable.redraw();
+    scheduleTable.redraw();
 }
 document.getElementById("default_open").click();
         </script>
