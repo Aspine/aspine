@@ -61,8 +61,12 @@
 			//create Tabulator on DOM element with id "scheduleTable"
 			let scheduleTable = new Tabulator("#scheduleTable", {
 				layout:"fitColumns", //fit columns to width of table (optional)
+				rowFormatter:function(row) {
+					row.getElement().style.backgroundColor = row.getData().color;
+				},
 				columns:[ //Define Table Columns
-					{title:"Block", field:"block"},
+					{title:"Period", field:"period"},
+					{title:"Time", field:"time"},
 					{title:"Class", field:"name"},
 					{title:"Teacher", field:"teacher"},
 					{title:"Room", field:"room"},
@@ -103,17 +107,19 @@
 						}
 					}
 
-					let blocks = [
-						"Period 1  |  8:05 - 9:25",
-						"CM/OTI      |  9:29 - 9:44",
-						"Period 2  |  9:48 - 11:08",
-						"Period 3  |  11:12 - 1:06",
-						"Period 4  |  1:10 - 2:30"
-					];
+					let periods = [ "Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4", "Extra", "Extra", "Extra", "Extra"];
 
-					for (let i = 0; i < 5;  i++) {
-						tableData.schedule.black[i].block = blocks[i]; 
-						tableData.schedule.silver[i].block = blocks[i];
+					let times = [ "8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30", "Extra", "Extra", "Extra", "Extra"];
+
+					let colors = ["#e6ecff", "#ccd9ff", "#b3c6ff", "#99b3ff", "#809fff", "#668cff", "#4d79ff", "#3366ff", "#1a53ff", "#0040ff"];
+
+					for (let i = 0; i < tableData.schedule.black.length;  i++) {
+						tableData.schedule.black[i].period = periods[i]; 
+						tableData.schedule.black[i].time = times[i]
+						tableData.schedule.black[i].color = colors[i];
+						tableData.schedule.silver[i].period = periods[i];
+						tableData.schedule.silver[i].time = times[i];
+						tableData.schedule.silver[i].color = colors[i];
 					}
 
 					scheduleTable.setData(response.schedule.black);
