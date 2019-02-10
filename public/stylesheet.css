@@ -5,7 +5,8 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-input {
+
+input.login {
 	text-align: center;
 	margin-left: 5%;
 	margin-right: 5%;
@@ -15,18 +16,18 @@ input {
 	font-family: serif;
 }
 
-input:hover {
+input:hover.login {
 	background-color: orange;
 }
 
-input#login {
+input#login.login {
 	border: 1px solid blue;
 	background-color: lightblue;
 	padding: 5px 50px;
 	margin: 50px 0px;
 }
 
-input#login:hover {
+input#login:hover.login {
 	background-color: blue;
 }
 
