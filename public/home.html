@@ -53,12 +53,16 @@
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter},
+					{formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
+					    cell.getRow().delete();
+					}},
 				],
 			});
 			//create Tabulator on DOM element with id "scheduleTable"
 			let scheduleTable = new Tabulator("#scheduleTable", {
 				layout:"fitColumns", //fit columns to width of table (optional)
 				columns:[ //Define Table Columns
+					{title:"Block", field:"block"},
 					{title:"Class", field:"name"},
 					{title:"Teacher", field:"teacher"},
 					{title:"Room", field:"room"},
@@ -97,6 +101,19 @@
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
+					}
+
+					let blocks = [
+						"Period 1  |  8:05 - 9:25",
+						"CM/OTI      |  9:29 - 9:44",
+						"Period 2  |  9:48 - 11:08",
+						"Period 3  |  11:12 - 1:06",
+						"Period 4  |  1:10 - 2:30"
+					];
+
+					for (let i = 0; i < 5;  i++) {
+						tableData.schedule.black[i].block = blocks[i]; 
+						tableData.schedule.silver[i].block = blocks[i];
 					}
 
 					scheduleTable.setData(response.schedule.black);
