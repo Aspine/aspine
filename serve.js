@@ -22,7 +22,9 @@ app.use(express.static('public')); // Serve any files in public directory
 //app.use(express.static('node_modules/socket.io')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(session({ // Allows for sessions, and signs them with the (arbitrary) secret
-	secret: "scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody"
+	secret: "scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody",
+    resave: true,
+    saveUninitialized: false
 }));
 
 app.post('/data', async (req, res) => {
