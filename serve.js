@@ -39,7 +39,7 @@ app.post('/login', async (req, res) => {
 	res.sendFile('home.html', {root:"public"});
 });
 
-app.post('/logout', async (req res) => {
+app.post('/logout', async (req, res) => {
 
 	res.sendFile('index.html', {root:"public"});
 
