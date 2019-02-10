@@ -6,6 +6,11 @@ body {
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 }
 
+input {
+	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 14px;
+}
 
 input.login {
 	text-align: center;
@@ -58,7 +63,7 @@ h4#title {
 	/*border-radius: 6px;*/
 	position: absolute;
 	left: 8px;
-	top: 45px;
+	top: 50px;
 
 }
 

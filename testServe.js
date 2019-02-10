@@ -39,6 +39,11 @@ app.post('/login', async (req, res) => {
 	res.sendFile('home.html', {root:"public"});
 });
 
+app.post('/logout', async (req, res) => {
+	res.sendFile('index.html', {root:"public"});
+
+});
+
 io.on('connection', function(socket){
 	console.log('a user connected');
 });
