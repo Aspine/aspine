@@ -30,7 +30,7 @@ app.post('/data', async (req, res) => {
 	// USE REAL DATA:
 	res.send(await scraper.scrape_student(req.session.username, req.session.password));
 
-	USE FAKE DATA:
+	//USE FAKE DATA:
 	//res.sendFile('sample.json', {root:"public"});
 });
 app.post('/login', async (req, res) => {
