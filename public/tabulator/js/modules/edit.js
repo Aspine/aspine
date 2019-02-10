@@ -302,7 +302,7 @@ Edit.prototype.editors = {
 
 		input.setAttribute("type", "text");
 
-		input.style.padding = "4px";
+		input.style.padding = "12px";
 		input.style.width = "100%";
 		input.style.boxSizing = "border-box";
 
