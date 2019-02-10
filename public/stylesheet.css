@@ -1,5 +1,6 @@
 body {
-	background-image: url("background.webp");
+	background-image: url("images/img-01.png"), url("background.webp");
+    background-size: cover;
 	background-color: #cccccc;
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;
@@ -182,6 +183,7 @@ button {
 
 /* Style the tab content */
 .tabcontent {
+  background: rgba(138, 138, 138, 0.7);
   display: none;
   padding: 6px 12px;
   border: 1px solid #ccc;
