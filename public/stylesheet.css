@@ -31,7 +31,7 @@ input#login:hover.login {
 	background-color: blue;
 }
 
-h4#title, h5 {
+h4#title {
 	font-family: Arial, Helvetica, sans-serif;
 	letter-spacing: 0.1em;
 	color: #1D2B4E;
@@ -41,10 +41,6 @@ h4#title, h5 {
 
 h4#title {
 	font-size: 66px;
-}
-
-h5 {
-	font-size: 40px;
 }
 
 div#login-bubble {
@@ -199,9 +195,10 @@ button {
   to {opacity: 1;}
 }
 
-.switch p {
+#schedule_title {
     color: white;
     display: inline;
     position: relative;
-    font-size: 25px;
+    font-size: 30px;
+	letter-spacing: 0.1em;
 }
