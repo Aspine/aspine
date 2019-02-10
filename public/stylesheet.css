@@ -32,7 +32,12 @@ input#login:hover.login {
 	background-color: blue;
 }
 
+div#header {
+}
+
 h4#title {
+	display: inline-block;
+	position: relative;
 	font-family: Arial, Helvetica, sans-serif;
 	letter-spacing: 0.1em;
 	color: #1D2B4E;
@@ -40,8 +45,25 @@ h4#title {
 	margin-top: 20px;
 }
 
-h4#title {
-	font-size: 66px;
+#logout {
+	width: 100px;
+	height: 50px;
+	background: lightblue;
+	color: black !important;
+	background: #ffffff;
+	border: 4px solid #494949 !important;
+	/*border-radius: 6px;*/
+	position: absolute;
+	left: 8px;
+	top: 45px;
+
+}
+
+#logout:hover {
+	color: #ffffff !important;
+	background: #f6b93b;
+	border-color: #f6b93b !important;
+	transition: all 0.4s ease 0s;
 }
 
 div#login-bubble {
