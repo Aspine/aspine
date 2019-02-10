@@ -136,6 +136,7 @@ iframe {
 .txt1 {
   font-family: Poppins-Regular;
   font-size: 13px;
+  font-weight: bold;
   line-height: 1.5;
   color: #999999;
 }
