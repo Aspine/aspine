@@ -1,4 +1,4 @@
-#!/bin/node
+#!/usr/bin/node
 
 // --------------- Includes ------------------
 const express = require('express');
@@ -7,7 +7,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
 const socket = require('socket.io');
-
+const fs = require('fs');
+const https = require('https');
 // -------------------------------------------
 
 
@@ -17,6 +18,23 @@ const port = 8080;
 const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
 const io = socket(server);
+
+if(process.argv[2] == "secure") {
+    // Certificate
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
+
+    const credentials = {
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+    };
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(443, () => {
+        console.log('HTTPS Server running on port 443');
+    });
+}
 
 app.use(express.static('public')); // Serve any files in public directory
 //app.use(express.static('node_modules/socket.io')); // Serve any files in public directory

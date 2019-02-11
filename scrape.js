@@ -1,4 +1,4 @@
-#!/bin/node
+#!/usr/bin/node
 
 // --------------- Parameters ----------------
 const THREADS = 10;
