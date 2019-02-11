@@ -41,7 +41,8 @@ app.post('/data', async (req, res) => {
 app.post('/login', async (req, res) => {
 	req.session.username = req.body.username;
 	req.session.password = req.body.password;
-	res.sendFile('home.html', {root:"public"});
+	//res.sendFile('home.html', {root:"public"});
+    res.redirect('/home.html');
 });
 
 app.post('/logout', async (req, res) => {
