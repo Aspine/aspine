@@ -3,6 +3,37 @@ Number.prototype.countDecimals = function () {
     return this.toString().split(".")[1].length || 0; 
 }
 
+function getGPA(gradeToBeGPA) {
+
+	let parsed = parseFloat(gradeToBeGPA);
+	if (parsed >= 97) {
+		return 4.0;
+	} else if (parsed >= 93) {
+		return 4.0;
+	} else if (parsed >= 90) {
+		return 3.7;
+	} else if (parsed >= 87) {
+		return 3.3;
+	} else if (parsed >= 83) {
+		return 3.0;
+	} else if (parsed >= 80) {
+		return 2.7;
+	} else if (parsed >= 77) {
+		return 2.3;
+	} else if (parsed >= 73) {
+		return 2.0;
+	} else if (parsed >= 70) {
+		return 1.7;
+	} else if (parsed >= 67) {
+		return 1.3;
+	} else if (parsed >= 63) {
+		return 1.0;
+	} else if (parsed >= 60) {
+		return 0.7;
+	} else {
+		return 0.0;
+	}
+}
 
 function getLetterGrade(gradeToBeLettered) {
 
