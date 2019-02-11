@@ -5,7 +5,6 @@
         <title>Aspine | CRLS Student Dashboard</title>
 
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!--===============================================================================================-->
 		<meta name="Aspine" content="Aspen Scraper and Beautifier">
 		<!--===============================================================================================-->
@@ -30,11 +29,6 @@
 	</head>
 	<body>
 		<div id="header">
-            <!--
-			<form action="/logout" method="POST">	
-				<input id="logout" type="submit" value="Logout"></button>
-			</form>
-            -->
 			<h4 id="title">
 				Aspine
 			</h4>
@@ -42,7 +36,7 @@
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-            <button class="tablinks" onclick="location.href='/'" id="logout">Logout</button>
+            <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
@@ -109,6 +103,9 @@
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
+                    if(response.classes.length == 0) {
+                        location.href='/logout';
+                    }
 					tableData = response;
 
 
