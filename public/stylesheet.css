@@ -182,6 +182,10 @@ button {
   transition: 0.3s;
 }
 
+.tab button#GPA {
+	float: right;
+}
+
 .tab button#logout {
   float: right;
 }
