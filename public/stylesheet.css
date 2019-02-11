@@ -233,3 +233,19 @@ div.tabcontent, div.tab {
     left: 0;
     right: 0;
 }
+
+.text-center.p-t-12.login100-form {
+    /* margin: auto; */
+    /* padding: 0; */
+    margin-top: 5px;
+    width: 100%;
+}
+
+.wrap-login100 {
+        padding: 5% 10% 5% 10%;
+}
+
+form.login100-form {
+    margin: auto 0 auto 0;
+    height: fit-content;
+}
