@@ -46,7 +46,7 @@
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
- 	    <div align="center"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button><button class="addAssignment" onclick="resetTableData()">Reset Changes</button></div> 
+ 	    <div align="nenter"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button><button class="addAssignment" onclick="resetTableData()">Reset Changes</button></div> 
            <div id="assignmentsTable"></div>
         </div>
         <div id="schedule" class="tabcontent">
@@ -94,9 +94,9 @@
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
-					{title:"Period", field:"period", headerSort:false, formatter: "html"},
+					{title:"Period", field:"period", width: 100, headerSort:false, formatter: "html"},
 					{title:"Class", field:"class", headerSort:false, formatter: "html"},
-					{title:"Room", field:"room", headerSort:false},
+					{title:"Room", field:"room", width: 100, headerSort:false},
 				],
 			});
 			let classesTable = new Tabulator("#classesTable", {
