@@ -41,14 +41,12 @@ app.post('/data', async (req, res) => {
 app.post('/login', async (req, res) => {
 	req.session.username = req.body.username;
 	req.session.password = req.body.password;
-	//res.sendFile('home.html', {root:"public"});
     res.redirect('/home.html');
 });
 
-app.post('/logout', async (req, res) => {
-
-	res.sendFile('index.html', {root:"public"});
-
+app.get('/logout', async (req, res) => {
+    req.session.destroy();
+	res.redirect('/');
 });
 
 io.on('connection', function(socket){

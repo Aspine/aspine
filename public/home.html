@@ -29,11 +29,6 @@
 	</head>
 	<body>
 		<div id="header">
-            <!--
-			<form action="/logout" method="POST">	
-				<input id="logout" type="submit" value="Logout"></button>
-			</form>
-            -->
 			<h4 id="title">
 				Aspine
 			</h4>
@@ -41,7 +36,7 @@
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-            <button class="tablinks" onclick="location.href='/'" id="logout">Logout</button>
+            <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
