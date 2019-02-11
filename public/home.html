@@ -54,7 +54,7 @@
         </div>
 		<script type="text/javascript">
 			let tableData = {};
-			let selected_class_i = 0;
+			let selected_class_i;
 			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
@@ -88,8 +88,8 @@
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
-					{title:"Period", field:"period", headerSort:false, formatter: "html"},
-					{title:"Room", field:"room", headerSort:false},
+					{title:"Period", field:"period", width: 150, headerSort:false, formatter: "html"},
+					{title:"Room", field:"room", width: 150, headerSort:false},
 					{title:"Class", field:"class", headerSort:false, formatter: "html"},
 				],
 			});
