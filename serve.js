@@ -19,7 +19,7 @@ const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
 const io = socket(server);
 
-if(process.argv[2] == "secure") {
+if(process.argv[2] != "insecure") {
     // Certificate
     const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
