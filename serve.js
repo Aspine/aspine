@@ -14,7 +14,7 @@ const https = require('https');
 
 // ------------ Web Server -------------------
 const app = express();
-const port = 80;
+const port = 8080;
 const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
 const io = socket(server);
@@ -30,20 +30,23 @@ if(process.argv[2] == "secure") {
         cert: certificate,
         ca: ca
     };
-    const httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(443, () => {
+
+    app.all('*', ensureSecure); // at top of routing calls
+
+    http.createServer(app).listen(80)
+    https.createServer(credentials, app).listen(443, () => {
         console.log('HTTPS Server running on port 443');
     });
 
-    const httpServer = http.createServer();
-    // set up a route to redirect http to https
-    http.get('*', function(req, res) {
-        res.redirect('https://' + req.headers.host + req.url);
-    })
-
-    // have it listen on 8080
-    http.listen(8080);
-
+    function ensureSecure(req, res, next){
+        if(req.secure){
+            // OK, continue
+            return next();
+        };
+        // handle port numbers if you need non defaults
+        // res.redirect('https://' + req.host + req.url); // express 3.x
+        res.redirect('https://' + req.hostname + req.url); // express 4.x
+    }
 }
 
 app.use(express.static('public')); // Serve any files in public directory
