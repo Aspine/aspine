@@ -1,6 +1,6 @@
 let newAssignment = function() {
 
-	tableData.classes[selected_class_i].assignments.push({
+	tableData.classes[selected_class_i].assignments.unshift({
 		"name": "Assignment",
 		"category": Object.keys(tableData.classes[selected_class_i].categories)[0],
 		"score": 10,
