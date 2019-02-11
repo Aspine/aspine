@@ -34,8 +34,8 @@ if(process.argv[2] == "secure") {
     httpsServer.listen(443, () => {
         console.log('HTTPS Server running on port 443');
     });
-    const http = express.createServer();
 
+    const httpServer = http.createServer();
     // set up a route to redirect http to https
     http.get('*', function(req, res) {
         res.redirect('https://' + req.headers.host + req.url);
