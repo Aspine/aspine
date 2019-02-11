@@ -83,14 +83,14 @@
 			});
 			//create Tabulator on DOM element with id "scheduleTable"
 			let scheduleTable = new Tabulator("#scheduleTable", {
-				layout:"fitColumns", //fit columns to width of table (optional)
+				layout:"fitDataFill", //fit columns to width of table (optional)
 				rowFormatter:function(row) {
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
-					{title:"Period", field:"period", width: 100, headerSort:false, formatter: "html"},
+					{title:"Period", field:"period", headerSort:false, formatter: "html"},
+					{title:"Room", field:"room", headerSort:false},
 					{title:"Class", field:"class", headerSort:false, formatter: "html"},
-					{title:"Room", field:"room", width: 100, headerSort:false},
 				],
 			});
 			let classesTable = new Tabulator("#classesTable", {
