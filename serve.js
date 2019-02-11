@@ -1,4 +1,4 @@
-#!/bin/node
+#!/usr/bin/node
 
 // --------------- Includes ------------------
 const express = require('express');
