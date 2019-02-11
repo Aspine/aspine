@@ -154,6 +154,9 @@
 			
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
+					tableData.GPA = computeGPA();
+					document.getElementById("GPA").innerHTML = "GPA: " + tableData.GPA;
+
 					scheduleTable.setData(response.schedule.black);
 
 					return response.classes; //return the tableData property of a response json object
