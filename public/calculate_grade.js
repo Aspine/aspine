@@ -1,4 +1,4 @@
-function computeGrade(categories, scores, maxScores, constCategories, constWeights, type) {
+function computeGrade(categories, scores, maxScores, constCategories, constWeights, type, decimals) {
 
 
 	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
@@ -46,9 +46,9 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 
 		let totalPercent = totalScore / totalMaxScore;
 		if (type === 1) {
-			return "" + Math.round(categoryPercent * Math.pow(10, 3)) / Math.pow(10, 1);
+			return "" + Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals);
 		} else {
-			return "" +  Math.round(totalPercent * Math.pow(10, 3)) / Math.pow(10, 1);
+			return "" +  Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals);
 		}
 	}
 
@@ -95,8 +95,6 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 	categoryPercent = Math.round(categoryPercent * 1000) / 1000;
 	totalPercent = Math.round(totalPercent * 1000) / 1000;
 
-	console.log(categoryPercent);
-	console.log(totalPercent);
 
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
 		return 1;
