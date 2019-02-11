@@ -54,7 +54,7 @@
         </div>
 		<script type="text/javascript">
 			let tableData = {};
-			let selected_class_i = 0;
+			let selected_class_i;
 			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
@@ -83,14 +83,14 @@
 			});
 			//create Tabulator on DOM element with id "scheduleTable"
 			let scheduleTable = new Tabulator("#scheduleTable", {
-				layout:"fitColumns", //fit columns to width of table (optional)
+				layout:"fitDataFill", //fit columns to width of table (optional)
 				rowFormatter:function(row) {
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
-					{title:"Period", field:"period", width: 100, headerSort:false, formatter: "html"},
+					{title:"Period", field:"period", width: 150, headerSort:false, formatter: "html"},
+					{title:"Room", field:"room", width: 150, headerSort:false},
 					{title:"Class", field:"class", headerSort:false, formatter: "html"},
-					{title:"Room", field:"room", width: 100, headerSort:false},
 				],
 			});
 			let classesTable = new Tabulator("#classesTable", {
@@ -110,6 +110,9 @@
 
 
 					for(let i = 0; i < tableData.classes.length; i++) {
+						if (tableData.classes[i].grade != "") {
+							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
+						}
 
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
@@ -127,7 +130,7 @@
 							let computingClassData = tableData.classes[i];
 							tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
 
-							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type);
+							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type, tableData.classes[i].decimals);
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
