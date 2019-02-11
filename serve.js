@@ -9,6 +9,7 @@ const http = require('http');
 const socket = require('socket.io');
 const fs = require('fs');
 const https = require('https');
+const args = require('minimist')(process.argv.slice(2));
 // -------------------------------------------
 
 
@@ -19,7 +20,7 @@ const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
 const io = socket(server);
 
-if(process.argv[2] != "insecure") {
+if(!args._.includes("insecure")) {
     // Certificate
     const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
@@ -60,7 +61,7 @@ app.use(session({ // Allows for sessions, and signs them with the (arbitrary) se
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-    if(process.argv[2] != "fake") {
+    if(!args._.includes("fake")) {
         // USE REAL DATA:
         res.send(await scraper.scrape_student(req.session.username, req.session.password));
     } else {

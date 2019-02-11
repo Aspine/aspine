@@ -8,6 +8,7 @@
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "minimist": "^1.2.0",
     "node-fetch": "^2.3.0",
     "prompt": "^1.0.0",
     "socket.io": "^2.2.0"
