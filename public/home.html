@@ -28,8 +28,8 @@
 
 	</head>
 	<body>
-		<div class="login100-pic js-tilt" data-tilt>
-			<img src="images/rotatedTree.png" alt="IMG">
+		<div class="logo">
+			<img src="images/logo.png" alt="IMG">
 		</div>
 
 		<!--<div id="header">
@@ -41,7 +41,7 @@
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
-	    <button class="tablinks" id="GPA">GPA: </button>
+	    <button class="tablinks" id="GPA">Quarter GPA: </button>
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
@@ -159,7 +159,7 @@
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 					tableData.GPA = computeGPA();
-					document.getElementById("GPA").innerHTML = "GPA: " + tableData.GPA;
+					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
 					scheduleTable.setData(response.schedule.black);
 

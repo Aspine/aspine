@@ -249,3 +249,13 @@ form.login100-form {
     margin: auto 0 auto 0;
     height: fit-content;
 }
+
+.logo {
+    height: 150px;
+    margin: 10px;
+}
+
+.logo img {
+    overflow: auto;
+    max-height: 100%;
+}
