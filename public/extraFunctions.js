@@ -38,27 +38,27 @@ function getGPA(gradeToBeGPA) {
 function getLetterGrade(gradeToBeLettered) {
 
 	let parsed = parseFloat(gradeToBeLettered);
-	if (parsed >= 97) {
+	if (parsed >= 97.5) {
 		return "A+";
-	} else if (parsed >= 93) {
+	} else if (parsed >= 92.5) {
 		return "A";
 	} else if (parsed >= 90) {
 		return "A-";
-	} else if (parsed >= 87) {
+	} else if (parsed >= 87.5) {
 		return "B+";
-	} else if (parsed >= 83) {
+	} else if (parsed >= 82.5) {
 		return "B";
 	} else if (parsed >= 80) {
 		return "B-";
-	} else if (parsed >= 77) {
+	} else if (parsed >= 77.5) {
 		return "C+";
-	} else if (parsed >= 73) {
+	} else if (parsed >= 72.5) {
 		return "C";
 	} else if (parsed >= 70) {
 		return "C-";
-	} else if (parsed >= 67) {
+	} else if (parsed >= 67.5) {
 		return "D+";
-	} else if (parsed >= 63) {
+	} else if (parsed >= 62.5) {
 		return "D";
 	} else if (parsed >= 60) {
 		return "D-";
