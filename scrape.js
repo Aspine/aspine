@@ -27,17 +27,17 @@ async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	scrapers[0] = scrape_schedule(username, password, 0);
+	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
 
 	// Spawn class scrapers
-	for(let i = 1; i < THREADS; i++) {
+	for(let i = 0; i < THREADS; i++) {
 		scrapers[i] = scrape_class(username, password, i);
 	}
 
 	// Await on all class scrapers
 	return {
-		classes: (await Promise.all(scrapers.slice(1))).filter(Boolean),
-		schedule: await scrapers[0]
+		classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
+		schedule: await scrapers[THREADS]
 	}
 }
 
@@ -267,9 +267,9 @@ async function fetch_body(url, options) {
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
-		//console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+		console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
 	} else {
-		//console.log(`Thread ${thread}: ${name}\n`);
+		console.log(`Thread ${thread}: ${name}\n`);
 	}
 }
 
