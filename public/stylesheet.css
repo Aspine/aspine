@@ -251,7 +251,8 @@ form.login100-form {
 }
 
 .logo {
-    height: 25%;
+    height: 150px;
+    margin: 10px;
 }
 
 .logo img {
