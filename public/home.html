@@ -76,7 +76,8 @@
 					{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter, headerSort:false},
 					{title:"Category", field:"category", editor:"select",
 						editorParams:function(cell) {
-							return {values:Object.keys(tableData.classes[selected_class_i].categories)};
+							return {values: (tableData.classes[selected_class_i].catCategories)}
+							//tableData.classes[selected_class_i].catCategories};
 						}, 
 						formatter: rowFormatter, headerSort:false,
 					},
@@ -120,6 +121,17 @@
 						if (tableData.classes[i].grade != "") {
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
+
+						tableData.classes[i].catCategories = [];
+			console.log(Object.keys(tableData.classes[i].categories).length);
+						for (let k = 0; k < Object.keys(tableData.classes[i].categories).length; k++) {
+			console.log("testing");
+							console.log((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + ")"));
+							tableData.classes[i].catCategories.push((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + "%)"));
+							
+						}
+						//(Object.keys(tableData.classes[i].categories) + " (" + Object.values(tableData.classes[i].categories) + ")");
+
 
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
