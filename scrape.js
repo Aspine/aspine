@@ -1,7 +1,7 @@
 #!/usr/bin/node
 
 // --------------- Parameters ----------------
-const THREADS = 10;
+const THREADS = 2;
 
 // -------------------------------------------
 
@@ -27,18 +27,32 @@ async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+	//scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+	
+	let sleep = function(milliseconds) { 
+		var start = new Date().getTime(); 
+		for (var i = 0; i < 1e7; i++) { 
+			if ((new Date().getTime() - start) > milliseconds){ 
+				break; 
+			} 
+		} 
+	}
 
 	// Spawn class scrapers
-	for(let i = 0; i < THREADS; i++) {
-		scrapers[i] = scrape_class(username, password, i);
-	}
+	//for(let i = 3; i < THREADS + 3; i++) {
+		//scrapers[i] = scrape_class(username, password, i);
+		scrapers[3] = scrape_class(username, password, 3);
+		sleep(10000);
+		scrapers[5] = scrape_class(username, password, 5);
+
+	//}
 
 	// Await on all class scrapers
-	return {
+	return (await Promise.all([scrapers[3], scrapers[5]]));
+	/*return {
 		classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
 		schedule: await scrapers[THREADS]
-	}
+	}*/
 }
 
 // Returns promise that contains object of all class data
@@ -51,7 +65,7 @@ function scrape_class(username, password, i) {
 		log(i, "session", session);
 
 		// Academics Page
-		academics = await scrape_academics(session.session_id);
+		let academics = await scrape_academics(session.session_id);
 		log(i, "academics", academics);
 
 		// Check if thread is extra
@@ -68,7 +82,7 @@ function scrape_class(username, password, i) {
 		log(i, "categories", categories);
 
 		// Get assignments data page by page
-		let assignments = await scrape_assignments(session.session_id);
+		let assignments = await scrape_assignments(session.session_id, academics.apache_token);
 		log(i, "assignments", assignments);
 
 		// Return promise
@@ -188,7 +202,8 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
 }
 
 // Returns list of assignments (name, category, score, max_score)
-async function scrape_assignments(session_id) {
+async function scrape_assignments(session_id, apache_token) {
+	console.log(`session_id: ${session_id}, apache_token: ${apache_token}`);
 	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
 		{"credentials":"include",
 			"headers":{"Connection": "keep-alive",
@@ -207,6 +222,7 @@ async function scrape_assignments(session_id) {
 			"method":"GET",
 			"mode":"cors"}));
 	let data = [];
+
 	$("tr.listCell.listRowHeight").each(function(i, elem) {
 		let row = {};
 		row["name"] = $(this).find("a").text();
@@ -219,6 +235,42 @@ async function scrape_assignments(session_id) {
 		}
 		data.push(row);
 	});
+
+	$ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+		{"credentials":"include",
+			"headers":{
+				"Connection": "keep-alive",
+				"Cache-Control": "max-age=0",
+				"Origin": "https://aspen.cpsd.us",
+				"Upgrade-Insecure-Requests": "1",
+				"Content-Type": "application/x-www-form-urlencoded",
+				"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+				"Accept-Language": "en-US,en",
+				"X-Do-Not-Track": "1",
+				"DNT": "1",
+				"Referer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+				"Accept-Encoding": "gzip, deflate, br",
+				"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
+			"referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+			"referrerPolicy":"strict-origin-when-cross-origin",
+			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sA&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+			"method":"POST",
+			"mode":"cors"}));
+
+	$("tr.listCell.listRowHeight").each(function(i, elem) {
+		let row = {};
+		row["name"] = $(this).find("a").text();
+		row["category"] = $(this).children().eq(2).text().trim();
+		let scores = $(this).find("div[class=percentFieldContainer]")
+			.parent().next().text().split('/');
+		if(scores[0] != "") { // No score
+			row["score"] = Number(scores[0]);
+			row["max_score"] = Number(scores[1]);
+		}
+		data.push(row);
+	});
+
 	return data;
 }
 
@@ -267,9 +319,9 @@ async function fetch_body(url, options) {
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
-		console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+		//console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
 	} else {
-		console.log(`Thread ${thread}: ${name}\n`);
+		//console.log(`Thread ${thread}: ${name}\n`);
 	}
 }
 
@@ -296,7 +348,7 @@ if(require.main === module) {
 
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
-		console.log(await scrape_student(result.username, result.password));
+		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
 		//let session = await scrape_login();
 		//await submit_login(result.username, result.password, session.apache_token, session.session_id);
 		//console.log(session);

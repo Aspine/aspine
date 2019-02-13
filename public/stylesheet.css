@@ -1,7 +1,6 @@
 body {
-	background-image:  url("background.webp");
 	background-size: cover;
-	background-color: #cccccc;
+	background-color: white;
 	text-align: center;
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 }
