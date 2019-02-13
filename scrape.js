@@ -51,7 +51,7 @@ function scrape_class(username, password, i) {
 		log(i, "session", session);
 
 		// Academics Page
-		academics = await scrape_academics(session.session_id);
+		let academics = await scrape_academics(session.session_id);
 		log(i, "academics", academics);
 
 		// Check if thread is extra
@@ -68,7 +68,7 @@ function scrape_class(username, password, i) {
 		log(i, "categories", categories);
 
 		// Get assignments data page by page
-		let assignments = await scrape_assignments(session.session_id);
+		let assignments = await scrape_assignments(session.session_id, academics.apache_token);
 		log(i, "assignments", assignments);
 
 		// Return promise
@@ -188,7 +188,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
 }
 
 // Returns list of assignments (name, category, score, max_score)
-async function scrape_assignments(session_id) {
+async function scrape_assignments(session_id, apache_token) {
 	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
 		{"credentials":"include",
 			"headers":{"Connection": "keep-alive",
@@ -207,19 +207,50 @@ async function scrape_assignments(session_id) {
 			"method":"GET",
 			"mode":"cors"}));
 	let data = [];
-	$("tr.listCell.listRowHeight").each(function(i, elem) {
-		let row = {};
-		row["name"] = $(this).find("a").text();
-		row["category"] = $(this).children().eq(2).text().trim();
-		let scores = $(this).find("div[class=percentFieldContainer]")
-			.parent().next().text().split('/');
-		if(scores[0] != "") { // No score
-			row["score"] = Number(scores[0]);
-			row["max_score"] = Number(scores[1]);
-		}
-		data.push(row);
-	});
-	return data;
+    let page = 1;
+    let n_assignments = parseInt($("#totalRecordsCount").text());
+
+    while(true) {
+        $("tr.listCell.listRowHeight").each(function(i, elem) {
+            let row = {};
+            row["name"] = $(this).find("a").text();
+            row["category"] = $(this).children().eq(2).text().trim();
+            let scores = $(this).find("div[class=percentFieldContainer]")
+                .parent().next().text().split('/');
+            if(scores[0] != "") { // No score
+                row["score"] = Number(scores[0]);
+                row["max_score"] = Number(scores[1]);
+            }
+            data.push(row);
+        });
+
+        if(page * 25 > n_assignments) {
+            return data;
+        }
+        page++;
+
+        $ = cheerio.load((await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+            {"credentials":"include",
+                "headers":{
+                    "Connection": "keep-alive",
+                    "Cache-Control": "max-age=0",
+                    "Origin": "https://aspen.cpsd.us",
+                    "Upgrade-Insecure-Requests": "1",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+                    "Accept-Language": "en-US,en",
+                    "X-Do-Not-Track": "1",
+                    "DNT": "1",
+                    "Referer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
+                "referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+                "referrerPolicy":"strict-origin-when-cross-origin",
+                "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sA&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+                "method":"POST",
+                "mode":"cors"})));
+    }
 }
 
 // Returns list of black/silver day pairs of class names and room numbers
@@ -296,7 +327,7 @@ if(require.main === module) {
 
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
-		console.log(await scrape_student(result.username, result.password));
+		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
 		//let session = await scrape_login();
 		//await submit_login(result.username, result.password, session.apache_token, session.session_id);
 		//console.log(session);
