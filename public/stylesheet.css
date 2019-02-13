@@ -260,3 +260,9 @@ form.login100-form {
     height: 100px;
     float: left;
 }
+
+.login100-pic.js-tilt {
+    height: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+}

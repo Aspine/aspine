@@ -298,9 +298,9 @@ async function fetch_body(url, options) {
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
-		console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+		//console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
 	} else {
-		console.log(`Thread ${thread}: ${name}\n`);
+		//console.log(`Thread ${thread}: ${name}\n`);
 	}
 }
 
