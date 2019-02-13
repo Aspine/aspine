@@ -1,7 +1,7 @@
 #!/usr/bin/node
 
 // --------------- Parameters ----------------
-const THREADS = 2;
+const THREADS = 10;
 
 // -------------------------------------------
 
@@ -27,32 +27,19 @@ async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	//scrapers[THREADS] = scrape_schedule(username, password, THREADS);
-	
-	let sleep = function(milliseconds) { 
-		var start = new Date().getTime(); 
-		for (var i = 0; i < 1e7; i++) { 
-			if ((new Date().getTime() - start) > milliseconds){ 
-				break; 
-			} 
-		} 
-	}
+	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
 
 	// Spawn class scrapers
-	//for(let i = 3; i < THREADS + 3; i++) {
-		//scrapers[i] = scrape_class(username, password, i);
-		scrapers[3] = scrape_class(username, password, 3);
-		sleep(10000);
-		scrapers[5] = scrape_class(username, password, 5);
+	for(let i = 0; i < THREADS; i++) {
+		scrapers[i] = scrape_class(username, password, i);
 
-	//}
+	}
 
 	// Await on all class scrapers
-	return (await Promise.all([scrapers[3], scrapers[5]]));
-	/*return {
+	return {
 		classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
 		schedule: await scrapers[THREADS]
-	}*/
+	}
 }
 
 // Returns promise that contains object of all class data
