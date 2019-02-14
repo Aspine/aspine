@@ -11,30 +11,7 @@ input {
 	font-size: 14px;
 }
 
-input.login {
-	text-align: center;
-	margin-left: 5%;
-	margin-right: 5%;
-	padding: 5px 0px;
-	font-size: 20px;
-	border: 1px solid orange;
-	font-family: Poppins-Bold, serif;
-}
 
-input:hover.login {
-	background-color: orange;
-}
-
-input#login.login {
-	border: 1px solid blue;
-	background-color: lightblue;
-	padding: 5px 50px;
-	margin: 50px 0px;
-}
-
-input#login:hover.login {
-	background-color: blue;
-}
 
 
 
