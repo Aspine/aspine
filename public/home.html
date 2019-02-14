@@ -123,9 +123,7 @@
 						}
 
 						tableData.classes[i].catCategories = [];
-			console.log(Object.keys(tableData.classes[i].categories).length);
 						for (let k = 0; k < Object.keys(tableData.classes[i].categories).length; k++) {
-			console.log("testing");
 							console.log((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + ")"));
 							tableData.classes[i].catCategories.push((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + "%)"));
 							
@@ -198,6 +196,7 @@
 							return;
 						}
 					}
+					document.getElementById("assignmentsTable").style.display = "inline-block";
 				},
 			});
 			function schedule_toggle() {
