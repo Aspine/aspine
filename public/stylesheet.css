@@ -12,10 +12,6 @@ input {
 }
 
 
-
-
-
-
 h4#title {
 	position: absolute;
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
@@ -28,15 +24,7 @@ h4#title {
 	top: 0px;
 }
 
-div#login-bubble {
-	background-color: #ffffcc;
-	border-radius: 10px;
-	padding-bottom: 20px;
-	width: 50%;
-	min-width: 650px;
-	vertical-align: middle;
-	height: 265px;
-}
+
 
 button {
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
