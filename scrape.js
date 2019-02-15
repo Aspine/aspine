@@ -32,6 +32,7 @@ async function scrape_student(username, password) {
 	// Spawn class scrapers
 	for(let i = 0; i < THREADS; i++) {
 		scrapers[i] = scrape_class(username, password, i);
+
 	}
 
 	// Await on all class scrapers
@@ -207,7 +208,7 @@ async function scrape_assignments(session_id, apache_token) {
 			"method":"GET",
 			"mode":"cors"}));
 	let data = [];
-    let page = 1;
+   let page = 1;
     let n_assignments = parseInt($("#totalRecordsCount").text());
 
     while(true) {

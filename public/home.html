@@ -47,7 +47,7 @@
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
- 	    <div align="nenter"><button class="addAssignment" onclick="newAssignment()">Add Assignment</button><button class="addAssignment" onclick="resetTableData()">Reset Changes</button></div> 
+ 	    <div align="center" id="assignmentsButtonDiv"><button class="assignmentsButton" onclick="newAssignment()">Add Assignment</button><button class="assignmentsButton" onclick="resetTableData()">Reset Changes</button></div> 
            <div id="assignmentsTable"></div>
         </div>
         <div id="schedule" class="tabcontent">
@@ -76,7 +76,8 @@
 					{title:"Assignment", field:"name", editor:"input", formatter: rowFormatter, headerSort:false},
 					{title:"Category", field:"category", editor:"select",
 						editorParams:function(cell) {
-							return {values:Object.keys(tableData.classes[selected_class_i].categories)};
+							return {values: (tableData.classes[selected_class_i].catCategories)}
+							//tableData.classes[selected_class_i].catCategories};
 						}, 
 						formatter: rowFormatter, headerSort:false,
 					},
@@ -121,6 +122,14 @@
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
 
+						tableData.classes[i].catCategories = [];
+						for (let k = 0; k < Object.keys(tableData.classes[i].categories).length; k++) {
+							tableData.classes[i].catCategories.push((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + "%)"));
+							
+						}
+						//(Object.keys(tableData.classes[i].categories) + " (" + Object.values(tableData.classes[i].categories) + ")");
+
+
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
 							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
@@ -137,7 +146,8 @@
 							let computingClassData = tableData.classes[i];
 							tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
 
-							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type, tableData.classes[i].decimals);
+							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
+								//computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type, tableData.classes[i].decimals);
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
@@ -177,6 +187,8 @@
 					{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+					document.getElementById("assignmentsTable").style.display = "block";
+					document.getElementById("assignmentsButtonDiv").style.display = "inline-block";
 					selected_class_i = row.getPosition();
 					tabledata = classesTable.getData();
 					for(let i in tabledata) {
