@@ -1,4 +1,4 @@
-function computeGrade2(assignments, categories, decimals) {
+function computeGrade(assignments, categories, decimals) {
 
 	let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
 
@@ -9,7 +9,6 @@ function computeGrade2(assignments, categories, decimals) {
 		categoryGrades[category] = 0;
 	}
 
-	console.log(categoryScores);
 
 
 
@@ -36,7 +35,6 @@ function computeGrade2(assignments, categories, decimals) {
 			}
 		}
 
-		console.log(categoryScores);
 
 
 		let categoryPercent = 0, counterWeight = 1;
@@ -53,10 +51,6 @@ function computeGrade2(assignments, categories, decimals) {
 
 		let totalPercent = totalScore / totalMaxScore;
 
-		console.log( {
-			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
-			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
-		});
 
 		return {
 			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
@@ -66,108 +60,70 @@ function computeGrade2(assignments, categories, decimals) {
 
 }
 
-function computeGrade(categories, scores, maxScores, constCategories, constWeights, decimals) {
 
 
 
-	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
+function determineGradeType(assignments, categories, currentGrade) {
+	let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
 
-	if (constCategories.length === 0) {
-		for (let j = 0; j < scores.length; j++) {
-			totalScore += parseFloat(scores[j]);
-			totalMaxScore += parseFloat(maxScores[j]);
+	
+	for (let category in categories) {
+		categoryScores[category] = 0;
+		categoryMaxScores[category] = 0;
+		categoryGrades[category] = 0;
+	}
+
+
+
+
+	let totalScore = 0, totalMaxScore = 0;
+
+	if (Object.keys(categories).length === 0) {
+		for (let j = 0; j < assignments.length; j++) {
+			totalScore += parseFloat(assignments[j].score);
+			totalMaxScore += parseFloat(assignments[j].max_score);
 		}
 
 		let totalPercent = totalScore / totalMaxScore;
 
 		return "" + (Math.round(totalPercent * 10000) / 100);
+
 	} else {
-		for (let i = 0; i < constCategories.length; i++) {
-			categoryScores[i] = 0;
-			categoryMaxScores[i] = 0;
-		}
+		for (let i = 0; i < assignments.length; i++) {
+			if (assignments[i].score != "None") {
+				totalScore += parseFloat(assignments[i].score);
+				totalMaxScore += parseFloat(assignments[i].max_score);
 
-		for (let i = 0; i < constCategories.length; i++) {
-			for (let j = 0; j < scores.length; j++) {
-				if (constCategories[i] === categories[j]) {
-					totalScore += parseFloat(scores[j]);
-					totalMaxScore += parseFloat(maxScores[j]);
-
-					categoryScores[i] += parseFloat(scores[j]);
-					categoryMaxScores[i] += parseFloat(maxScores[j]);
-				}
+				categoryScores[assignments[i].category] += parseFloat(assignments[i].score);
+				categoryMaxScores[assignments[i].category] += parseFloat(assignments[i].max_score);
 			}
 		}
 
 
+
 		let categoryPercent = 0, counterWeight = 1;
 
-		for (let i = 0; i < constCategories.length; i++) {
-
-			if (categoryMaxScores[i] === 0) {
-				counterWeight -= parseFloat(getWeight(constCategories[i], constCategories, constWeights));
+		for (category in categories) {
+			if (categoryMaxScores[category] === 0) {
+				counterWeight -= parseFloat(categories[category]);
 			} else {
-				categoryPercent += ((0.0 + categoryScores[i]) / categoryMaxScores[i]) * parseFloat(getWeight(constCategories[i], constCategories, constWeights));
+				categoryPercent += ((0.0 + categoryScores[category]) / categoryMaxScores[category]) * parseFloat(categories[category]);
 			}
 		}
 
 		categoryPercent /= counterWeight;
 
 		let totalPercent = totalScore / totalMaxScore;
-		return {
-			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
-			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
-		};
-	}
 
-}
+		categoryPercent = Math.round(categoryPercent * 1000) / 1000;
+		totalPercent = Math.round(totalPercent * 1000) / 1000;
 
 
-function determineGradeType(categories, scores, maxScores, constCategories, constWeights, currentGrade) {
-	currentGrade = parseFloat(currentGrade);
-	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
-
-	for (let i = 0; i < constCategories.length; i++) {
-		categoryScores[i] = 0;
-		categoryMaxScores[i] = 0;
-	}
-	for (let i = 0; i < constCategories.length; i++) {
-		for (let j = 0; j < scores.length; j++) {
-			if (constCategories[i] === categories[j]) {
-				totalScore += parseFloat(scores[j]);
-				totalMaxScore += parseFloat(maxScores[j]);
-
-				categoryScores[i] += parseFloat(scores[j]);
-				categoryMaxScores[i] += parseFloat(maxScores[j]);
-			}
-		}
-	}
-
-
-	let categoryPercent = 0, counterWeight = 1;
-
-	for (let i = 0; i < constCategories.length; i++) {
-
-		if (categoryMaxScores[i] === 0) {
-			counterWeight -= parseFloat(getWeight(constCategories[i], constCategories, constWeights));
-
+		if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
+			return 'categoryPercent';
 		} else {
-			categoryPercent += ((0.0 + categoryScores[i]) / categoryMaxScores[i]) * parseFloat(getWeight(constCategories[i], constCategories, constWeights));
+			return 'totalPercent';
 		}
-	}
-
-	categoryPercent /= counterWeight;
-
-	let totalPercent = totalScore / totalMaxScore;
-
-	categoryPercent = Math.round(categoryPercent * 1000) / 1000;
-	totalPercent = Math.round(totalPercent * 1000) / 1000;
-
-
-	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
-		return 'categoryPercent';
-	} else {
-		return 'categoryPercent';
 	}
 }
 

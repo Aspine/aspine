@@ -13,8 +13,7 @@ let newAssignment = function() {
 
 		let computingClassData = tableData.classes[selected_class_i];
 
-		//tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.decimals))[computingClassData.type];
-		tableData.classes[selected_class_i].calculated_grade = (computeGrade2(computingClassData.assignments, computingClassData.categories, computingClassData.decimals))[computingClassData.type];
+		tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals))[computingClassData.type];
 
 		classesTable.setData(tableData.classes);
 
@@ -53,14 +52,11 @@ let editAssignment = function(data) {
 
 	let computingClassData = tableData.classes[selected_class_i];
 
-	tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.decimals))[computingClassData.type];
+	tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals))[computingClassData.type];
 
 	tableData.classes[selected_class_i].color = getColor(tableData.classes[selected_class_i].calculated_grade);
 
 	classesTable.setData(tableData.classes);
-
-
-
 }
 
 let resetTableData = function() {
