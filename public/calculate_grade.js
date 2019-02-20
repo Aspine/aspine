@@ -1,4 +1,73 @@
+function computeGrade2(assignments, categories, decimals) {
+
+	let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
+
+	
+	for (let category in categories) {
+		categoryScores[category] = 0;
+		categoryMaxScores[category] = 0;
+		categoryGrades[category] = 0;
+	}
+
+	console.log(categoryScores);
+
+
+
+	let totalScore = 0, totalMaxScore = 0;
+
+	if (Object.keys(categories).length === 0) {
+		for (let j = 0; j < assignments.length; j++) {
+			totalScore += parseFloat(assignments[j].score);
+			totalMaxScore += parseFloat(assignments[j].max_score);
+		}
+
+		let totalPercent = totalScore / totalMaxScore;
+
+		return "" + (Math.round(totalPercent * 10000) / 100);
+
+	} else {
+		for (let i = 0; i < assignments.length; i++) {
+			if (assignments[i].score != "None") {
+				totalScore += parseFloat(assignments[i].score);
+				totalMaxScore += parseFloat(assignments[i].max_score);
+
+				categoryScores[assignments[i].category] += parseFloat(assignments[i].score);
+				categoryMaxScores[assignments[i].category] += parseFloat(assignments[i].max_score);
+			}
+		}
+
+		console.log(categoryScores);
+
+
+		let categoryPercent = 0, counterWeight = 1;
+
+		for (category in categories) {
+			if (categoryMaxScores[category] === 0) {
+				counterWeight -= parseFloat(categories[category]);
+			} else {
+				categoryPercent += ((0.0 + categoryScores[category]) / categoryMaxScores[category]) * parseFloat(categories[category]);
+			}
+		}
+
+		categoryPercent /= counterWeight;
+
+		let totalPercent = totalScore / totalMaxScore;
+
+		console.log( {
+			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+		});
+
+		return {
+			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+		};
+	}
+
+}
+
 function computeGrade(categories, scores, maxScores, constCategories, constWeights, decimals) {
+
 
 
 	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
