@@ -133,11 +133,10 @@ function computeGPA() {
 	let sum = 0;
 	let counter = 0.0;
 	for (let i = 0; i < tableData.classes.length; i++) {
-		if (!isNaN(parseFloat(tableData.classes[i].grade))) {
-			sum += parseFloat(tableData.classes[i].grade);
+		if (!isNaN(parseFloat(tableData.classes[i].calculated_grade))) {
+			sum += parseFloat(tableData.classes[i].calculated_grade);
 			counter += 1.0;
 		}
 	}
 	return Math.round(sum / counter * 100) / 100;
-
 }

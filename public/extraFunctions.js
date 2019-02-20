@@ -144,26 +144,35 @@ let rowGradeFormatter = function(cell, formatterParams) {
 
 let gradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
+	let calculated_grade = cell.getRow().getData().calculated_grade;
 
 
 	if (isNaN(numberGrade)) {
 		return "No Grade";
 
 	} else {
-		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
-		if(parseFloat(numberGrade) >= 90){
-			return "<span style='color:green; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) >= 80){
-			return "<span style='color:blue; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) >= 70){
-			return "<span style='color:#ff9900; font-weight:bold;'>" + value + "</span>";
-		} else if(parseFloat(numberGrade) >= 60){
-			return "<span style='color:orange; font-weight:bold;'>" + value + "</span>";
-		} else if (parseFloat(numberGrade) >= 0) {
-			return "<span style='color:red; font-weight:bold;'>" + value + "</span>";
-		} else {
-			return value;
+
+		let real = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
+		let fake = "";
+		if (parseFloat(numberGrade) != parseFloat(calculated_grade)) {
+			fake = "Calculated Grade: " + calculated_grade + "% " + getLetterGrade(calculated_grade);
 		}
+
+		return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
+
+		//if(parseFloat(numberGrade) >= 90){
+		//	return "<span style='color:green; font-weight:bold;'>" + real + "</span>";
+		//} else if(parseFloat(numberGrade) >= 80){
+		//	return "<span style='color:blue; font-weight:bold;'>" + real + "</span>";
+		//} else if(parseFloat(numberGrade) >= 70){
+		//	return "<span style='color:#ff9900; font-weight:bold;'>" + real + "</span>";
+		//} else if(parseFloat(numberGrade) >= 60){
+		//	return "<span style='color:orange; font-weight:bold;'>" + real + "</span>";
+		//} else if (parseFloat(numberGrade) >= 0) {
+		//	return "<span style='color:red; font-weight:bold;'>" + real + "</span>";
+		//} else {
+		//	return real;
+		//}
 	}
 
 }

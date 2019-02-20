@@ -18,6 +18,13 @@ let newAssignment = function() {
 		classesTable.setData(tableData.classes);
 
 		assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+
+		tableData.calcGPA = computeGPA();
+
+		if (tableData.GPA != tableData.calcGPA) {
+			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
+		}	
+
 	}
 }
 

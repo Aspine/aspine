@@ -124,7 +124,7 @@
 
 						tableData.classes[i].catCategories = [];
 						for (let k = 0; k < Object.keys(tableData.classes[i].categories).length; k++) {
-							tableData.classes[i].catCategories.push((Object.keys(tableData.classes[i].categories)[k] + " (" + Object.values(tableData.classes[i].categories)[k] + "%)"));
+							tableData.classes[i].catCategories.push((Object.keys(tableData.classes[i].categories)[k] + " (" + (Object.values(tableData.classes[i].categories)[k] * 100)+ "%)"));
 							
 						}
 						//(Object.keys(tableData.classes[i].categories) + " (" + Object.values(tableData.classes[i].categories) + ")");
@@ -171,6 +171,7 @@
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 					tableData.GPA = computeGPA();
+					tableData.calcGPA = computeGPA();
 					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
 					scheduleTable.setData(response.schedule.black);
@@ -184,7 +185,6 @@
 				columns:[ //Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
-					{title:"Calculated Grade", field:"calculated_grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
 					document.getElementById("assignmentsTable").style.display = "block";
