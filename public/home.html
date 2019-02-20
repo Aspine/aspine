@@ -153,19 +153,21 @@
 						}
 					}
 
-					let periods = [ "Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4", "Extra", "Extra", "Extra", "Extra"];
+					let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
 
-					let times = [ "8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30", "", "", "", ""];
+					let times = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
 
 					let colors = ["#e6ecff", "#ccd9ff", "#b3c6ff", "#99b3ff", "#809fff", "#668cff", "#4d79ff", "#3366ff", "#1a53ff", "#0040ff"];
 
 					for (let i = 0; i < tableData.schedule.black.length;  i++) {
-						tableData.schedule.black[i].period = periods[i] + "<br>" + times[i]; 
+						tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra"; 
 						tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
-						tableData.schedule.black[i].color = colors[i];
-						tableData.schedule.silver[i].period = periods[i] + "<br>" + times[i];
+						tableData.schedule.black[i].color = colors[i] ? colors[i] : "#0040ff";
+						//tableData.schedule.black[i].color = colors[5];
+
+						tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
 						tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
-						tableData.schedule.silver[i].color = colors[i];
+						tableData.schedule.silver[i].color = colors[i] ? colors[i] : "#00400ff";
 					}
 			
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
