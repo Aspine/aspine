@@ -1,4 +1,4 @@
-function computeGrade(categories, scores, maxScores, constCategories, constWeights, type, decimals) {
+function computeGrade(categories, scores, maxScores, constCategories, constWeights, decimals) {
 
 
 	let categoryScores = [], categoryMaxScores = [], totalScore = 0, totalMaxScore = 0;
@@ -45,11 +45,10 @@ function computeGrade(categories, scores, maxScores, constCategories, constWeigh
 		categoryPercent /= counterWeight;
 
 		let totalPercent = totalScore / totalMaxScore;
-		if (type === 1) {
-			return "" + Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals);
-		} else {
-			return "" +  Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals);
-		}
+		return {
+			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+		};
 	}
 
 }
@@ -97,9 +96,9 @@ function determineGradeType(categories, scores, maxScores, constCategories, cons
 
 
 	if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
-		return 1;
+		return 'categoryPercent';
 	} else {
-		return 0;
+		return 'categoryPercent';
 	}
 }
 

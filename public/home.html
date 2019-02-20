@@ -122,14 +122,14 @@
 
 
 					for(let i = 0; i < tableData.classes.length; i++) {
+
+						tableData.classes[i].categoryGrades = {};
+
 						if (tableData.classes[i].grade != "") {
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
 
 						
-						//(Object.keys(tableData.classes[i].categories) + " (" + Object.values(tableData.classes[i].categories) + ")");
-
-
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
 							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
@@ -147,7 +147,6 @@
 							tableData.classes[i].type = determineGradeType(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), computingClassData.grade);
 
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
-								//computeGrade(computingClassData.assignments.map(assignment => assignment.category), computingClassData.assignments.map(assignment => assignment.score === "None" ? 0 : assignment.score), computingClassData.assignments.map(assignment => assignment.max_score === "None" ? 0 : assignment.max_score), Object.keys(computingClassData.categories), Object.values(computingClassData.categories), tableData.classes[i].type, tableData.classes[i].decimals);
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
