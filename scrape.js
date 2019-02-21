@@ -216,9 +216,13 @@ async function scrape_assignments(session_id, apache_token) {
             let row = {};
             row["name"] = $(this).find("a").text();
             row["category"] = $(this).children().eq(2).text().trim();
-            let scores = $(this).find("div[class=percentFieldContainer]")
-                .parent().next().text().split('/');
-            if(scores[0] != "") { // No score
+            //let scores = $(this).find("div[class=percentFieldContainer]");
+	    let scores = $(this).find("tr")
+                .children().slice(0, 2);
+		console.log(scores.text());
+		row["special"] = scores.text();
+            if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
+		    scores = scores.eq(1).text().split("/");
                 row["score"] = Number(scores[0]);
                 row["max_score"] = Number(scores[1]);
             }
