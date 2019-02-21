@@ -170,8 +170,8 @@
 
 							let categoriesArray = Object.keys(gradeInfo.categoryScores);
 			let weightsArray = Object.values(computingClassData.categories).map(weight => weight * 100 + "%");
-							let scoresArray = Object.values(gradeInfo.categoryScores).map(score => !isNaN(parseFloat(score)) ? score : "None");
-							let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => !isNaN(parseFloat(maxScore)) ? maxScore : "None");
+							let scoresArray = Object.values(gradeInfo.categoryScores).map(score => !isNaN(parseFloat(score)) && parseFloat(score) != 0 ? score : "None");
+							let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => !isNaN(parseFloat(maxScore)) && parseFloat(maxScore) != 0 ? maxScore : "None");
 			let gradesArray = Object.values(gradeInfo.categoryGrades).map(grade => !isNaN(parseFloat(grade)) ? Math.round(grade * 1000) / 10 + "%" : "No Grade");
 
 							tableData.classes[i].type = gradeInfo.type;
