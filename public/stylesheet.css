@@ -67,7 +67,7 @@ button {
 	color: #ffffff !important;
 	background: #f6b93b;
 	border-color: #f6b93b !important;
-	transition: all 0.4s ease 0s;
+	/*transition: all 0.4s ease 0s;*/
 }
 
 .center-div {
@@ -161,7 +161,7 @@ button {
 	outline: none;
 	cursor: pointer;
 	padding: 14px 16px;
-	transition: 0.3s;
+	/*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
 }
 
 .tab button#GPA {
