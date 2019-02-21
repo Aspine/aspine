@@ -97,6 +97,7 @@
 			let scheduleTable = new Tabulator("#scheduleTable", {
 				layout:"fitDataFill", //fit columns to width of table (optional)
 				rowFormatter:function(row) {
+					row.getElement().style.transition = "all 1s ease";
 					row.getElement().style.backgroundColor = row.getData().color;
 				},
 				columns:[ //Define Table Columns
