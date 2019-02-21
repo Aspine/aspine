@@ -1,5 +1,7 @@
 let newAssignment = function() {
 
+	tableData.classes[selected_class_i].edited = true;
+
 	if (!isNaN(selected_class_i)) {
 
 		tableData.classes[selected_class_i].assignments.unshift({
@@ -21,7 +23,7 @@ let newAssignment = function() {
 
 		tableData.calcGPA = computeGPA();
 
-		if (tableData.GPA != tableData.calcGPA) {
+		if (tableData.classes[selected_class_i].edited) {
 			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
 		} else {
 			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
@@ -33,6 +35,8 @@ let newAssignment = function() {
 
 let editAssignment = function(data) {
 	
+	tableData.classes[selected_class_i].edited = true;
+
 	tableData.classes[selected_class_i].assignments = data.slice();
 
 	for (let j = 0; j < tableData.classes[selected_class_i].assignments.length; j++) {
@@ -62,7 +66,7 @@ let editAssignment = function(data) {
 
 	tableData.calcGPA = computeGPA();
 
-	if (tableData.GPA != tableData.calcGPA) {
+	if (tableData.classes[selected_class_i].edited) {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
 	} else {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
@@ -70,6 +74,9 @@ let editAssignment = function(data) {
 }
 
 let resetTableData = function() {
+
+	tableData.classes[selected_class_i].edited = false;
+
 	tableData = JSON.parse(JSON.stringify(tableDataReset));
 	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
 	classesTable.setData(tableData.classes);
@@ -77,7 +84,7 @@ let resetTableData = function() {
 	tableData.calcGPA = computeGPA();
 
 
-	if (tableData.GPA != tableData.calcGPA) {
+	if (tableData.classes[selected_class_i].edited) {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
 	} else {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
