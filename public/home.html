@@ -47,6 +47,7 @@
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
+	    <div id="categoriesTable"></div>
  	    <div align="center" id="assignmentsButtonDiv"><button class="assignmentsButton login100-form-btn" onclick="newAssignment()">Add Assignment</button><button class="login100-form-btn assignmentsButton" onclick="resetTableData()">Reset Changes</button></div> 
            <div id="assignmentsTable"></div>
         </div>
@@ -64,6 +65,20 @@
 			let selected_class_i;
 			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
+			let categoriesTable = new Tabulator("#categoriesTable", {
+
+			//	height: 400,
+
+				layout:"fitColumns",
+				columns: [
+					{title:"Category", field:"category", formatter: rowFormatter, headerSort: false},
+					{title:"Weight", field:"weight", formatter:rowFormatter, headerSort: false},
+					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
+					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
+					{title:"Percentage", field:"grade", formatter: rowFormatter, headerSort:false},
+					],
+			
+			});
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
 				height:600, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 				//data:tabledata[0].assignments, //assign data to table
@@ -150,13 +165,29 @@
 
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
 							let computingClassData = tableData.classes[i];
-							//tableData.classes[i].type = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade).type;
+
 							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
 
+							let categoriesArray = Object.keys(gradeInfo.categoryScores);
+			let weightsArray = Object.values(computingClassData.categories).map(weight => weight * 100 + "%");
+							let scoresArray = Object.values(gradeInfo.categoryScores).map(score => !isNaN(parseFloat(score)) ? score : "None");
+							let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => !isNaN(parseFloat(maxScore)) ? maxScore : "None");
+			let gradesArray = Object.values(gradeInfo.categoryGrades).map(grade => !isNaN(parseFloat(grade)) ? Math.round(grade * 1000) / 10 + "%" : "No Grade");
+
 							tableData.classes[i].type = gradeInfo.type;
-							tableData.classes[i].categoryScores = gradeInfo.categoryScores;
-							tableData.classes[i].categoryMaxScores = gradeInfo.categoryMaxScores;
-							tableData.classes[i].categoryGrades = gradeInfo.categoryGrades;
+
+							tableData.classes[i].categoryDisplay = [];
+
+							for (let b = 0; b < categoriesArray.length; b++) {
+								let categoryRow = {};
+								categoryRow.category = categoriesArray[b];
+								categoryRow.weight = weightsArray[b];
+								categoryRow.score = scoresArray[b];
+								categoryRow.maxScore = maxScoresArray[b];
+								categoryRow.grade = gradesArray[b];
+								categoryRow.color = getColor(gradesArray[b]);
+								tableData.classes[i].categoryDisplay.push(categoryRow);
+							}
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -201,6 +232,7 @@
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					document.getElementById("assignmentsButtonDiv").style.display = "inline-block";
 					selected_class_i = row.getPosition();
@@ -208,6 +240,7 @@
 					for(let i in tabledata) {
 						if(tabledata[i].name == row.getData().name) {
 							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
 							return;
 						}
 					}

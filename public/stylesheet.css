@@ -41,6 +41,10 @@ button {
 	font-size: 14px;
 }
 
+#categoriesTable {
+	display: none;
+}
+
 #assignmentsTable {
 	display: none;
 }
