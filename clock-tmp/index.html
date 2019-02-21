@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <title>Aspine Test</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="400" height="400" style="background-color:white"></canvas>
+        <img id="logo" src="logo-circle.png" alt="logo" hidden>
+        <p id="demo">before</p>
+
+        <script>
+current_schedule = "regular-a";
+
+function drawHand(ctx, pos, period_length) {
+
+}
+
+window.onload = () => {
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var radius = canvas.height / 2;
+    ctx.translate(radius, radius);
+    var logo = document.getElementById("logo");
+    ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
+
+    xhttp = new XMLHttpRequest;
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var schedules = JSON.parse(this.responseText);
+            var now = Date.now();
+            //var tod = now % (24 * 60 * 60 * 1000);
+            var tod = 6535;
+            var pos = 0;
+
+            var current_period_i = 0;// Get current period from array
+            while(current_period_i < schedules[current_schedule].length - 1 &&
+                tod > schedules[current_schedule][current_period_i + 1].start) {
+                current_period_i++;
+            }
+
+            var current_period = schedules[current_schedule][current_period_i];
+            var next_period = schedules[current_schedule][current_period_i + 1];
+
+            var period_length = -1;
+            var period_name = "";
+
+            if(tod < current_period.start) { // Before school
+                period_length = current_period.start;
+                period_name = "Before School";
+                pos = tod / period_length;
+            }
+            else if(tod > next_period.end) { // After school
+                period_length = next_period.end;
+                period_name = "After School";
+                pos = (24 * 60 * 60 * 1000 - tod) / period_length;
+            }
+
+            else if(tod > current_period.end) { // Between classes
+                period_length = next_period.start - current_period.end;
+                period_name = current_period.name + " -> " + next_period.name;
+                pos = (tod - current_period.end) / period_length;
+            }
+            else { // In class
+                period_length = current_period.end - current_period.start;
+                period_name = current_period.name;
+                pos = (tod - current_period.start) / period_length;
+            }
+                
+            var pos = pos * 2 * Math.PI;
+
+            document.getElementById("demo").innerHTML = period_name + ": " + pos;
+            drawHand(ctx, pos, radius * .85, radius * .04);
+        }
+    };
+    xhttp.open("GET", "schedule.json");
+    xhttp.send();
+};
+
+function drawHand(ctx, pos, length, width) {
+    ctx.strokeStyle = 'red';
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+}
+        </script>
+
+    </body>
+</html>
