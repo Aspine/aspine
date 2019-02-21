@@ -23,7 +23,9 @@ let newAssignment = function() {
 
 		if (tableData.GPA != tableData.calcGPA) {
 			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
-		}	
+		} else {
+			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+		}
 
 	}
 }
@@ -57,13 +59,27 @@ let editAssignment = function(data) {
 	tableData.classes[selected_class_i].color = getColor(tableData.classes[selected_class_i].calculated_grade);
 
 	classesTable.setData(tableData.classes);
+
+	tableData.calcGPA = computeGPA();
+
+	if (tableData.GPA != tableData.calcGPA) {
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
+	} else {
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+	}
 }
 
 let resetTableData = function() {
-	console.log("resetTableData");
 	tableData = JSON.parse(JSON.stringify(tableDataReset));
 	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
 	classesTable.setData(tableData.classes);
+	
+	tableData.calcGPA = computeGPA();
 
 
+	if (tableData.GPA != tableData.calcGPA) {
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "  (Calc: " + tableData.calcGPA + ")";
+	} else {
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+	}
 }

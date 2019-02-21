@@ -143,9 +143,15 @@
 
 						if (tableData.classes[i].grade != "") {
 
+							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
 							let computingClassData = tableData.classes[i];
-							tableData.classes[i].type = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
+							//tableData.classes[i].type = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade).type;
+							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
 
+							tableData.classes[i].type = gradeInfo.type;
+							tableData.classes[i].categoryScores = gradeInfo.categoryScores;
+							tableData.classes[i].categoryMaxScores = gradeInfo.categoryMaxScores;
+							tableData.classes[i].categoryGrades = gradeInfo.categoryGrades;
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -169,10 +175,12 @@
 						tableData.schedule.silver[i].color = colors[i] ? colors[i] : "#00400ff";
 					}
 			
-					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 					tableData.GPA = computeGPA();
 					tableData.calcGPA = computeGPA();
+					tableDataReset = JSON.parse(JSON.stringify(tableData));
+
+
 					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
 					scheduleTable.setData(response.schedule.black);
