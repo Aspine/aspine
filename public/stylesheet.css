@@ -269,3 +269,9 @@ form.login100-form {
 .tablinks {
 	color: black;
 }
+
+i.fa.fa-plus {
+    padding-left: 35%;
+    padding-top: 25%;
+    font-size: large;
+}

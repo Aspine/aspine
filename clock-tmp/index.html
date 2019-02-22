@@ -22,6 +22,12 @@ function drawHand(ctx, radius, pos, length, width) {
     ctx.rotate(-pos);
 }
 
+function drawFace(ctx, radius) {
+    ctx.moveTo(0,0);
+    ctx.clearRect(-radius, -radius, radius * 2, radius * 2);
+    ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
+}
+
 function drawNumber(ctx, radius, pos, period_length) {
     ctx.fillStyle = 'green';
     ctx.textBaseline = "middle";
@@ -63,14 +69,13 @@ function fitText(ctx, text, fontface, width) {
     return fontsize;
 }
 
-var ctx, radius, schedules;
+var ctx, radius, schedules, logo;
 window.onload = () => {
     var canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     radius = canvas.height / 2;
     ctx.translate(radius, radius);
-    var logo = document.getElementById("logo");
-    ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
+    logo = document.getElementById("logo");
 
     xhttp = new XMLHttpRequest;
     xhttp.onreadystatechange = function() {
@@ -87,9 +92,10 @@ window.onload = () => {
 };
 
 function redraw() {
-    var now = Date.now();
-    //var tod = now % (24 * 60 * 60 * 1000);
-    var tod = 71399000;
+    // UTC to EST
+    var now = Date.now() - 5 * 60 * 60 * 1000;
+    var tod = now % (24 * 60 * 60 * 1000);
+    //var tod = 71399000;
     var pos = 0;
 
     var current_period_i = 0;// Get current period from array
@@ -128,7 +134,8 @@ function redraw() {
         
     var pos = pos * 2 * Math.PI;
 
-    document.getElementById("demo").innerHTML = period_name + ": " + pos;
+    document.getElementById("demo").innerHTML = period_name + ": " + pos + "<br>" + tod;
+    drawFace(ctx, radius);
     drawName(ctx, radius, period_name);
     drawHand(ctx, radius, pos, radius * .75, radius * .04);
     drawNumber(ctx, radius, pos, period_length);
