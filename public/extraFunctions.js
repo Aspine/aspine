@@ -36,7 +36,8 @@ function getGPA(gradeToBeGPA) {
 }
 
 let addAssignmentFormatter = function(value, data, cell, row, options) {
-	return "<img class='addAssignmentImage' src='addAssignment.png' alt='Add'>";
+	//return "<img class='addAssignmentImage' src='addAssignment.png' alt='Add'>";
+	return "<i class='fa fa-plus addAssignmentIcon'></i>";
 };
 
 function getLetterGrade(gradeToBeLettered) {
