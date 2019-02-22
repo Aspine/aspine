@@ -8,7 +8,7 @@
         <p id="demo">before</p>
 
         <script>
-current_schedule = "regular-a";
+current_schedule = "regular";
 
 function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'green';
@@ -44,6 +44,9 @@ function drawNumber(ctx, radius, pos, period_length) {
     else {
         d1 = Math.floor(time / 60 / 60);
         d2 = Math.floor(time / 60 % 60);
+    }
+    if(d2 < 10) {
+        d2 = "0" + d2;
     }
     ctx.fillText(d1 + ":" + d2, 0, 2*radius/3);
 }
