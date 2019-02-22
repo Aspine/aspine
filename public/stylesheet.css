@@ -43,13 +43,6 @@ button {
 	font-size: 14px;
 }
 
-
-i.fa.fa-plus.addAssignmentIcon {
-    color: #00551C;
-    margin: 9px 12px;
-    font-size: 1.4em;
-}
-
 #categoriesTable {
 	display: none;
 }
@@ -271,6 +264,7 @@ form.login100-form {
 }
 
 i.fa.fa-plus {
+    color: #00551C;
     padding-left: 35%;
     padding-top: 25%;
     font-size: large;
