@@ -93,3 +93,7 @@ let resetTableData = function() {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
 }
+
+let hideCategoriesTable = function() {
+	document.getElementById("categoriesTable").style.display = "none";
+}
