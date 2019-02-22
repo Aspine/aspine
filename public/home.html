@@ -47,11 +47,8 @@
         </div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
-	    <div id="categoriesTable"></div>
- 	    <div align="center" id="assignmentsButtonDiv">
-		    <!--<button class="assignmentsButton login100-form-btn" onclick="newAssignment()">Add Assignment</button>-->
-		    <!--<button class="login100-form-btn assignmentsButton" onclick="resetTableData()">Reset Changes</button></div> -->
-           <div id="assignmentsTable"></div>
+            <div id="categoriesTable"></div>
+            <div id="assignmentsTable"></div>
         </div>
         <div id="schedule" class="tabcontent">
             <!-- Rounded switch -->
@@ -279,6 +276,7 @@ function openTab(evt, tab_name) {
     classesTable.redraw();
     assignmentsTable.redraw();
     scheduleTable.redraw();
+    categoriesTable.redraw();
 }
 document.getElementById("default_open").click();
         </script>
