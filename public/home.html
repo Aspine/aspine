@@ -12,9 +12,9 @@
 		<!--===============================================================================================-->
 		<link href="tabulator.css" rel="stylesheet">
 		<!--===============================================================================================-->
-		<script type="text/javascript" src="/tabulator/js/tabulator.min.js"></script>
-		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="stylesheet.css">
+		<!--===============================================================================================-->
+		<script type="text/javascript" src="/tabulator/js/tabulator.min.js"></script>
 		<!--===============================================================================================-->
 		<script type="text/javascript" src="extraFunctions.js"></script>
 		<!--===============================================================================================-->
@@ -48,7 +48,9 @@
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
 	    <div id="categoriesTable"></div>
- 	    <div align="center" id="assignmentsButtonDiv"><button class="assignmentsButton login100-form-btn" onclick="newAssignment()">Add Assignment</button><button class="login100-form-btn assignmentsButton" onclick="resetTableData()">Reset Changes</button></div> 
+ 	    <div align="center" id="assignmentsButtonDiv">
+		    <!--<button class="assignmentsButton login100-form-btn" onclick="newAssignment()">Add Assignment</button>-->
+		    <button class="login100-form-btn assignmentsButton" onclick="resetTableData()">Reset Changes</button></div> 
            <div id="assignmentsTable"></div>
         </div>
         <div id="schedule" class="tabcontent">
@@ -103,7 +105,7 @@
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
-					{formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
+					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
 					    cell.getRow().delete();
 					}, headerSort:false,},
 				],

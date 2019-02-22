@@ -33,12 +33,21 @@ h4#title {
 
 }
 
-
+.tabulator-col {
+    height:  35px;
+}
 
 button {
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
+}
+
+.addAssignmentImage {
+	height: 30px;
+	width: 30px;
+	cursor: pointer;
+	margin: 3px 0 auto 4px;
 }
 
 #categoriesTable {
