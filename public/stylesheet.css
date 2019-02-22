@@ -43,11 +43,11 @@ button {
 	font-size: 14px;
 }
 
-.addAssignmentIcon {
-	height: 30px;
-	width: 30px;
-	cursor: pointer;
-	margin: 3px 0 auto 4px;
+
+i.fa.fa-plus.addAssignmentIcon {
+    color: #00551C;
+    margin: 9px 12px;
+    font-size: 1.4em;
 }
 
 #categoriesTable {
