@@ -1,44 +1,19 @@
 {
     "regular-a":[
         {
-            "name":"Before School",
-            "start": 2333,
-            "end": 4334
+            "name":"First P",
+            "start": 26400000,
+            "end": 36400000
         },
         {
-            "name":"Period 1",
-            "start": 5333,
-            "end": 6334
+            "name":"Second P",
+            "start": 46400000,
+            "end": 56400000
         },
         {
-            "name":"Community Meeting",
-            "start": 5333,
-            "end": 6334
-        },
-        {
-            "name":"Period 2",
-            "start": 7333,
-            "end": 8334
-        },
-        {
-            "name":"Lunch",
-            "start": 9333,
-            "end": 10334
-        },
-        {
-            "name":"Period 3",
-            "start": 11333,
-            "end": 12334
-        },
-        {
-            "name":"Period 4",
-            "start": 13333,
-            "end": 14334
-        },
-        {
-            "name":"After School",
-            "start": 15333,
-            "end": 17334
+            "name":"Third P",
+            "start": 66400000,
+            "end": 76400000
         }
     ],
     "regular-b":[
