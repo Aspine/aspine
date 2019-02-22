@@ -268,6 +268,7 @@ i.fa.fa-plus {
     padding-left: 31%;
     padding-top: 25%;
     font-size: large;
+    cursor: pointer;
 }
 
 i.fa.fa-eye-slash {
@@ -275,6 +276,6 @@ i.fa.fa-eye-slash {
     padding-left: 10%;
     padding-top: 15%;
     font-size: large;
-
+    cursor: pointer;
 
 }
