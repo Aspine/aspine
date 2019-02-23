@@ -13,9 +13,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "https://aspine.us/",
   "background_color": "#3367D6",
   "display": "standalone",
-  "scope": "/home.html",
+  "scope": "/",
+  "orientation": "portrait",
   "theme_color": "#3367D6"
 }
