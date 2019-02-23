@@ -219,7 +219,7 @@ async function scrape_assignments(session_id, apache_token) {
             //let scores = $(this).find("div[class=percentFieldContainer]");
 	    let scores = $(this).find("tr")
                 .children().slice(0, 2);
-		console.log(scores.text());
+		//console.log(scores.text());
 		row["special"] = scores.text();
             if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
 		    scores = scores.eq(1).text().split("/");
