@@ -3,20 +3,20 @@
   "name": "Aspine | CRLS Student Dashboard",
   "icons": [
     {
-      "src": "public/images/logo-circle198x198.png",
+      "src": "/images/logo-circle198x198.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "public/images/logo-circle512x512.png",
+      "src": "/images/logo-circle512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://aspine.us/",
+  "start_url": "./",
   "background_color": "#3367D6",
   "display": "standalone",
-  "scope": "/",
+  "scope": "./",
   "orientation": "portrait",
   "theme_color": "#3367D6"
 }
