@@ -54,7 +54,7 @@ async function scrape_recent(username, password, i) {
 		await submit_login(username, password, session.apache_token, session.session_id);
 
 
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
+		let $ = (await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
 			{"credentials":"include",
 				"headers":{"Connection": "keep-alive", 
 					"Cache-Control": 
@@ -67,14 +67,18 @@ async function scrape_recent(username, password, i) {
 					"X-Do-Not-Track": "1",
 					"Referer": "https://aspen.cpsd.us/aspen/logon.do",
 					"Accept-Encoding": "gzip, deflate, br",
-					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560"
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + ";"
 				},
 				"referrer":"https://aspen.cpsd.us/aspen/logon.do",
 				"referrerPolicy":"strict-origin-when-cross-origin",
 				"body":null,
 				"method":"GET",
 				"mode":"cors"}));
+		//console.log($);
+		
+		//let children = $('ul[class=collapsibleContent]').children().html();
 
+		resolve($);
 		//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 		//	{"credentials":"include",
 		//		"headers":{"Connection": "keep-alive",
@@ -104,7 +108,6 @@ async function scrape_recent(username, password, i) {
 		//	}
 		//});
 		//log(i, "schedule", data);
-		resolve($);
 	});
 }
 
@@ -398,7 +401,8 @@ if(require.main === module) {
 
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
-		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+		console.log((await scrape_student(result.username, result.password)));
 		//let session = await scrape_login();
 		//await submit_login(result.username, result.password, session.apache_token, session.session_id);
 		//console.log(session);
