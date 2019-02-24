@@ -49,6 +49,7 @@
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
             <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
+            <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
 	    <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
@@ -70,12 +71,34 @@
             <canvas id="large_clock" width="400" height="400"></canvas>
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
         </div>
+	<div id="recent" class="tabcontent">
+            <div id="recentTable"></div>
+        </div>
+
         <script type="text/javascript" src="/js/clock.js"></script>
 		<script type="text/javascript">
 			let tableData = {};
 			let selected_class_i;
 			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
+			let recentTable = new Tabulator("#recentTable", {
+
+			//	height: 400,
+
+				layout:"fitColumns",
+				//columns:[ //Define Table Columns
+				//	{title:"Period", field:"period", width: 150, headerSort:false, formatter: "html"},
+				//	{title:"Room", field:"room", width: 150, headerSort:false},
+				//	{title:"Class", field:"class", headerSort:false, formatter: "html"},
+				//],
+
+				columns: [
+					{title:"Date", field:"date", headerSort: false},
+					{title:"Class", field:"classname", headerSort: false},
+					{title:"Grade", field:"grade", headerSort: false},
+					],
+			
+			});
 			let categoriesTable = new Tabulator("#categoriesTable", {
 
 			//	height: 400,
@@ -240,7 +263,8 @@
 
 					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
-					scheduleTable.setData(response.schedule.black);
+					scheduleTable.setData(tableData.schedule.black);
+					recentTable.setData(tableData.recent.recentActivityArray);
 
 					return response.classes; //return the tableData property of a response json object
 
@@ -305,6 +329,7 @@
 		    assignmentsTable.redraw();
 		    scheduleTable.redraw();
 		    categoriesTable.redraw();
+		    recentTable.redraw();
 		}
 		document.getElementById("default_open").click();
         </script>
