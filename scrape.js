@@ -27,85 +27,19 @@ async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	//scrapers[THREADS] = scrape_schedule(username, password, THREADS);
-
-	// Spawn recent activity scraper
-	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
+	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
 
 	// Spawn class scrapers
-	//for(let i = 0; i < THREADS; i++) {
-	//	scrapers[i] = scrape_class(username, password, i);
+	for(let i = 0; i < THREADS; i++) {
+		scrapers[i] = scrape_class(username, password, i);
 
-	//}
+	}
 
 	// Await on all class scrapers
-	//return {
-	//	//classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
-	//	//schedule: await scrapers[THREADS],
-	//	recent: await scrapers[THREADS + 1]
-	//}
-	return await scrapers[THREADS + 1];
-
-}
-
-async function scrape_recent(username, password, i) {
-	return new Promise(async function(resolve, reject) {
-		let session = await scrape_login();
-		await submit_login(username, password, session.apache_token, session.session_id);
-
-
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-			{"credentials":"include",
-				"headers":{"Connection": "keep-alive", 
-					"Cache-Control": 
-					"max-age=0", 
-					"Upgrade-Insecure-Requests": "1",
-					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-					"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-					"DNT": "1",
-					"Accept-Language": "en-US,en",
-					"X-Do-Not-Track": "1",
-					"Referer": "https://aspen.cpsd.us/aspen/logon.do",
-					"Accept-Encoding": "gzip, deflate, br",
-					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560"
-				},
-				"referrer":"https://aspen.cpsd.us/aspen/logon.do",
-				"referrerPolicy":"strict-origin-when-cross-origin",
-				"body":null,
-				"method":"GET",
-				"mode":"cors"}));
-
-		//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
-		//	{"credentials":"include",
-		//		"headers":{"Connection": "keep-alive",
-		//			"Upgrade-Insecure-Requests": "1",
-		//			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-		//			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-		//			"X-Do-Not-Track": "1",
-		//			"Accept-Language": "en-US,en",
-		//			"DNT": "1",
-		//			"Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-		//			"Accept-Encoding": "gzip, deflate, br",
-		//			"Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
-		//		"referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-		//		"referrerPolicy":"strict-origin-when-cross-origin",
-		//		"body":null,
-		//		"method":"GET",
-		//		"mode":"cors"}));
-		
-		//let data = {black:[], silver:[]};
-		//$('td[style="width: 125px"]').each(function(i, elem) {
-		//	const parts = $(this).html().trim().split('<br>').slice(1, 4);
-		//	const block = {name: parts[0], teacher: parts[1], room: parts[2]};
-		//	if(i % 2 == 0) {
-		//		data.black[i/2] = block;
-		//	} else {
-		//		data.silver[Math.floor(i/2)] = block;
-		//	}
-		//});
-		//log(i, "schedule", data);
-		resolve($);
-	});
+	return {
+		classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
+		schedule: await scrapers[THREADS]
+	}
 }
 
 // Returns promise that contains object of all class data
