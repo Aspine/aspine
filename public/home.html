@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 	<head>
 
@@ -72,7 +73,13 @@
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
         </div>
 	<div id="recent" class="tabcontent">
-            <div id="recentTable"></div>
+		<label class="switch">
+			<input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
+			<span class="slider round"></span>
+			<p id="recent_title">Assignments</p>
+            	</label>
+        	<div id="recentActivity"></div>
+        	<div id="recentAttendance"></div>
         </div>
 
         <script type="text/javascript" src="/js/clock.js"></script>
@@ -81,7 +88,22 @@
 			let selected_class_i;
 			let tableDataReset = {};
 			//create Tabulator on DOM element with id "assignmentsTable"
-			let recentTable = new Tabulator("#recentTable", {
+
+			let recentAttendance = new Tabulator("#recentAttendance", {
+
+			//	height: 400,
+
+				layout:"fitColumns",
+
+				columns: [
+					{title:"Date", field:"date", headerSort: false},
+					{title:"Class", field:"classname", headerSort: false},
+					{title:"Period", field:"period", headerSort: false},
+					{title:"Event", field:"event", headerSort: false, rowFormatter: getAttendanceEvent},
+					],
+			
+			});
+			let recentActivity = new Tabulator("#recentActivity", {
 
 			//	height: 400,
 
@@ -260,7 +282,8 @@
 					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
 					scheduleTable.setData(tableData.schedule.black);
-					recentTable.setData(tableData.recent.recentActivityArray);
+					recentActivity.setData(tableData.recent.recentActivityArray);
+					recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
 					return response.classes; //return the tableData property of a response json object
 
@@ -286,15 +309,28 @@
 					}
 				},
 			});
+			function recent_toggle() {
+				if(!document.getElementById("recent_toggle").checked) {
+					//recentActivity.setData(tableData.recent.recentActivityArray);
+					document.getElementById("recentActivity").style.display = "block";
+					document.getElementById("recentAttendance").style.display = "none";
+					document.getElementById("recent_title").innerHTML = "Assignments";
+				} else {
+					//recentActivity.setData(tableData.recent.recentAttendanceArray);
+					document.getElementById("recentActivity").style.display = "none";
+					document.getElementById("recentAttendance").style.display = "block";
+					document.getElementById("recent_title").innerHTML = "Attendance";
+				}
+		        }
 			function schedule_toggle() {
 				if(document.getElementById("schedule_toggle").checked) {
 					scheduleTable.setData(tableData.schedule.silver);
-                    document.getElementById("schedule_title").innerHTML = "Silver";
+					document.getElementById("schedule_title").innerHTML = "Silver";
 				} else {
 					scheduleTable.setData(tableData.schedule.black);
-                    document.getElementById("schedule_title").innerHTML = "Black";
-                }
-            }
+					document.getElementById("schedule_title").innerHTML = "Black";
+				}
+		        }
 		function openTab(evt, tab_name) {
 		    // Declare all variables
 		    var i, tabcontent, tablinks;
@@ -325,7 +361,8 @@
 		    assignmentsTable.redraw();
 		    scheduleTable.redraw();
 		    categoriesTable.redraw();
-		    recentTable.redraw();
+		    recentActivity.redraw();
+		    recentAttendance.redraw();
 		}
 		document.getElementById("default_open").click();
         </script>
