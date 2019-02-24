@@ -161,9 +161,10 @@
 							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
 
 							if (isNaN(tableData.classes[i].assignments[j].score)) {
+								//tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
+								//tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
 								tableData.classes[i].assignments[j].score = "None";
-								tableData.classes[i].assignments[j].max_score = "None";
-							}
+								tableData.classes[i].assignments[j].max_score = "None";							}
 
 						}
 
@@ -172,28 +173,16 @@
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
 							let computingClassData = tableData.classes[i];
 
+							
+							
+							
 							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
-
-							let categoriesArray = Object.keys(gradeInfo.categoryScores);
-			let weightsArray = Object.values(computingClassData.categories).map(weight => weight * 100 + "%");
-							let scoresArray = Object.values(gradeInfo.categoryScores).map(score => !isNaN(parseFloat(score)) && parseFloat(score) != 0 ? score : "None");
-							let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => !isNaN(parseFloat(maxScore)) && parseFloat(maxScore) != 0 ? maxScore : "None");
-			let gradesArray = Object.values(gradeInfo.categoryGrades).map(grade => !isNaN(parseFloat(grade)) ? Math.round(grade * 1000) / 10 + "%" : "No Grade");
-
+							tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 							tableData.classes[i].type = gradeInfo.type;
 
-							tableData.classes[i].categoryDisplay = [];
-
-							for (let b = 0; b < categoriesArray.length; b++) {
-								let categoryRow = {};
-								categoryRow.category = categoriesArray[b];
-								categoryRow.weight = weightsArray[b];
-								categoryRow.score = scoresArray[b];
-								categoryRow.maxScore = maxScoresArray[b];
-								categoryRow.grade = gradesArray[b];
-								categoryRow.color = getColor(gradesArray[b]);
-								tableData.classes[i].categoryDisplay.push(categoryRow);
-							}
+							
+							
+							
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -287,6 +276,6 @@
 		document.getElementById("default_open").click();
         </script>
 		<script type="text/javascript" src="/js/calculate_grade.js"></script>
-		<script type="text/javascript" src="/js/app.js"></script>
+		<!--<script type="text/javascript" src="/js/app.js"></script>-->
 	</body>
 </html>

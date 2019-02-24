@@ -250,3 +250,28 @@ function doCalculations(assignments, categories) {
 		totalPercent,
 	};
 }
+
+let getCategoryDisplay = function (gradeInfo, computingClassData) {
+
+	let categoryDisplay = [];
+
+	let categoriesArray = Object.keys(gradeInfo.categoryScores);
+	let weightsArray = Object.values(computingClassData.categories).map(weight => weight * 100 + "%");
+	let scoresArray = Object.values(gradeInfo.categoryScores).map(score => parseFloat(score) != 0 ? score : "None");
+	let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => parseFloat(maxScore) != 0 ? maxScore : "None");
+	let gradesArray = Object.values(gradeInfo.categoryGrades).map(grade => !isNaN(parseFloat(grade)) ? Math.round(grade * 1000) / 10 + "%" : "No Grade");
+
+	for (let b = 0; b < categoriesArray.length; b++) {
+		let categoryRow = {};
+		categoryRow.category = categoriesArray[b];
+		categoryRow.weight = weightsArray[b];
+		categoryRow.score = scoresArray[b];
+		categoryRow.maxScore = maxScoresArray[b];
+		categoryRow.grade = gradesArray[b];
+		categoryRow.color = getColor(gradesArray[b]);
+
+		categoryDisplay.push(categoryRow);
+	}
+
+	return categoryDisplay;
+}

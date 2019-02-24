@@ -15,9 +15,14 @@ let newAssignment = function() {
 
 		let computingClassData = tableData.classes[selected_class_i];
 
-		tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals))[computingClassData.type];
+		let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals));
+
+		tableData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+
+		tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
 		classesTable.setData(tableData.classes);
+		categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 
 		assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
 
