@@ -246,7 +246,7 @@ form.login100-form {
 	float: left;
 }
 
-.logo img {
+.logo canvas {
 	overflow: auto;
 	max-height: 100%;
 	height: 100px;
