@@ -163,8 +163,21 @@
 							if (isNaN(tableData.classes[i].assignments[j].score)) {
 								console.log(tableData.classes[i].assignments[j].special);
 								if (tableData.classes[i].assignments[j].special) {
-									tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
-									tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
+
+									if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
+										var regExp = /\(([^)]+)\)/;
+										//var matches = regExp.exec("I expect five hundred dollars ($500).");
+
+										//matches[1] contains the value between the parentheses
+										//console.log(matches[1]);
+
+										tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
+										tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
+									} else {
+										tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
+										tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
+
+									}
 								} else {
 									tableData.classes[i].assignments[j].score = "Ungraded";
 									tableData.classes[i].assignments[j].max_score = "Ungraded";
