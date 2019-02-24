@@ -157,7 +157,7 @@
 
 						tableData.classes[i].categoryGrades = {};
 
-						if (tableData.classes[i].grade != "") {
+						if (!isNaN(parseFloat(tableData.classes[i].grade))) {
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
 
