@@ -1,10 +1,18 @@
 let current_schedule = "regular";
-let ctx, radius, schedules, logo;
+let schedules, logo;
 
-let clock = document.getElementById("clock");
-ctx = clock.getContext("2d");
-radius = clock.height / 2;
-ctx.translate(radius, radius);
+let small_ctx, small_radius;
+let small_clock = document.getElementById("small_clock");
+small_ctx = small_clock.getContext("2d");
+small_radius = small_clock.height / 2;
+small_ctx.translate(small_radius, small_radius);
+
+let large_ctx, large_radius;
+let large_clock = document.getElementById("large_clock");
+large_ctx = large_clock.getContext("2d");
+large_radius = large_clock.height / 2;
+large_ctx.translate(large_radius, large_radius);
+
 logo = document.getElementById("logo");
 
 xhttp = new XMLHttpRequest;
@@ -129,8 +137,13 @@ function redraw_clock() {
         
     pos = pos * 2 * Math.PI;
 
-    drawFace(ctx, radius);
-    drawName(ctx, radius, period_name);
-    drawHand(ctx, radius, pos, radius * .75, radius * .04);
-    drawNumber(ctx, radius, pos, period_length);
+    drawFace(small_ctx, small_radius);
+    drawName(small_ctx, small_radius, period_name);
+    drawHand(small_ctx, small_radius, pos, small_radius * .75, small_radius * .04);
+    drawNumber(small_ctx, small_radius, pos, period_length);
+
+    drawFace(large_ctx, large_radius);
+    drawName(large_ctx, large_radius, period_name);
+    drawHand(large_ctx, large_radius, pos, large_radius * .75, large_radius * .04);
+    drawNumber(large_ctx, large_radius, pos, period_length);
 }
