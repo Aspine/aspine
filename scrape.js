@@ -53,10 +53,11 @@ async function scrape_recent(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
 
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1550983279513", 
+
+		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
 			{"credentials":"include",
 				"headers":{
-					"Cookie": "deploymentId=x2sis; JSESSIONID=B07301DB33F282F3277A823DA185E767; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560",
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560",
 					"DNT": "1",
 					"Accept-Encoding": "gzip, deflate, br",
 					"Accept-Language": "en-US,en",
@@ -75,8 +76,39 @@ async function scrape_recent(username, password, i) {
 				xmlMode: true,
 				normalizeWhitespace: true,
 				decodeEntities: true});
+		let studentName = $('recent-activity').attr('studentname');
+		let recentAttendanceArray = [];
+		let recentActivityArray = [];
 
-		resolve($);
+		$('recent-activity').children().filter('periodAttendance')
+		.each(function(i, elem) {
+			recentAttendanceArray.push({
+				date: $(this).attr('date'),
+				period: $(this).attr('period'),
+				code: $(this).attr('code'),
+				classname: $(this).attr('classname'),
+				dismissed: $(this).attr('dismissed'),
+				absent: $(this).attr('absent'),
+				excused: $(this).attr('excused'),
+				tardy: $(this).attr('tardy'),
+			});
+		});
+		
+		$('recent-activity').children().filter('gradebookScore')
+		.each(function(i, elem) {
+			recentActivityArray.push({
+				date: $(this).attr('date'),
+				classname: $(this).attr('classname'),
+				grade: $(this).attr('grade'),
+			});
+		});
+
+
+		resolve({
+			recentAttendanceArray,
+			recentActivityArray,
+			studentName,
+		});
 	});
 }
 
