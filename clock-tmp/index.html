@@ -43,6 +43,7 @@ function drawFace(ctx, radius) {
 }
 
 function drawNumber(ctx, radius, pos, period_length) {
+    console.log(pos, period_length);
     ctx.fillStyle = 'green';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
@@ -98,11 +99,11 @@ window.onload = () => {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             schedules = JSON.parse(this.responseText);
-        }
-        redraw();
-        setInterval(function() {
             redraw();
-        }, 1000);
+            setInterval(function() {
+                redraw();
+            }, 1000);
+        }
     };
     xhttp.open("GET", "schedule.json");
     xhttp.send();
@@ -120,6 +121,7 @@ function redraw() {
         tod > schedules[current_schedule][current_period_i + 1].start) {
         current_period_i++;
     }
+    console.log(current_period_i);
 
     var current_period = schedules[current_schedule][current_period_i];
     var next_period = schedules[current_schedule][current_period_i + 1];
@@ -133,9 +135,10 @@ function redraw() {
         pos = tod / period_length;
     }
     else if(!next_period && tod > current_period.end) { // After school
-        period_length = current_period.end;
+        period_length = 24 * 60 * 60 * 1000 - current_period.end;
+        console.log(current_period.end, period_length);
         period_name = "After School";
-        pos = (24 * 60 * 60 * 1000 - tod) / period_length;
+        pos = (tod - current_period.end) / period_length;
     }
 
     else if(tod > current_period.end) { // Between classes
