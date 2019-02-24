@@ -21,7 +21,7 @@ xhttp.open("GET", "schedule.json");
 xhttp.send();
 
 function drawHand(ctx, radius, pos, length, width) {
-    ctx.strokeStyle = 'green';
+    ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.lineWidth = width;
     ctx.lineCap = "round";
@@ -35,11 +35,15 @@ function drawHand(ctx, radius, pos, length, width) {
 function drawFace(ctx, radius) {
     ctx.moveTo(0,0);
     ctx.clearRect(-radius, -radius, radius * 2, radius * 2);
+    ctx.fillStyle = 'green';
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+    ctx.fill();
     ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
 }
 
 function drawNumber(ctx, radius, pos, period_length) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font = "75px arial";
@@ -62,7 +66,7 @@ function drawNumber(ctx, radius, pos, period_length) {
 }
 
 function drawName(ctx, radius, name) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font = fitText(ctx, name, "arial", radius * 1.5) + "px arial";
