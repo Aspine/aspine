@@ -161,11 +161,18 @@
 							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
 
 							if (isNaN(tableData.classes[i].assignments[j].score)) {
-								//tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
-								//tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
-								tableData.classes[i].assignments[j].score = "None";
-								tableData.classes[i].assignments[j].max_score = "None";							}
+								console.log(tableData.classes[i].assignments[j].special);
+								if (tableData.classes[i].assignments[j].special) {
+									tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
+									tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
+								} else {
+									tableData.classes[i].assignments[j].score = "Ungraded";
+									tableData.classes[i].assignments[j].max_score = "Ungraded";
 
+								}
+								//tableData.classes[i].assignments[j].score = "None";
+								//tableData.classes[i].assignments[j].max_score = "None";							
+							}
 						}
 
 						if (tableData.classes[i].grade != "") {

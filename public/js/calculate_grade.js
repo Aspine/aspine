@@ -26,7 +26,7 @@ function computeGrade(assignments, categories, decimals) {
 
 	} else {
 		for (let i = 0; i < assignments.length; i++) {
-			if (assignments[i].score != "None") {
+			if (!isNaN(assignments[i].score)) {
 				totalScore += parseFloat(assignments[i].score);
 				totalMaxScore += parseFloat(assignments[i].max_score);
 
@@ -95,7 +95,7 @@ function determineGradeType(assignments, categories, currentGrade) {
 
 	} else {
 		for (let i = 0; i < assignments.length; i++) {
-			if (assignments[i].score != "None") {
+			if (!isNaN(assignments[i].score)) {
 				totalScore += parseFloat(assignments[i].score);
 				totalMaxScore += parseFloat(assignments[i].max_score);
 
@@ -213,7 +213,7 @@ function doCalculations(assignments, categories) {
 
 	} else {
 		for (let i = 0; i < assignments.length; i++) {
-			if (assignments[i].score != "None") {
+			if (!isNaN(assignments[i].score)) {
 				totalScore += parseFloat(assignments[i].score);
 				totalMaxScore += parseFloat(assignments[i].max_score);
 
@@ -257,8 +257,8 @@ let getCategoryDisplay = function (gradeInfo, computingClassData) {
 
 	let categoriesArray = Object.keys(gradeInfo.categoryScores);
 	let weightsArray = Object.values(computingClassData.categories).map(weight => weight * 100 + "%");
-	let scoresArray = Object.values(gradeInfo.categoryScores).map(score => parseFloat(score) != 0 ? score : "None");
-	let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => parseFloat(maxScore) != 0 ? maxScore : "None");
+	let scoresArray = Object.values(gradeInfo.categoryScores).map(score => parseFloat(score) != 0 ? score : "Ungraded");
+	let maxScoresArray = Object.values(gradeInfo.categoryMaxScores).map(maxScore => parseFloat(maxScore) != 0 ? maxScore : "Ungraded");
 	let gradesArray = Object.values(gradeInfo.categoryGrades).map(grade => !isNaN(parseFloat(grade)) ? Math.round(grade * 1000) / 10 + "%" : "No Grade");
 
 	for (let b = 0; b < categoriesArray.length; b++) {
