@@ -99,7 +99,7 @@
 					{title:"Date", field:"date", headerSort: false},
 					{title:"Class", field:"classname", headerSort: false},
 					{title:"Period", field:"period", headerSort: false},
-					{title:"Event", field:"event", headerSort: false, formatter: getAttendanceEvent},
+					{title:"Event", field:"event", headerSort: false,},
 					],
 			
 			});
@@ -247,9 +247,6 @@
 							tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 							tableData.classes[i].type = gradeInfo.type;
 
-							
-							
-							
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
 
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -271,6 +268,22 @@
 						tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
 						tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
 						tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+					}
+
+					for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
+						tableData.recent.recentAttendanceArray[i].event = "";
+						if (tableData.recent.recentAttendanceArray[i].dismissed === "true") {
+							tableData.recent.recentAttendanceArray[i].event += "Dismissed ";
+						}
+						if (tableData.recent.recentAttendanceArray[i].excused === "true") {
+							tableData.recent.recentAttendanceArray[i].event += "Excused ";
+						}
+						if (tableData.recent.recentAttendanceArray[i].absent === "true") {
+							tableData.recent.recentAttendanceArray[i].event += "Absent ";
+						}
+						if (tableData.recent.recentAttendanceArray[i].tardy === "true") {
+							tableData.recent.recentAttendanceArray[i].event += "Tardy ";
+						}
 					}
 			
 
