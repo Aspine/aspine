@@ -8,7 +8,7 @@
 		<!--===============================================================================================-->
 		<meta name="Aspine" content="Aspen Scraper and Beautifier">
 		<!--===============================================================================================-->
-	        <meta name="viewport" content="width=device-width, initial-scale=.75">
+        <meta name="viewport" content="width=device-width, initial-scale=.75">
 		<!--===============================================================================================-->
 		<meta name="theme-color" content="#00551C"/>
 		<!--===============================================================================================-->
@@ -29,16 +29,17 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
         <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="manifest" href="/manifest.json">
-<!--===============================================================================================-->
+        <!--===============================================================================================-->
+        <link rel="manifest" href="/manifest.json">
+        <!--===============================================================================================-->
 
 
 	</head>
 	<body>
 		<div id="header">
             <div class="logo">
-                <img src="images/logo-circle.png" alt="IMG">
+                <canvas id="clock" width="400" height="400"></canvas>
+                <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             </div>
 
 			<h4 id="title">
@@ -65,6 +66,7 @@
             </label>
             <div id="scheduleTable"></div>
         </div>
+        <script type="text/javascript" src="/js/clock.js"></script>
 		<script type="text/javascript">
 			let tableData = {};
 			let selected_class_i;

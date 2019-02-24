@@ -99,9 +99,9 @@ window.onload = () => {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             schedules = JSON.parse(this.responseText);
-            redraw();
+            redraw_clock();
             setInterval(function() {
-                redraw();
+                redraw_clock();
             }, 1000);
         }
     };
@@ -109,7 +109,7 @@ window.onload = () => {
     xhttp.send();
 };
 
-function redraw() {
+function redraw_clock() {
     // UTC to EST
     var now = Date.now() - 5 * 60 * 60 * 1000;
     var tod = now % (24 * 60 * 60 * 1000);
