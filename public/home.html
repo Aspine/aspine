@@ -294,6 +294,13 @@
 		    // Show the current tab, and add an "active" class to the button that opened the tab
 		    document.getElementById(tab_name).style.display = "block";
 		    evt.currentTarget.className += " active";
+
+            if(tab_name == "clock") {
+                document.getElementById("small_clock").style.display = "none";
+            } else {
+                document.getElementById("small_clock").style.display = "block";
+            }
+
 		    classesTable.redraw();
 		    assignmentsTable.redraw();
 		    scheduleTable.redraw();

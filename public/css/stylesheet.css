@@ -237,9 +237,9 @@ form.login100-form {
 }
 
 .logo {
-	/* height: 150px; */
+	height: 100px;
 	margin: 10px;
-	width: fit-content;
+	width: 100px;
 	display: inline;
 	float: left;
 }
