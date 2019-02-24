@@ -27,25 +27,23 @@ async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	//scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
 
 	// Spawn recent activity scraper
 	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
 
-	// Spawn class scrapers
-	//for(let i = 0; i < THREADS; i++) {
-	//	scrapers[i] = scrape_class(username, password, i);
+	//Spawn class scrapers
+	for(let i = 0; i < THREADS; i++) {
+		scrapers[i] = scrape_class(username, password, i);
 
-	//}
+	}
 
 	// Await on all class scrapers
-	//return {
-	//	//classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
-	//	//schedule: await scrapers[THREADS],
-	//	recent: await scrapers[THREADS + 1]
-	//}
-	return await scrapers[THREADS + 1];
-
+	return {
+		classes: (await Promise.all(scrapers.slice(0, -1))).filter(Boolean),
+		schedule: await scrapers[THREADS],
+		recent: await scrapers[THREADS + 1]
+	}
 }
 
 async function scrape_recent(username, password, i) {
