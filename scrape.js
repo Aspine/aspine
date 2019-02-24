@@ -53,61 +53,30 @@ async function scrape_recent(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
 
+		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1550983279513", 
+			{"credentials":"include",
+				"headers":{
+					"Cookie": "deploymentId=x2sis; JSESSIONID=B07301DB33F282F3277A823DA185E767; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560",
+					"DNT": "1",
+					"Accept-Encoding": "gzip, deflate, br",
+					"Accept-Language": "en-US,en",
+					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+					"Accept": "application/xml, text/xml, */*; q=0.01",
+					"Referer": "https://aspen.cpsd.us/aspen/home.do",
+					"X-Requested-With": "XMLHttpRequest",
+					"Connection": "keep-alive",
+					"X-Do-Not-Track": "1"
+				},
+				"referrer":"https://aspen.cpsd.us/aspen/home.do",
+				"referrerPolicy":"strict-origin-when-cross-origin",
+				"body":null,
+				"method":"GET",
+				"mode":"cors"}), {
+				xmlMode: true,
+				normalizeWhitespace: true,
+				decodeEntities: true});
 
-		//let $ = (await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-		//	{"credentials":"include",
-		//		"headers":{"Connection": "keep-alive", 
-		//			"Cache-Control": 
-		//			"max-age=0", 
-		//			"Upgrade-Insecure-Requests": "1",
-		//			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-		//			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-		//			"DNT": "1",
-		//			"Accept-Language": "en-US,en",
-		//			"X-Do-Not-Track": "1",
-		//			"Referer": "https://aspen.cpsd.us/aspen/logon.do",
-		//			"Accept-Encoding": "gzip, deflate, br",
-		//			"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + ";"
-		//		},
-		//		"referrer":"https://aspen.cpsd.us/aspen/logon.do",
-		//		"referrerPolicy":"strict-origin-when-cross-origin",
-		//		"body":null,
-		//		"method":"GET",
-		//		"mode":"cors"}));
-		//console.log($);
-		
-		//let children = $('ul[class=collapsibleContent]').children().html();
-
-		resolve(page);
-		//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
-		//	{"credentials":"include",
-		//		"headers":{"Connection": "keep-alive",
-		//			"Upgrade-Insecure-Requests": "1",
-		//			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-		//			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-		//			"X-Do-Not-Track": "1",
-		//			"Accept-Language": "en-US,en",
-		//			"DNT": "1",
-		//			"Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-		//			"Accept-Encoding": "gzip, deflate, br",
-		//			"Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
-		//		"referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-		//		"referrerPolicy":"strict-origin-when-cross-origin",
-		//		"body":null,
-		//		"method":"GET",
-		//		"mode":"cors"}));
-		
-		//let data = {black:[], silver:[]};
-		//$('td[style="width: 125px"]').each(function(i, elem) {
-		//	const parts = $(this).html().trim().split('<br>').slice(1, 4);
-		//	const block = {name: parts[0], teacher: parts[1], room: parts[2]};
-		//	if(i % 2 == 0) {
-		//		data.black[i/2] = block;
-		//	} else {
-		//		data.silver[Math.floor(i/2)] = block;
-		//	}
-		//});
-		//log(i, "schedule", data);
+		resolve($);
 	});
 }
 
