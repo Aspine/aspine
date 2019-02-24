@@ -50,6 +50,7 @@ async function scrape_recent(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
+		log(i, "session", session);
 
 
 		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
@@ -74,6 +75,8 @@ async function scrape_recent(username, password, i) {
 				xmlMode: true,
 				normalizeWhitespace: true,
 				decodeEntities: true});
+		log(i, "scrape recent widget", $);
+
 		let studentName = $('recent-activity').attr('studentname');
 		let recentAttendanceArray = [];
 		let recentActivityArray = [];
@@ -91,7 +94,9 @@ async function scrape_recent(username, password, i) {
 				tardy: $(this).attr('tardy'),
 			});
 		});
+		log(i, "recentAttendance", recentAttendanceArray);
 		
+
 		$('recent-activity').children().filter('gradebookScore')
 		.each(function(i, elem) {
 			recentActivityArray.push({
@@ -100,8 +105,10 @@ async function scrape_recent(username, password, i) {
 				grade: $(this).attr('grade'),
 			});
 		});
+		log(i, "recentGrades", recentActivityArray);
 
 
+		log(i, "closing");
 		resolve({
 			recentAttendanceArray,
 			recentActivityArray,
