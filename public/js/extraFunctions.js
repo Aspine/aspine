@@ -39,7 +39,7 @@ let addAssignmentFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-plus\"aria-hidden=\"true\"></i>";
 };
 let getAttendanceEvent = function(value, data, cell, row, options) {
-	return "absent";
+	return "Absent";
 };
 let hideCategoriesFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
