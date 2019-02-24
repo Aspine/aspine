@@ -51,34 +51,34 @@ async function scrape_student(username, password) {
 async function scrape_recent(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
-		await submit_login(username, password, session.apache_token, session.session_id);
+		let page = await submit_login(username, password, session.apache_token, session.session_id);
 
 
-		let $ = (await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-			{"credentials":"include",
-				"headers":{"Connection": "keep-alive", 
-					"Cache-Control": 
-					"max-age=0", 
-					"Upgrade-Insecure-Requests": "1",
-					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-					"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-					"DNT": "1",
-					"Accept-Language": "en-US,en",
-					"X-Do-Not-Track": "1",
-					"Referer": "https://aspen.cpsd.us/aspen/logon.do",
-					"Accept-Encoding": "gzip, deflate, br",
-					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + ";"
-				},
-				"referrer":"https://aspen.cpsd.us/aspen/logon.do",
-				"referrerPolicy":"strict-origin-when-cross-origin",
-				"body":null,
-				"method":"GET",
-				"mode":"cors"}));
+		//let $ = (await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
+		//	{"credentials":"include",
+		//		"headers":{"Connection": "keep-alive", 
+		//			"Cache-Control": 
+		//			"max-age=0", 
+		//			"Upgrade-Insecure-Requests": "1",
+		//			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+		//			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+		//			"DNT": "1",
+		//			"Accept-Language": "en-US,en",
+		//			"X-Do-Not-Track": "1",
+		//			"Referer": "https://aspen.cpsd.us/aspen/logon.do",
+		//			"Accept-Encoding": "gzip, deflate, br",
+		//			"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + ";"
+		//		},
+		//		"referrer":"https://aspen.cpsd.us/aspen/logon.do",
+		//		"referrerPolicy":"strict-origin-when-cross-origin",
+		//		"body":null,
+		//		"method":"GET",
+		//		"mode":"cors"}));
 		//console.log($);
 		
 		//let children = $('ul[class=collapsibleContent]').children().html();
 
-		resolve($);
+		resolve(page);
 		//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 		//	{"credentials":"include",
 		//		"headers":{"Connection": "keep-alive",
@@ -188,6 +188,7 @@ async function submit_login(username, password, apache_token, session_id) {
 			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password, 
 			"method":"POST", 
 			"mode":"cors"}); 
+	return page;
 }
 
 // Returns object with classes (name, grade, id),
