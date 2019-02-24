@@ -35,7 +35,7 @@ function drawHand(ctx, radius, pos, length, width) {
 function drawFace(ctx, radius) {
     ctx.moveTo(0,0);
     ctx.clearRect(-radius, -radius, radius * 2, radius * 2);
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = '#268A48';
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
     ctx.fill();
