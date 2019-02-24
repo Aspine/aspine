@@ -13,27 +13,7 @@ let newAssignment = function() {
 			"color": "green",
 		});
 
-		let computingClassData = tableData.classes[selected_class_i];
-
-		let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals));
-
-		tableData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
-
-		tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
-
-		classesTable.setData(tableData.classes);
-		categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
-
-		assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
-
-		tableData.calcGPA = computeGPA();
-
-		if (tableData.classes[selected_class_i].edited) {
-			document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\" onclick=\"resetTableData()\"></i>";
-		} else {
-			document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
-		}
+		updateGradePage();		
 
 	}
 }
@@ -60,24 +40,9 @@ let editAssignment = function(data) {
 		}
 	}
 
-	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+	updateGradePage();
 
-	let computingClassData = tableData.classes[selected_class_i];
-
-	tableData.classes[selected_class_i].calculated_grade = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals))[computingClassData.type];
-
-	tableData.classes[selected_class_i].color = getColor(tableData.classes[selected_class_i].calculated_grade);
-
-	classesTable.setData(tableData.classes);
-
-	tableData.calcGPA = computeGPA();
-
-	if (tableData.classes[selected_class_i].edited) {
-		document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\" onclick=\"resetTableData()\"></i>";
-	} else {
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
-	}
+	
 }
 
 let resetTableData = function() {
@@ -86,6 +51,7 @@ let resetTableData = function() {
 
 	tableData = JSON.parse(JSON.stringify(tableDataReset));
 	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 	classesTable.setData(tableData.classes);
 	
 	tableData.calcGPA = computeGPA();
@@ -101,4 +67,28 @@ let resetTableData = function() {
 
 let hideCategoriesTable = function() {
 	document.getElementById("categoriesTable").style.display = "none";
+}
+
+let updateGradePage = function() {
+	let computingClassData = tableData.classes[selected_class_i];
+
+	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals));
+
+	tableData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+
+	tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+
+	classesTable.setData(tableData.classes);
+	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
+
+	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+
+	tableData.calcGPA = computeGPA();
+
+	if (tableData.classes[selected_class_i].edited) {
+		document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\" onclick=\"resetTableData()\"></i>";
+	} else {
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+	}
 }
