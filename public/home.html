@@ -36,19 +36,19 @@
 
 	</head>
 	<body>
-		<div id="header">
+		<div id="header" onclick="openTab(event, 'clock')">
             <div class="logo">
                 <canvas id="clock" width="400" height="400"></canvas>
                 <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             </div>
-
 			<h4 id="title">
 				Aspine
-			</h4>
+            </h4>
 		</div>
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
+            <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
 	    <button class="tablinks" id="GPA">Quarter GPA: </button>
         </div>
@@ -65,6 +65,10 @@
                 <p id="schedule_title">Black</p>
             </label>
             <div id="scheduleTable"></div>
+        </div>
+        <div id="clock" class="tabcontent">
+            <canvas id="clock" width="400" height="400"></canvas>
+            <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
         </div>
         <script type="text/javascript" src="/js/clock.js"></script>
 		<script type="text/javascript">

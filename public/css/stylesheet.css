@@ -2,26 +2,23 @@ body {
 	background-size: cover;
 	background-color: #f7f7f7;
 	text-align: center;
-	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 input {
-	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
 }
-
 
 h4#title {
 	position: absolute;
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 	font-size: 80px;
-	letter-spacing: 0.1em;
 	color: #00551D;
-	display: inline;
 	left: 0px;
 	right: 0px;
-	top: 0px;
+	margin-left: 125px;
 }
 
 .container-login100 {
@@ -38,7 +35,7 @@ h4#title {
 }
 
 button {
-	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
 }
