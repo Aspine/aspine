@@ -46,6 +46,7 @@ async function scrape_student(username, password) {
 	}
 }
 
+// Returns object of recent activity
 async function scrape_recent(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
@@ -103,6 +104,7 @@ async function scrape_recent(username, password, i) {
 				date: $(this).attr('date'),
 				classname: $(this).attr('classname'),
 				grade: $(this).attr('grade'),
+				assignment: $(this).attr('assignmentname'),
 			});
 		});
 		log(i, "recentGrades", recentActivityArray);
