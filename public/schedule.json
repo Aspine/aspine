@@ -1,0 +1,140 @@
+{
+    "regular":[
+        {
+            "name":"Period 1",
+            "start": 29100000,
+            "end": 33900000
+        },
+        {
+            "name":"CM/OTI",
+            "start": 34140000,
+            "end": 35040000
+        },
+        {
+            "name":"Period 2",
+            "start": 35280000,
+            "end": 40080000
+        },
+        {
+            "name":"Lunch A",
+            "start": 40320000,
+            "end": 42120000
+        },
+        {
+            "name":"Lunch B",
+            "start": 42840000,
+            "end": 44640000
+        },
+        {
+            "name":"Lunch C",
+            "start": 45360000,
+            "end": 47160000
+        },
+        {
+            "name":"Period 4",
+            "start": 47400000,
+            "end": 52200000
+        }
+    ],
+    "regular-a":[
+        {
+            "name":"Period 1",
+            "start": 29100000,
+            "end": 33900000
+        },
+        {
+            "name":"CM/OTI",
+            "start": 34140000,
+            "end": 35040000
+        },
+        {
+            "name":"Period 2",
+            "start": 35280000,
+            "end": 40080000
+        },
+        {
+            "name":"Lunch",
+            "start": 40320000,
+            "end": 42120000
+        },
+        {
+            "name":"Period 3",
+            "start": 42360000,
+            "end": 47160000
+        },
+        {
+            "name":"Period 4",
+            "start": 47400000,
+            "end": 52200000
+        }
+    ],
+    "regular-b":[
+        {
+            "name":"Period 1",
+            "start": 29100000,
+            "end": 33900000
+        },
+        {
+            "name":"CM/OTI",
+            "start": 34140000,
+            "end": 35040000
+        },
+        {
+            "name":"Period 2",
+            "start": 35280000,
+            "end": 40080000
+        },
+        {
+            "name":"Period 3",
+            "start": 40320000,
+            "end": 42720000
+        },
+        {
+            "name":"Lunch",
+            "start": 42840000,
+            "end": 44640000
+        },
+        {
+            "name":"Period 3",
+            "start": 44760000,
+            "end": 47160000
+        },
+        {
+            "name":"Period 4",
+            "start": 47400000,
+            "end": 52200000
+        }
+    ],
+    "regular-c":[
+        {
+            "name":"Period 1",
+            "start": 29100000,
+            "end": 33900000
+        },
+        {
+            "name":"CM/OTI",
+            "start": 34140000,
+            "end": 35040000
+        },
+        {
+            "name":"Period 2",
+            "start": 35280000,
+            "end": 40080000
+        },
+        {
+            "name":"Period 3",
+            "start": 40320000,
+            "end": 45120000
+        },
+        {
+            "name":"Lunch",
+            "start": 45360000,
+            "end": 47160000
+        },
+        {
+            "name":"Period 4",
+            "start": 47400000,
+            "end": 52200000
+        }
+    ]
+}
