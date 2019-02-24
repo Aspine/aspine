@@ -58,7 +58,7 @@ let resetTableData = function() {
 
 
 	if (tableData.classes[selected_class_i].edited) {
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\" onclick=\"resetTableData()\"></i>";
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
 		document.getElementById("GPA").style.padding = "14px 16px 14px 16px";
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
@@ -87,7 +87,7 @@ let updateGradePage = function() {
 
 	if (tableData.classes[selected_class_i].edited) {
 		document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\" onclick=\"resetTableData()\"></i>";
+		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
