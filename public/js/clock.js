@@ -54,23 +54,44 @@ function drawNumber(ctx, radius, pos, period_length) {
     ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "75px arial";
+    ctx.font = "60px arial";
     // Get time in seconds
     let time = (1 - pos / (2 * Math.PI)) * period_length / 1000;
     // Get first and second digit
-    let d1, d2;
-    if(time / 60 < 60) {
-        d1 = Math.floor(time / 60);
-        d2 = Math.floor(time % 60);
-    }
-    else {
-        d1 = Math.floor(time / 60 / 60);
-        d2 = Math.floor(time / 60 % 60);
+
+    // hours
+    let d1 = Math.floor(time / 60 / 60);
+    // minutes
+    let d2 = Math.floor(time / 60 % 60);
+    // seconds
+    let d3 = Math.floor(time % 60);
+
+    if(d1 < 10) {
+        d1 = `0${d1}`;
     }
     if(d2 < 10) {
-        d2 = "0" + d2;
+        d2 = `0${d2}`;
     }
-    ctx.fillText(d1 + ":" + d2, 0, 2*radius/3);
+    if(d3 < 10) {
+        d3 = `0${d3}`;
+    }
+
+    ctx.fillText(`${d1}:${d2}:${d3}`, 0, 2*radius/3);
+    
+    // vvvvv Two digits, dynamic vvvvv
+    //let d1, d2;
+    //if(time / 60 < 60) {
+    //    d1 = Math.floor(time / 60);
+    //    d2 = Math.floor(time % 60);
+    //}
+    //else {
+    //    d1 = Math.floor(time / 60 / 60);
+    //    d2 = Math.floor(time / 60 % 60);
+    //}
+    //if(d2 < 10) {
+    //    d2 = "0" + d2;
+    //}
+    //ctx.fillText(d1 + ":" + d2, 0, 2*radius/3);
 }
 
 function drawName(ctx, radius, name) {
