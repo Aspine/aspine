@@ -41,9 +41,15 @@ button {
 	font-size: 14px;
 }
 
+
+#recentAttendance {
+	display: none;
+}
+
 #categoriesTable {
 	display: none;
 }
+
 
 #assignmentsTable {
 	display: none;

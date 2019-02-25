@@ -329,11 +329,13 @@
 					document.getElementById("recentActivity").style.display = "block";
 					document.getElementById("recentAttendance").style.display = "none";
 					document.getElementById("recent_title").innerHTML = "Assignments";
+		    			recentActivity.redraw();
 				} else {
 					//recentActivity.setData(tableData.recent.recentAttendanceArray);
 					document.getElementById("recentActivity").style.display = "none";
 					document.getElementById("recentAttendance").style.display = "block";
 					document.getElementById("recent_title").innerHTML = "Attendance";
+		    			recentAttendance.redraw();
 				}
 		        }
 			function schedule_toggle() {
