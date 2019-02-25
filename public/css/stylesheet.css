@@ -89,7 +89,7 @@ button {
 .switch {
 	position: relative;
 	display: inline-block;
-	width: 200px;
+	width: 225px;
 	height: 34px;
 	margin-top: 3px;
 	margin-bottom: 10px;
@@ -136,9 +136,9 @@ button {
 }
 
 .switch input:checked + .slider:before {
-	-webkit-transform: translateX(165px);
-	-ms-transform: translateX(165px);
-	transform: translateX(165px);
+	-webkit-transform: translateX(190px);
+	-ms-transform: translateX(190px);
+	transform: translateX(190px);
 }
 
 /* Rounded sliders */
