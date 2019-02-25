@@ -34,15 +34,6 @@ function drawHand(ctx, radius, pos, length, width) {
     ctx.lineWidth = width;
     ctx.arc(0, 0, length, -Math.PI/2, pos - Math.PI/2); 
     ctx.stroke();
-    //ctx.strokeStyle = 'white';
-    //ctx.beginPath();
-    //ctx.lineWidth = width;
-    //ctx.lineCap = "round";
-    //ctx.moveTo(0,0);
-    //ctx.rotate(pos);
-    //ctx.lineTo(0, -length);
-    //ctx.stroke();
-    //ctx.rotate(-pos);
 }
 
 function drawFace(ctx, radius) {
@@ -55,13 +46,13 @@ function drawFace(ctx, radius) {
     ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
 }
 
-function drawNumber(ctx, radius, pos, period_length) {
+function drawNumber(ctx, radius, pos, number) {
     ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font = "75px arial";
     // Get time in seconds
-    let time = (1 - pos / (2 * Math.PI)) * period_length / 1000;
+    let time = number / 1000;
     // Get first and second digit
 
     // hours
@@ -82,21 +73,6 @@ function drawNumber(ctx, radius, pos, period_length) {
     }
 
     ctx.fillText(`${d1}:${d2}:${d3}`, 0, radius/4);
-    
-    // vvvvv Two digits, dynamic vvvvv
-    //let d1, d2;
-    //if(time / 60 < 60) {
-    //    d1 = Math.floor(time / 60);
-    //    d2 = Math.floor(time % 60);
-    //}
-    //else {
-    //    d1 = Math.floor(time / 60 / 60);
-    //    d2 = Math.floor(time / 60 % 60);
-    //}
-    //if(d2 < 10) {
-    //    d2 = "0" + d2;
-    //}
-    //ctx.fillText(d1 + ":" + d2, 0, 2*radius/3);
 }
 
 function drawName(ctx, radius, name) {
@@ -136,6 +112,7 @@ function redraw_clock() {
     let current_period = schedules[current_schedule][current_period_i];
     let next_period = schedules[current_schedule][current_period_i + 1];
 
+    let number = 0;
     let period_length = -1;
     let period_name = "";
 
@@ -143,22 +120,25 @@ function redraw_clock() {
         period_length = current_period.start;
         period_name = "Before School";
         pos = tod / period_length;
+        number = current_period.start - tod;
     }
     else if(!next_period && tod > current_period.end) { // After school
         period_length = 24 * 60 * 60 * 1000 - current_period.end;
         period_name = "After School";
         pos = (tod - current_period.end) / period_length;
+        number = tod - current_period.end;
     }
-
     else if(tod > current_period.end) { // Between classes
         period_length = next_period.start - current_period.end;
         period_name = current_period.name + " ➡ " + next_period.name;
         pos = (tod - current_period.end) / period_length;
+        number = next_period.start - tod;
     }
     else { // In class
         period_length = current_period.end - current_period.start;
         period_name = current_period.name;
         pos = (tod - current_period.start) / period_length;
+        number = current_period.end - tod;
     }
         
     pos = pos * 2 * Math.PI;
@@ -166,7 +146,7 @@ function redraw_clock() {
     drawFace(small_ctx, small_radius);
     drawName(small_ctx, small_radius, period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
-    drawNumber(small_ctx, small_radius, pos, period_length);
+    drawNumber(small_ctx, small_radius, pos, number);
 
     drawFace(large_ctx, large_radius);
     drawName(large_ctx, large_radius, period_name);
