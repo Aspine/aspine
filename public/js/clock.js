@@ -32,12 +32,17 @@ function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.lineWidth = width;
-    ctx.lineCap = "round";
-    ctx.moveTo(0,0);
-    ctx.rotate(pos);
-    ctx.lineTo(0, -length);
+    ctx.arc(0, 0, length, -Math.PI/2, pos - Math.PI/2); 
     ctx.stroke();
-    ctx.rotate(-pos);
+    //ctx.strokeStyle = 'white';
+    //ctx.beginPath();
+    //ctx.lineWidth = width;
+    //ctx.lineCap = "round";
+    //ctx.moveTo(0,0);
+    //ctx.rotate(pos);
+    //ctx.lineTo(0, -length);
+    //ctx.stroke();
+    //ctx.rotate(-pos);
 }
 
 function drawFace(ctx, radius) {
@@ -54,7 +59,7 @@ function drawNumber(ctx, radius, pos, period_length) {
     ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "60px arial";
+    ctx.font = "75px arial";
     // Get time in seconds
     let time = (1 - pos / (2 * Math.PI)) * period_length / 1000;
     // Get first and second digit
@@ -76,7 +81,7 @@ function drawNumber(ctx, radius, pos, period_length) {
         d3 = `0${d3}`;
     }
 
-    ctx.fillText(`${d1}:${d2}:${d3}`, 0, 2*radius/3);
+    ctx.fillText(`${d1}:${d2}:${d3}`, 0, radius/4);
     
     // vvvvv Two digits, dynamic vvvvv
     //let d1, d2;
@@ -99,7 +104,7 @@ function drawName(ctx, radius, name) {
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font = fitText(ctx, name, "arial", radius * 1.5) + "px arial";
-    ctx.fillText(name, 0, radius/3);
+    ctx.fillText(name, 0, -radius/4);
 }
 
 function fitText(ctx, text, fontface, width) {
@@ -160,11 +165,11 @@ function redraw_clock() {
 
     drawFace(small_ctx, small_radius);
     drawName(small_ctx, small_radius, period_name);
-    drawHand(small_ctx, small_radius, pos, small_radius * .75, small_radius * .04);
+    drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
     drawNumber(small_ctx, small_radius, pos, period_length);
 
     drawFace(large_ctx, large_radius);
     drawName(large_ctx, large_radius, period_name);
-    drawHand(large_ctx, large_radius, pos, large_radius * .75, large_radius * .04);
+    drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
     drawNumber(large_ctx, large_radius, pos, period_length);
 }
