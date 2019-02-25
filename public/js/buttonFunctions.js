@@ -25,9 +25,14 @@ let editAssignment = function(data) {
 
 	tableData.classes[selected_class_i].assignments = data.slice();
 
+
 	for (let j = 0; j < tableData.classes[selected_class_i].assignments.length; j++) {
 		tableData.classes[selected_class_i].assignments[j].percentage = Math.round(tableData.classes[selected_class_i].assignments[j].score / tableData.classes[selected_class_i].assignments[j].max_score * 1000) / 10;
 		tableData.classes[selected_class_i].assignments[j].color = getColor(tableData.classes[selected_class_i].assignments[j].percentage);
+
+		if (tableData.classes[selected_class_i].assignments[j].category.includes("(")) {
+			tableData.classes[selected_class_i].assignments[j].category = tableData.classes[selected_class_i].assignments[j].category.substring(0, tableData.classes[selected_class_i].assignments[j].category.indexOf("(") - 1); 
+		}
 
 
 		if (isNaN(tableData.classes[selected_class_i].assignments[j].score) || tableData.classes[selected_class_i].assignments[j].score === "") {
