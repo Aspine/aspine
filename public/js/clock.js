@@ -113,31 +113,26 @@ function redraw_clock() {
     let next_period = schedules[current_schedule][current_period_i + 1];
 
     let number = 0;
-    let period_length = -1;
     let period_name = "";
 
     if(tod < current_period.start) { // Before school
-        period_length = current_period.start;
         period_name = "Before School";
-        pos = tod / period_length;
+        pos = tod / current_period.start;
         number = current_period.start - tod;
     }
     else if(!next_period && tod > current_period.end) { // After school
-        period_length = 24 * 60 * 60 * 1000 - current_period.end;
         period_name = "After School";
-        pos = (tod - current_period.end) / period_length;
+        pos = (tod - current_period.end) / (24 * 60 * 60 * 1000 - current_period.end);
         number = tod - current_period.end;
     }
     else if(tod > current_period.end) { // Between classes
-        period_length = next_period.start - current_period.end;
         period_name = current_period.name + " ➡ " + next_period.name;
-        pos = (tod - current_period.end) / period_length;
+        pos = (tod - current_period.end) / (next_period.start - current_period.end);
         number = next_period.start - tod;
     }
     else { // In class
-        period_length = current_period.end - current_period.start;
         period_name = current_period.name;
-        pos = (tod - current_period.start) / period_length;
+        pos = (tod - current_period.start) / (current_period.end - current_period.start);
         number = current_period.end - tod;
     }
         
@@ -151,5 +146,5 @@ function redraw_clock() {
     drawFace(large_ctx, large_radius);
     drawName(large_ctx, large_radius, period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
-    drawNumber(large_ctx, large_radius, pos, period_length);
+    drawNumber(large_ctx, large_radius, pos, number);
 }
