@@ -1,7 +1,20 @@
-var cacheName = "v1";
+var cacheName = "v2";
 var cacheFiles = [
 	'/',
 	'/index.html',
+	//'/home.html',
+	//'/manifest.json',
+	//'/sw.js',
+	//'/tambulator.css',
+	//'/images/icons/favicon.ico',
+	//'/vendor/bootstrap/css/bootstrap.min.css',
+	//'/fonts/font-awesome-4.7.0/css/font-awesome.min.css',
+	//'/vendor/animate/animate.css',
+	//'/vendor/css-hamburgers/hamburgers.min.css',
+	//'/vendor/select2/select2.min.css',
+	//'/css/util.css',
+	//'/css/main.css',
+	//'/css/stylesheet.css',
 ];
 
 self.addEventListener('install', function(event) {
