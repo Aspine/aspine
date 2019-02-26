@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+
 <html lang="en">
 	<head>
 
@@ -268,11 +269,26 @@
 
 					//the following lines are used to set up the schedule table correctly
 					//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-					let periods = tableData.schedule.black.slice().map(x => "Period: " + x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+					let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+					let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
+					let timesCounter = 0;
+					let times = []
 
-					let times = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
+					for (let i = 0; i < periods.length; i++) {
 
-					let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0"];
+						if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
+							times[i] = placeTimes[timesCounter];
+							timesCounter++;
+						} else {
+							times[i] = "";
+						}
+
+					}
+
+					periods = periods.map(x => "Period: " + x);
+
+
+					let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
 
 
 					for (let i = 0; i < tableData.schedule.black.length;  i++) {
