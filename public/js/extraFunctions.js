@@ -80,7 +80,7 @@ function getColor(gradeToBeColored) {
 	if (parseFloat(gradeToBeColored) >= 90) {
 		return "#1E8541";
 	} else if (parseFloat(gradeToBeColored) >= 80) {
-		return "blue";
+		return "#6666FF";
 	} else if (parseFloat(gradeToBeColored) >= 70) {
 		return "#ff9900";
 	} else if (parseFloat(gradeToBeColored) >= 60) {
