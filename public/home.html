@@ -193,67 +193,78 @@
 					document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
 
 
+					//parsing the data extracted by the scrappers, and getting tableData ready for presentation
 					for(let i = 0; i < tableData.classes.length; i++) {
 
+						//initialize every the edited key for every class and set it to false
 						tableData.classes[i].edited = false;
 
+						//initialize category grades which will be used for the categoryGrades table
 						tableData.classes[i].categoryGrades = {};
 
+						//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
 						if (!isNaN(parseFloat(tableData.classes[i].grade))) {
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
 
 						
+						//cycle through each assignment of every class for further parsing
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
+							//initialize the percentage of the assignment.
 							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
+							//initialize how the assignment should be colored in the table; based on percentage
 							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
 
+							//an if statement to handle assignments without a score
 							if (isNaN(tableData.classes[i].assignments[j].score)) {
-								//console.log(tableData.classes[i].assignments[j].special);
+								//an if statement to handle assignments with a special characteristic
 								if (tableData.classes[i].assignments[j].special) {
 
+									//an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
 									if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
+										// a reg expression to extract only the information from between the parenthesis.
 										var regExp = /\(([^)]+)\)/;
-										//var matches = regExp.exec("I expect five hundred dollars ($500).");
-
-										//matches[1] contains the value between the parentheses
-										//console.log(matches[1]);
 
 										tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
 										tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
 									} else {
+										// if no parenthesis, set it equal to special in its entirety
 										tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
 										tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
 
 									}
 								} else {
+									// if no special and no grade, set score and max_score to ungraded
 									tableData.classes[i].assignments[j].score = "Ungraded";
 									tableData.classes[i].assignments[j].max_score = "Ungraded";
 
 								}
-								//tableData.classes[i].assignments[j].score = "None";
-								//tableData.classes[i].assignments[j].max_score = "None";							
 							}
 						}
 
+						//initializing a calculated_grade for classes with a grade
 						if (tableData.classes[i].grade != "") {
 
-							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
 							let computingClassData = tableData.classes[i];
 
-							
-							
-							
+							//getting calculated values related to classes
 							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
+							//populating categoryDisplay which is the object used to display the category grading information
 							tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+
+							//setting grading type. Total vs. category
 							tableData.classes[i].type = gradeInfo.type;
 
+							//setting calculated_grade
 							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
 
+							//setting how the class should be colored in the classes table.
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 						}
 					}
 
+
+					//the following lines are used to set up the schedule table correctly
 					let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
 
 					let times = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
@@ -271,6 +282,9 @@
 						tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
 					}
 
+
+
+					//populates the event for each row in the recentAttendance table
 					for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
 						tableData.recent.recentAttendanceArray[i].event = "";
 						if (tableData.recent.recentAttendanceArray[i].dismissed === "true") {
@@ -288,6 +302,7 @@
 					}
 			
 
+					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
 					tableData.GPA = computeGPA();
 					tableData.calcGPA = computeGPA();
 					tableDataReset = JSON.parse(JSON.stringify(tableData));

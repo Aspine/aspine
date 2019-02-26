@@ -127,8 +127,6 @@ function determineGradeType(assignments, categories, currentGrade) {
 
 		let type;
 
-		console.log(Math.abs(categoryPercent * 100 - parseFloat(currentGrade)));
-		console.log(Math.abs(totalPercent * 100 - parseFloat(currentGrade)));
 
 		//if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
 		//	type = 'categoryPercent';
