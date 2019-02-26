@@ -50,6 +50,11 @@ if(!args._.includes("insecure")) {
     }
 }
 
+app.use(function(req, res, next) { // enable cors
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(session({ // Allows for sessions, and signs them with the (arbitrary) secret
