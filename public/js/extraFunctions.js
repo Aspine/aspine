@@ -78,7 +78,7 @@ function getLetterGrade(gradeToBeLettered) {
 
 function getColor(gradeToBeColored) {
 	if (parseFloat(gradeToBeColored) >= 90) {
-		return "#107031";
+		return "#1E8541";
 	} else if (parseFloat(gradeToBeColored) >= 80) {
 		return "blue";
 	} else if (parseFloat(gradeToBeColored) >= 70) {
