@@ -361,7 +361,8 @@ async function scrape_schedule(username, password, i) {
 		let data = {black:[], silver:[]};
 		$('td[style="width: 125px"]').each(function(i, elem) {
 			const parts = $(this).html().trim().split('<br>').slice(1, 4);
-			const block = {name: parts[0], teacher: parts[1], room: parts[2]};
+			const period = $(this).parentsUntil('td').prev().find('th').html().trim();
+			const block = {name: parts[0], teacher: parts[1], room: parts[2], aspenPeriod: period};
 			if(i % 2 == 0) {
 				data.black[i/2] = block;
 			} else {

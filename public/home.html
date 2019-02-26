@@ -267,7 +267,8 @@
 
 
 					//the following lines are used to set up the schedule table correctly
-					let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
+					//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
+					let periods = tableData.schedule.black.slice().map(x => "Period: " + x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
 
 					let times = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
 
