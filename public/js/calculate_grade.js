@@ -122,16 +122,20 @@ function determineGradeType(assignments, categories, currentGrade) {
 
 		let totalPercent = totalScore / totalMaxScore;
 
-		categoryPercent = Math.round(categoryPercent * 1000) / 1000;
-		totalPercent = Math.round(totalPercent * 1000) / 1000;
+		categoryPercent = Math.round(categoryPercent * 10000) / 10000;
+		totalPercent = Math.round(totalPercent * 10000) / 10000;
 
 		let type;
 
-		if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
-			type = 'categoryPercent';
-		} else {
-			type = 'totalPercent';
-		}
+		console.log(Math.abs(categoryPercent * 100 - parseFloat(currentGrade)));
+		console.log(Math.abs(totalPercent * 100 - parseFloat(currentGrade)));
+
+		//if (Math.abs(categoryPercent * 100 - parseFloat(currentGrade)) <= Math.abs(totalPercent * 100 - parseFloat(currentGrade))) {
+		//	type = 'categoryPercent';
+		//} else {
+		//	type = 'totalPercent';
+		//}
+		type = 'categoryPercent';
 
 		return {
 			type,
