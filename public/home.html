@@ -111,10 +111,12 @@
 				layout:"fitColumns",
 
 				columns: [
-					{title:"Date", field:"date", headerSort: false},
-					{title:"Class", field:"classname", headerSort: false},
-					{title:"Assignment", field:"assignment", headerSort: false},
-					{title:"Grade", field:"grade", headerSort: false},
+					{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
+					{title:"Class", field:"classname", formatter: rowFormatter, headerSort: false},
+					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
+					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
+					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowFormatter, headerSort: false},
 					],
 			
 			});
@@ -301,6 +303,30 @@
 						}
 					}
 			
+
+					let activityArray = tableData.recent.recentActivityArray.slice();
+					for (let i = 0; i < activityArray.length; i++) {
+						let assignmentName = activityArray[i].assignment;
+						let className = activityArray[i].classname;
+						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
+						
+						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+
+						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
+						tableData.recent.recentActivityArray[i].className = className;
+						tableData.recent.recentActivityArray[i].classIndex = classIndex;
+						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+
+						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
+						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
+						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+
+
+
+						//tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+
+						//var objectFound = array[elementPos];
+					}
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
 					tableData.GPA = computeGPA();

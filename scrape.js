@@ -103,7 +103,7 @@ async function scrape_recent(username, password, i) {
 			recentActivityArray.push({
 				date: $(this).attr('date'),
 				classname: $(this).attr('classname'),
-				grade: $(this).attr('grade'),
+				score: $(this).attr('grade'),
 				assignment: $(this).attr('assignmentname'),
 			});
 		});
@@ -292,7 +292,7 @@ async function scrape_assignments(session_id, apache_token) {
     while(true) {
         $("tr.listCell.listRowHeight").each(function(i, elem) {
             let row = {};
-            row["name"] = $(this).find("a").text();
+            row["name"] = $(this).find("a").first().text();
             row["category"] = $(this).children().eq(2).text().trim();
             //let scores = $(this).find("div[class=percentFieldContainer]");
 	    let scores = $(this).find("tr")
