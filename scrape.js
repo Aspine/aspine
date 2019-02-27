@@ -89,6 +89,10 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 		}
 	});
 
+	if (statistics.length < 3) {
+		statistics = "No statistics data for this assignment";
+	}
+
 //next().next().text().trim();
 	return statistics;
 
