@@ -286,13 +286,13 @@
 
 					}
 
-					periods = periods.map(x => "Period: " + x);
+					periods = periods.filter(Boolean).map(x => "Period: " + x);
 
 
 					let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
 
 
-					for (let i = 0; i < tableData.schedule.black.length;  i++) {
+					for (let i = 0; i < periods.length;  i++) {
 						tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra"; 
 						tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
 						tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
