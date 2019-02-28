@@ -38,6 +38,15 @@ function getGPA(gradeToBeGPA) {
 let addAssignmentFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-plus\"aria-hidden=\"true\"></i>";
 };
+
+let statInfoFormatter = function(value, data, cell, row, options) {
+	return "<i class=\"fa fa-info\"aria-hidden=\"true\"></i>";
+}
+
+let statInfoHeaderFormatter = function(value, data, cell, row, options) {
+	return "<i class=\"fa fa-info-circle\"aria-hidden=\"true\"></i>";
+}
+
 let getAttendanceEvent = function(value, data, cell, row, options) {
 	return "Absent";
 };

@@ -161,6 +161,9 @@
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
+					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick:function(e, cell){
+					    cell.getRow().delete();
+					}, headerSort:false,},
 					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
 					    cell.getRow().delete();
 					}, headerSort:false,},
@@ -181,7 +184,7 @@
 			});
 			let classesTable = new Tabulator("#classesTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-                selectable:1,
+                		selectable:1,
 				ajaxURL:"/data",
 				ajaxConfig:"post", //ajax HTTP request type
 				ajaxContentType:"json", // send parameters to the server as a JSON encoded string

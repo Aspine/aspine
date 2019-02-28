@@ -12,6 +12,7 @@
     "minimist": "^1.2.0",
     "node-fetch": "^2.3.0",
     "prompt": "^1.0.0",
+    "request": "^2.88.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {},

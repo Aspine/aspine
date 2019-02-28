@@ -281,6 +281,14 @@ i.fa.fa-plus {
     cursor: pointer;
 }
 
+i.fa.fa-info-circle {
+    color: #00551C;
+    padding-left: 31%;
+    padding-top: 25%;
+    font-size: large;
+    cursor: pointer;
+}
+
 i.fa.fa-eye-slash {
     color: #00551C;
     padding-left: 10%;
