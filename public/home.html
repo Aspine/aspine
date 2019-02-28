@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 
+
 <html lang="en">
 	<head>
 
@@ -83,9 +84,12 @@
         	<div id="recentAttendance"></div>
         </div>
 
-        <script type="text/javascript" src="/js/clock.js"></script>
+        	<script type="text/javascript" src="/js/clock.js"></script>
 		<script type="text/javascript" src="/js/calculate_grade.js"></script>
+		<!--<script src="/js/request.js"></script>-->
+		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+			//let request = require('request');
 			let tableData = {};
 			let selected_class_i;
 			let tableDataReset = {};
@@ -102,7 +106,7 @@
 					{title:"Period", field:"period", headerSort: false},
 					{title:"Event", field:"event", headerSort: false,},
 					],
-			
+
 			});
 			let recentActivity = new Tabulator("#recentActivity", {
 
@@ -118,7 +122,7 @@
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
-			
+
 			});
 			let categoriesTable = new Tabulator("#categoriesTable", {
 
@@ -131,9 +135,9 @@
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
-					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:48, headerSort: false}, 
+					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:48, headerSort: false},
 					],
-			
+
 			});
 
 			//create Tabulator on DOM element with id "assignmentsTable"
@@ -155,14 +159,21 @@
 								catCategories.push((Object.keys(tableData.classes[selected_class_i].categories)[k] + " (" + (Object.values(tableData.classes[selected_class_i].categories)[k] * 100)+ "%)"));
 							}
 							return {values: catCategories};
-						}, 
+						},
 						normatter: rowFormatter, headerSort:false,
 					},
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
-					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick:function(e, cell){
-					    cell.getRow().delete();
+					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+						console.log("stats click");
+
+						let session_id = tableData.classes[selected_class_i].tokens.session_id;
+						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
+						let assignment_id = cell.getRow().getData().assignment_id;
+						
+						window.getStats(session_id, apache_token, assignment_id);
+
 					}, headerSort:false,},
 					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
 					    cell.getRow().delete();
@@ -214,7 +225,7 @@
 							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
 						}
 
-						
+
 						//cycle through each assignment of every class for further parsing
 						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
 							//initialize the percentage of the assignment.
@@ -263,7 +274,7 @@
 							tableData.classes[i].type = gradeInfo.type;
 
 							//setting calculated_grade
-							tableData.classes[i].calculated_grade = tableData.classes[i].grade; 
+							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
 
 							//setting how the class should be colored in the classes table.
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -296,7 +307,7 @@
 
 
 					for (let i = 0; i < periods.length;  i++) {
-						tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra"; 
+						tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
 						tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
 						tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
 
@@ -323,14 +334,14 @@
 							tableData.recent.recentAttendanceArray[i].event += "Tardy ";
 						}
 					}
-			
+
 
 					let activityArray = tableData.recent.recentActivityArray.slice();
 					for (let i = 0; i < activityArray.length; i++) {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
 						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
-						
+
 						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
 						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
@@ -443,7 +454,10 @@
 		    recentAttendance.redraw();
 		}
 		document.getElementById("default_open").click();
-        </script>
+
+		
+		</script>
+
 		<script type="text/javascript" src="/js/app.js"></script>
 	</body>
 </html>
