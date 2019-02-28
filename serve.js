@@ -64,7 +64,7 @@ app.use(session({ // Allows for sessions, and signs them with the (arbitrary) se
 }));
 
 app.post('/stats', async (req, res) => {
-	console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}\n------------------`);
+	console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
 
     if(!args._.includes("fake")) {
         // USE REAL DATA:
