@@ -71,7 +71,10 @@ app.post('/stats', async (req, res) => {
         res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
     } else {
         //USE FAKE DATA:
-        res.sendFile('sample.json', {root:"public"});
+	console.log("data sent");
+        res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
+	//res.send("Hello World");
+        //res.sendFile('sample.json', {root:"public"});
     }
 });
 

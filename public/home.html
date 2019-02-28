@@ -172,7 +172,8 @@
 						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
 						let assignment_id = cell.getRow().getData().assignment_id;
 						
-						window.getStats(session_id, apache_token, assignment_id);
+						let stats = window.getStats(session_id, apache_token, assignment_id);
+						console.log(await stats);
 
 					}, headerSort:false,},
 					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
@@ -458,6 +459,6 @@
 		
 		</script>
 
-		<script type="text/javascript" src="/js/app.js"></script>
+		<!--<script type="text/javascript" src="/js/app.js"></script>-->
 	</body>
 </html>

@@ -16,7 +16,8 @@ const util = require('util');
 
 // --------------- Exports -------------------
 module.exports = {
-	scrape_student: scrape_student
+	scrape_student: scrape_student,
+	scrape_assignmentDetails: scrape_assignmentDetails
 };
 
 // -------------------------------------------
