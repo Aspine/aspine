@@ -48,6 +48,7 @@
 				Aspine
             </h4>
 		</div>
+		
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
             <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
@@ -56,6 +57,15 @@
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
 	    <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
+		<div id="myModal" class="modal">
+
+		  <!-- Modal content -->
+		  <div class="modal-content">
+		    <span class="close" onclick="hideModal()">&times;</span>
+		    <p id="modalText">Some text in the Modal..</p>
+		  </div>
+
+		</div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
             <div id="categoriesTable"></div>
@@ -82,6 +92,7 @@
             	</label>
         	<div id="recentActivity"></div>
         	<div id="recentAttendance"></div>
+		
         </div>
 
         	<script type="text/javascript" src="/js/clock.js"></script>
@@ -89,6 +100,10 @@
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+			let hideModal = function() {
+				document.getElementById('myModal').style.display = "none";
+			}
+				
 			//let request = require('request');
 			let tableData = {};
 			let selected_class_i;
@@ -166,6 +181,8 @@
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+						document.getElementById("modalText").innerHTML = "Loading Statistics...";
+						document.getElementById('myModal').style.display = "block";
 						console.log("stats click");
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
@@ -174,6 +191,9 @@
 						
 						let stats = window.getStats(session_id, apache_token, assignment_id);
 						console.log(await stats);
+						await stats;
+						
+						document.getElementById("modalText").innerHTML = await stats;
 
 					}, headerSort:false,},
 					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
