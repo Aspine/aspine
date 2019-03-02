@@ -77,11 +77,12 @@ function drawNumber(ctx, radius, pos, number) {
 }
 
 function drawName(ctx, radius, name) {
-    ctx.fillStyle = 'white';
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    ctx.font = fitText(ctx, name, "arial", radius * 1.5) + "px arial";
-    ctx.fillText(name, 0, -radius/4);
+    document.getElementById("clock_period").innerHTML = name;
+    //ctx.fillStyle = 'white';
+    //ctx.textBaseline = "middle";
+    //ctx.textAlign = "center";
+    //ctx.font = fitText(ctx, name, "arial", radius * 1.5) + "px arial";
+    //ctx.fillText(name, 0, -radius/4);
 }
 
 function fitText(ctx, text, fontface, width) {
@@ -100,14 +101,13 @@ function fitText(ctx, text, fontface, width) {
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
 function get_period_name(default_name) {
-    if(tableData == {}) {
+    if(Object.keys(tableData).length == 0) {
         return default_name;
     }
     if(period_names.length == 0) {
-        console.log(tableData);
         // set period_names -- should only be run once
         for(i in tableData.classes) {
-            default_name[i] = tableData.classes[i].name;
+            period_names[i] = tableData.classes[i].name;
         }
         // TODO: calculate lunch
     }
@@ -155,12 +155,13 @@ function redraw_clock() {
         number = tod % (12 * 60 * 60 * 1000);
     }
     else if(tod > current_period.end) { // Between classes
-        period_name = current_period.name + " ➡ " + next_period.name;
+        period_name = get_period_name(current_period.name) +
+            " ➡ " + get_period_name(next_period.name);
         pos = (tod - current_period.end) / (next_period.start - current_period.end);
         number = next_period.start - tod;
     }
     else { // In class
-        period_name = current_period.name;
+        period_name = get_period_name(current_period.name);
         pos = (tod - current_period.start) / (current_period.end - current_period.start);
         number = current_period.end - tod;
     }
