@@ -324,6 +324,7 @@ canvas#large_clock {
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
+  height:50%;
 }
 
 /* The Close Button */
