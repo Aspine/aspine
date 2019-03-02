@@ -250,7 +250,7 @@ form.login100-form {
 
 .logo {
 	height: 100px;
-	margin: 10px;
+	margin: 10px 10px 25px 10px;
 	width: 100px;
 	display: inline;
 	float: left;
@@ -293,4 +293,10 @@ i.fa.fa-eye-slash {
 canvas#large_clock {
     width: 100%;
     max-width: 400px;
+}
+
+p#clock_period {
+    position: absolute;
+    top: 110px;
+    left: 10px;
 }
