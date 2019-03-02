@@ -120,47 +120,62 @@ function get_period_name(default_name) {
     return period_names[bs_day][index];
 }
 
+function school_day() {
+    let now = new Date();
+    if(now.getDay() % 6 == 0) { // If it's a weekend
+        return false;
+    }
+    return true;
+}
+
 function redraw_clock() {
     // UTC to EST
-    let now = Date.now() - 10 * 60 * 60 * 1000;
-    let tod = now % (24 * 60 * 60 * 1000);
-    // let tod = 41399000; // Simulate time
-    let pos = 0;
-
-    let current_period_i = 0;// Get current period from array
-    while(current_period_i < schedules[current_schedule].length - 1 &&
-        tod > schedules[current_schedule][current_period_i + 1].start) {
-        current_period_i++;
-    }
-
-    let current_period = schedules[current_schedule][current_period_i];
-    let next_period = schedules[current_schedule][current_period_i + 1];
-
     let number = 0;
     let period_name = "";
+    let now = Date.now() - 5 * 60 * 60 * 1000;
+    let tod = now % (24 * 60 * 60 * 1000);
+    if(school_day()) {
+        // let tod = 41399000; // Simulate time
 
-    if(tod < current_period.start) { // Before school
-        period_name = "Before School";
-        pos = tod / current_period.start;
-        number = current_period.start - tod;
-    }
-    else if(!next_period && tod > current_period.end) { // After school
+        let current_period_i = 0;// Get current period from array
+        while(current_period_i < schedules[current_schedule].length - 1 &&
+            tod > schedules[current_schedule][current_period_i + 1].start) {
+            current_period_i++;
+        }
+
+        let current_period = schedules[current_schedule][current_period_i];
+        let next_period = schedules[current_schedule][current_period_i + 1];
+
+        if(tod < current_period.start) { // Before school
+            period_name = "Before School";
+            pos = tod / current_period.start;
+            number = current_period.start - tod;
+        }
+        else if(!next_period && tod > current_period.end) { // After school
+            // Realtime
+            period_name = "";
+            pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
+            number = tod % (12 * 60 * 60 * 1000);
+        }
+        else if(tod > current_period.end) { // Between classes
+            period_name = get_period_name(current_period.name) +
+                " ➡ " + get_period_name(next_period.name);
+            pos = (tod - current_period.end) / (next_period.start - current_period.end);
+            number = next_period.start - tod;
+        }
+        else { // In class
+            period_name = get_period_name(current_period.name);
+            pos = (tod - current_period.start) / (current_period.end - current_period.start);
+            number = current_period.end - tod;
+        }
+    } else {
+        // Realtime
         period_name = "";
         pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
         number = tod % (12 * 60 * 60 * 1000);
     }
-    else if(tod > current_period.end) { // Between classes
-        period_name = get_period_name(current_period.name) +
-            " ➡ " + get_period_name(next_period.name);
-        pos = (tod - current_period.end) / (next_period.start - current_period.end);
-        number = next_period.start - tod;
-    }
-    else { // In class
-        period_name = get_period_name(current_period.name);
-        pos = (tod - current_period.start) / (current_period.end - current_period.start);
-        number = current_period.end - tod;
-    }
-        
+
+    // conver 0-1 to 0-2pi
     pos = pos * 2 * Math.PI;
 
     drawFace(small_ctx, small_radius);

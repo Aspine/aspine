@@ -300,3 +300,6 @@ p#small_clock_period {
     top: 110px;
     left: 10px;
 }
+p#large_clock_period {
+    font-size: 50px;
+}
