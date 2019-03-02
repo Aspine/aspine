@@ -51,7 +51,7 @@ function drawNumber(ctx, radius, pos, number) {
     ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "75px arial";
+    ctx.font = "85px arial";
     // Get time in seconds
     let time = number / 1000;
     // Get first and second digit
@@ -73,16 +73,11 @@ function drawNumber(ctx, radius, pos, number) {
         d3 = `0${d3}`;
     }
 
-    ctx.fillText(`${d1}:${d2}:${d3}`, 0, radius/4);
+    ctx.fillText(`${d1}:${d2}:${d3}`, 0, 0);
 }
 
-function drawName(ctx, radius, name) {
+function drawName(name) {
     document.getElementById("clock_period").innerHTML = name;
-    //ctx.fillStyle = 'white';
-    //ctx.textBaseline = "middle";
-    //ctx.textAlign = "center";
-    //ctx.font = fitText(ctx, name, "arial", radius * 1.5) + "px arial";
-    //ctx.fillText(name, 0, -radius/4);
 }
 
 function fitText(ctx, text, fontface, width) {
@@ -169,12 +164,12 @@ function redraw_clock() {
     pos = pos * 2 * Math.PI;
 
     drawFace(small_ctx, small_radius);
-    drawName(small_ctx, small_radius, period_name);
+    drawName(period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
     drawNumber(small_ctx, small_radius, pos, number);
 
     drawFace(large_ctx, large_radius);
-    drawName(large_ctx, large_radius, period_name);
+    drawName(period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
     drawNumber(large_ctx, large_radius, pos, number);
 }
