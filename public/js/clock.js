@@ -94,6 +94,20 @@ function fitText(ctx, text, fontface, width) {
     return fontsize;
 }
 
+// Takes an object with "room" and "id"
+function get_schedule(p3room, p3id) {
+    var floor = Math.floor(p3room / 1000);
+    var zone = Math.floor((p3room % 1000) / 100);
+    var subject = p3id.charAt(0);
+    if((floor == 2 || floor == 2) && subject != 'S') {
+        return "regular-b";
+    }
+    if((zone < 6 && (floor == 4 || floor == 5)) || (zone == 6 && (floor == 2 || floor == 3)) /* || Biology ): */) {
+        return "regular-c";
+    }
+    return "regular-a";
+}
+
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
 function get_period_name(default_name) {
@@ -109,7 +123,7 @@ function get_period_name(default_name) {
         for(let i in tableData.schedule.silver) {
             period_names.silver.push(tableData.schedule.silver[i].name);
         }
-        // TODO: calculate lunch
+        current_schedule = get_schedule(tableData.schedule.black[2].room, tableData.schedule.black[2].id);
     }
     let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
