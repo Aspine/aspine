@@ -11,7 +11,7 @@
 		<!--===============================================================================================-->
 		<meta name="Aspine" content="Aspen Scraper and Beautifier">
 		<!--===============================================================================================-->
-        <meta name="viewport" content="width=device-width, initial-scale=.75">
+	        <meta name="viewport" content="width=device-width, initial-scale=.75">
 		<!--===============================================================================================-->
 		<meta name="theme-color" content="#00551C"/>
 		<!--===============================================================================================-->
@@ -35,8 +35,8 @@
         <!--===============================================================================================-->
         <link rel="manifest" href="/manifest.json">
         <!--===============================================================================================-->
-	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <!--===============================================================================================-->
+	<script src="https://unpkg.com/picasso.js"></script>
+	<!--===============================================================================================-->
 
 
 	</head>
@@ -63,7 +63,7 @@
 
 		  <!-- Modal content -->
 		  <div class="modal-content">
-		    <div id="tester" style="width:600px;height:250px;">
+		    <div id="tester" style="position:relative;height:200px;width:400px;margin:auto">
 		    </div>
 		    <span class="close" onclick="hideModal()">&times;</span>
 		    <p id="modalText">Some text in the Modal..</p>
@@ -187,37 +187,104 @@
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
 						document.getElementById("modalText").innerHTML = "Loading Statistics...";
 						document.getElementById('myModal').style.display = "block";
-						console.log("stats click");
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
 						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
 						let assignment_id = cell.getRow().getData().assignment_id;
 						
-						let stats = window.getStats(session_id, apache_token, assignment_id);
-						console.log(await stats);
-						await stats;
+						//let stats = await window.getStats(session_id, apache_token, assignment_id);
+						stats = [8, 6, 8, 7.5];
 
-						var trace2 = {
-						  x: [2, 3, 3, 3, 3, 5, 6, 6, 7],
-						  type: 'box',
-						  name: 'Set 2'
-						};
+						if (stats.indexOf("[") === 0) {
+							stats = stats.substring(1, stats.length - 1);
+							stats = stats.split(",");
+							stats = stats.map(x => parseFloat(x.substring(1, stats.length)));
+							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
+							console.log(high);
+							console.log(low);
+							console.log(median);
+							console.log(mean);
+							let insert1 = (5 * mean - high - low - median - ((high - low) / 4)) / 2;
+							let insert2 = (high - low) / 4 + x;
+							stats.push(insert1);
+							stats.push(insert2);
+						}
+						let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
+						console.log(high);
+						console.log(low);
+						console.log(median);
+						console.log(mean);
+						let insert1 = ((5 * mean) - high - low - median - ((high - low) / 8)) / 2;
+						console.log(insert1);
+						let insert2 = (high - low) / 8 + insert1;
+						console.log(insert2);
+						stats.push(insert1);
+						stats.push(insert2);
 
-						var data = [trace2];
+						let data = [
+							{
+								type: "matrix",
+								data: [
+									["Dim", "min", "low", "med", "high", "max"],
+									["", 3, 4, 5, 6, 7]
+								]
+							}
+						];
 
-						var layout = {
-						  title: 'Horizontal Box Plot'
-						};
+						console.log("charting");
+						picasso.chart({
+						  element: document.querySelector('#tester'),
+						  data,
+						  settings: {
+						    scales: {
+						      v: {
+							data: {
+								fields: ['min', 'max'] 								}
+							     },
+							t: {
+							 data: { 
+								 extract: { 
+									 field: 'Dim'
+								 }
+							  }, type: 'band' 
+							}
+						      },
 
-						Plotly.newPlot('tester', data, layout);
-
-						//TESTER = document.getElementById('tester');
-						//	Plotly.plot( TESTER, [{
-						//	x: [1, 2, 3, 4, 5],
-						//	y: [1, 2, 4, 8, 16] }], {
-						//	margin: { t: 0 } } );
-						
-						document.getElementById("modalText").innerHTML = await stats;
+						    components: [{
+						      type: 'axis',
+						      dock: 'left',
+						      scale: 't'
+						    },{
+						      type: 'axis',
+						      dock: 'bottom',
+						      scale: 'v'
+						    }, {
+						      type: 'box',
+						      data: {
+							extract: {
+							  field: 'Dim',
+							  props: {
+							    min: { field: 'min' },
+							    start: { field: 'low' },
+   							  med: { field: 'med'},
+							    end: { field: 'high' },
+							    max: { field: 'max' }
+							  }
+							}
+						      },
+						      settings: {
+							major: { scale: 't' },
+							minor: { scale: 'v' },
+							orientation: 'horizontal',
+							box: {
+							  width: 0.7
+							}
+						      }
+						    }]
+						  }
+						});
+	
+						document.getElementById("modalText").innerHTML = stats;
 
 					}, headerSort:false,},
 					{title: "Add", titleFormatter:addAssignmentFormatter, headerClick: newAssignment, formatter:"buttonCross", width:40, align:"center", cellClick:function(e, cell){
