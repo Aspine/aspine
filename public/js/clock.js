@@ -77,7 +77,8 @@ function drawNumber(ctx, radius, pos, number) {
 }
 
 function drawName(name) {
-    document.getElementById("clock_period").innerHTML = name;
+    document.getElementById("small_clock_period").innerHTML = name;
+    document.getElementById("large_clock_period").innerHTML = name;
 }
 
 function fitText(ctx, text, fontface, width) {

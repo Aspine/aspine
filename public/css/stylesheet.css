@@ -295,7 +295,7 @@ canvas#large_clock {
     max-width: 400px;
 }
 
-p#clock_period {
+p#small_clock_period {
     position: absolute;
     top: 110px;
     left: 10px;
