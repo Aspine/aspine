@@ -1,5 +1,6 @@
 let current_schedule = "regular";
 let schedules, logo;
+let period_names = [];
 
 let small_ctx, small_radius;
 let small_clock = document.getElementById("small_clock");
@@ -96,11 +97,36 @@ function fitText(ctx, text, fontface, width) {
     return fontsize;
 }
 
+// Takes the default names (Period 1, etc) and overrides with real class
+// names if they are available
+function get_period_name(default_name) {
+    if(tableData == {}) {
+        return default_name;
+    }
+    if(period_names.length == 0) {
+        console.log(tableData);
+        // set period_names -- should only be run once
+        for(i in tableData.classes) {
+            default_name[i] = tableData.classes[i].name;
+        }
+        // TODO: calculate lunch
+    }
+
+    // period_names has class names now
+    try {
+        let i = Number(default_name.charAt(default_name.length - 1));
+        return period_names[i];
+    }
+    catch(err) {
+        return default_name;
+    }
+}
+
 function redraw_clock() {
     // UTC to EST
     let now = Date.now() - 5 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
-    //let tod = 71399000;
+    // let tod = 71399000; // Simulate time
     let pos = 0;
 
     let current_period_i = 0;// Get current period from array
@@ -121,9 +147,12 @@ function redraw_clock() {
         number = current_period.start - tod;
     }
     else if(!next_period && tod > current_period.end) { // After school
-        period_name = "After School";
-        pos = (tod - current_period.end) / (24 * 60 * 60 * 1000 - current_period.end);
-        number = tod - current_period.end;
+        // period_name = "After School";
+        // pos = (tod - current_period.end) / (24 * 60 * 60 * 1000 - current_period.end);
+        // number = tod - current_period.end;
+        period_name = "";
+        pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
+        number = tod % (12 * 60 * 60 * 1000);
     }
     else if(tod > current_period.end) { // Between classes
         period_name = current_period.name + " ➡ " + next_period.name;
