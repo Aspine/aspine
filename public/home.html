@@ -402,9 +402,11 @@
 				if(document.getElementById("schedule_toggle").checked) {
 					scheduleTable.setData(tableData.schedule.silver);
 					document.getElementById("schedule_title").innerHTML = "Silver";
+                    redraw_clock();
 				} else {
 					scheduleTable.setData(tableData.schedule.black);
 					document.getElementById("schedule_title").innerHTML = "Black";
+                    redraw_clock();
 				}
 		        }
 		function openTab(evt, tab_name) {

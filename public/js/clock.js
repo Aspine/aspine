@@ -1,6 +1,6 @@
 let current_schedule = "regular";
 let schedules, logo;
-let period_names = [];
+let period_names = {black:[], silver:[]};
 
 let small_ctx, small_radius;
 let small_clock = document.getElementById("small_clock");
@@ -99,29 +99,31 @@ function get_period_name(default_name) {
     if(Object.keys(tableData).length == 0) {
         return default_name;
     }
-    if(period_names.length == 0) {
+    if(period_names.black.length == 0) {
         // set period_names -- should only be run once
-        for(i in tableData.classes) {
-            period_names[i] = tableData.classes[i].name;
+        for(let i in tableData.schedule.black) {
+            if(tableData.schedule.black[i].name != "Community Meeting");
+            period_names.black.push(tableData.schedule.black[i].name);
+        }
+        for(let i in tableData.schedule.silver) {
+            period_names.silver.push(tableData.schedule.silver[i].name);
         }
         // TODO: calculate lunch
     }
-
+    let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
-    try {
-        let i = Number(default_name.charAt(default_name.length - 1));
-        return period_names[i];
-    }
-    catch(err) {
+    let index = Number(default_name.charAt(default_name.length - 1));
+    if(isNaN(index)) {
         return default_name;
     }
+    return period_names[bs_day][index];
 }
 
 function redraw_clock() {
     // UTC to EST
-    let now = Date.now() - 5 * 60 * 60 * 1000;
+    let now = Date.now() - 10 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
-    // let tod = 71399000; // Simulate time
+    // let tod = 41399000; // Simulate time
     let pos = 0;
 
     let current_period_i = 0;// Get current period from array
@@ -142,9 +144,6 @@ function redraw_clock() {
         number = current_period.start - tod;
     }
     else if(!next_period && tod > current_period.end) { // After school
-        // period_name = "After School";
-        // pos = (tod - current_period.end) / (24 * 60 * 60 * 1000 - current_period.end);
-        // number = tod - current_period.end;
         period_name = "";
         pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
         number = tod % (12 * 60 * 60 * 1000);
