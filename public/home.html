@@ -71,6 +71,8 @@
             <div id="scheduleTable"></div>
         </div>
         <div id="clock" class="tabcontent">
+            <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()">
+            <p id="lunch_label">A</p>
             <canvas id="large_clock" width="400" height="400"></canvas>
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             <p id="large_clock_period"></p>

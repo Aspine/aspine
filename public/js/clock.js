@@ -94,6 +94,21 @@ function fitText(ctx, text, fontface, width) {
     return fontsize;
 }
 
+function update_lunch() {
+    let current = "";
+    switch(Number(document.getElementById("lunch_range").value)) {
+        case 0:
+            current = "A";
+            break;
+        case 1:
+            current = "B";
+            break;
+        case 2:
+            current = "C";
+    }
+    document.getElementById("lunch_label").innerHTML = current;
+}
+
 // Takes an object with "room" and "id"
 function get_schedule(p3room, p3id) {
     var floor = Math.floor(p3room / 1000);

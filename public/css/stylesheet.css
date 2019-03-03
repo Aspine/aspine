@@ -303,3 +303,48 @@ p#small_clock_period {
 p#large_clock_period {
     font-size: 50px;
 }
+#lunch_range {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 34px;
+  border-radius: 17px;
+  background: #000000;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  padding:5px;
+}
+
+#lunch_range:hover {
+  opacity: 1;
+}
+
+#lunch_range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  /*margin: 0px 10px 0px 10px;*/
+}
+
+#lunch_range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  margin: 0px 10px 0px 10px;
+}
+
+#lunch_label {
+    color: white;
+    position: relative;
+    font-size: 30px;
+    top: -47px;
+    height: 0px;
+    pointer-events: none;
+}
