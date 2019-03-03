@@ -71,8 +71,9 @@
             <div id="scheduleTable"></div>
         </div>
         <div id="clock" class="tabcontent">
+            <p>Lunch:</p>
             <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()">
-            <p id="lunch_label">A</p>
+            <p id="lunch_label">ABC</p>
             <canvas id="large_clock" width="400" height="400"></canvas>
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             <p id="large_clock_period"></p>
@@ -361,6 +362,8 @@
 					scheduleTable.setData(tableData.schedule.black);
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
+
+                    redraw_clock();
 
 					return response.classes; //return the tableData property of a response json object
 

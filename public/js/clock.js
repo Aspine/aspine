@@ -95,18 +95,17 @@ function fitText(ctx, text, fontface, width) {
 }
 
 function update_lunch() {
-    let current = "";
     switch(Number(document.getElementById("lunch_range").value)) {
         case 0:
-            current = "A";
+            current_schedule = "regular-a";
             break;
         case 1:
-            current = "B";
+            current_schedule = "regular-b";
             break;
         case 2:
-            current = "C";
+            current_schedule = "regular-c";
     }
-    document.getElementById("lunch_label").innerHTML = current;
+    redraw_clock();
 }
 
 // Takes an object with "room" and "id"
@@ -115,11 +114,14 @@ function get_schedule(p3room, p3id) {
     var zone = Math.floor((p3room % 1000) / 100);
     var subject = p3id.charAt(0);
     if((floor == 2 || floor == 2) && subject != 'S') {
+        document.getElementById("lunch_range").value = 1;
         return "regular-b";
     }
     if((zone < 6 && (floor == 4 || floor == 5)) || (zone == 6 && (floor == 2 || floor == 3)) /* || Biology ): */) {
+        document.getElementById("lunch_range").value = 2;
         return "regular-c";
     }
+    document.getElementById("lunch_range").value = 0;
     return "regular-a";
 }
 
@@ -132,21 +134,25 @@ function get_period_name(default_name) {
     if(period_names.black.length == 0) {
         // set period_names -- should only be run once
         for(let i in tableData.schedule.black) {
-            if(tableData.schedule.black[i].name != "Community Meeting");
-            period_names.black.push(tableData.schedule.black[i].name);
+            if(tableData.schedule.black[i].name != "Community Meeting") {
+                period_names.black.push(tableData.schedule.black[i]);
+            }
         }
         for(let i in tableData.schedule.silver) {
-            period_names.silver.push(tableData.schedule.silver[i].name);
+            if(tableData.schedule.silver[i].name != "Community Meeting") {
+                period_names.silver.push(tableData.schedule.silver[i]);
+            }
         }
-        current_schedule = get_schedule(tableData.schedule.black[2].room, tableData.schedule.black[2].id);
+        // Guess lunch
+        current_schedule = get_schedule(period_names.black[2].room, period_names.black[2].id);
     }
     let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
-    let index = Number(default_name.charAt(default_name.length - 1));
+    let index = Number(default_name.charAt(default_name.length - 1)) - 1;
     if(isNaN(index)) {
         return default_name;
     }
-    return period_names[bs_day][index];
+    return period_names[bs_day][index].name;
 }
 
 function school_day() {
@@ -158,9 +164,12 @@ function school_day() {
 }
 
 function redraw_clock() {
+    // Fake call to get_period_name to set current_schedule
+    get_period_name("Period 1");
     // UTC to EST
     let number = 0;
     let period_name = "";
+    //let now = Date.now() - 5 * 60 * 60 * 1000;
     let now = Date.now() - 5 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
     if(school_day()) {

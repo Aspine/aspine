@@ -305,7 +305,7 @@ p#large_clock_period {
 }
 #lunch_range {
   -webkit-appearance: none;
-  width: 100px;
+  width: 225px;
   height: 34px;
   border-radius: 17px;
   background: #000000;
@@ -326,7 +326,7 @@ p#large_clock_period {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: #4CAF50;
+  background: white;
   cursor: pointer;
   /*margin: 0px 10px 0px 10px;*/
 }
@@ -342,9 +342,17 @@ p#large_clock_period {
 
 #lunch_label {
     color: white;
+    text-shadow:
+    -1px -1px 5px #000,  
+    1px -1px 5px #000,
+    -1px 1px 5px #000,
+    1px 1px 5px #000;
     position: relative;
-    font-size: 30px;
-    top: -47px;
+    font-size: 25px;
+    top: -44px;
     height: 0px;
     pointer-events: none;
+    letter-spacing: 3.15em;
+    text-align: center;
+    left: 40px;
 }
