@@ -66,14 +66,14 @@
             <label class="switch">
                 <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
                 <span class="slider round"></span>
-                <p id="schedule_title">Black</p>
+                <p id="schedule_title" class="unselectable">Black</p>
             </label>
             <div id="scheduleTable"></div>
         </div>
         <div id="clock" class="tabcontent">
             <p>Lunch:</p>
-            <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()">
-            <p id="lunch_label">ABC</p>
+            <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
+            <p id="lunch_label" class="unselectable">ABC</p>
             <canvas id="large_clock" width="400" height="400"></canvas>
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             <p id="large_clock_period"></p>
@@ -82,8 +82,8 @@
 		<label class="switch">
 			<input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
 			<span class="slider round"></span>
-			<p id="recent_title">Assignments</p>
-            	</label>
+			<p id="recent_title" class="unselectable">Assignments</p>
+        </label>
         	<div id="recentActivity"></div>
         	<div id="recentAttendance"></div>
         </div>
