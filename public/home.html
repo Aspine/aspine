@@ -64,13 +64,11 @@
 
 		  <!-- Modal content -->
 		  <div class="modal-content">
-		    <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
-		    <div id="tester" style="position:relative;top:20px;height:30vh;width:70vw;margin:auto">
+			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
+		    <p id="modalTitle" style="display:inline-block;position:relative;left:12px;">Modal Title..</p>
+		    <div id="tester" style="position:relative;top:20px;height:25vh;width:70vw;">
 		    </div>
-		    <div id="tester2" style="position:relative;top:20px;height:30vh;width:70vw;margin:auto">
-		    </div>
-
-		    <p id="modalText">Some text in the Modal..</p>
+		    <p id="modalCaption" style="display:inline-block;position:relative;top:15px">Modal Caption..</p>
 		  </div>
 
 		</div>
@@ -190,7 +188,7 @@
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
-						document.getElementById("modalText").innerHTML = "Loading Statistics...";
+						document.getElementById("modalCaption").innerHTML = "Loading Statistics...";
 						document.getElementById('myModal').style.display = "inline-block";
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
@@ -218,17 +216,23 @@
 							var statsTrace = {
 							  x: stats,
 							  type: 'box',
-							  name: " ",
+								name: "&zwnj;",
 							};
 
 							var data = [statsTrace];
 
 							let layout = {
-								title: "Grade Statistics for: <br>" + assignment,
+								title: "&zwnj;",
 								xaxis: {
-									title: 'Score',
+									title: "&zwnj;",
 									zeroline: true,
 									range: [0, high],
+								},
+								margin: {
+									t: 20,
+									l: 20,
+									r: 20,
+									b: 20,
 								},
 							};
 
@@ -237,15 +241,17 @@
 
 							TESTER.style.display = "inline";
 
-							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true});
+							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("modalText").innerHTML = "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
+							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment;
+							document.getElementById("modalCaption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
+
 						} else {
 							
 							document.getElementById("tester").style.display = "none";
 
-							document.getElementById("modalText").innerHTML = stats;
+							document.getElementById("modalCaption").innerHTML = stats;
 						}
 
 						

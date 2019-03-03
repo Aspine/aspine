@@ -341,3 +341,7 @@ canvas#large_clock {
   text-decoration: none;
   cursor: pointer;
 }
+.js-plotly-plot,
+.plot-container {
+          width: 80vh
+}
