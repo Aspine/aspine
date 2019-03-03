@@ -194,6 +194,9 @@ function redraw_clock() {
             period_name = "";
             pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
             number = tod % (12 * 60 * 60 * 1000);
+            if(number < 1 * 60 * 60 * 1000) {
+                number += 12 * 60 * 60 * 1000;
+            }
         }
         else if(tod > current_period.end) { // Between classes
             period_name = get_period_name(current_period.name) +
@@ -211,6 +214,9 @@ function redraw_clock() {
         period_name = "";
         pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
         number = tod % (12 * 60 * 60 * 1000);
+        if(number < 1 * 60 * 60 * 1000) {
+            number += 12 * 60 * 60 * 1000;
+        }
     }
 
     // conver 0-1 to 0-2pi
