@@ -66,7 +66,7 @@
 		  <div id="modal-content" class="modal-content">
 			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
 		    <p id="modalTitle" style="display:inline-block;position:relative;left:12px;">Modal Title..</p>
-		    <div id="tester" style="position:relative;top:20px;height:25vh;width:70vw;">
+		    <div id="tester" style="display:none;position:relative;top:20px;height:25vh;width:70vw;">
 		    </div>
 		    <p id="modalCaption" style="display:inline-block;position:relative;top:15px">Modal Caption..</p>
 		  </div>
@@ -109,8 +109,18 @@
 			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('tester')); });
 			let hideModal = function() {
 				document.getElementById('myModal').style.display = "none";
-			}
+				noStats();
 				
+			}
+			let noStats = function() {
+				document.getElementById('tester').style.display = "none";
+				document.getElementById("tester").style.display = "none";
+				document.getElementById("modalCaption").innerHTML = "No statistics information for this assignment.";
+				document.getElementById("modalTitle").innerHTML = "";
+				document.getElementById("modal-content").style.height = "15vh";
+				document.getElementById("modal-content").style.margin = "30% auto";
+			}
+
 			//let request = require('request');
 			let tableData = {};
 			let selected_class_i;
@@ -188,6 +198,7 @@
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+						noStats();
 						document.getElementById("modalCaption").innerHTML = "Loading Statistics...";
 						document.getElementById("modalTitle").innerHTML = "";
 						document.getElementById('myModal').style.display = "inline-block";
@@ -253,12 +264,8 @@
 							document.getElementById("modal-content").style.margin = "15% auto";
 						} else {
 							
-							document.getElementById("tester").style.display = "none";
-
-							document.getElementById("modalCaption").innerHTML = stats;
-							document.getElementById("modalTitle").innerHTML = "";
-							document.getElementById("modal-content").style.height = "20vh";
-							document.getElementById("modal-content").style.margin = "30% auto";
+							noStats();
+							
 						}
 
 						
