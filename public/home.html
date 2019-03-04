@@ -198,6 +198,7 @@
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+					if (!isNaN(cell.getRow().getData().score)) {
 						noStats();
 						document.getElementById("modalCaption").innerHTML = "Loading Statistics...";
 						document.getElementById("modalTitle").innerHTML = "";
@@ -267,6 +268,7 @@
 							noStats();
 							
 						}
+					}
 
 						
 
