@@ -16,7 +16,8 @@ const util = require('util');
 
 // --------------- Exports -------------------
 module.exports = {
-	scrape_student: scrape_student
+	scrape_student: scrape_student,
+	scrape_assignmentDetails: scrape_assignmentDetails
 };
 
 // -------------------------------------------
@@ -70,6 +71,24 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 			"referrerPolicy":"strict-origin-when-cross-origin",
 			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sA&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
 			"method":"POST",
+			"mode":"cors"}));
+
+	(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+		{"credentials":"include",
+			"headers":{"Connection": "keep-alive",
+				"Upgrade-Insecure-Requests": "1",
+				"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+				"X-Do-Not-Track": "1",
+				"Accept-Language": "en-US,en",
+				"DNT": "1",
+				"Referer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+				"Accept-Encoding": "gzip, deflate, br",
+				"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
+			"referrer":"https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+			"referrerPolicy":"strict-origin-when-cross-origin",
+			"body":null,
+			"method":"GET",
 			"mode":"cors"}));
 
 	let statistics = [];
@@ -330,6 +349,7 @@ async function scrape_assignments(session_id, apache_token) {
 			"body":null,
 			"method":"GET",
 			"mode":"cors"}));
+
 	let data = [];
    let page = 1;
     let n_assignments = parseInt($("#totalRecordsCount").text());

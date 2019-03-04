@@ -1,3 +1,5 @@
+
+
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
     return this.toString().split(".")[1].length || 0; 
@@ -38,6 +40,18 @@ function getGPA(gradeToBeGPA) {
 let addAssignmentFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-plus\"aria-hidden=\"true\"></i>";
 };
+
+let statInfoFormatter = function(cell, formatterParams) {
+
+	if (!isNaN(cell.getRow().getData().score)) {
+		return "<i class=\"fa fa-info\"aria-hidden=\"true\"></i>";
+	}
+}
+
+let statInfoHeaderFormatter = function(value, data, cell, row, options) {
+	return "<i class=\"fa fa-info-circle\"aria-hidden=\"true\"></i>";
+}
+
 let getAttendanceEvent = function(value, data, cell, row, options) {
 	return "Absent";
 };

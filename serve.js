@@ -63,6 +63,21 @@ app.use(session({ // Allows for sessions, and signs them with the (arbitrary) se
     saveUninitialized: false
 }));
 
+app.post('/stats', async (req, res) => {
+	console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
+
+    if(!args._.includes("fake")) {
+        // USE REAL DATA:
+        res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
+    } else {
+        //USE FAKE DATA:
+	console.log("data sent");
+        res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
+	//res.send("Hello World");
+        //res.sendFile('sample.json', {root:"public"});
+    }
+});
+
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
