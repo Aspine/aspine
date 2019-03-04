@@ -250,7 +250,7 @@ form.login100-form {
 
 .logo {
 	height: 100px;
-	margin: 10px;
+	margin: 10px 10px 25px 10px;
 	width: 100px;
 	display: inline;
 	float: left;
@@ -344,4 +344,76 @@ canvas#large_clock {
 .js-plotly-plot,
 .plot-container {
           width: 80vh
+}
+
+p#small_clock_period {
+    position: absolute;
+    top: 110px;
+    left: 10px;
+}
+p#large_clock_period {
+    font-size: 50px;
+}
+#lunch_range {
+  -webkit-appearance: none;
+  width: 225px;
+  height: 34px;
+  border-radius: 17px;
+  background: #000000;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  padding:5px;
+}
+
+#lunch_range:hover {
+  opacity: 1;
+}
+
+#lunch_range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  /*margin: 0px 10px 0px 10px;*/
+}
+
+#lunch_range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  margin: 0px 10px 0px 10px;
+}
+
+#lunch_label {
+    color: white;
+    text-shadow:
+    -1px -1px 5px #000,  
+    1px -1px 5px #000,
+    -1px 1px 5px #000,
+    1px 1px 5px #000;
+    position: relative;
+    font-size: 25px;
+    top: -44px;
+    height: 0px;
+    pointer-events: none;
+    letter-spacing: 3.15em;
+    text-align: center;
+    left: 40px;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
 }
