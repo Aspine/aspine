@@ -27,7 +27,7 @@ $(function() {
     // Populate list of calendars using calendar_list
     for(let i in calendar_list) {
         $('#calendar-list').append(
-            `<input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label><br>`);
+            `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
     }
     refresh_calendar();
 

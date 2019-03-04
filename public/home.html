@@ -33,6 +33,8 @@
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">
 		<!--===============================================================================================-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" crossorigin="anonymous">
+		<!--===============================================================================================-->
         <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
         <!--===============================================================================================-->
         <link rel="manifest" href="/manifest.json">
@@ -98,10 +100,12 @@
             <p id="large_clock_period"></p>
         </div>
         <div id="calendar-tab" class="tabcontent">
-            <div id='calendar'></div>
-            <form id='calendar-list'>
-            </form>
+            <div id="calendar-list-container">
+                <ul id='calendar-list' class="ks-cboxtags">
+                </ul>
+            </div>
             <button id='add-calendar'>Add Your Own Calendar</button>
+            <div id='calendar'></div>
         </div>
 	<div id="recent" class="tabcontent">
 		<label class="switch">
