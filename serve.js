@@ -71,7 +71,6 @@ app.post('/stats', async (req, res) => {
         res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
     } else {
         //USE FAKE DATA:
-	console.log("data sent");
         res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
 	//res.send("Hello World");
         //res.sendFile('sample.json', {root:"public"});
@@ -89,6 +88,15 @@ app.post('/data', async (req, res) => {
         res.sendFile('sample.json', {root:"public"});
     }
 });
+
+app.get('/', async (req, res) => {
+    if(req.session.username) {
+        res.redirect('/home.html');
+    } else {
+        res.redirect('/login.html');
+    }
+});
+
 app.post('/login', async (req, res) => {
 	req.session.username = req.body.username;
 	req.session.password = req.body.password;
@@ -97,7 +105,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', async (req, res) => {
     req.session.destroy();
-	res.redirect('/');
+	res.redirect('/login.html');
 });
 
 io.on('connection', function(socket){
