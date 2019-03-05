@@ -5,6 +5,7 @@ const express = require('express');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 const http = require('http');
 const socket = require('socket.io');
 const fs = require('fs');
@@ -57,9 +58,19 @@ app.use(function(req, res, next) { // enable cors
 });
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
-app.use(session({ // Allows for sessions, and signs them with the (arbitrary) secret
-	secret: "scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody",
-    resave: true,
+//app.use(session({ // Allows for sessions, and signs them with the (arbitrary) secret
+//	secret: "scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody",
+//    resave: true,
+//    saveUninitialized: false
+//}));
+const options = {
+    host: 'localhost',
+    port: 6379
+}
+app.use(session({
+    store: new RedisStore(options),
+    secret: 'scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody',
+    resave: false,
     saveUninitialized: false
 }));
 
