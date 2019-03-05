@@ -173,7 +173,9 @@
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
-					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:48, headerSort: false},
+					//filler column to match the assignments table
+					//{title: "", width:1, align:"center", headerSort: false}, 
+					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
 					],
 
 			});
