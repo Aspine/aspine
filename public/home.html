@@ -456,6 +456,7 @@
 
 					let activityArray = tableData.recent.recentActivityArray.slice();
 					for (let i = 0; i < activityArray.length; i++) {
+						try {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
 						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
@@ -470,12 +471,14 @@
 						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
 						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
 						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+						} catch(err) {
+							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+
+						}
 
 
 
-						//tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						//var objectFound = array[elementPos];
 					}
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
