@@ -24,21 +24,28 @@ $(function() {
         googleCalendarApiKey: 'AIzaSyDtbQCoHa4lC4kW4g4YXTyb8f5ayJct2Ao',
     })
 
-    // Populate list of calendars using calendar_list
-    for(let i in calendar_list) {
-        $('#calendar-list').append(
-            `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
-    }
-    refresh_calendar();
+    calendar_list = $.get("/get-calendars", function (data) {
+        // Populate list of calendars using calendar_list
+        calendar_list = data;
+        for(let i in data) {
+            $('#calendar-list').append(
+                `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+        }
+        refresh_calendar();
+    });
 
     $('#calendar-list').change(refresh_calendar);
 
-    $('#add-calendar').click(add_calendar());
+    $('#add-calendar').submit(add_calendar);
 });
 
 // Add calendar by appending it to the db and selecting it
 function add_calendar() {
     // ajax request to server to add calendar
+    $.post("/add-calendar", $('#add-calendar').serialize(), function (data) {
+        console.log(data);
+    });
+    return false;
 }
 
 // Use the checkboxes to find what calendars to display

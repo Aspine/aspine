@@ -168,6 +168,9 @@ app.post('/add-calendar', async (req, res) => {
 
 app.get('/get-calendars', async (req, res) => {
     client.lrange(`calendars`, 0, -1, function (err, reply) {
+        for(i in reply) {
+            reply[i] = JSON.parse(reply[i]);
+        }
         res.send(reply);
     });
 });
