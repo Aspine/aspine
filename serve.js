@@ -124,21 +124,21 @@ app.get('/logout', async (req, res) => {
 });
 
 app.post('/set-settings', async (req, res) => {
+    // TODO: Sanitization
+    console.log(Object.keys(req.body));
+
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
     client.set(`settings:${key}`, req.body);
 });
 
 app.get('/get-settings', async (req, res) => {
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
-    let settings = client.get(`settings:${key}`, function (err, reply) {
-        console.log(reply.toString()); // Will print `OK`
+    client.get(`settings:${key}`, function (err, reply) {
+        res.send(reply);
     });
-    res.send(settings);
 });
 
 app.post('/add-calendar', async (req, res) => {
-    console.log("adding calendar");
-    console.log(req.body);
 
     // Security: MUST SANITIZE URLS
     if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
@@ -147,7 +147,6 @@ app.post('/add-calendar', async (req, res) => {
         res.status(404).send("Bad id or name!");
         return;
     }
-    console.log("passed sanitizers");
 
     let cal = JSON.stringify({
         name: req.body.name,

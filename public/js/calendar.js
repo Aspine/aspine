@@ -37,6 +37,10 @@ $(function() {
     $('#calendar-list').change(refresh_calendar);
 
     $('#add-calendar').submit(add_calendar);
+    
+    $('#calendar-edit-toggle').click(() => {
+        $('#calendar-edit').slideToggle();
+    });
 });
 
 // Add calendar by appending it to the db and selecting it

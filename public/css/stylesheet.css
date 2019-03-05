@@ -494,3 +494,7 @@ ul.ks-cboxtags li input[type="checkbox"] {
 ul.ks-cboxtags li input[type="checkbox"]:focus + label {
   border: 2px solid #e9a1ff;
 }
+
+div#calendar-list-container {
+    margin: auto;
+}
