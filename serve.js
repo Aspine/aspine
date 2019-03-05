@@ -6,11 +6,15 @@ const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
+const redis = require("redis"),
+    client = redis.createClient();
 const http = require('http');
 const socket = require('socket.io');
 const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
+const crypto = require('crypto');
+const validator = require('validator');
 // -------------------------------------------
 
 
@@ -20,6 +24,11 @@ const port = 8080;
 const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
 const io = socket(server);
+
+// redis setup
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 if(!args._.includes("insecure")) {
     // Certificate
@@ -58,11 +67,6 @@ app.use(function(req, res, next) { // enable cors
 });
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
-//app.use(session({ // Allows for sessions, and signs them with the (arbitrary) secret
-//	secret: "scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody",
-//    resave: true,
-//    saveUninitialized: false
-//}));
 const options = {
     host: 'localhost',
     port: 6379
@@ -117,6 +121,55 @@ app.post('/login', async (req, res) => {
 app.get('/logout', async (req, res) => {
     req.session.destroy();
 	res.redirect('/login.html');
+});
+
+app.post('/set-settings', async (req, res) => {
+    let key = crypto.createHash('md5').update(req.session.username).digest('hex');
+    client.set(`settings:${key}`, req.body);
+});
+
+app.get('/get-settings', async (req, res) => {
+    let key = crypto.createHash('md5').update(req.session.username).digest('hex');
+    let settings = client.get(`settings:${key}`, function (err, reply) {
+        console.log(reply.toString()); // Will print `OK`
+    });
+    res.send(settings);
+});
+
+app.post('/add-calendar', async (req, res) => {
+    console.log("adding calendar");
+    console.log(req.body);
+
+    // Security: MUST SANITIZE URLS
+    if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
+        req.body.name == undefined || !validator.isAlpha(req.body.name)) {
+        console.log("Bad id or name!");
+        res.status(404).send("Bad id or name!");
+        return;
+    }
+    console.log("passed sanitizers");
+
+    let cal = JSON.stringify({
+        name: req.body.name,
+        id: req.body.id,
+        color: 'green'
+    });
+    client.lrem('calendars', 0, cal);
+
+    client.rpush('calendars', 
+    JSON.stringify({
+        name: req.body.name,
+        id: req.body.id,
+        color: 'green'
+    }));
+
+    res.status(200).send("added calendar");
+});
+
+app.get('/get-calendars', async (req, res) => {
+    client.lrange(`calendars`, 0, -1, function (err, reply) {
+        res.send(reply);
+    });
 });
 
 io.on('connection', function(socket){
