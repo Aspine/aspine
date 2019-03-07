@@ -393,8 +393,10 @@
 							//setting grading type. Total vs. category
 							tableData.classes[i].type = gradeInfo.type;
 
-							//setting calculated_grade
-							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
+							//setting calculated_grade and initcalcGrade
+							tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
+
+							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade);
 
 							//setting how the class should be colored in the classes table.
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
