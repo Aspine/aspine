@@ -54,16 +54,6 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
 		let totalPercent = totalScore / totalMaxScore;
 		output = (parseFloat(grade)/100) + categoryPercent - parseFloat(init_grade);
 
-		console.log("categoryPercnet")
-		console.log(categoryPercent);
-		console.log("Grade:")
-		console.log(parseFloat(grade)/100);
-		console.log("INIT")
-		console.log(parseFloat(init_grade));
-		console.log("difference")
-		console.log(parseFloat(categoryPercent - parseFloat(init_grade)));
-		console.log("Output: " );
-		console.log(output);
 
 
 		return {

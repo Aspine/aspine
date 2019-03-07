@@ -396,7 +396,7 @@
 							//setting calculated_grade and initcalcGrade
 							tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
 
-							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade);
+							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
 
 							//setting how the class should be colored in the classes table.
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -487,6 +487,7 @@
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
 					tableData.GPA = computeGPA();
+					console.log(tableData.GPA);
 					tableData.calcGPA = computeGPA();
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
