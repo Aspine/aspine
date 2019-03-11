@@ -170,7 +170,7 @@ function redraw_clock() {
     let number = 0;
     let period_name = "";
     //let now = Date.now() - 5 * 60 * 60 * 1000;
-    let now = Date.now() - 5 * 60 * 60 * 1000;
+    let now = Date.now() - 4 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
     if(school_day()) {
         // let tod = 41399000; // Simulate time
