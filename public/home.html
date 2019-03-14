@@ -36,7 +36,8 @@
         <link rel="manifest" href="/manifest.json">
         <!--===============================================================================================-->
 	<script src="js/plotly-latest.min.js"></script>
-
+	<!--===============================================================================================-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<!--===============================================================================================-->
 
 
@@ -67,7 +68,7 @@
 		  <div id="modal-content" class="modal-content">
 			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
 		    <h3 id="modalTitle" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-		    <div id="tester" style="display:none;position:relative;top:20px;height:100px;width:70vw;">
+		    <div id="tester" style="display:none;position:relative;top:20px;height:100px;width:250px">
 		    </div>
 		    <p id="modalCaption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
 		  </div>
@@ -111,6 +112,7 @@
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+			$('#tester').width($(window).width() * 7 / 11);
 			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('tester')); });
 			let hideModal = function() {
 				document.getElementById('myModal').style.display = "none";
@@ -220,8 +222,8 @@
 						let max_score = cell.getRow().getData().max_score;
 
 						
-						let stats = await window.getStats(session_id, apache_token, assignment_id);
-						//stats = '["8","6","8","7.5"]';
+						//let stats = await window.getStats(session_id, apache_token, assignment_id);
+						stats = '["8","6","8","7.5"]';
 						//stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
@@ -279,7 +281,7 @@
 							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment;
+							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
 							document.getElementById("modalCaption").style.top = "30px";
 							document.getElementById("modalCaption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 

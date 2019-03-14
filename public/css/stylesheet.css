@@ -323,8 +323,8 @@ canvas#large_clock {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80vw; /* Could be more or less, depending on screen size */
-  height:50vh;
+  width: 80%; /* Could be more or less, depending on screen size */
+  height:50%;
 }
 
 /* The Close Button */
@@ -341,10 +341,10 @@ canvas#large_clock {
   text-decoration: none;
   cursor: pointer;
 }
-.js-plotly-plot,
+/*.js-plotly-plot,
 .plot-container {
           width: 80vh
-}
+}*/
 
 p#small_clock_period {
     position: absolute;
