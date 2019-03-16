@@ -109,16 +109,20 @@
                 </div>
                 <div id="calendar-add-modal" class="modal">
                     <div class="modal-content">
-                        <span class="close" id="calendar-add-close">&times;</span>
-                        <form id='add-calendar'>
+                        <div class="modal-header">
+                            <span class="close" id="calendar-add-close">&times;</span>
                             <h3>Add Calendar</h3>
-                            <p>*Calendar must be a public Google Calendar</p>
-                            <input type="text" name="name" placeholder="Calendar Name">
-                            <br>
-                            <input type="text" name="id" placeholder="Calendar ID">
-                            <br>
-                            <input id="calendar-add-submit" type="submit" value="Add">
-                        </form>
+                        </div>
+                        <div class="modal-body">
+                            <form id='add-calendar'>
+                                <p>*Calendar must be a public Google Calendar</p>
+                                <input type="text" name="name" placeholder="Calendar Name">
+                                <br>
+                                <input type="text" name="id" placeholder="Calendar ID (found in calendar settings)">
+                                <br>
+                                <input id="calendar-add-submit" type="submit" value="Add">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
