@@ -1,5 +1,3 @@
-//import $ from 'jquery';
-//import 'fullcalendar';
 $ = require('jquery');
 require('fullcalendar');
 
@@ -24,32 +22,78 @@ $(function() {
         googleCalendarApiKey: 'AIzaSyDtbQCoHa4lC4kW4g4YXTyb8f5ayJct2Ao',
     })
 
-    calendar_list = $.get("/get-calendars", function (data) {
-        // Populate list of calendars using calendar_list
-        calendar_list = data;
-        for(let i in data) {
-            $('#calendar-list').append(
-                `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
-        }
-        refresh_calendar();
-    });
+    init_calendar();
 
     $('#calendar-list').change(refresh_calendar);
 
     $('#add-calendar').submit(add_calendar);
     
     $('#calendar-edit-toggle').click(() => {
-        $('#calendar-edit').slideToggle();
+        $('#calendar-list-container').slideToggle();
     });
+
+    // Get the modal
+    var modal = document.getElementById('calendar-add-modal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("calendar-add-toggle");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementById("calendar-add-close");
+
+    // When the user clicks on the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 });
+
+function init_calendar() {
+    $.get("/get-calendars", function (data) {
+        // Populate list of calendars using calendar_list
+        calendar_list = data;
+        $.get("/get-settings", function (settings) {
+            if(typeof(settings.calendars) == "undefined") {
+                settings.calendars = [];
+            }
+            $('#calendar-list').html("");
+            for(let i in data) {
+                console.log(calendar_list[i].name);
+                if(settings.calendars.includes(calendar_list[i].name)) {
+                    $('#calendar-list').append(
+                        `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+                } else {
+                    $('#calendar-list').append(
+                        `<li><input type="checkbox" id="calendar-list-${i}"><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+                }
+            }
+            refresh_calendar();
+        });
+    });
+}
 
 // Add calendar by appending it to the db and selecting it
 function add_calendar() {
     // ajax request to server to add calendar
     $.post("/add-calendar", $('#add-calendar').serialize(), function (data) {
         console.log(data);
+        $('#calendar-add-modal').css("display", "none");
+        $('#calendar-list').append(
+            `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
+        refresh_calendar();
     });
-    return false;
+    return false; // Don't reload the page
 }
 
 // Use the checkboxes to find what calendars to display
@@ -66,4 +110,20 @@ function refresh_calendar(){
             console.log("adding calendar");
         }
     }
+    // save settings
+    save_settings();
+}
+
+function save_settings() {
+    // get calendar settings
+    let settings = {calendars: []};
+    $("#calendar-list input:checked").each((index, value) => {
+        settings.calendars.push($(value).next().html());
+    });
+    console.log(JSON.stringify(settings));
+    
+    // Save calendar settings
+    $.post("/set-settings", settings, function (data) {
+        console.log("settings set");
+    });
 }

@@ -307,7 +307,7 @@ canvas#large_clock {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 10; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -324,7 +324,7 @@ canvas#large_clock {
   padding: 20px;
   border: 1px solid #888;
   width: 80vw; /* Could be more or less, depending on screen size */
-  height:50vh;
+  height: fit-content;
 }
 
 /* The Close Button */
@@ -424,6 +424,7 @@ p#large_clock_period {
 }
 
 #calendar-list-container {
+    margin: auto;
     max-width: 80%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 13px;
@@ -467,12 +468,12 @@ ul.ks-cboxtags li label::before {
     font-weight: 900;
     font-size: 12px;
     padding: 2px 6px 2px 2px;
-    content: "\f067";
+    content: "❌";
     transition: transform .3s ease-in-out;
 }
 
 ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
-    content: "\f00c";
+    content: "✔";
     transform: rotate(-360deg);
     transition: transform .3s ease-in-out;
 }
@@ -495,6 +496,26 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
   border: 2px solid #e9a1ff;
 }
 
-div#calendar-list-container {
-    margin: auto;
+h3#calendar-edit-toggle, h3#calendar-add-toggle {
+    padding-right: 15px;
+    float: left;
+    cursor: pointer;
+}
+
+#add-calendar input {
+    border: 2px #00551D solid;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+}
+
+input#calendar-add-submit {
+    background: #268A48;
+    padding: 5px 20px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+input#calendar-add-submit:hover {
+    background: #107031;
 }

@@ -100,21 +100,27 @@
             <p id="large_clock_period"></p>
         </div>
         <div id="calendar-tab" class="tabcontent">
-            <button id="calendar-edit-toggle">Choose Calendars</button>
-            <div id="calendar-edit" hidden>
-                <div id="calendar-list-container">
+            <div id="calendar-edit">
+                <h3 id="calendar-edit-toggle">⚙</h3>
+                <h3 id="calendar-add-toggle">➕</h3>
+                <div id="calendar-list-container" hidden>
                     <ul id='calendar-list' class="ks-cboxtags">
                     </ul>
                 </div>
-                <form id='add-calendar'>
-                    Calendar Name:<br>
-                    <input type="text" name="name" placeholder="name">
-                    <br>
-                    Calendar ID:<br>
-                    <input type="text" name="id" placeholder="Calendar ID">
-                    <br><br>
-                    <input type="submit" value="Add Your Own Calendar">
-                </form>
+                <div id="calendar-add-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" id="calendar-add-close">&times;</span>
+                        <form id='add-calendar'>
+                            <h3>Add Calendar</h3>
+                            <p>*Calendar must be a public Google Calendar</p>
+                            <input type="text" name="name" placeholder="Calendar Name">
+                            <br>
+                            <input type="text" name="id" placeholder="Calendar ID">
+                            <br>
+                            <input id="calendar-add-submit" type="submit" value="Add">
+                        </form>
+                    </div>
+                </div>
             </div>
             <div id='calendar'></div>
         </div>

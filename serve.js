@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redis = require("redis"),
-    client = redis.createClient();
+    client = redis.createClient(6310);
 const http = require('http');
 const socket = require('socket.io');
 const fs = require('fs');
@@ -67,9 +67,10 @@ app.use(function(req, res, next) { // enable cors
 });
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
+app.use(bodyParser.json()) // json parser
 const options = {
     host: 'localhost',
-    port: 6379
+    port: 6310
 }
 app.use(session({
     store: new RedisStore(options),
@@ -105,7 +106,7 @@ app.post('/data', async (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    if(req.session.username) {
+    if(typeof(req.session) != "undefined") {
         res.redirect('/home.html');
     } else {
         res.redirect('/login.html');
@@ -126,15 +127,24 @@ app.get('/logout', async (req, res) => {
 app.post('/set-settings', async (req, res) => {
     // TODO: Sanitization
     console.log(Object.keys(req.body));
+    console.log(req.body);
+    console.log(typeof(req.body));
 
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
-    client.set(`settings:${key}`, req.body);
+    console.log(req.body);
+    client.set(`settings:${key}`, JSON.stringify(req.body));
+    console.log("done");
+    res.status(200).send("set settings");
 });
 
 app.get('/get-settings', async (req, res) => {
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
     client.get(`settings:${key}`, function (err, reply) {
-        res.send(reply);
+        if(!reply) {
+            res.send(JSON.stringify({calendars:[]}));
+        } else {
+            res.send(JSON.parse(reply));
+        }
     });
 });
 
@@ -142,7 +152,7 @@ app.post('/add-calendar', async (req, res) => {
 
     // Security: MUST SANITIZE URLS
     if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
-        req.body.name == undefined || !validator.isAlpha(req.body.name)) {
+        req.body.name == undefined || !validator.isAlphanumeric(req.body.name)) {
         console.log("Bad id or name!");
         res.status(404).send("Bad id or name!");
         return;
