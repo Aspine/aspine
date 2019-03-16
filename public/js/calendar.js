@@ -69,7 +69,6 @@ function init_calendar() {
             }
             $('#calendar-list').html("");
             for(let i in data) {
-                console.log(calendar_list[i].name);
                 if(settings.calendars.includes(calendar_list[i].name)) {
                     $('#calendar-list').append(
                         `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
@@ -87,7 +86,6 @@ function init_calendar() {
 function add_calendar() {
     // ajax request to server to add calendar
     $.post("/add-calendar", $('#add-calendar').serialize(), function (data) {
-        console.log(data);
         $('#calendar-add-modal').css("display", "none");
         $('#calendar-list').append(
             `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
@@ -100,14 +98,12 @@ function add_calendar() {
 function refresh_calendar(){
     $("#calendar").fullCalendar('removeEvents');
     for(let i in calendar_list) {
-        //console.log($(`#calendar-list-${i}`).prop('checked'));
         if($(`#calendar-list-${i}`).prop('checked')) {
             $("#calendar").fullCalendar('addEventSource',
                 {
                     googleCalendarId: calendar_list[i].id,
                     color: calendar_list[i].color
                 });
-            console.log("adding calendar");
         }
     }
     // save settings
@@ -120,10 +116,8 @@ function save_settings() {
     $("#calendar-list input:checked").each((index, value) => {
         settings.calendars.push($(value).next().html());
     });
-    console.log(JSON.stringify(settings));
     
     // Save calendar settings
     $.post("/set-settings", settings, function (data) {
-        console.log("settings set");
     });
 }

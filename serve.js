@@ -126,14 +126,8 @@ app.get('/logout', async (req, res) => {
 
 app.post('/set-settings', async (req, res) => {
     // TODO: Sanitization
-    console.log(Object.keys(req.body));
-    console.log(req.body);
-    console.log(typeof(req.body));
-
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
-    console.log(req.body);
     client.set(`settings:${key}`, JSON.stringify(req.body));
-    console.log("done");
     res.status(200).send("set settings");
 });
 
@@ -153,7 +147,6 @@ app.post('/add-calendar', async (req, res) => {
     // Security: MUST SANITIZE URLS
     if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
         req.body.name == undefined || !validator.isAlphanumeric(req.body.name)) {
-        console.log("Bad id or name!");
         res.status(404).send("Bad id or name!");
         return;
     }
