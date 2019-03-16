@@ -202,7 +202,9 @@
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
-					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:48, headerSort: false},
+					//filler column to match the assignments table
+					//{title: "", width:1, align:"center", headerSort: false}, 
+					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
 					],
 
 			});
@@ -255,12 +257,9 @@
 							stats = stats.substring(1, stats.length - 1);
 							stats = stats.split(",");
 							stats = stats.map(x => parseFloat(x.substring(1, stats.length)));
-							console.log(stats);
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
 							stats.push((low + median) / 2);
 							stats.push((high + median) / 2);
-							console.log(stats);
-							console.log("charting");
 
 							var statsTrace = {
 							  x: stats,
@@ -423,8 +422,10 @@
 							//setting grading type. Total vs. category
 							tableData.classes[i].type = gradeInfo.type;
 
-							//setting calculated_grade
-							tableData.classes[i].calculated_grade = tableData.classes[i].grade;
+							//setting calculated_grade and initcalcGrade
+							tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
+
+							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
 
 							//setting how the class should be colored in the classes table.
 							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
@@ -488,6 +489,7 @@
 
 					let activityArray = tableData.recent.recentActivityArray.slice();
 					for (let i = 0; i < activityArray.length; i++) {
+						try {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
 						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
@@ -502,16 +504,19 @@
 						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
 						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
 						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+						} catch(err) {
+							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+
+						}
 
 
 
-						//tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						//var objectFound = array[elementPos];
 					}
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
 					tableData.GPA = computeGPA();
+					console.log(tableData.GPA);
 					tableData.calcGPA = computeGPA();
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 

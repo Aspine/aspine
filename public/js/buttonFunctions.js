@@ -77,7 +77,7 @@ let hideCategoriesTable = function() {
 let updateGradePage = function() {
 	let computingClassData = tableData.classes[selected_class_i];
 
-	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals));
+	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade));
 
 	tableData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
 

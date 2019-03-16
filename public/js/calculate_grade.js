@@ -1,4 +1,4 @@
-function computeGrade(assignments, categories, decimals) {
+function computeGrade(assignments, categories, decimals, init_grade, grade) {
 
 	let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
 
@@ -52,10 +52,12 @@ function computeGrade(assignments, categories, decimals) {
 		categoryPercent /= counterWeight;
 
 		let totalPercent = totalScore / totalMaxScore;
+		output = (parseFloat(grade)/100) + categoryPercent - parseFloat(init_grade);
+
 
 
 		return {
-			categoryPercent: "" + (Math.round(categoryPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+			categoryPercent: "" + (Math.round(output * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
 			totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
 			categoryScores,
 			categoryMaxScores,
@@ -140,6 +142,7 @@ function determineGradeType(assignments, categories, currentGrade) {
 			categoryScores,
 			categoryMaxScores,
 			categoryGrades,
+			categoryPercent,
 
 		};
 	}
