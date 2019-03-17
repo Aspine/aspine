@@ -15,6 +15,7 @@ const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
 const crypto = require('crypto');
 const validator = require('validator');
+const fetch = require('node-fetch');
 // -------------------------------------------
 
 
@@ -147,8 +148,15 @@ app.post('/add-calendar', async (req, res) => {
 
     // Security: MUST SANITIZE URLS
     if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
-        req.body.name == undefined || !validator.isAlphanumeric(req.body.name)) {
-        res.status(404).send("Bad id or name!");
+        req.body.name == undefined || !req.body.name.match(/^[\-0-9a-zA-Z.'' ]+$/g)) {
+        res.status(404).send("Malformed ID or Name");
+        return;
+    }
+
+    // Check to see if it is public and working
+    const calendar = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(req.body.id)}/events?key=AIzaSyDtbQCoHa4lC4kW4g4YXTyb8f5ayJct2Ao&timeMin=2019-02-23T00%3A00%3A00Z&timeMax=2019-04-08T00%3A00%3A00Z&singleEvents=true&maxResults=9999&_=1552838482460`);
+    if(!calendar.ok) {
+        res.status(404).send("Bad Calendar ID");
         return;
     }
 

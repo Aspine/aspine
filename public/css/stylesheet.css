@@ -545,3 +545,7 @@ input#calendar-add-submit {
 input#calendar-add-submit:hover {
     background: #107031;
 }
+
+p#add-calendar-error {
+    color: red;
+}

@@ -93,6 +93,8 @@ function add_calendar() {
         $('#calendar-list').append(
             `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
         refresh_calendar();
+    }).fail(() => {
+        $('p#add-calendar-error').html(`Failed to add calendar: ${$('#add-calendar input[name=name]').val()}`);
     });
     return false; // Don't reload the page
 }
