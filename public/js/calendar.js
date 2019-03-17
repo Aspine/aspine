@@ -67,6 +67,9 @@ function init_calendar() {
             if(typeof(settings.calendars) == "undefined") {
                 settings.calendars = [];
             }
+            if(typeof(settings) == "string") {
+                settings = JSON.parse(settings);
+            }
             $('#calendar-list').html("");
             for(let i in data) {
                 if(settings.calendars.includes(calendar_list[i].name)) {

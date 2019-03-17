@@ -135,7 +135,8 @@ app.get('/get-settings', async (req, res) => {
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
     client.get(`settings:${key}`, function (err, reply) {
         if(!reply) {
-            res.send(JSON.stringify({calendars:[]}));
+            //res.send(JSON.stringify({calendars:[]}));
+            res.send({calendars:[]});
         } else {
             res.send(JSON.parse(reply));
         }
