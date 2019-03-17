@@ -358,7 +358,6 @@ canvas#large_clock {
   text-decoration: none;
   cursor: pointer;
 }
-
 .modal-header {
   padding: 2px 16px;
   background-color: #00551D;
@@ -367,10 +366,10 @@ canvas#large_clock {
 
 .modal-body {padding: 2px 16px;}
 
-.js-plotly-plot,
+/*.js-plotly-plot,
 .plot-container {
           width: 80vh
-}
+}*/
 
 p#small_clock_period {
     position: absolute;

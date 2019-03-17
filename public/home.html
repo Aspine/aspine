@@ -39,7 +39,9 @@
         <!--===============================================================================================-->
         <link rel="manifest" href="/manifest.json">
         <!--===============================================================================================-->
-        <script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script>
+        <script src="js/plotly-latest.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/jquery-3.3.1.min.js"></script>
         <!--===============================================================================================-->
 
 
@@ -71,8 +73,7 @@
 		  <div id="modal-content" class="modal-content">
 			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
 		    <h3 id="modalTitle" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-		    <div id="tester" style="display:none;position:relative;top:20px;height:100px;width:70vw;">
-		    </div>
+		    <div id="tester" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
 		    <p id="modalCaption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
 		  </div>
 
@@ -144,6 +145,7 @@
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+			$('#tester').width($(window).width() * 7 / 11);
 			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('tester')); });
 			let hideModal = function() {
 				document.getElementById('myModal').style.display = "none";
@@ -268,15 +270,17 @@
 							var statsTrace = {
 							  x: stats,
 							  type: 'box',
-								name: "&zwnj;",
+								name: " ",
 							};
 
 							var data = [statsTrace];
 
 							let layout = {
-								title: "&zwnj;",
+								title: " ",
+								width: window.innerWidth * 10 / 15,
+								height: 100,
 								xaxis: {
-									title: "&zwnj;",
+									title: " ",
 									zeroline: true,
 									range: [0, high],
 								},
@@ -312,7 +316,7 @@
 							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment;
+							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
 							document.getElementById("modalCaption").style.top = "30px";
 							document.getElementById("modalCaption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 
@@ -520,7 +524,6 @@
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
 					tableData.GPA = computeGPA();
-					console.log(tableData.GPA);
 					tableData.calcGPA = computeGPA();
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
