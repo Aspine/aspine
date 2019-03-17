@@ -145,11 +145,12 @@ app.get('/get-settings', async (req, res) => {
 });
 
 app.post('/add-calendar', async (req, res) => {
-
+    console.log(req.body.color);
     // Security: MUST SANITIZE URLS
     if(req.body.id == undefined || !validator.isEmail(req.body.id) ||
-        req.body.name == undefined || !req.body.name.match(/^[\-0-9a-zA-Z.'' ]+$/g)) {
-        res.status(400).send("Malformed ID or Name");
+        req.body.name == undefined || !req.body.name.match(/^[\-0-9a-zA-Z.'' ]+$/g) ||
+        req.body.color == undefined || !req.body.color.match(/^([\-0-9a-fA-F]){6}$/g)) {
+        res.status(400).send("Malformed ID, Name, or Color");
         return;
     }
 
@@ -163,7 +164,7 @@ app.post('/add-calendar', async (req, res) => {
     let cal = JSON.stringify({
         name: req.body.name,
         id: req.body.id,
-        color: 'green'
+        color: req.body.color
     });
     client.lrem('calendars', 0, cal);
 
@@ -171,7 +172,7 @@ app.post('/add-calendar', async (req, res) => {
     JSON.stringify({
         name: req.body.name,
         id: req.body.id,
-        color: 'green'
+        color: req.body.color
     }));
 
     res.status(200).send("added calendar");

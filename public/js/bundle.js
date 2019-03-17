@@ -69647,6 +69647,12 @@ $(function() {
         editable: false,
         eventLimit: true, // allow "more" link when too many events
         googleCalendarApiKey: 'AIzaSyDtbQCoHa4lC4kW4g4YXTyb8f5ayJct2Ao',
+        eventClick: function(event) {
+            if (event.url) {
+                window.open(event.url);
+                return false;
+            }
+        }
     })
 
     init_calendar();
@@ -69720,6 +69726,7 @@ function add_calendar() {
         $('#calendar-list').append(
             `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
         refresh_calendar();
+        init_calendar();
     }).fail(() => {
         $('p#add-calendar-error').html(`Failed to add calendar: ${$('#add-calendar input[name=name]').val()}`);
     });
@@ -69734,7 +69741,7 @@ function refresh_calendar(){
             $("#calendar").fullCalendar('addEventSource',
                 {
                     googleCalendarId: calendar_list[i].id,
-                    color: calendar_list[i].color
+                    color: "#" + calendar_list[i].color
                 });
         }
     }
