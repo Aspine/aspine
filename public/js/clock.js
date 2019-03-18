@@ -128,7 +128,7 @@ function get_schedule(p3room, p3id) {
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
 function get_period_name(default_name) {
-    if(Object.keys(tableData).length == 0) {
+    if(typeof(tableData) == "undefined" || Object.keys(tableData).length == 0) {
         return default_name;
     }
     if(period_names.black.length == 0) {
