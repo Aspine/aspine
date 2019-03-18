@@ -157,7 +157,11 @@ let rowGradeFormatter = function(cell, formatterParams) {
 
 	} else {
 		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
-		return "<span style='color:"+rowColor+"; font-weight:bold;'>" + value + "</span>";
+		if (numberGrade >= 100) {
+			return "<span style='background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
+		} else {
+			return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+		}
 
 	}
 
