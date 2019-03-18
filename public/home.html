@@ -69,7 +69,7 @@
 
 		  <!-- Modal content -->
 		  <div id="stats_modal_content" class="modal-content">
-			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
+			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
 		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
 		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
 		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
@@ -256,8 +256,8 @@
 						let max_score = cell.getRow().getData().max_score;
 
 						
-						let stats = await window.getStats(session_id, apache_token, assignment_id);
-						//let stats = '["8","6","8","7.5"]';
+						//let stats = await window.getStats(session_id, apache_token, assignment_id);
+						let stats = '["8","6","8","7.5"]';
 						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
