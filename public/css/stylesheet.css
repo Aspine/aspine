@@ -322,7 +322,7 @@ canvas#large_clock {
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  margin: auto;
+  /*margin: auto;*/
   padding: 0;
   border: 1px solid #888;
   width: 80%;
@@ -345,6 +345,7 @@ canvas#large_clock {
 }
 
 /* The Close Button */
+
 .close {
   color: white;
   float: right;
@@ -371,7 +372,33 @@ canvas#large_clock {
           width: 80vh
 }*/
 
+#stats_modal {
+	/*padding: auto;*/
+	/*top: 40px !important;*/
+}
+
+#stats_modal_content {
+	padding: 20px;
+	margin: auto !important;
+	top: 40px;
+	-webkit-animation-name: statsanimatetop !important;
+	-webkit-animation-duration: 0.4s !important;
+	animation-name: statsanimatetop !important;
+	animation-duration: 0.4s
+}
+@-webkit-keyframes statsanimatetop {
+  from {top:-300px; opacity:0} 
+  to {top:140px; opacity:1}
+}
+
+@keyframes statsanimatetop {
+  from {top:-300px; opacity:0}
+  to {top:140px; opacity:1}
+}
+
+
 p#small_clock_period {
+
     position: absolute;
     top: 110px;
     left: 10px;
