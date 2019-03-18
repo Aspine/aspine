@@ -183,8 +183,27 @@ let gradeFormatter = function(cell, formatterParams) {
 		if (edited) {
 			fake = "Calculated Grade: " + calculated_grade + "% " + getLetterGrade(calculated_grade);
 		}
+		let realColor = getColor(parseFloat(real));
+		let fakeColor = getColor(parseFloat(fake));
 
-		return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
+		if (numberGrade >= 100 && calculated_grade >= 100) {
+
+			return "<span style='background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
+
+		} else if (numberGrade >= 100) {
+
+			return "<span style='background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(fake)) + "; font-weight:bold;'>" + fake + "</span>";
+
+		} else if (calculated_grade >= 100) {
+
+			return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
+
+		} else {
+
+			return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
+
+		}
+		//return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
 
 	}
 
