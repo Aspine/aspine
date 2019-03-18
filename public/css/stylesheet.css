@@ -521,10 +521,11 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
   border: 2px solid #e9a1ff;
 }
 
-h3#calendar-edit-toggle, h3#calendar-add-toggle {
-    padding-right: 15px;
+i#calendar-edit-toggle, i#calendar-add-toggle {
+    padding: 10px 15px 10px 0px;
     float: left;
     cursor: pointer;
+    color: black;
 }
 
 #add-calendar input {

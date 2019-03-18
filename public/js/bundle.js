@@ -69638,9 +69638,28 @@ let calendar_list = [
 $(function() {
     // Initialize blank calendar
     $('#calendar').fullCalendar({
+        customButtons: {
+            add: {
+                text: 'add',
+                click: () => {
+                    $('#calendar-add-modal').css("display", "block");
+                }
+            },
+            settings: {
+                text: "settings",
+                click: () => {
+                    $('#calendar-list-container').slideToggle();
+                }
+            }
+        },
         header: {
-            left: 'prev,next today',
+            left: 'today',
             center: 'title',
+            right: 'add settings'
+        },
+        footer: {
+            left: 'prev,next',
+            center: '',
             right: 'month,agendaWeek,agendaDay,listWeek'
         },
         navLinks: true, // can click day/week names to navigate views
@@ -69668,16 +69687,8 @@ $(function() {
     // Get the modal
     var modal = document.getElementById('calendar-add-modal');
 
-    // Get the button that opens the modal
-    var btn = document.getElementById("calendar-add-toggle");
-
     // Get the <span> element that closes the modal
     var span = document.getElementById("calendar-add-close");
-
-    // When the user clicks on the button, open the modal
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
@@ -69707,10 +69718,10 @@ function init_calendar() {
             for(let i in data) {
                 if(settings.calendars.includes(calendar_list[i].name)) {
                     $('#calendar-list').append(
-                        `<li><input type="checkbox" id="calendar-list-${i}" checked><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+                        `<li><input type="checkbox" id="calendar-list-${i}" checked><label style="background-color:#${calendar_list[i].color}" for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
                 } else {
                     $('#calendar-list').append(
-                        `<li><input type="checkbox" id="calendar-list-${i}"><label for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+                        `<li><input type="checkbox" id="calendar-list-${i}"><label style="background-color:#${calendar_list[i].color}" for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
                 }
             }
             refresh_calendar();
