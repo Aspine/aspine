@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "us.aspine.app",
+               "sha256_cert_fingerprints": ["2A:39:A8:FC:D1:C8:B6:EC:05:5C:DA:44:70:BD:5A:3A:B1:61:FC:9A:E4:F9:CD:D7:CC:88:6C:CB:B6:3B:46:50"] }
+}]
