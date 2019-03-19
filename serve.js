@@ -10,11 +10,13 @@ const socket = require('socket.io');
 const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
+const compression = require('compression');
 // -------------------------------------------
 
 
 // ------------ Web Server -------------------
 const app = express();
+app.use(compression());
 const port = 8080;
 const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));
