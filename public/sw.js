@@ -19,11 +19,11 @@ var cacheFiles = [
 
 self.addEventListener('install', function(event) {
   // Perform install steps
-  //console.log("[ServiceWorker] Installed");
-
+  console.log("[ServiceWorker] Installed");
   event.waitUntil(
 	  caches.open(cacheName).then(function(cache) {
 		  //console.log("[ServiceWorker] Caching cacheFiles");
+		  cache.addAll('./404.html');
 		  return cache.addAll(cacheFiles);
 	  })
   );
@@ -31,13 +31,13 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function(event) {
   // Perform install steps
-  //console.log("[ServiceWorker] Activated");
+  console.log("[ServiceWorker] Activated");
 
 	event.waitUntil(
 		caches.keys().then(function(cacheNames) {
 			return Promise.all(cacheNames.map(function(thisCacheName) {
 				if (thisCacheName !== cacheName) {
-					//console.log("[ServiceWorker] Resolving Cached Files from ", thisCacheName);
+					console.log("[ServiceWorker] Resolving Cached Files from ", thisCacheName);
 					return caches.delete(thisCacheName);
 				}
 			}))
@@ -61,14 +61,14 @@ self.addEventListener('fetch', function (event) {
                 return response;
             }
 
-            //console.log('No response found in cache. About to fetch from network...');
+            console.log('No response found in cache. About to fetch from network...');
 
             return fetch(event.request).then(function (response) {
-                //console.log('Response from network is:', response);
+                console.log('Response from network is:', response);
 
                 return response;
             }).catch(function (error) {
-                //console.error('Fetching failed:', error);
+                console.error('Fetching failed:', error);
 
                 return caches.match(OFFLINE_URL);
             });
