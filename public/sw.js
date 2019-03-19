@@ -1,7 +1,7 @@
 var cacheName = "v2";
 var cacheFiles = [
 	'/',
-	'/index.html',
+	'/login.html',
 	//'/home.html',
 	//'/manifest.json',
 	//'/sw.js',
