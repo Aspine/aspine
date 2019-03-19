@@ -133,6 +133,10 @@ app.post('/set-settings', async (req, res) => {
 });
 
 app.get('/get-settings', async (req, res) => {
+    if(typeof(req.session.username) == "undefined") {
+        res.status(400).send("User not logged in");
+        return;
+    }
     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
     client.get(`settings:${key}`, function (err, reply) {
         if(!reply) {
