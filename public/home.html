@@ -145,6 +145,14 @@
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+			let statsModal = document.getElementById('stats_modal');
+
+			// When the user clicks anywhere outside of the modal, close it
+			window.addEventListener("click", function(event) {
+			  if (event.target == statsModal) {
+			    hideModal();
+			  }
+			});
 			$('#stats_plot').width($(window).width() * 7 / 11);
 			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('stats_plot')); });
 			let hideModal = function() {
