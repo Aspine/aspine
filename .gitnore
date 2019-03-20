@@ -80,3 +80,6 @@ typings/
 .dynamodb/
 
 tmp/
+
+# Redis database
+.rdb
