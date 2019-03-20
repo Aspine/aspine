@@ -61,29 +61,29 @@ let hideCategoriesFormatter = function(value, data, cell, row, options) {
 function getLetterGrade(gradeToBeLettered) {
 
 	let parsed = parseFloat(gradeToBeLettered);
-	if (parsed >= 97.5) {
+	if (parsed >= 96.5) {
 		return "A+";
 	} else if (parsed >= 92.5) {
 		return "A";
-	} else if (parsed >= 90) {
+	} else if (parsed >= 89.5) {
 		return "A-";
-	} else if (parsed >= 87.5) {
+	} else if (parsed >= 86.5) {
 		return "B+";
 	} else if (parsed >= 82.5) {
 		return "B";
-	} else if (parsed >= 80) {
+	} else if (parsed >= 79.5) {
 		return "B-";
-	} else if (parsed >= 77.5) {
+	} else if (parsed >= 76.5) {
 		return "C+";
 	} else if (parsed >= 72.5) {
 		return "C";
-	} else if (parsed >= 70) {
+	} else if (parsed >= 69.5) {
 		return "C-";
-	} else if (parsed >= 67.5) {
+	} else if (parsed >= 66.5) {
 		return "D+";
 	} else if (parsed >= 62.5) {
 		return "D";
-	} else if (parsed >= 60) {
+	} else if (parsed >= 59.5) {
 		return "D-";
 	} else {
 		return "F";
@@ -157,7 +157,7 @@ let rowGradeFormatter = function(cell, formatterParams) {
 
 	} else {
 		let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
-		if (numberGrade >= 100) {
+		if (numberGrade > 100) {
 			return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
 		} else {
 			return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
