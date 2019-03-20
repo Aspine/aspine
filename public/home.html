@@ -13,7 +13,7 @@
 		<!--===============================================================================================-->
 		<meta name="Aspine" content="Aspen Scraper and Beautifier">
 		<!--===============================================================================================-->
-	        <meta name="viewport" content="width=device-width, initial-scale=.75">
+        <meta name="viewport" content="width=device-width, initial-scale=.75">
 		<!--===============================================================================================-->
 		<meta name="theme-color" content="#00551C"/>
 		<!--===============================================================================================-->
@@ -33,14 +33,16 @@
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">
+		<!--===============================================================================================-->
         <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
         <!--===============================================================================================-->
         <link rel="manifest" href="/manifest.json">
         <!--===============================================================================================-->
-	<script src="js/plotly-latest.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<!--===============================================================================================-->
+        <script src="js/plotly-latest.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <!--===============================================================================================-->
 
 
 	</head>
@@ -61,17 +63,18 @@
             <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
             <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
+            <button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
 	    <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
-		<div id="myModal" class="modal">
+		<div id="stats_modal" class="modal">
 
 		  <!-- Modal content -->
-		  <div id="modal-content" class="modal-content">
-			  <span class="close" style="display:inline-block" onclick="hideModal()">&times;</span>
-		    <h3 id="modalTitle" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-		    <div id="tester" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-		    <p id="modalCaption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
+		  <div id="stats_modal_content" class="modal-content">
+			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
+		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
+		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
+		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
 		  </div>
 
 		</div>
@@ -97,6 +100,36 @@
             <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
             <p id="large_clock_period"></p>
         </div>
+        <div id="calendar-tab" class="tabcontent">
+            <div id="calendar-edit">
+                <div id="calendar-list-container" hidden>
+                    <ul id='calendar-list' class="ks-cboxtags">
+                    </ul>
+                </div>
+                <div id="calendar-add-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="close" id="calendar-add-close">&times;</span>
+                            <h3>Add Calendar</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form id='add-calendar'>
+                                <p>*Calendar must be a public Google Calendar</p>
+                                <input type="text" name="name" placeholder="Calendar Name">
+                                <br>
+                                <input type="text" name="id" placeholder="Calendar ID (found in calendar settings)">
+                                <br>
+                                <input type="text" class="jscolor" name="color" value="268A48">
+                                <br>
+                                <input id="calendar-add-submit" type="submit" value="Add">
+                                <p id='add-calendar-error'></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id='calendar'></div>
+        </div>
 	<div id="recent" class="tabcontent">
 		<label class="switch">
 			<input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
@@ -109,25 +142,35 @@
         </div>
 
         	<script type="text/javascript" src="/js/clock.js"></script>
+        	<script type="text/javascript" src="/js/jscolor.js"></script>
 		<script type="text/javascript" src="/js/calculate_grade.js"></script>
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
-			$('#tester').width($(window).width() * 7 / 11);
-			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('tester')); });
+			let statsModal = document.getElementById('stats_modal');
+
+			// When the user clicks anywhere outside of the modal, close it
+			window.addEventListener("click", function(event) {
+			  if (event.target == statsModal) {
+			    hideModal();
+			  }
+			});
+			$('#stats_plot').width($(window).width() * 7 / 11);
+			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('stats_plot')); });
 			let hideModal = function() {
-				document.getElementById('myModal').style.display = "none";
+				document.getElementById('stats_modal').style.display = "none";
 				noStats();
 				
 			}
 			let noStats = function() {
-				document.getElementById('tester').style.display = "none";
-				document.getElementById("tester").style.display = "none";
-				document.getElementById("modalCaption").innerHTML = "No statistics information for this assignment.";
-				document.getElementById("modalCaption").style.top = "7px";
-				document.getElementById("modalTitle").innerHTML = "";
-				document.getElementById("modal-content").style.height = "80px";
-				document.getElementById("modal-content").style.margin = "30% auto";
+				document.getElementById('stats_plot').style.display = "none";
+				document.getElementById("stats_plot").style.display = "none";
+				document.getElementById("stats_modal_caption").innerHTML = "No statistics information for this assignment.";
+				document.getElementById("stats_modal_caption").style.top = "7px";
+				document.getElementById("stats_modal_title").innerHTML = "";
+				document.getElementById("stats_modal_content").style.height = "80px";
+				//document.getElementById("stats_modal_content").style.margin = "300px auto";
+				document.getElementById("stats_modal_content").style.top = "140px";
 			}
 
 			//let request = require('request');
@@ -211,9 +254,9 @@
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
 					if (!isNaN(cell.getRow().getData().score)) {
 						noStats();
-						document.getElementById("modalCaption").innerHTML = "Loading Statistics...";
-						document.getElementById("modalTitle").innerHTML = "";
-						document.getElementById('myModal').style.display = "inline-block";
+						document.getElementById("stats_modal_caption").innerHTML = "Loading Statistics...";
+						document.getElementById("stats_modal_title").innerHTML = "";
+						document.getElementById('stats_modal').style.display = "inline-block";
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
 						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
@@ -224,8 +267,8 @@
 
 						
 						let stats = await window.getStats(session_id, apache_token, assignment_id);
-						//stats = '["8","6","8","7.5"]';
-						//stats = 'No Statistics Data for this assignment';
+						//let stats = '["8","6","8","7.5"]';
+						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
 							stats = stats.substring(1, stats.length - 1);
@@ -277,19 +320,19 @@
 							};
 
 
-							let TESTER = document.getElementById("tester");
+							let TESTER = document.getElementById("stats_plot");
 
 							TESTER.style.display = "inline";
 
 							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("modalTitle").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
-							document.getElementById("modalCaption").style.top = "30px";
-							document.getElementById("modalCaption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
+							document.getElementById("stats_modal_title").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
+							document.getElementById("stats_modal_caption").style.top = "30px";
+							document.getElementById("stats_modal_caption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 
-							document.getElementById("modal-content").style.height = "350px";
-							document.getElementById("modal-content").style.margin = "15% auto";
+							document.getElementById("stats_modal_content").style.height = "350px";
+							document.getElementById("stats_modal_content").style.margin = "15% auto";
 						} else {
 							
 							noStats();

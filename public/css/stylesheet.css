@@ -311,7 +311,8 @@ canvas#large_clock {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 10; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -321,19 +322,36 @@ canvas#large_clock {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content/Box */
+/* Modal Content */
 .modal-content {
+  position: relative;
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
+  margin: auto;
+  padding: 0;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  height:50%;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
 }
 
 /* The Close Button */
+
 .close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -341,16 +359,50 @@ canvas#large_clock {
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: #000;
   text-decoration: none;
   cursor: pointer;
 }
+.modal-header {
+  padding: 2px 16px;
+  background-color: #00551D;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
 /*.js-plotly-plot,
 .plot-container {
           width: 80vh
 }*/
 
+#stats_modal {
+	/*padding: auto;*/
+	/*top: 40px !important;*/
+}
+
+#stats_modal_content {
+	padding: 20px;
+	margin: auto !important;
+	top: 40px;
+	-webkit-animation-name: statsanimatetop !important;
+	-webkit-animation-duration: 0.4s !important;
+	animation-name: statsanimatetop !important;
+	animation-duration: 0.4s
+}
+@-webkit-keyframes statsanimatetop {
+  from {top:-300px; opacity:0} 
+  to {top:140px; opacity:1}
+}
+
+@keyframes statsanimatetop {
+  from {top:-300px; opacity:0}
+  to {top:140px; opacity:1}
+}
+
+
 p#small_clock_period {
+
     position: absolute;
     top: 110px;
     left: 10px;
@@ -420,4 +472,112 @@ p#large_clock_period {
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+}
+
+#calendar {
+    width: 95%;
+    margin: auto;
+}
+
+#calendar-list-container {
+    margin: auto;
+    max-width: 80%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+}
+ul.ks-cboxtags {
+    list-style: none;
+    padding: 20px;
+}
+ul.ks-cboxtags li{
+  display: inline;
+}
+ul.ks-cboxtags li label{
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .9);
+    border: 2px solid rgba(139, 139, 139, .3);
+    color: #adadad;
+    border-radius: 25px;
+    white-space: nowrap;
+    margin: 3px 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all .2s;
+}
+
+ul.ks-cboxtags li label {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+ul.ks-cboxtags li label::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 12px;
+    padding: 2px 6px 2px 2px;
+    content: "❌";
+    transition: transform .3s ease-in-out;
+}
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
+    content: "✔";
+    transform: rotate(-360deg);
+    transition: transform .3s ease-in-out;
+}
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+    border: 2px solid #1bdbf8;
+    background-color: #12bbd4;
+    color: #fff;
+    transition: all .2s;
+}
+
+ul.ks-cboxtags li input[type="checkbox"] {
+  display: absolute;
+}
+ul.ks-cboxtags li input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+ul.ks-cboxtags li input[type="checkbox"]:focus + label {
+  border: 2px solid #e9a1ff;
+}
+
+i#calendar-edit-toggle, i#calendar-add-toggle {
+    padding: 10px 15px 10px 0px;
+    float: left;
+    cursor: pointer;
+    color: black;
+}
+
+#add-calendar input {
+    border: 2px #00551D solid;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+    width: 300px;
+}
+
+input#calendar-add-submit {
+    background: #268A48;
+    padding: 5px 20px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+input#calendar-add-submit:hover {
+    background: #107031;
+}
+
+p#add-calendar-error {
+    color: red;
 }
