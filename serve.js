@@ -13,6 +13,7 @@ const socket = require('socket.io');
 const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
+const compression = require('compression');
 const crypto = require('crypto');
 const validator = require('validator');
 const fetch = require('node-fetch');
@@ -21,6 +22,7 @@ const fetch = require('node-fetch');
 
 // ------------ Web Server -------------------
 const app = express();
+app.use(compression());
 const port = 8080;
 const server = app.listen(port,
     () => console.log(`Example app listening on port ${port}!`));

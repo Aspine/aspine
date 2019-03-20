@@ -11,6 +11,10 @@ input {
 	font-size: 14px;
 }
 
+label {
+	display: none;
+}
+
 h4#title {
 	position: absolute;
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
