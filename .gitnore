@@ -79,6 +79,4 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-public/.well-known/
-
 tmp/
