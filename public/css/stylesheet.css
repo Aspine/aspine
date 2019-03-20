@@ -322,7 +322,7 @@ canvas#large_clock {
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  /*margin: auto;*/
+  margin: auto;
   padding: 0;
   border: 1px solid #888;
   width: 80%;
