@@ -23,7 +23,6 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
 	  caches.open(cacheName).then(function(cache) {
 		  //console.log("[ServiceWorker] Caching cacheFiles");
-		  cache.addAll('./404.html');
 		  return cache.addAll(cacheFiles);
 	  })
   );
