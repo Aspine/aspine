@@ -143,7 +143,7 @@ app.get('/get-settings', async (req, res) => {
     client.get(`settings:${key}`, function (err, reply) {
         if(!reply) {
             //res.send(JSON.stringify({calendars:[]}));
-            res.send({calendars:[]});
+            res.send({calendars:["CRLS", "holidays"]});
         } else {
             res.send(JSON.parse(reply));
         }
