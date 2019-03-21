@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [2019] [Max Cole Killian Katz-Christy]
+Copyright (c) [2019] [Cole Killian and Max Katz-Christy]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,7 +1,5 @@
 # Aspine
 
-# Aspine
-
 Who needs Aspen when you have Aspine! It serves as a one stop shop for everything Aspen related, and actually looks nice! 
 
 ## Getting Started
@@ -22,20 +20,16 @@ Using Aspine is as easy as 1, 2, 3! Just visit aspine.us and login with your Asp
 * [Tabulator](http://www.dropwizard.io/1.0.2/docs/) - Table Generator
 * [Plotly](https://maven.apache.org/) - Box Plot Generator
 * [CRLS Clock](https://rometools.github.io/rome/) - Used for Clock
+* [Google Calendar](hhtps://calendar.google.com/r/) - Used for Calendar
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+Feel free to enhancement or bug issues!
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* [**Max Katz-Christy**](https://github.com/max)
+* [**Cole Killian**](https://github.com/ruborcalor)
 
 ## Color Scheme
 
@@ -56,9 +50,3 @@ See also the list of [contributors](https://github.com/your/project/contributors
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Tabulator
-* Plotly.js
-
