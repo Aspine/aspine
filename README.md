@@ -26,7 +26,7 @@ Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Asp
 
 ## Contributing
 
-Feel free to enhancement or bug issues either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
+Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
 ## Authors
 
