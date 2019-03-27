@@ -10,8 +10,35 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.html$/,
+        use: [
+          "file-loader",
+          "extract-loader",
+          {
+            loader: "html-loader",
+            options: {
+              attrs: ["img:src", "link:href"]
+            }
+          }
+        ]
+      },
+      //{
+      //  test: /\.css$/,
+      //  //use: ['style-loader', 'css-loader']
+      //  use: ['file-loader', 'extract-loader', 'css-loader']
+      //}
+      {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+          use: [
+            "file-loader",
+            "extract-loader",
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: false
+              }
+            }
+          ]
       }
     ]
   }
