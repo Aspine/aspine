@@ -13,7 +13,12 @@ module.exports = {
         test: /\.html$/,
         use: [
           "file-loader",
-          "extract-loader",
+          {
+            loader: "extract-loader",
+            options: {
+              name: "index.html",
+            },
+          },
           {
             loader: "html-loader",
             options: {
@@ -31,7 +36,12 @@ module.exports = {
         test: /\.css$/,
           use: [
             "file-loader",
-            "extract-loader",
+            {
+              loader: "extract-loader",
+              options: {
+                name: "bootstrap.css",
+              },
+            },
             {
               loader: "css-loader",
               options: {
