@@ -4,7 +4,7 @@ Who needs Aspen when you have Aspine! It serves as a one stop shop for everythin
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credientials!
+Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credentials!
 
 ## Features
 
