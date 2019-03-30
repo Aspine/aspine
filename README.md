@@ -4,17 +4,23 @@ Who needs Aspen when you have Aspine! It serves as a one stop shop for everythin
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credientials!
+Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credentials!
 
 ## Features
 
 * Everything Aspen, but better!
 * CRLS Clock
+
 ![CRLS Clock Image](images/crls_clock.png)
+
 * Grade Comparison via boxplot
+
 ![Example Boxplot Image](images/boxplot.png)
+
 * Calendar
+
 ![Example Calendar Image](images/calendar.png)
+
 * Chat with your classmates (coming soon...)
 
 
@@ -59,4 +65,4 @@ Secondary Colors:
 
 ## License
 
-This project is licensed under the GNU License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License, version 3 - see the [LICENSE.md](LICENSE.md) file for details.
