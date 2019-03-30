@@ -28,6 +28,16 @@ Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Asp
 
 Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
+If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. To test your additions to Aspine:
+
+* Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
+  * On Windows or macOS, download node.js and redis from their websites, and install them.
+  * On GNU+Linux, you should be able to find these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
+* Open a terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `redis-server redis.conf`.
+* Open another terminal or command prompt, navigate to that same directory, and run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
+
+These instructions have only been tested on GNU+Linux. You might need to change your `PATH` on Windows if you get an error saying that `node` is not found after installing node.js.
+
 ## Authors
 
 * [**Max Katz-Christy**](https://github.com/maxtkc)
