@@ -1,14 +1,14 @@
 # Aspine
 
-Who needs Aspen when you have Aspine! It serves as a one stop shop for everything Aspen related, and actually looks nice! 
+Who needs Aspen when you have Aspine. It serves as a one stop shop for everything Aspen related, and there are rainbows!
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credentials!
+Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credentials.
 
 ## Features
 
-* Everything Aspen, but better!
+* Aesthetic Grade Checking
 * CRLS Clock
 
 ![CRLS Clock Image](images/crls_clock.png)
@@ -22,6 +22,20 @@ Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Asp
 ![Example Calendar Image](images/calendar.png)
 
 * Chat with your classmates (coming soon...)
+
+## FAQ
+
+##### How are usernames and passwords handled?
+
+Aspine does not store any usernames or passwords.
+
+##### How are calculated grades computed?
+
+First, calculated category percentages are computed by dividing a student's total earned points within a category by the total available points for that category. Then, the category percentages are multiplied by their respective weights and summed in order to produce the calculated grade for a class.
+
+Note:
+* Assignments scored with free text (i.e. "Missing", "Exempt") are ignored during grade computation. (Improvements coming soon)
+* Due to the mysterious workings of Aspen, it is impossible to achieve 100% accuracy when making grade prediction calculations. That being said, Aspine's cutting edge grade calcuation algorithm is unmatched.
 
 
 ## Built With
