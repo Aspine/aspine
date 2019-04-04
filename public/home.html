@@ -223,6 +223,13 @@
 					//{title: "", width:1, align:"center", headerSort: false}, 
 					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          assignmentsTable.clearFilter();
+          assignmentsTable.addFilter([
+            {field: "category", type:"=", value: row.getData().category}
+            ]);
+				},
+
 
 			});
 
@@ -558,6 +565,7 @@
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
