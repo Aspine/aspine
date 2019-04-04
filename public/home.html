@@ -208,7 +208,14 @@
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
-          openTab(event, 'grades');
+            var elem = document.getElementById("default_open");
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            // If cancelled, don't dispatch our event
+            var canceled = !elem.dispatchEvent(evt);
 
           assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
