@@ -2,6 +2,7 @@
 
 
 
+
 <html lang="en">
 	<head>
 
@@ -314,19 +315,20 @@
 								name: " ",
 							};
 
+              
 							var data = [statsTrace];
 
 							let layout = {
 								title: " ",
 								width: window.innerWidth * 10 / 15,
-								height: 100,
+								height: 120,
 								xaxis: {
 									title: " ",
 									zeroline: true,
 									range: [0, high],
 								},
 								yaxis: {
-									range: [-0.5, 0.5],
+									range: [-0.75, 0.75],
 								},
 								margin: {
 									t: 20,
@@ -338,12 +340,12 @@
 									{
 										type: 'line',
 										x0:score,
-										y0:-0.5,
+										y0:-0.50,
 										x1: score,
-										y1: 0.5,
+										y1: 0.50,
 										line: {
-											color: '#00551C',
-											width: 4,
+											color: '#268A48',
+											width: 3,
 										},
 									},
 									{
@@ -353,11 +355,29 @@
 										x1: mean,
 										y1: 0.5,
 										line: {
-											color: '#00551C',
-											width: 4,
+											color: '#000',
+											width: 3,
 										},
 									},
 								],
+                annotations: [
+                  {
+                    x: mean,
+                    y: -.65,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Mean',
+                    showarrow: false,
+                  },
+                  {
+                    x: score,
+                    y: .75,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Your Score',
+                    showarrow: false,
+                  }
+                ],
 							};
 
 
@@ -372,7 +392,7 @@
 							document.getElementById("stats_modal_caption").style.top = "30px";
 							document.getElementById("stats_modal_caption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 
-							document.getElementById("stats_modal_content").style.height = "350px";
+							document.getElementById("stats_modal_content").style.height = "365px";
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
 						} else {
 							
