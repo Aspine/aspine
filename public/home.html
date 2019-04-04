@@ -325,7 +325,7 @@
 								xaxis: {
 									title: " ",
 									zeroline: true,
-									range: [0, high],
+									range: [0, max_score],
 								},
 								yaxis: {
 									range: [-0.75, 0.75],
@@ -344,7 +344,7 @@
 										x1: score,
 										y1: 0.50,
 										line: {
-											color: '#268A48',
+											color: getColor(score / max_score * 100),
 											width: 3,
 										},
 									},
@@ -355,7 +355,7 @@
 										x1: mean,
 										y1: 0.5,
 										line: {
-											color: '#000',
+											color: getColor(mean / max_score * 100),
 											width: 3,
 										},
 									},
