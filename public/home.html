@@ -297,8 +297,9 @@
 
 						if (stats.indexOf("[") === 0) {
 							stats = stats.substring(1, stats.length - 1);
+
 							stats = stats.split(",");
-							stats = stats.map(x => parseFloat(x.substring(1, stats.length)));
+							stats = stats.map(x => parseFloat(x.substring(1, x.length)));
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
 							stats.push((low + median) / 2);
 							stats.push((high + median) / 2);
