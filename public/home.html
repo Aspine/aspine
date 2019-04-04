@@ -342,9 +342,9 @@
 								shapes: [
 									{
 										type: 'line',
-										x0:score,
+										x0:score  - (max_score / 1000),
 										y0:-0.50,
-										x1: score,
+										x1: score - (max_score / 1000),
 										y1: 0.50,
 										line: {
 											color: getColor(score / max_score * 100),
@@ -353,9 +353,9 @@
 									},
 									{
 										type: 'line',
-										x0:mean,
+										x0:mean - (max_score / 1000),
 										y0:-0.5,
-										x1: mean,
+										x1: mean - (max_score / 1000),
 										y1: 0.5,
 										line: {
 											color: getColor(mean / max_score * 100),
