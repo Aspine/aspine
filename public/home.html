@@ -365,7 +365,7 @@
 								],
                 annotations: [
                   {
-                    x: mean,
+                    x: mean - (max_score / 68),
                     y: -.65,
                     xref: 'x',
                     yref: 'y',
@@ -373,7 +373,7 @@
                     showarrow: false,
                   },
                   {
-                    x: score,
+                    x: score - (max_score / 38),
                     y: .75,
                     xref: 'x',
                     yref: 'y',
