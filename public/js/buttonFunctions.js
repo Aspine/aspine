@@ -83,10 +83,10 @@ let updateGradePage = function() {
 
 	tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
-	classesTable.setData(tableData.classes);
-	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
+	classesTable.replace(tableData.classes);
+	categoriesTable.replace(tableData.classes[selected_class_i].categoryDisplay);
 
-	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+	assignmentsTable.replace(tableData.classes[selected_class_i].assignments);
 
 	tableData.calcGPA = computeGPA();
 
