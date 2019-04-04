@@ -52,7 +52,7 @@ These instructions have only been tested on GNU+Linux. You might need to change 
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
 
-![Color Palette](/color_palette.png)
+![Color Palette](images/color_palette.png)
 
 ```
 Primary Color: #00551D
