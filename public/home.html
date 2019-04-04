@@ -206,6 +206,24 @@
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          openTab(event, 'grades');
+
+          assignmentsTable.clearFilter();
+					document.getElementById("categoriesTable").style.display = "block";
+					document.getElementById("assignmentsTable").style.display = "block";
+					selected_class = row.getData().classname;
+					tabledata = classesTable.getData();
+					for(let i in tabledata) {
+						if(tabledata[i].name == row.getData().classname) {
+							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
+							return;
+						}
+					}
+
+				},
+
 
 			});
 			let categoriesTable = new Tabulator("#categoriesTable", {
