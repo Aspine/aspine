@@ -157,7 +157,16 @@
 			  }
 			});
 			$('#stats_plot').width($(window).width() * 7 / 11);
-			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('stats_plot')); });
+			window.addEventListener('resize', function() { 
+        Plotly.Plots.resize(document.getElementById('stats_plot')); 
+        let update_size = {
+          //width: 800,  // or any new width
+          width: window.innerWidth * 10 / 15,
+          height: 120  // " "
+        };
+
+        Plotly.relayout('stats_plot', update_size);
+      });
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
