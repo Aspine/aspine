@@ -396,6 +396,11 @@
                     yref: 'y',
                     text: 'Mean',
                     showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(mean / max_score * 100),
+                    },
                   },
                   {
                     x: score - (max_score / 38),
@@ -404,7 +409,12 @@
                     yref: 'y',
                     text: 'Your Score',
                     showarrow: false,
-                  }
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(score / max_score * 100),
+                    },
+                  },
                 ],
 							};
 
