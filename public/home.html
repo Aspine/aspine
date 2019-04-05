@@ -75,7 +75,7 @@
 			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
 		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
 		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
+		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px;color:#0d0d0d;">Modal Caption..</p>
 		  </div>
 
 		</div>
@@ -359,14 +359,27 @@
 								title: " ",
 								width: window.innerWidth * 10 / 15,
 								height: 120,
+
 								xaxis: {
 									title: " ",
 									zeroline: true,
 									range: [0, max_score],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								yaxis: {
 									range: [-0.75, 0.75],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								margin: {
 									t: 20,
 									l: 20,
