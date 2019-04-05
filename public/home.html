@@ -208,6 +208,10 @@
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          console.log("select row");
+          classesTable.selectRow(1);
+
+
             var elem = document.getElementById("default_open");
             var evt = new MouseEvent('click', {
                 bubbles: true,
@@ -222,6 +226,15 @@
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class = row.getData().classname;
 					tabledata = classesTable.getData();
+          console.log("select row");
+          classesTable.deselectRow();
+          classesTable.selectRow(selected_class);
+          //classesTable.getRows()
+          //    .filter(row => row.getData().name == selected_class)
+          //    .forEach(row => row.toggleSelect());
+
+
+
 					for(let i in tabledata) {
 						if(tabledata[i].name == row.getData().classname) {
 							assignmentsTable.setData(tabledata[i].assignments);
@@ -229,6 +242,9 @@
 							return;
 						}
 					}
+
+          console.log("select row");
+          classesTable.selectRow(1);
 
 				},
 
@@ -435,6 +451,7 @@
 			});
 			let classesTable = new Tabulator("#classesTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+        index: "name",
                 		selectable:1,
 				ajaxURL:"/data",
 				ajaxConfig:"post", //ajax HTTP request type
