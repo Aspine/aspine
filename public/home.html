@@ -375,6 +375,10 @@
                     //if(response.classes.length == 0) {
                     //    location.href='/logout';
                     //}
+                    if(Object.keys((response.classes)[0]).includes("login")) {
+                        location.href='/logout';
+                    }
+
 					tableData = response;
 
 					document.getElementById("scheduleTable").style.rowBackgroundColor = "black";

@@ -112,6 +112,10 @@ async function scrape_recent(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login": false});
+    }
+
 		log(i, "session", session);
 
 
@@ -186,8 +190,11 @@ function scrape_class(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		// Login
 		let session = await scrape_login();
-		await submit_login(username, password,
+		let page = await submit_login(username, password,
 			session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login": false});
+    }
 		log(i, "session", session);
 
 		// Academics Page
@@ -261,7 +268,7 @@ async function submit_login(username, password, apache_token, session_id) {
 			"method":"POST", 
 			"mode":"cors"}); 
   console.log(page.includes("Invalid login."));
-	return page;
+	return page.includes("Invalid login.");
 }
 
 // Returns object with classes (name, grade, id),
@@ -407,7 +414,11 @@ async function scrape_assignments(session_id, apache_token) {
 async function scrape_schedule(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
-		await submit_login(username, password, session.apache_token, session.session_id);
+		let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login": false});
+    }
+
 		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 			{"credentials":"include",
 				"headers":{"Connection": "keep-alive",
