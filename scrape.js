@@ -260,6 +260,7 @@ async function submit_login(username, password, apache_token, session_id) {
 			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password, 
 			"method":"POST", 
 			"mode":"cors"}); 
+  console.log(page.includes("Invalid login."));
 	return page;
 }
 
