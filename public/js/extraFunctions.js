@@ -147,6 +147,20 @@ let rowFormatter = function(cell, formatterParams) {
 	}
 }
 
+let weightFormatter = function(cell, formatterParams) {
+	let value = cell.getValue();
+	let rowColor = cell.getRow().getData().color;
+
+  if (value.indexOf(".") != -1) {
+    value = value.substring(0, value.indexOf(".") + 2) + "%";
+  }
+	if (rowColor === "black") {
+		return value;
+	} else {
+		return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+	}
+}
+
 let rowGradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
 	let rowColor = cell.getRow().getData().color;
