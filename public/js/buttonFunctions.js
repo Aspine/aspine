@@ -85,7 +85,6 @@ let updateGradePage = function() {
 	tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
 	classesTable.replaceData(tableData.classes);
-  console.log(tableData.classes[selected_class_i].categoryDisplay)
 	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 
 	assignmentsTable.replaceData(tableData.classes[selected_class_i].assignments);
