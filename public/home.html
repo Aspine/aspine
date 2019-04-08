@@ -4,6 +4,7 @@
 
 
 
+
 <html lang="en">
 	<head>
 
@@ -159,14 +160,17 @@
 			});
 			$('#stats_plot').width($(window).width() * 7 / 11);
 			window.addEventListener('resize', function() { 
-        Plotly.Plots.resize(document.getElementById('stats_plot')); 
-        let update_size = {
-          //width: 800,  // or any new width
-          width: window.innerWidth * 10 / 15,
-          height: 120  // " "
-        };
+        if ($('#stats_plot').is(":visible")) { 
 
-        Plotly.relayout('stats_plot', update_size);
+          Plotly.Plots.resize(document.getElementById('stats_plot')); 
+          let update_size = {
+            //width: 800,  // or any new width
+            width: window.innerWidth * 10 / 15,
+            height: 120  // " "
+          };
+
+          Plotly.relayout('stats_plot', update_size);
+        }
       });
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
@@ -431,7 +435,7 @@
                   },
                   {
                     x: score - (max_score / 38),
-                    y: .75,
+                    y: .65,
                     xref: 'x',
                     yref: 'y',
                     text: 'Your Score',
@@ -445,21 +449,35 @@
                 ],
 							};
               for (let i = 5; i <= 10; i++) {
-                for (let j = -1; j <= 1; j += 2) {
-                  shape = {
+                  let shape = {
                     type: 'line',
-                    x0: max_score * i / 10 + j * 1.5 / max_score,
+                    x0: max_score * i / 10,
                     y0: 0.85,
-                    x1: max_score * i / 10 + j * 1.5 / max_score,
+                    x1: max_score * i / 10,
                     y1: 1.1,
                     line: {
-                      color: getColor(i * 10 + j * 2),
+                      color: getColor(i * 10),
                       width: 2,
                     },
                   };
                   layout.shapes.push(shape);
-                }
               }
+            for (let i = 5; i <= 9; i++) {
+                  let annotation = {
+                    x: max_score * i / 10 + max_score / 20,
+                    y: .95,
+                    xref: 'x',
+                    yref: 'y',
+                    text: getLetterGrade(((i + 0.5) / 10) * 100),
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(((i + 0.5) / 10) * 100),
+                    },
+                  }
+                  layout.annotations.push(annotation);
+            }
 
 
 							let TESTER = document.getElementById("stats_plot");

@@ -1,5 +1,6 @@
 let newAssignment = function() {
 
+  console.log("new assignment clicked");
 	tableData.classes[selected_class_i].edited = true;
 
 	if (!isNaN(selected_class_i)) {
@@ -83,10 +84,11 @@ let updateGradePage = function() {
 
 	tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
-	classesTable.replace(tableData.classes);
-	categoriesTable.replace(tableData.classes[selected_class_i].categoryDisplay);
+	classesTable.replaceData(tableData.classes);
+  console.log(tableData.classes[selected_class_i].categoryDisplay)
+	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 
-	assignmentsTable.replace(tableData.classes[selected_class_i].assignments);
+	assignmentsTable.replaceData(tableData.classes[selected_class_i].assignments);
 
 	tableData.calcGPA = computeGPA();
 
