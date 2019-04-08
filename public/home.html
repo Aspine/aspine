@@ -364,7 +364,7 @@
 								xaxis: {
 									title: " ",
 									zeroline: true,
-									range: [0, max_score],
+									range: [0, 15 * max_score / 14],
                   tickfont: {
                     family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
                     size: 12,
@@ -373,7 +373,7 @@
 								},
 
 								yaxis: {
-									range: [-0.75, 0.95],
+									range: [-0.75, 1.10],
                   tickfont: {
                     family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
                     size: 12,
@@ -448,10 +448,10 @@
                 for (let j = -1; j <= 1; j += 2) {
                   shape = {
                     type: 'line',
-                    x0: max_score * i / 10 + j / 20,
-                    y0: 0.8,
-                    x1: max_score * i / 10 + j / 20,
-                    y1: 0.95,
+                    x0: max_score * i / 10 + j * 1.5 / max_score,
+                    y0: 0.85,
+                    x1: max_score * i / 10 + j * 1.5 / max_score,
+                    y1: 1.1,
                     line: {
                       color: getColor(i * 10 + j * 2),
                       width: 2,
