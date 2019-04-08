@@ -91,13 +91,13 @@ function getLetterGrade(gradeToBeLettered) {
 }
 
 function getColor(gradeToBeColored) {
-	if (parseFloat(gradeToBeColored) >= 90) {
+	if (parseFloat(gradeToBeColored) >= 89.5) {
 		return "#1E8541";
-	} else if (parseFloat(gradeToBeColored) >= 80) {
+	} else if (parseFloat(gradeToBeColored) >= 79.5) {
 		return "#6666FF";
-	} else if (parseFloat(gradeToBeColored) >= 70) {
+	} else if (parseFloat(gradeToBeColored) >= 69.5) {
 		return "#ff9900";
-	} else if (parseFloat(gradeToBeColored) >= 60) {
+	} else if (parseFloat(gradeToBeColored) >= 59.5) {
 		return "orange";
 	} else if (parseFloat(gradeToBeColored) >= 0) {
 		return "red";
@@ -107,13 +107,13 @@ function getColor(gradeToBeColored) {
 }
 
 function getLightColor(gradeToBeColored) {
-	if (parseFloat(gradeToBeColored) >= 90) {
+	if (parseFloat(gradeToBeColored) >= 89.5) {
 		return "#99ff66";
-	} else if (parseFloat(gradeToBeColored) >= 80) {
+	} else if (parseFloat(gradeToBeColored) >= 79.5) {
 		return "#66ccff";
-	} else if (parseFloat(gradeToBeColored) >= 70) {
+	} else if (parseFloat(gradeToBeColored) >= 69.5) {
 		return "#ffff66";
-	} else if (parseFloat(gradeToBeColored) >= 60) {
+	} else if (parseFloat(gradeToBeColored) >= 59.5) {
 		return "#ff8533";
 	} else if (parseFloat(gradeToBeColored) >= 0) {
 		return "#ff4d4d";
