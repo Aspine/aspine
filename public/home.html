@@ -165,7 +165,7 @@
           Plotly.Plots.resize(document.getElementById('stats_plot')); 
           let update_size = {
             //width: 800,  // or any new width
-            width: window.innerWidth * 10 / 15,
+            width: $('#stats_modal_content').width(),
             height: 120  // " "
           };
 
@@ -362,7 +362,7 @@
 
 							let layout = {
 								title: " ",
-								width: window.innerWidth * 10 / 15,
+								width: $('#stats_modal_content').width(),
 								height: 120,
 
 								xaxis: {
