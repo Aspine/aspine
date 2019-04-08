@@ -113,7 +113,7 @@ async function scrape_recent(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page) {
-      resolve({"login": false});
+      resolve({"login_fail": true});
     }
 
 		log(i, "session", session);
@@ -193,7 +193,8 @@ function scrape_class(username, password, i) {
 		let page = await submit_login(username, password,
 			session.apache_token, session.session_id);
     if (page) {
-      resolve({"login": false});
+      resolve({"login_fail": true});
+
     }
 		log(i, "session", session);
 
@@ -416,7 +417,7 @@ async function scrape_schedule(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page) {
-      resolve({"login": false});
+      resolve({"login_fail": true});
     }
 
 		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
