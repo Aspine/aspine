@@ -3,6 +3,7 @@
 
 
 
+
 <html lang="en">
 	<head>
 
@@ -372,7 +373,7 @@
 								},
 
 								yaxis: {
-									range: [-0.75, 0.75],
+									range: [-0.75, 0.95],
                   tickfont: {
                     family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
                     size: 12,
@@ -411,19 +412,9 @@
 											width: 3,
 										},
 									},
-                  //grade dividers
-									{//open E
-										type: 'line',
-										x0:mean - (max_score / 1000),
-										y0:-0.5,
-										x1: mean - (max_score / 1000),
-										y1: 0.5,
-										line: {
-											color: getLightColor(mean / max_score * 100),
-											width: 3,
-										},
-									},
+ 
 								],
+
                 annotations: [
                   {
                     x: mean - (max_score / 68),
@@ -453,6 +444,22 @@
                   },
                 ],
 							};
+              for (let i = 5; i <= 10; i++) {
+                for (let j = -1; j <= 1; j += 2) {
+                  shape = {
+                    type: 'line',
+                    x0: max_score * i / 10 + j / 20,
+                    y0: 0.8,
+                    x1: max_score * i / 10 + j / 20,
+                    y1: 0.95,
+                    line: {
+                      color: getColor(i * 10 + j * 2),
+                      width: 2,
+                    },
+                  };
+                  layout.shapes.push(shape);
+                }
+              }
 
 
 							let TESTER = document.getElementById("stats_plot");
