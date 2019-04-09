@@ -11,6 +11,7 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const express = require('express');
 const util = require('util');
+const fs = require('fs');
 
 // -------------------------------------------
 
@@ -22,30 +23,80 @@ module.exports = {
 
 // -------------------------------------------
 
+async function scrape_pdf(username, password, i) {
+	return new Promise(async function(resolve, reject) {
+		let session = await scrape_login();
+		let page = await submit_login(username, password, session.apache_token, session.session_id);
+		log(i, "session", session);
+
+
+    console.log(session.session_id)
+      fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Report_Card.pdf&downLoad=true", 
+			{"credentials":"include",
+				"headers":{
+          'X-Frame-Options': 'SAMEORIGIN',
+          'Strict-Transport-Security': 'max-age=31536000;', 
+          'Content-Type': 'text/html;charset=UTF-8', 
+          'Transfer-Encoding': 'chunked', 
+          'Date': 'Tue, 09 Apr 2019 13:55:03 GMT', 
+          'Connection': 'close',
+					"Cookie": "JSESSIONID=" + session.session_id + ";",
+          "Set-Cookie": "JSESSIONID=" + session.session_id + "; Path=/aspen; Secure; HttpOnly",
+          "DNT": "1",
+					"Accept-Encoding": "gzip, deflate, br",
+					"Accept-Language": "en-US,en",
+					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+					"Accept": "application/xml, text/xml, */*; q=0.01",
+					"Referer": "https://aspen.cpsd.us/aspen/home.do",
+					"X-Requested-With": "XMLHttpRequest",
+					"Connection": "keep-alive",
+					"X-Do-Not-Track": "1"
+				},
+				"referrer":"https://aspen.cpsd.us/aspen/home.do",
+				"referrerPolicy":"strict-origin-when-cross-origin",
+        "body": null,
+				"method":"GET",
+				"mode":"cors"});
+
+//"org.apache.struts.taglib.html.TOKEN=" + session.apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password + "&fileName=Report_Card.pdf&download=true", 
+
+		log(i, "closing");
+		resolve({
+      "Hello": "hello"
+
+		});
+	});
+}
 // --------------- Scraping ------------------
 // Returns object of classes
 async function scrape_student(username, password) {
 	let scrapers = [];
 
 	// Spawn schedule scraper
-	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+//	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+//
+//	// Spawn recent activity scraper
+//	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
 
-	// Spawn recent activity scraper
-	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
+  // Spawn pdf scraper
+	scrapers[THREADS + 2] = scrape_pdf(username, password, THREADS + 2);
 
 	//Spawn class scrapers
-	for(let i = 0; i < THREADS; i++) {
-		scrapers[i] = scrape_class(username, password, i);
-
-	}
+//	for(let i = 0; i < THREADS; i++) {
+//		scrapers[i] = scrape_class(username, password, i);
+//
+//	}
 
 	// Await on all class scrapers
-	return {
-		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
-		schedule: await scrapers[THREADS],
-		recent: await scrapers[THREADS + 1],
-    username: username
-	}
+    return {
+      pdf: scrapers[THREADS + 2]
+    }
+//	return {
+//		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
+//		schedule: await scrapers[THREADS],
+//		recent: await scrapers[THREADS + 1],
+//    username: username
+//	}
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
@@ -453,6 +504,22 @@ function log(thread, name, obj) {
 	} else {
 		//console.log(`Thread ${thread}: ${name}\n`);
 	}
+}
+
+async function fetch_file(url, options) {
+  let path = "./practice.html";
+
+  const res = await fetch(url, options);
+  const fileStream = fs.createWriteStream(path);
+  return await new Promise((resolve, reject) => {
+      res.body.pipe(fileStream);
+      res.body.on("error", (err) => {
+        reject(err);
+      });
+      fileStream.on("finish", function() {
+        resolve();
+      });
+    });
 }
 
 // --------------Compute Functions------------
