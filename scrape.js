@@ -30,33 +30,30 @@ async function scrape_pdf(username, password, i) {
 		log(i, "session", session);
 
 
-    console.log(session.session_id)
-      fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Report_Card.pdf&downLoad=true", 
-			{"credentials":"include",
+      console.log(session.session_id)
+
+      fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true", 
+			{
 				"headers":{
-          'X-Frame-Options': 'SAMEORIGIN',
-          'Strict-Transport-Security': 'max-age=31536000;', 
-          'Content-Type': 'text/html;charset=UTF-8', 
-          'Transfer-Encoding': 'chunked', 
-          'Date': 'Tue, 09 Apr 2019 13:55:03 GMT', 
-          'Connection': 'close',
-					"Cookie": "JSESSIONID=" + session.session_id + ";",
-          "Set-Cookie": "JSESSIONID=" + session.session_id + "; Path=/aspen; Secure; HttpOnly",
-          "DNT": "1",
-					"Accept-Encoding": "gzip, deflate, br",
-					"Accept-Language": "en-US,en",
-					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
-					"Accept": "application/xml, text/xml, */*; q=0.01",
-					"Referer": "https://aspen.cpsd.us/aspen/home.do",
-					"X-Requested-With": "XMLHttpRequest",
-					"Connection": "keep-alive",
-					"X-Do-Not-Track": "1"
+				"Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis",
+          //'X-Frame-Options': 'SAMEORIGIN',
+          //'Strict-Transport-Security': 'max-age=31536000;', 
+          //'Content-Type': 'text/html;charset=UTF-8', 
+          //'Transfer-Encoding': 'chunked', 
+          //'Date': 'Tue, 09 Apr 2019 13:55:03 GMT', 
+          //'Connection': 'close',
+					//"Cookie": "JSESSIONID=" + session.session_id + ";deploymentId=x2sis",
+          //"DNT": "1",
+					//"Accept-Encoding": "gzip, deflate, br",
+					//"Accept-Language": "en-US,en",
+					//"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+					//"Accept": "application/xml, text/xml, */*; q=0.01",
+					//"Referer": "https://aspen.cpsd.us/aspen/home.do",
+					//"X-Requested-With": "XMLHttpRequest",
+					//"Connection": "keep-alive",
+					//"X-Do-Not-Track": "1"
 				},
-				"referrer":"https://aspen.cpsd.us/aspen/home.do",
-				"referrerPolicy":"strict-origin-when-cross-origin",
-        "body": null,
-				"method":"GET",
-				"mode":"cors"});
+				});
 
 //"org.apache.struts.taglib.html.TOKEN=" + session.apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password + "&fileName=Report_Card.pdf&download=true", 
 
