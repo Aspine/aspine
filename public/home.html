@@ -377,7 +377,7 @@
 								},
 
 								yaxis: {
-									range: [-0.75, 1.10],
+									range: [-1.15, 0.7],
                   tickfont: {
                     family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
                     size: 12,
@@ -452,9 +452,9 @@
                   let shape = {
                     type: 'line',
                     x0: max_score * i / 10,
-                    y0: 0.85,
+                    y0: -0.90,
                     x1: max_score * i / 10,
-                    y1: 1.1,
+                    y1: -1.15,
                     line: {
                       color: getColor(i * 10),
                       width: 2,
@@ -465,7 +465,7 @@
             for (let i = 5; i <= 9; i++) {
                   let annotation = {
                     x: max_score * i / 10 + max_score / 20,
-                    y: .95,
+                    y: -1.05,
                     xref: 'x',
                     yref: 'y',
                     text: getLetterGrade(((i + 0.5) / 10) * 100),
@@ -478,6 +478,8 @@
                   }
                   layout.annotations.push(annotation);
             }
+
+						
 
 
 							let TESTER = document.getElementById("stats_plot");
