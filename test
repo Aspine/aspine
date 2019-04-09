@@ -1,3 +1,4 @@
 #/bin/bash
+terminal -e "redis-server redis.conf"
 ./serve.js insecure fake
 
