@@ -57,114 +57,44 @@ async function scrape_pdf(username, password, i) {
    let new_apache = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
     console.log("New Apache: " + new_apache);
 
-    console.log("homedo");
-
-//     (await fetch_body("https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11&groupPageWidgetOid=GPW0000006UKen&1554939833156", 
-//      {"credentials":"include",
-//        "headers":{
-//          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
-//          "DNT": "1",
-//          "Accept-Encoding": "gzip, deflate, br",
-//          "Accept-Language": "en-US,en",
-//          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-//          "Accept": "*/*",
-//          "Referer": "https://aspen.cpsd.us/aspen/home.do",
-//          "X-Requested-With": "XMLHttpRequest",
-//          "Connection": "keep-alive"
-//        },
-//        "referrer":"https://aspen.cpsd.us/aspen/home.do",
-//        "referrerPolicy":"strict-origin-when-cross-origin",
-//        "body":null,
-//        "method":"GET",
-//        "mode":"cors"}));
-//    console.log("publishedReportsWidget.do");
-//    (await fetch_body("https://aspen.cpsd.us/aspen/reportsWidget.do?groupPageWidgetOid=gpwX2000000003&widgetId=reports_8&groupPageWidgetOid=gpwX2000000003&1554942373581",
-//        {"credentials":"include",
-//          "headers":{
-//            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
-//            "DNT": "1",
-//            "Accept-Encoding": "gzip, deflate, br",
-//            "Accept-Language": "en-US,en",
-//            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-//            "Accept": "*/*",
-//            "Referer": "https://aspen.cpsd.us/aspen/home.do",
-//            "X-Requested-With": "XMLHttpRequest",
-//            "Connection": "keep-alive"
-//          },
-//          "referrer":"https://aspen.cpsd.us/aspen/home.do",
-//          "referrerPolicy":"strict-origin-when-cross-origin",
-//          "body":null,
-//          "method":"GET",
-//          "mode":"cors"}));
-//    console.log("reportsWidget.do");
-
-    (await fetch_body("https://aspen.cpsd.us/aspen/repositoryTree.do?userEvent=90170&entityOid=grpX2000000000&entityType=group",
+     (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2&deploymentId=x2sis",
       {"credentials":"include",
         "headers":{
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
-          "Origin": "https://aspen.cpsd.us",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Accept-Language": "en-US,en",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          "Accept": "*/*",
-          "Referer": "https://aspen.cpsd.us/aspen/home.do",
-          "X-Requested-With": "XMLHttpRequest",
           "Connection": "keep-alive",
-          "DNT": "1"
+          "Pragma": "no-cache",
+          "Cache-Control": "no-cache",
+          "Upgrade-Insecure-Requests": "1",
+          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+          "Accept-Language": "en-US,en",
+          "DNT": "1",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
         },
-        "redirect": "follow", // manual, *follow, error
-        "referrer":"https://aspen.cpsd.us/aspen/home.do",
         "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":"org.apache.struts.taglib.html.TOKEN=" + new_apache,
-        "method":"POST",
+        "body":null,
+        "method":"GET",
         "mode":"cors"}));
+//('fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2')
 
-    console.log("repositoryTree");
-
-    console.log(await fetch_body("https://aspen.cpsd.us/aspen/resourceTreeLessonPlanAction.do?userEvent=2560",
+    (await fetch_body("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
       {"credentials":"include",
         "headers":{
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
-          "Origin": "https://aspen.cpsd.us",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Accept-Language": "en-US,en",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          "Accept": "*/*",
-          "Referer": "https://aspen.cpsd.us/aspen/home.do",
-          "X-Requested-With": "XMLHttpRequest",
           "Connection": "keep-alive",
-          "DNT": "1"
+          "Pragma": "no-cache",
+          "Cache-Control": "no-cache",
+          "Upgrade-Insecure-Requests": "1",
+          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+          "Accept-Language": "en-US,en",
+          "DNT": "1",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
         },
-        "referrer":"https://aspen.cpsd.us/aspen/home.do",
         "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":"org.apache.struts.taglib.html.TOKEN=" + new_apache,
-        "method":"POST",
+        "body":null,
+        "method":"GET",
         "mode":"cors"}));
-
-//fetch("https://aspen.cpsd.us/aspen/repositoryTree.do?userEvent=90170&entityOid=grpX2000000000&entityType=group", {"credentials":"include","headers":{},"referrer":"https://aspen.cpsd.us/aspen/home.do","referrerPolicy":"strict-origin-when-cross-origin",
-//"body":
-//"org.apache.struts.taglib.html.TOKEN=c0e3af6b1803e5211567d9616cb005ac"
-//  
-//  ,"method":"POST","mode":"cors"});
-
-
-
-
-
-
-
-
-
-
-
-      //console.log(await fetch_body("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true", 
-			//{
-			//	"headers":{
-			//	"Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis",
-			//	},
-      //}));
 
 		log(i, "closing");
 		resolve({
