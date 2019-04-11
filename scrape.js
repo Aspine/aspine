@@ -77,7 +77,7 @@ async function scrape_pdf(username, password, i) {
         "mode":"cors"}));
 //('fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2')
 
-    (await fetch_body("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
+    (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
       {"credentials":"include",
         "headers":{
           "Connection": "keep-alive",
@@ -542,23 +542,23 @@ function log(thread, name, obj) {
 	}
 }
 
-//async function fetch_file(url, options) {
-//  let path = "./practice.html";
-//
-//  const res = await fetch(url, options);
-//  const fileStream = fs.createWriteStream(path);
-//  return await new Promise((resolve, reject) => {
-//      res.body.pipe(fileStream);
-//      res.body.on("error", (err) => {
-//        console.log("error");
-//        reject(err);
-//      });
-//      fileStream.on("finish", function() {
-//        console.log("success");
-//        resolve();
-//      });
-//    });
-//}
+async function fetch_file(url, options) {
+  let path = "./practice.pdf";
+
+  const res = await fetch(url, options);
+  const fileStream = fs.createWriteStream(path);
+  return await new Promise((resolve, reject) => {
+      res.body.pipe(fileStream);
+      res.body.on("error", (err) => {
+        console.log("error");
+        reject(err);
+      });
+      fileStream.on("finish", function() {
+        console.log("success");
+        resolve();
+      });
+    });
+}
 
 // --------------Compute Functions------------
 
