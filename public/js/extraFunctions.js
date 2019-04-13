@@ -256,6 +256,8 @@ let gradeFormatter = function(cell, formatterParams) {
 	}
 
 }
+let scale = 1;
+let adjustedScale = 1;
 let generate_pdf = function(index) {
   let pdfInitParams = {"data": (tableData.pdf_files)[0]};
   let loadingTask = pdfjsLib.getDocument(pdfInitParams);
@@ -276,7 +278,7 @@ let generate_pdf = function(index) {
         modifier = 900;
       }
 
-      let adjustedScale = (modifier / viewport.width) * 0.9;
+      adjustedScale = (modifier / viewport.width) * 0.9;
 
       console.log("Adjusted Scale: " + adjustedScale);
 
@@ -287,6 +289,40 @@ let generate_pdf = function(index) {
       let context = canvas.getContext('2d');
       canvas.width = viewport.width;
       canvas.height = viewport.height;
+
+      var renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+
+      var renderTask = page.render(renderContext);
+      renderTask.promise.then(function () {
+        console.log('Page rendered');
+      });
+
+    });
+
+  }, function (reason) {
+    console.error(reason);
+  });
+}
+
+let zoom_in_pdf = function() {
+  let pdfInitParams = {"data": (tableData.pdf_files)[0]};
+  let loadingTask = pdfjsLib.getDocument(pdfInitParams);
+  loadingTask.promise.then(function(pdf) {
+    let pageNumber = 1;
+
+    pdf.getPage(pageNumber).then(function(page) {
+      console.log("Page Loaded");
+
+      adjustedScale += 0.1;
+
+      viewport = page.getViewport({"scale": adjustedScale});
+
+
+      let canvas = document.getElementById('pdf-canvas');
+      let context = canvas.getContext('2d');
 
       var renderContext = {
         canvasContext: context,
