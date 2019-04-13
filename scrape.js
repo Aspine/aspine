@@ -4,7 +4,7 @@
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 10;
-const PDF_THREADS = 1
+const PDF_THREADS = 5
 
 // Solo-Threads
 const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
@@ -106,16 +106,13 @@ async function scrape_pdf(username, password, i) {
         deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
 
         
-        filenames.push((raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17)).replace(/ /g, "_"));
+        filenames.push((raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17)).replace(/ /g, "_") + ".pdf");
       }
     });
-    console.log(filenames);
 
     let oid = oids[i];
     let deliveryRecipient = deliveryRecipients[i];
-
-    //console.log(oid);
-    //console.log(deliveryRecipient);
+    let filename = filenames[i];
 
     (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
        {"credentials":"include",
@@ -136,7 +133,7 @@ async function scrape_pdf(username, password, i) {
          "method":"GET",
          "mode":"cors"}));
 
-    fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
+    fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
       {"credentials":"include",
         "headers":{
           "Connection": "keep-alive",
@@ -577,7 +574,6 @@ function log(thread, name, obj) {
 }
 
 async function fetch_file(url, options) {
-  console.log("Fetching File");
 
   let res = (await fetch(url, options));
   let readable = res.body;

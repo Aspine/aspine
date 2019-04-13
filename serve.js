@@ -119,7 +119,7 @@ app.get('/', async (req, res) => {
 app.post('/login', async (req, res) => {
 	req.session.username = req.body.username;
 	req.session.password = req.body.password;
-    res.redirect('/home.html');
+  res.redirect('/home.html');
 });
 
 app.get('/logout', async (req, res) => {

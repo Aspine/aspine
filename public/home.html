@@ -46,6 +46,10 @@
         <!--===============================================================================================-->
         <script src="js/jquery-3.3.1.min.js"></script>
         <!--===============================================================================================-->
+          <!--<script src="pdfjs-dist/src/pdf.js"></script>-->
+          <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+        <!--===============================================================================================-->
 
 
 	</head>
@@ -148,6 +152,7 @@
 
     <p>Hello World!</p>
 
+    <canvas id="the-canvas" width="400" height="400"></canvas>
   </div>
 
         	<script type="text/javascript" src="/js/clock.js"></script>
@@ -793,6 +798,41 @@
             } else {
                 document.getElementById("small_clock").style.display = "block";
                 document.getElementById("small_clock_period").style.display = "block";
+            }
+
+            if (tab_name == "reports") {
+            let url = './sample.pdf';
+
+
+              let loadingTask = pdfjsLib.getDocument(url);
+              loadingTask.promise.then(function(pdf) {
+                let pageNumber = 1;
+
+                pdf.getPage(pageNumber).then(function(page) {
+                  console.log("Page Loaded");
+                  let scale = 1.5;
+                  let viewport = page.getViewport({scale: scale});
+
+                  let canvas = document.getElementById('the-canvas');
+                  let context = canvas.getContext('2d');
+                  canvas.height = viewport.height;
+                  canvas.width = viewport.width;
+
+                  var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                  };
+
+                  var renderTask = page.render(renderContext);
+                  renderTask.promise.then(function () {
+                    console.log('Page rendered');
+                  });
+
+                });
+
+                }, function (reason) {
+                console.error(reason);
+                });
             }
 
 		    classesTable.redraw();
