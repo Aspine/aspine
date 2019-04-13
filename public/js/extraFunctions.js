@@ -39,7 +39,7 @@ function getGPA(gradeToBeGPA) {
 }
 
 let addAssignmentFormatter = function(value, data, cell, row, options) {
-	return "<i class=\"fa fa-plus\"aria-hidden=\"true\"></i>";
+	return "<i class=\"fa fa-plus grades\"aria-hidden=\"true\"></i>";
 };
 
 let statInfoFormatter = function(cell, formatterParams) {
@@ -258,7 +258,10 @@ let gradeFormatter = function(cell, formatterParams) {
 }
 let scale = 1;
 let adjustedScale = 1;
+let controlAdjustedScale = adjustedScale;
 let generate_pdf = function(index) {
+  let adjustedHeight = $(window).height() - 280;
+  $('#pdf-container').css('height', adjustedHeight + 'px');
   let pdfInitParams = {"data": (tableData.pdf_files)[0]};
   let loadingTask = pdfjsLib.getDocument(pdfInitParams);
   loadingTask.promise.then(function(pdf) {
@@ -278,7 +281,8 @@ let generate_pdf = function(index) {
         modifier = 900;
       }
 
-      adjustedScale = (modifier / viewport.width) * 0.99;
+      adjustedScale = (modifier / viewport.width) * 0.97;
+      controlAdjustedScale = (modifier / viewport.width) * 0.97;
 
       console.log("Adjusted Scale: " + adjustedScale);
 
@@ -317,12 +321,55 @@ let zoom_in_pdf = function() {
       console.log("Page Loaded");
 
       adjustedScale += 0.1;
+//      if (adjustedScale > controlAdjustedScale) {
+//
+//        $('#pdf-container').css('overflow-x', 'scroll');
+//      }
+
+      viewport = page.getViewport({"scale": adjustedScale});
+
+      let canvas = document.getElementById('pdf-canvas');
+      let context = canvas.getContext('2d');
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      var renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+
+      var renderTask = page.render(renderContext);
+      renderTask.promise.then(function () {
+        console.log('Page rendered');
+      });
+
+    });
+
+
+  }, function (reason) {
+    console.error(reason);
+  });
+}
+let zoom_out_pdf = function() {
+  let pdfInitParams = {"data": (tableData.pdf_files)[0]};
+  let loadingTask = pdfjsLib.getDocument(pdfInitParams);
+  loadingTask.promise.then(function(pdf) {
+    let pageNumber = 1;
+
+    pdf.getPage(pageNumber).then(function(page) {
+      console.log("Page Loaded");
+
+      adjustedScale -= 0.1;
 
       viewport = page.getViewport({"scale": adjustedScale});
 
 
       let canvas = document.getElementById('pdf-canvas');
       let context = canvas.getContext('2d');
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
       var renderContext = {
         canvasContext: context,
@@ -339,4 +386,16 @@ let zoom_in_pdf = function() {
   }, function (reason) {
     console.error(reason);
   });
+}
+
+
+function showPDFDropdown() {
+  document.getElementById("pdfdropdown").classList.toggle("show");
+
+  //var x = document.getElementById("Demo");
+  //if (x.className.indexOf("w3-show") == -1) {  
+  //  x.className += " w3-show";
+  //} else { 
+  //  x.className = x.className.replace(" w3-show", "");
+  //}
 }
