@@ -617,8 +617,13 @@ if(require.main === module) {
 
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
+    // Generate Sample JSON
+    fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
+      if (err) throw err;
+
+    });
 		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-		console.log((await scrape_student(result.username, result.password)));
+		//console.log((await scrape_student(result.username, result.password)));
 		//let session = await scrape_login();
 		//await submit_login(result.username, result.password, session.apache_token, session.session_id);
 		//console.log(session);

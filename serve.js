@@ -104,7 +104,7 @@ app.post('/data', async (req, res) => {
         res.send(await scraper.scrape_student(req.session.username, req.session.password));
     } else {
         //USE FAKE DATA:
-        res.sendFile('sample.json', {root:"public"});
+        res.sendFile('sample2.json', {root:"public"});
     }
 });
 
