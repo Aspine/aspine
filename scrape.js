@@ -41,14 +41,14 @@ async function scrape_student(username, password) {
 	//Spawn class scrapers
 	let class_scrapers = [];
 	for(let i = 0; i < CLASS_THREADS; i++) {
-		class_scrapers[i] = scrape_class(username, password, "CLASS_THREAD #" + i);
+		class_scrapers[i] = scrape_class(username, password, i);
 	}
 
   // Spawn pdf scrapers
-//	let pdf_scrapers = [];
-//  for (let i = 0; i < PDF_THREADS; i++) {
-//    scrapers[i] = scrape_pdf(username, password, "PDF_THREAD #" + i);
-//  }
+	let pdf_scrapers = [];
+  for (let i = 0; i < PDF_THREADS; i++) {
+    pdf_scrapers[i] = scrape_pdf(username, password, i);
+  }
 
 	// Spawn schedule scraper
   let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
@@ -61,7 +61,7 @@ async function scrape_student(username, password) {
 		classes: (await Promise.all(class_scrapers)).filter(Boolean),
 		schedule: await schedule_scraper,
 		recent: await recent_scraper,
-//    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
+    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
     username: username,
 	}
 }
@@ -70,55 +70,58 @@ async function scrape_pdf(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
-    //console.log("Login sumbitted");
+
 		log(i, "session", session);
 
 
-      //console.log("Session ID " + session.session_id);
-    //console.log("Apache Token Login: " + session.apache_token);
 
- 	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-      {"credentials":"include",
-        "headers":{
-          "Connection": "keep-alive",
-          "Cache-Control": "max-age=0",
-          "Upgrade-Insecure-Requests": "1",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-          "Accept-Language": "en-US,en",
-          "DNT": "1",
-          "Referer": "https://aspen.cpsd.us/aspen/logon.do",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-        },
-        "referrer":"https://aspen.cpsd.us/aspen/logon.do",
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "redirect": "follow", // manual, *follow, error
-        "body":null,
-        "method":"GET",
-        "mode":"cors"}));
-   let new_apache = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
+        {"credentials":"include",
+          "headers":{
+            "Connection": "keep-alive",
+            "Cache-Control": "max-age=0",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-US,en",
+            "DNT": "1",
+            "Referer": "https://aspen.cpsd.us/aspen/logon.do",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
+          },
+          "referrer":"https://aspen.cpsd.us/aspen/logon.do",
+          "referrerPolicy":"strict-origin-when-cross-origin",
+          "redirect": "follow", // manual, *follow, error
+          "body":null,
+          "method":"GET",
+          "mode":"cors"}));
+
+    console.log("?");
+    $('.listRowStandard').siblings().each(function(i, elem) {
+      console.log("YES");
+      console.log($(this).attr('id'));
+    });
+    //let new_apache = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
     //console.log("New Apache: " + new_apache);
 
-     (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2&deploymentId=x2sis",
-      {"credentials":"include",
-        "headers":{
-          "Connection": "keep-alive",
-          "Pragma": "no-cache",
-          "Cache-Control": "no-cache",
-          "Upgrade-Insecure-Requests": "1",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-          "Accept-Language": "en-US,en",
-          "DNT": "1",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-        },
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":null,
-        "method":"GET",
-        "mode":"cors"}));
-//('fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2')
+    (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2&deploymentId=x2sis",
+       {"credentials":"include",
+         "headers":{
+           "Connection": "keep-alive",
+           "Pragma": "no-cache",
+           "Cache-Control": "no-cache",
+           "Upgrade-Insecure-Requests": "1",
+           "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+           "Accept-Language": "en-US,en",
+           "DNT": "1",
+           "Accept-Encoding": "gzip, deflate, br",
+           "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
+         },
+         "referrerPolicy":"strict-origin-when-cross-origin",
+         "body":null,
+         "method":"GET",
+         "mode":"cors"}));
 
     fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
       {"credentials":"include",
@@ -139,11 +142,13 @@ async function scrape_pdf(username, password, i) {
         "method":"GET",
         "mode":"cors"}));
 
-		log(i, "closing");
-		resolve({
+    log(i, "closing");
+
+    resolve({
       "content": [{"content": fileReturn }]
     });
-	});
+
+  });
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
@@ -552,9 +557,9 @@ async function fetch_pdf(url, options) {
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
-		console.log(`${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+		//console.log(`${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
 	} else {
-		console.log(`${thread}: ${name}\n`);
+		//console.log(`${thread}: ${name}\n`);
 	}
 }
 
