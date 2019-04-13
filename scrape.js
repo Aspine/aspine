@@ -1,9 +1,10 @@
 #!/usr/bin/node
 
+
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 10;
-const PDF_THREADS = 5
+const PDF_THREADS = 1
 
 // Solo-Threads
 const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
@@ -73,38 +74,50 @@ async function scrape_pdf(username, password, i) {
 
 		log(i, "session", session);
 
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11&groupPageWidgetOid=GPW0000006UKen&1554939833156", 
+      {"credentials":"include",
+        "headers":{
+          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
+          "DNT": "1",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Accept-Language": "en-US,en",
+          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+          "Accept": "*/*",
+          "Referer": "https://aspen.cpsd.us/aspen/home.do",
+          "X-Requested-With": "XMLHttpRequest",
+          "Connection": "keep-alive"
+        },
+        "referrer":"https://aspen.cpsd.us/aspen/home.do",
+        "referrerPolicy":"strict-origin-when-cross-origin",
+        "body":null,
+        "method":"GET",
+        "mode":"cors"}));
 
 
-    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-        {"credentials":"include",
-          "headers":{
-            "Connection": "keep-alive",
-            "Cache-Control": "max-age=0",
-            "Upgrade-Insecure-Requests": "1",
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-            "Accept-Language": "en-US,en",
-            "DNT": "1",
-            "Referer": "https://aspen.cpsd.us/aspen/logon.do",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-          },
-          "referrer":"https://aspen.cpsd.us/aspen/logon.do",
-          "referrerPolicy":"strict-origin-when-cross-origin",
-          "redirect": "follow", // manual, *follow, error
-          "body":null,
-          "method":"GET",
-          "mode":"cors"}));
+    let oids = [];
+    let deliveryRecipients = [];
+    let filenames = [];
+    $('.portletListCell').each(function(i, elem) {
+      if ($(this).attr('id')) {
+        let raw = ($(this).children().first().children().first().html());
 
-    console.log("?");
-    $('.listRowStandard').siblings().each(function(i, elem) {
-      console.log("YES");
-      console.log($(this).attr('id'));
+        oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
+
+        deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
+
+        
+        filenames.push((raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17)).replace(/ /g, "_"));
+      }
     });
-    //let new_apache = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
-    //console.log("New Apache: " + new_apache);
+    console.log(filenames);
 
-    (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2&deploymentId=x2sis",
+    let oid = oids[i];
+    let deliveryRecipient = deliveryRecipients[i];
+
+    //console.log(oid);
+    //console.log(deliveryRecipient);
+
+    (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
        {"credentials":"include",
          "headers":{
            "Connection": "keep-alive",
@@ -618,3 +631,25 @@ if(require.main === module) {
 }
 
 // -------------------------------------------
+// Saved Scrapes
+//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
+//    {"credentials":"include",
+//      "headers":{
+//        "Connection": "keep-alive",
+//        "Cache-Control": "max-age=0",
+//        "Upgrade-Insecure-Requests": "1",
+//        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+//        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+//        "Accept-Language": "en-US,en",
+//        "DNT": "1",
+//        "Referer": "https://aspen.cpsd.us/aspen/logon.do",
+//        "Accept-Encoding": "gzip, deflate, br",
+//        "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
+//      },
+//      "referrer":"https://aspen.cpsd.us/aspen/logon.do",
+//      "referrerPolicy":"strict-origin-when-cross-origin",
+//      "redirect": "follow", // manual, *follow, error
+//      "body":null,
+//      "method":"GET",
+//      "mode":"cors"}));
+//
