@@ -4,7 +4,7 @@
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 10;
-const PDF_THREADS = 5
+const PDF_THREADS = 1;
 
 // Solo-Threads
 const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
@@ -97,6 +97,7 @@ async function scrape_pdf(username, password, i) {
     let oids = [];
     let deliveryRecipients = [];
     let filenames = [];
+    let titles = [];
     $('.portletListCell').each(function(i, elem) {
       if ($(this).attr('id')) {
         let raw = ($(this).children().first().children().first().html());
@@ -106,13 +107,22 @@ async function scrape_pdf(username, password, i) {
         deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
 
         
-        filenames.push((raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17)).replace(/ /g, "_") + ".pdf");
+        let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
+        filenames.push((raw_filename).replace(/ /g, "_") + ".pdf");
+
+        let datetime = $(this).next().text().trim();
+        let date = datetime.substr(0, datetime.indexOf(" "));
+
+        let pretty_filename = raw_filename.split(' ').slice(0,2).join(' ');
+
+        titles.push(pretty_filename + " " + date);
       }
     });
 
     let oid = oids[i];
     let deliveryRecipient = deliveryRecipients[i];
     let filename = filenames[i];
+    let title = titles[i];
 
     (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
        {"credentials":"include",
@@ -154,9 +164,10 @@ async function scrape_pdf(username, password, i) {
 
     log(i, "closing");
 
-    resolve(
-      fileReturn
-    );
+    resolve({
+      "title": title,
+      "content": fileReturn
+    });
 
   });
 }
@@ -617,40 +628,16 @@ if(require.main === module) {
 
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
-    // Generate Sample JSON
+    // Send Stringified scrape_student() to samplejson.json
     fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
       if (err) throw err;
-
     });
+
+    // Print Stringified scrape_student() - good for checking json return
 		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+    
+    // Print scrape_student() - good for checking fetch html return
 		//console.log((await scrape_student(result.username, result.password)));
-		//let session = await scrape_login();
-		//await submit_login(result.username, result.password, session.apache_token, session.session_id);
-		//console.log(session);
-		//console.log(JSON.stringify(await scrape_schedule(session.session_id)));
+ 
 	});
 }
-
-// -------------------------------------------
-// Saved Scrapes
-//let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
-//    {"credentials":"include",
-//      "headers":{
-//        "Connection": "keep-alive",
-//        "Cache-Control": "max-age=0",
-//        "Upgrade-Insecure-Requests": "1",
-//        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-//        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-//        "Accept-Language": "en-US,en",
-//        "DNT": "1",
-//        "Referer": "https://aspen.cpsd.us/aspen/logon.do",
-//        "Accept-Encoding": "gzip, deflate, br",
-//        "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-//      },
-//      "referrer":"https://aspen.cpsd.us/aspen/logon.do",
-//      "referrerPolicy":"strict-origin-when-cross-origin",
-//      "redirect": "follow", // manual, *follow, error
-//      "body":null,
-//      "method":"GET",
-//      "mode":"cors"}));
-//
