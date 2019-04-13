@@ -11,7 +11,12 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const express = require('express');
 const util = require('util');
+const concat = require('concat-stream');
 const fs = require('fs');
+const streams = require('memory-streams');
+ 
+// Initialize with the string
+
 
 // -------------------------------------------
 
@@ -23,16 +28,46 @@ module.exports = {
 
 // -------------------------------------------
 
+// --------------- Scraping ------------------
+// Returns object of classes
+async function scrape_student(username, password) {
+	let scrapers = [];
+
+	// Spawn schedule scraper
+	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
+
+	// Spawn recent activity scraper
+	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
+
+  // Spawn pdf scraper
+	scrapers[THREADS + 2] = scrape_pdf(username, password, THREADS + 2);
+
+	//Spawn class scrapers
+	for(let i = 0; i < THREADS; i++) {
+		scrapers[i] = scrape_class(username, password, i);
+
+	}
+
+	// Await on all class scrapers
+	return {
+		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
+		schedule: await scrapers[THREADS],
+		recent: await scrapers[THREADS + 1],
+    username: username,
+    pdf: await scrapers[THREADS + 2]
+	}
+}
+
 async function scrape_pdf(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
-    console.log("Login sumbitted");
+    //console.log("Login sumbitted");
 		log(i, "session", session);
 
 
-      console.log("Session ID " + session.session_id);
-    console.log("Apache Token Login: " + session.apache_token);
+      //console.log("Session ID " + session.session_id);
+    //console.log("Apache Token Login: " + session.apache_token);
 
  	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/home.do", 
       {"credentials":"include",
@@ -55,7 +90,7 @@ async function scrape_pdf(username, password, i) {
         "method":"GET",
         "mode":"cors"}));
    let new_apache = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
-    console.log("New Apache: " + new_apache);
+    //console.log("New Apache: " + new_apache);
 
      (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2&deploymentId=x2sis",
       {"credentials":"include",
@@ -77,7 +112,7 @@ async function scrape_pdf(username, password, i) {
         "mode":"cors"}));
 //('fileDownload.do?propertyAsString=filFile&oid=FIL000000G9prz&reportDeliveryRecipient=RDR000000G9ps2')
 
-    (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
+    fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=Progress_Report__for_publishing.pdf&downLoad=true",
       {"credentials":"include",
         "headers":{
           "Connection": "keep-alive",
@@ -95,44 +130,16 @@ async function scrape_pdf(username, password, i) {
         "body":null,
         "method":"GET",
         "mode":"cors"}));
+    console.log("FILE");
+    console.log(fileReturn);
+
+    //console.log(fileReturn);
 
 		log(i, "closing");
-		resolve({
-      "Hello": "hello"
-
-		});
+		resolve(
+      fileReturn
+		);
 	});
-}
-// --------------- Scraping ------------------
-// Returns object of classes
-async function scrape_student(username, password) {
-	let scrapers = [];
-
-	// Spawn schedule scraper
-//	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
-//
-//	// Spawn recent activity scraper
-//	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
-
-  // Spawn pdf scraper
-	scrapers[THREADS + 2] = scrape_pdf(username, password, THREADS + 2);
-
-	//Spawn class scrapers
-//	for(let i = 0; i < THREADS; i++) {
-//		scrapers[i] = scrape_class(username, password, i);
-//
-//	}
-
-	// Await on all class scrapers
-    return {
-      pdf: scrapers[THREADS + 2]
-    }
-//	return {
-//		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
-//		schedule: await scrapers[THREADS],
-//		recent: await scrapers[THREADS + 1],
-//    username: username
-//	}
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
@@ -533,6 +540,11 @@ async function fetch_body(url, options) {
 	return (await fetch(url, options)).text();
 }
 
+async function fetch_pdf(url, options) {
+	return (await fetch(url, options)).buffer();
+}
+
+
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
@@ -543,21 +555,23 @@ function log(thread, name, obj) {
 }
 
 async function fetch_file(url, options) {
-  let path = "./practice.pdf";
+  console.log("Fetching File");
 
-  const res = await fetch(url, options);
-  const fileStream = fs.createWriteStream(path);
-  return await new Promise((resolve, reject) => {
-      res.body.pipe(fileStream);
-      res.body.on("error", (err) => {
-        console.log("error");
-        reject(err);
-      });
-      fileStream.on("finish", function() {
-        console.log("success");
-        resolve();
-      });
-    });
+  let res = (await fetch(url, options));
+  let readable = res.body;
+  //readable.setEncoding('utf8');
+  let chunks = [];
+
+  readable.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  readable.on("end", function() {
+    process.stdout.setDefaultEncoding('binary');
+    pdf_out = (Buffer.concat(chunks).toString('binary'));
+    return pdf_out;
+  });
+
 }
 
 // --------------Compute Functions------------
