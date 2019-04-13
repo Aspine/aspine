@@ -1,7 +1,13 @@
 #!/usr/bin/node
 
 // --------------- Parameters ----------------
-const THREADS = 10;
+// Multi-Threads
+const CLASS_THREADS = 10;
+const PDF_THREADS = 5
+
+// Solo-Threads
+const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
+const RECENT_THREAD = SCHEDULE_THREAD + 1;
 
 // -------------------------------------------
 
@@ -31,30 +37,32 @@ module.exports = {
 // --------------- Scraping ------------------
 // Returns object of classes
 async function scrape_student(username, password) {
-	let scrapers = [];
-
-	// Spawn schedule scraper
-	scrapers[THREADS] = scrape_schedule(username, password, THREADS);
-
-	// Spawn recent activity scraper
-	scrapers[THREADS + 1] = scrape_recent(username, password, THREADS + 1);
-
-  // Spawn pdf scraper
-	scrapers[THREADS + 2] = scrape_pdf(username, password, THREADS + 2);
 
 	//Spawn class scrapers
-	for(let i = 0; i < THREADS; i++) {
-		scrapers[i] = scrape_class(username, password, i);
-
+	let class_scrapers = [];
+	for(let i = 0; i < CLASS_THREADS; i++) {
+		class_scrapers[i] = scrape_class(username, password, "CLASS_THREAD #" + i);
 	}
+
+  // Spawn pdf scrapers
+//	let pdf_scrapers = [];
+//  for (let i = 0; i < PDF_THREADS; i++) {
+//    scrapers[i] = scrape_pdf(username, password, "PDF_THREAD #" + i);
+//  }
+
+	// Spawn schedule scraper
+  let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
+
+	// Spawn recent activity scraper
+  let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
 
 	// Await on all class scrapers
 	return {
-		classes: (await Promise.all(scrapers.slice(0, -3))).filter(Boolean),
-		schedule: await scrapers[THREADS],
-		recent: await scrapers[THREADS + 1],
+		classes: (await Promise.all(class_scrapers)).filter(Boolean),
+		schedule: await schedule_scraper,
+		recent: await recent_scraper,
+//    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
     username: username,
-    pdf: (await Promise.all(scrapers.slice([THREADS + 2]))).filter(Boolean),
 	}
 }
 
@@ -544,9 +552,9 @@ async function fetch_pdf(url, options) {
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
-		//console.log(`Thread ${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+		console.log(`${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
 	} else {
-		//console.log(`Thread ${thread}: ${name}\n`);
+		console.log(`${thread}: ${name}\n`);
 	}
 }
 
