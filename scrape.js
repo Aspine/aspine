@@ -50,11 +50,11 @@ async function scrape_student(username, password) {
 
 	// Await on all class scrapers
 	return {
-		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
+		classes: (await Promise.all(scrapers.slice(0, -3))).filter(Boolean),
 		schedule: await scrapers[THREADS],
 		recent: await scrapers[THREADS + 1],
     username: username,
-    pdf: await scrapers[THREADS + 2]
+    pdf: (await Promise.all(scrapers.slice([THREADS + 2]))).filter(Boolean),
 	}
 }
 
@@ -130,15 +130,11 @@ async function scrape_pdf(username, password, i) {
         "body":null,
         "method":"GET",
         "mode":"cors"}));
-    console.log("FILE");
-    console.log(fileReturn);
-
-    //console.log(fileReturn);
 
 		log(i, "closing");
-		resolve(
-      fileReturn
-		);
+		resolve({
+      "content": [{"content": fileReturn }]
+    });
 	});
 }
 
@@ -559,17 +555,19 @@ async function fetch_file(url, options) {
 
   let res = (await fetch(url, options));
   let readable = res.body;
-  //readable.setEncoding('utf8');
-  let chunks = [];
 
-  readable.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
+  return new Promise((resolve, reject) => {
+    let chunks = [];
 
-  readable.on("end", function() {
-    process.stdout.setDefaultEncoding('binary');
-    pdf_out = (Buffer.concat(chunks).toString('binary'));
-    return pdf_out;
+    readable.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    readable.on("end", function() {
+      process.stdout.setDefaultEncoding('binary');
+      pdf_out = (Buffer.concat(chunks).toString('binary'));
+      resolve(pdf_out);
+    });
   });
 
 }
