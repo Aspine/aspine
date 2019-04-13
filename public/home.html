@@ -804,7 +804,8 @@
             let url = './sample.pdf';
 
 
-              let loadingTask = pdfjsLib.getDocument(url);
+              let pdfInitParams = {"data": (tableData.pdf_files)[0]};
+              let loadingTask = pdfjsLib.getDocument(pdfInitParams);
               loadingTask.promise.then(function(pdf) {
                 let pageNumber = 1;
 

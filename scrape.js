@@ -154,9 +154,9 @@ async function scrape_pdf(username, password, i) {
 
     log(i, "closing");
 
-    resolve({
-      "content": [{"content": fileReturn }]
-    });
+    resolve(
+      fileReturn
+    );
 
   });
 }
