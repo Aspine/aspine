@@ -272,13 +272,13 @@ let generate_pdf = function(index) {
       let viewport = page.getViewport({scale});
 
 
-      let modifier = $(window).width();
+      let modifier = $('#pdf-container').width();
 
       if ($(window).width() >= 900) {
         modifier = 900;
       }
 
-      adjustedScale = (modifier / viewport.width) * 0.9;
+      adjustedScale = (modifier / viewport.width) * 0.99;
 
       console.log("Adjusted Scale: " + adjustedScale);
 
