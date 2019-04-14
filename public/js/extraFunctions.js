@@ -263,7 +263,12 @@ let generate_pdf = function(index) {
   if (!pdfrendering) {
     pdfrendering = true;
     let adjustedHeight = $(window).height() - 280;
-    $('#pdf-container').css('height', adjustedHeight + 'px');
+    if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+      $('#pdf-container').css('height', adjustedHeight + 'px');
+    } else {
+      $('#pdf-container').css('height', $(window).height() + 'px');
+    }
+
     let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
@@ -494,30 +499,39 @@ let toggle_fullscreen_pdf = function() {
 if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
     } else if (elem.mozRequestFullScreen) { /* Firefox */
       elem.mozRequestFullScreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    let new_height = $(window).height();
       elem.webkitRequestFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
     } else if (elem.msRequestFullscreen) { /* IE/Edge */
       elem.msRequestFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
     }
   } else { 
 
     if (document.exitFullscreen) {
       document.exitFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
     } else if (document.mozCancelFullScreen) { /* Firefox */
       document.mozCancelFullScreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
     } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
       document.webkitExitFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
+
       $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
     }
   }
