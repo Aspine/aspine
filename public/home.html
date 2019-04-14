@@ -171,7 +171,7 @@
           </select>
         </div>
 
-        <span class="right hover" onclick="toggle_fullscreen_pdf()" style="cursor:pointer">
+        <span id="expand-pdf-icon" class="right hover" onclick="toggle_fullscreen_pdf()" style="cursor:pointer">
           <i class="fa fa-expand" aria-hidden="true"></i>
         </span>
 
@@ -182,7 +182,7 @@
         <span class="right hover" onclick="zoom_in_pdf()" style="cursor:pointer">
           <i class="fa fa-plus" aria-hidden="true"></i>
         </span>
-        <span class="right">
+        <span class="right hover" onclick="generate_pdf(pdf_index)" style="cursor:pointer">
           ZOOM
         </span>
         <span class="right hover" onclick="zoom_out_pdf()" style="cursor:pointer">
@@ -204,6 +204,7 @@
 
       ////////////////////Global Variables///////
       let pdf_index = 0;
+      let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
 
 			// When the user clicks anywhere outside of the modal, close it
@@ -228,7 +229,7 @@
           Plotly.relayout('stats_plot', update_size);
         }
 
-        if ($('#pdf-canvas').is(":visible")) { 
+        if ($('#pdf-canvas').is(":visible") && !pdfrendering) { 
           generate_pdf(pdf_index);
         }
       });
