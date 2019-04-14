@@ -464,8 +464,14 @@ let initialize_dropdown = function() {
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
           if (s.options[i].innerHTML == this.innerHTML) {
-            pdf_index = i;
-            generate_pdf(i);
+            if (i == 0) {
+              pdf_index = i;
+              generate_pdf(i);
+
+            } else {
+              pdf_index = i - 1;
+              generate_pdf(i - 1);
+            }
             s.selectedIndex = i;
             h.innerHTML = this.innerHTML;
             y = this.parentNode.getElementsByClassName("same-as-selected");
