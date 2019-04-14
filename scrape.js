@@ -3,7 +3,7 @@
 
 // --------------- Parameters ----------------
 // Multi-Threads
-const CLASS_THREADS = 10;
+const CLASS_THREADS = 50;
 const PDF_THREADS = 5;
 
 // Solo-Threads
@@ -41,29 +41,36 @@ async function scrape_student(username, password) {
 
 	//Spawn class scrapers
 	let class_scrapers = [];
-	for(let i = 23; i < 24; i++) {
+	for(let i = 0; i < CLASS_THREADS; i++) {
 		class_scrapers[i] = scrape_class(username, password, i);
 	}
 
-//  // Spawn pdf scrapers
-//	let pdf_scrapers = [];
-//  for (let i = 0; i < PDF_THREADS; i++) {
-//    pdf_scrapers[i] = scrape_pdf(username, password, i);
-//  }
-//
-//	// Spawn schedule scraper
-//  let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
-//
-//	// Spawn recent activity scraper
-//  let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
+  // Spawn pdf scrapers
+	let pdf_scrapers = [];
+  for (let i = 0; i < PDF_THREADS; i++) {
+    pdf_scrapers[i] = scrape_pdf(username, password, i);
+  }
+
+	// Spawn schedule scraper
+  let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
+
+	// Spawn recent activity scraper
+  let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
 
 	// Await on all class scrapers
 	return {
-		classes: (await Promise.all(class_scrapers)).filter(Boolean),
-//		schedule: await schedule_scraper,
-//		recent: await recent_scraper,
-//    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
-//    username: username,
+		classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
+    terms: {
+      current: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
+      q1: (await Promise.all(class_scrapers)).slice(10, 20).filter(Boolean),
+      q2: (await Promise.all(class_scrapers)).slice(20, 30).filter(Boolean),
+      q3: (await Promise.all(class_scrapers)).slice(30, 40).filter(Boolean),
+      q4: (await Promise.all(class_scrapers)).slice(40, 50).filter(Boolean),
+    },
+		schedule: await schedule_scraper,
+		recent: await recent_scraper,
+    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
+    username: username,
 	}
 }
 
@@ -267,7 +274,7 @@ function scrape_class(username, password, i) {
     let term = Math.floor(i / 10);
     i = i % 10;
 
-    if (term != 10) {
+    if (term != 0) {
       academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code);
     }
 
@@ -289,7 +296,7 @@ function scrape_class(username, password, i) {
 		// Get assignments data page by page
 		let assignments = await scrape_assignments(session.session_id, academics.apache_token);
 
-    if (term != 10) {
+    if (term != 0) {
       assignments = await change_term_assignments(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code);
     }
 
