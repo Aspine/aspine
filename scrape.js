@@ -4,7 +4,7 @@
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 10;
-const PDF_THREADS = 1;
+const PDF_THREADS = 5;
 
 // Solo-Threads
 const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
