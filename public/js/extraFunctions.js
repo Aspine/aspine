@@ -395,7 +395,7 @@ let zoom_out_pdf = function() {
 }
 
 
-function closeAllSelect(elmnt) {
+function pdf_closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
   except the current select box: */
   var x, y, i, arrNo = [];
@@ -491,7 +491,7 @@ let initialize_dropdown = function() {
       /* When the select box is clicked, close any other select boxes,
         and open/close the current select box: */
       e.stopPropagation();
-      closeAllSelect(this);
+      pdf_closeAllSelect(this);
       this.nextSibling.classList.toggle("pdf_select-hide");
       this.classList.toggle("pdf_select-arrow-active");
     });
