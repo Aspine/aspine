@@ -399,18 +399,18 @@ function closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
   except the current select box: */
   var x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
+  x = document.getElementsByClassName("pdf_select-items");
+  y = document.getElementsByClassName("pdf_select-selected");
   for (i = 0; i < y.length; i++) {
     if (elmnt == y[i]) {
       arrNo.push(i)
     } else {
-      y[i].classList.remove("select-arrow-active");
+      y[i].classList.remove("pdf_select-arrow-active");
     }
   }
   for (i = 0; i < x.length; i++) {
     if (arrNo.indexOf(i)) {
-      x[i].classList.add("select-hide");
+      x[i].classList.add("pdf_select-hide");
     }
   }
 }
@@ -428,29 +428,29 @@ let initialize_dropdown = function() {
       let o = new Option(tableData.pdf_files[i - 1].title, 0);
       /// jquerify the DOM object 'o' so we can use the html method
       $(o).html(tableData.pdf_files[i - 1].title);
-      $("#pdf-select").append(o);
+      $("#pdf_select").append(o);
     }
 
     let o = new Option(tableData.pdf_files[i - 1].title, i);
     /// jquerify the DOM object 'o' so we can use the html method
     $(o).html(tableData.pdf_files[i - 1].title);
-    $("#pdf-select").append(o);
+    $("#pdf_select").append(o);
 
   }
   
   let x, i, j, selElmnt, a, b, c;
   /* Look for any elements with the class "custom-select": */
-  x = document.getElementsByClassName("custom-select");
+  x = document.getElementsByClassName("pdf_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
     /* For each element, create a new DIV that will act as the selected item: */
     a = document.createElement("DIV");
-    a.setAttribute("class", "select-selected");
+    a.setAttribute("class", "pdf_select-selected");
     a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
     x[i].appendChild(a);
     /* For each element, create a new DIV that will contain the option list: */
     b = document.createElement("DIV");
-    b.setAttribute("class", "select-items select-hide");
+    b.setAttribute("class", "pdf_select-items pdf_select-hide");
     for (j = 1; j < selElmnt.length; j++) {
       /* For each option in the original select element,
         create a new DIV that will act as an option item: */
@@ -474,11 +474,11 @@ let initialize_dropdown = function() {
             }
             s.selectedIndex = i;
             h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
+            y = this.parentNode.getElementsByClassName("pdf_same-as-selected");
             for (k = 0; k < y.length; k++) {
               y[k].removeAttribute("class");
             }
-            this.setAttribute("class", "same-as-selected");
+            this.setAttribute("class", "pdf_same-as-selected");
             break;
           }
         }
@@ -492,8 +492,8 @@ let initialize_dropdown = function() {
         and open/close the current select box: */
       e.stopPropagation();
       closeAllSelect(this);
-      this.nextSibling.classList.toggle("select-hide");
-      this.classList.toggle("select-arrow-active");
+      this.nextSibling.classList.toggle("pdf_select-hide");
+      this.classList.toggle("pdf_select-arrow-active");
     });
   }
 };
