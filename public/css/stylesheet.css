@@ -633,7 +633,7 @@ p#add-calendar-error {
 }
 
 .pdf_select-selected {
-  background-color: DodgerBlue;
+  background-color: #248A48;
 
 }
 
@@ -657,7 +657,7 @@ p#add-calendar-error {
 
 /* style the items (options), including the selected item: */
 .pdf_select-items div,.pdf_select-selected {
-  color: #ffffff;
+  color: white;
   padding: 10px 16px;
   border: 1px solid transparent;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
@@ -667,7 +667,7 @@ p#add-calendar-error {
 /* Style items (options): */
 .pdf_select-items {
   position: absolute;
-  background-color: DodgerBlue;
+  background-color: #248A48;
   top: 100%;
   left: 0;
   right: 0;
@@ -725,15 +725,15 @@ p#add-calendar-error {
   color: black;
   font-weight: bold;
   padding: 14px 16px;
-  /*border: 1px solid transparent;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;
 }
 
 /* Style items (options): */
 .select-items {
   position: absolute;
-  background-color: DodgerBlue;
+  background-color: #f2f2f2;
   top: 100%;
   left: 0;
   right: 0;
@@ -746,6 +746,6 @@ p#add-calendar-error {
 }
 
 .select-items div:hover, .same-as-selected {
-  background-color: #00551c;
+  background-color: #ddd;
 }
 

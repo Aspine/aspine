@@ -615,6 +615,7 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
+  tableData.classes = classes;
   classes.GPA = computeGPA();
   classes.calcGPA = computeGPA();
   return classes;
