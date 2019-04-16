@@ -100,8 +100,43 @@ app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
     if(!args._.includes("fake")) {
+        //res.send(await scraper.scrape_student(req.session.username, req.session.password));
+        //
         // USE REAL DATA:
-        res.send(await scraper.scrape_student(req.session.username, req.session.password));
+        response = await scraper.scrape_student(req.session.username, req.session.password);
+      res.send(response)
+        //if (response.classes.length == 0) {
+        //  res.sendFile('invalid.json', {root:"public"});
+
+        //} else {
+
+        //  res.send(response);
+        //}
+ 
+          //if(tableData.classes.length == 0) {
+          //  tableData.classes.push({
+          //    "name": "You Have No Classes/Assignments This Marking Period", 
+          //    "grade": "You Have No Grades This Marking Period",
+          //    "categories": {"Nothing": "1.0"},
+          //    "assignments": [{
+          //      "name": "No assignments", 
+          //      "category": "Nothing", 
+          //      "assignment_id": "GCD000000Fx62l", 
+          //      "special": "Nothing Special", 
+          //      "score": 10,
+          //      "max_score": 10,
+          //      "percentage": 100,
+          //      "color": "#ff9900"
+          //    }],
+          //    "tokens":{"session_id":"263A6A78DE0F001DDDFC8A525D31A8F0","apache_token":"572aa56a8c407a6d9a25b0a50843fc32"},
+          //    "edited":false,
+          //    "categoryGrades":{},
+          //    "decimals":2,
+          //    "type":"categoryPercent",
+          //    "calculated_grade":"100 A+",
+          //    "color":"#1E8541"
+          //  });
+
     } else {
         //USE FAKE DATA:
         res.sendFile('sample2.json', {root:"public"});

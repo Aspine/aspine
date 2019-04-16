@@ -1,10 +1,4 @@
 <!DOCTYPE html>
-
-
-
-
-
-
 <html lang="en">
 	<head>
 
@@ -673,10 +667,89 @@ function closeAllSelect(elmnt) {
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
-                    if(response.classes.length == 0) {
-                        location.href='/logout';
+            console.log("AFJJAWLEJFWOEIJF");
+            console.log(response);
+          console.log("classeslength: " + response.classes.length);
+          console.log("classeslength: " + (response.classes.length == 0));
+
+          if(((response.schedule)).login_fail) {
+              location.href='/logout';
+          }
+
+          if (response.classes.length == 0) {
+            console.log("inside length 0");
+
+            response.classes = 
+            [
+                {
+                  "name": "No Classes",
+                  "grade": "No Grades",
+                  "categories": {
+                    "No Categories": "1.0"
+                  },
+                  "assignments": [
+                    {
+                      "name": "No Assignments",
+                      "category": "No Categories",
+                      "assignment_id": "GCD000000Fx62l",
+                      "special": "No Special",
+                      "score": 10,
+                      "max_score": 10,
+                      "percentage": 100,
+                      "color": "#6666FF"
                     }
+                  ],
+                  "tokens": {
+                    "session_id": "263A6A78DE0F001DDDFC8A525D31A8F0",
+                    "apache_token": "572aa56a8c407a6d9a25b0a50843fc32"
+                  },
+                  "edited": false,
+                  "categoryGrades": {},
+                  "decimals": 2,
+                  "categoryDisplay": [
+                    {
+                      "category": "HW, Classwork, Assessments",
+                      "weight": "30%",
+                      "score": 340,
+                      "maxScore": 400,
+                      "grade": "85%",
+                      "color": "#6666FF"
+                    },
+                    {
+                      "category": "Speak-Listen",
+                      "weight": "20%",
+                      "score": "Ungraded",
+                      "maxScore": "Ungraded",
+                      "grade": "No Grade",
+                      "color": "black"
+                    },
+                    {
+                      "category": "Tests, Quizzes, vocabulary",
+                      "weight": "30%",
+                      "score": 100,
+                      "maxScore": 100,
+                      "grade": "100%",
+                      "color": "#1E8541"
+                    },
+                    {
+                      "category": "timeliness, effort",
+                      "weight": "20%",
+                      "score": 200,
+                      "maxScore": 200,
+                      "grade": "100%",
+                      "color": "#1E8541"
+                    }
+                  ],
+                  "type": "categoryPercent",
+                  "calculated_grade": "94.05 A",
+                  "color": "#1E8541"
+                }
+              ];
+          }
+          console.log(response);
+
 					tableData = response;
+
 
 					document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
 

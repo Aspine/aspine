@@ -98,7 +98,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 			},
 			"referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
 			"referrerPolicy":"strict-origin-when-cross-origin",
-			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sA&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
 			"method":"POST",
 			"mode":"cors"}));
 
@@ -160,6 +160,16 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
     "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=950&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=termFilter&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=" + student_oid + "&jumpToSearch=&initialSearch=&yearFilter=current&termFilter=" + termFilter + "&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=",
     "method":"POST",
     "mode":"cors"}));
+// Returns object of recent activity
+async function scrape_recent(username, password, i) {
+	return new Promise(async function(resolve, reject) {
+		let session = await scrape_login();
+		let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login_fail": true});
+    }
+
+		log(i, "session", session);
 
 	let data = {"classes": []};
 	$("#dataGrid a").each(function(i, elem) {
@@ -263,8 +273,12 @@ function scrape_class(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		// Login
 		let session = await scrape_login();
-		await submit_login(username, password,
+		let page = await submit_login(username, password,
 			session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login_fail": true});
+
+    }
 		log(i, "session", session);
 
 		// Academics Page
@@ -351,7 +365,8 @@ async function submit_login(username, password, apache_token, session_id) {
 			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password, 
 			"method":"POST", 
 			"mode":"cors"}); 
-	return page;
+  console.log(page.includes("Invalid login."));
+	return page.includes("Invalid login.");
 }
 
 
@@ -599,7 +614,7 @@ async function scrape_assignments(session_id, apache_token) {
                     "Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
                 "referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do",
                 "referrerPolicy":"strict-origin-when-cross-origin",
-                "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sA&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+                "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
                 "method":"POST",
                 "mode":"cors"})));
 
@@ -610,7 +625,11 @@ async function scrape_assignments(session_id, apache_token) {
 async function scrape_schedule(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
-		await submit_login(username, password, session.apache_token, session.session_id);
+		let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page) {
+      resolve({"login_fail": true});
+    }
+
 		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 			{"credentials":"include",
 				"headers":{"Connection": "keep-alive",

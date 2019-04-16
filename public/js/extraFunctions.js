@@ -1,5 +1,7 @@
 
 let vip_username_list = ["8006214", "8001874"];
+// Cole: 8006697
+// Max: 2109723
 
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
