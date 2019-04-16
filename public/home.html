@@ -74,7 +74,7 @@
             <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
             <div class="GPA custom-select" style="width:230px;">
-              <select>
+              <select id="gpa_select">
                 <option id="init_gpa" value="0">Current Quarter GPA: </option>
                 <option id="current_gpa" value="1">Current Quarter GPA: </option>
                 <option id="q1_gpa" value="1">Q1 GPA:</option>
@@ -165,19 +165,6 @@
 
         <div class="pdf_custom-select" style="display:inline-block;width:400px;">
           <select id="pdf_select">
-<!--        <option value="0">Select car:</option> 
-            <option value="1">Audi</option>
-            <option value="2">BMW</option>
-            <option value="3">Citroen</option>
-            <option value="4">Ford</option>
-            <option value="5">Honda</option>
-            <option value="6">Jaguar</option>
-            <option value="7">Land Rover</option>
-            <option value="8">Mercedes</option>
-            <option value="9">Mini</option>
-            <option value="10">Nissan</option>
-            <option value="11">Toyota</option>
-            <option value="12">Volvo</option> -->
           </select>
         </div>
 
@@ -237,6 +224,16 @@ for (i = 0; i < x.length; i++) {
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
           if (s.options[i].innerHTML == this.innerHTML) {
+            console.log("match click");
+            if (i == 0 ) {
+              tableData.classes = tableData.terms.current;
+            } else {
+              tableData.classes = tableData.terms["q" + (i - 1)];
+            }
+            classesTable.setData(tableData.classes);
+            //assignmentsTable.setData(tableData[i].assignments);
+            //categoriesTable.setData(tableData[i].categoryDisplay);
+
             s.selectedIndex = i;
             h.innerHTML = this.innerHTML;
             y = this.parentNode.getElementsByClassName("same-as-selected");
@@ -685,76 +682,14 @@ function closeAllSelect(elmnt) {
 
 
 					//parsing the data extracted by the scrappers, and getting tableData ready for presentation
-					for(let i = 0; i < tableData.classes.length; i++) {
-
-						//initialize every the edited key for every class and set it to false
-						tableData.classes[i].edited = false;
-
-						//initialize category grades which will be used for the categoryGrades table
-						tableData.classes[i].categoryGrades = {};
-
-						//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
-						if (!isNaN(parseFloat(tableData.classes[i].grade))) {
-							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
-						}
+            tableData.classes = parseTableData(tableData.classes);
+            tableData.terms.current = parseTableData(tableData.terms.current);
+            tableData.terms.q1 = parseTableData(tableData.terms.q1);
+            tableData.terms.q2 = parseTableData(tableData.terms.q2);
+            tableData.terms.q3 = parseTableData(tableData.terms.q3);
+            tableData.terms.q4 = parseTableData(tableData.terms.q4);
 
 
-						//cycle through each assignment of every class for further parsing
-						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
-							//initialize the percentage of the assignment.
-							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
-							//initialize how the assignment should be colored in the table; based on percentage
-							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
-
-							//an if statement to handle assignments without a score
-							if (isNaN(tableData.classes[i].assignments[j].score)) {
-								//an if statement to handle assignments with a special characteristic
-								if (tableData.classes[i].assignments[j].special) {
-
-									//an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
-									if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
-										// a reg expression to extract only the information from between the parenthesis.
-										var regExp = /\(([^)]+)\)/;
-
-										tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-										tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-									} else {
-										// if no parenthesis, set it equal to special in its entirety
-										tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
-										tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
-
-									}
-								} else {
-									// if no special and no grade, set score and max_score to ungraded
-									tableData.classes[i].assignments[j].score = "Ungraded";
-									tableData.classes[i].assignments[j].max_score = "Ungraded";
-
-								}
-							}
-						}
-
-						//initializing a calculated_grade for classes with a grade
-						if (tableData.classes[i].grade != "") {
-
-							let computingClassData = tableData.classes[i];
-
-							//getting calculated values related to classes
-							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
-							//populating categoryDisplay which is the object used to display the category grading information
-							tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
-
-							//setting grading type. Total vs. category
-							tableData.classes[i].type = gradeInfo.type;
-
-							//setting calculated_grade and initcalcGrade
-							tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
-
-							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
-
-							//setting how the class should be colored in the classes table.
-							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
-						}
-					}
 
 
 					//the following lines are used to set up the schedule table correctly
@@ -839,17 +774,20 @@ function closeAllSelect(elmnt) {
 					}
 
 					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
-					tableData.GPA = computeGPA();
-					tableData.calcGPA = computeGPA();
+					//tableData.GPA = computeGPA();
+					//tableData.calcGPA = computeGPA();
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 
-					$(".select-selected").html("Current Quarter GPA: " + tableData.GPA);
+					$(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
-              $(this).html("Q" + i + " GPA: " + tableData.terms["current"].GPA);
+              $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
             } else {
               $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
+              document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
             }
           });
 					scheduleTable.setData(tableData.schedule.black);

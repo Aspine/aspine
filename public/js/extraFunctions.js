@@ -1,5 +1,5 @@
 
-let vip_username_list = ["8006214", "8006697", "2109723", "8001874"];
+let vip_username_list = ["8006214", "8001874"];
 
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
@@ -615,4 +615,7 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
+  classes.GPA = computeGPA();
+  classes.calcGPA = computeGPA();
+  return classes;
 }
