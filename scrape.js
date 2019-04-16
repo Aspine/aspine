@@ -43,7 +43,8 @@ async function scrape_student(username, password) {
 	return {
 		classes: (await Promise.all(scrapers.slice(0, -2))).filter(Boolean),
 		schedule: await scrapers[THREADS],
-		recent: await scrapers[THREADS + 1]
+		recent: await scrapers[THREADS + 1],
+    username: username
 	}
 }
 

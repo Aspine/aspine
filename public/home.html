@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-
-
-
-
-
 <html lang="en">
 	<head>
 
@@ -76,7 +71,7 @@
 			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
 		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
 		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
+		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px;color:#0d0d0d;">Modal Caption..</p>
 		  </div>
 
 		</div>
@@ -158,7 +153,19 @@
 			  }
 			});
 			$('#stats_plot').width($(window).width() * 7 / 11);
-			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('stats_plot')); });
+			window.addEventListener('resize', function() { 
+        if ($('#stats_plot').is(":visible")) { 
+
+          Plotly.Plots.resize(document.getElementById('stats_plot')); 
+          let update_size = {
+            //width: 800,  // or any new width
+            width: $('#stats_modal_content').width(),
+            height: 120  // " "
+          };
+
+          Plotly.relayout('stats_plot', update_size);
+        }
+      });
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
@@ -208,16 +215,58 @@
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          console.log("select row");
+          classesTable.selectRow(1);
+
+
+            var elem = document.getElementById("default_open");
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            // If cancelled, don't dispatch our event
+            var canceled = !elem.dispatchEvent(evt);
+
+          assignmentsTable.clearFilter();
+					document.getElementById("categoriesTable").style.display = "block";
+					document.getElementById("assignmentsTable").style.display = "block";
+					selected_class = row.getData().classname;
+					tabledata = classesTable.getData();
+          console.log("select row");
+          classesTable.deselectRow();
+          classesTable.selectRow(selected_class);
+          //classesTable.getRows()
+          //    .filter(row => row.getData().name == selected_class)
+          //    .forEach(row => row.toggleSelect());
+
+
+
+					for(let i in tabledata) {
+						if(tabledata[i].name == row.getData().classname) {
+							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
+							return;
+						}
+					}
+
+          console.log("select row");
+          classesTable.selectRow(1);
+
+				},
+
 
 			});
 			let categoriesTable = new Tabulator("#categoriesTable", {
 
 			//	height: 400,
 
+                selectable:1,
 				layout:"fitColumns",
 				columns: [
 					{title:"Category", field:"category", formatter: rowFormatter, headerSort: false},
-					{title:"Weight", field:"weight", formatter:rowFormatter, headerSort: false},
+					{title:"Weight", field:"weight", formatter:weightFormatter, headerSort: false},
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
@@ -225,6 +274,13 @@
 					//{title: "", width:1, align:"center", headerSort: false}, 
 					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          assignmentsTable.clearFilter();
+          assignmentsTable.addFilter([
+            {field: "category", type:"=", value: row.getData().category}
+            ]);
+				},
+
 
 			});
 
@@ -248,7 +304,7 @@
 							}
 							return {values: catCategories};
 						},
-						normatter: rowFormatter, headerSort:false,
+						formatter: rowFormatter, headerSort:false,
 					},
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
@@ -274,32 +330,55 @@
 
 						if (stats.indexOf("[") === 0) {
 							stats = stats.substring(1, stats.length - 1);
+
 							stats = stats.split(",");
-							stats = stats.map(x => parseFloat(x.substring(1, stats.length)));
+							stats = stats.map(x => parseFloat(x.substring(1, x.length)));
+              console.log("Raw Stats: " + stats);
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
-							stats.push((low + median) / 2);
-							stats.push((high + median) / 2);
+              let q1 = (low + median) / 2, q3 = (high + median) / 2;
+
+              let graph_stats = [low, q1, median, q3, high];
+              console.log("Graph Stats: " + graph_stats);
+              console.log("Mean: " + mean)
 
 							var statsTrace = {
-							  x: stats,
+							  x: graph_stats,
 							  type: 'box',
 								name: " ",
+                marker:{
+                    //color: '#268A48'
+                    color: '#ff66ff'
+                  }
 							};
 
+              
 							var data = [statsTrace];
 
 							let layout = {
 								title: " ",
-								width: window.innerWidth * 10 / 15,
-								height: 100,
+								width: $('#stats_modal_content').width(),
+								height: 120,
+
 								xaxis: {
 									title: " ",
 									zeroline: true,
-									range: [0, high],
+									range: [0, 15 * max_score / 14],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								yaxis: {
-									range: [-0.5, 0.5],
+									range: [-1.15, 0.7],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								margin: {
 									t: 20,
 									l: 20,
@@ -307,19 +386,94 @@
 									b: 20,
 								},
 								shapes: [
+                  //your score line
 									{
 										type: 'line',
-										x0:score,
-										y0:-0.5,
-										x1: score,
-										y1: 0.5,
+										x0:score  - (max_score / 1000),
+										y0:-0.50,
+										x1: score - (max_score / 1000),
+										y1: 0.50,
 										line: {
-											color: '#00551C',
+											color: getColor(score / max_score * 100),
 											width: 3,
 										},
-									}
+									},
+                  //mean line
+									{
+										type: 'line',
+										x0:mean - (max_score / 1000),
+										y0:-0.5,
+										x1: mean - (max_score / 1000),
+										y1: 0.5,
+										line: {
+											color: getLightColor(mean / max_score * 100),
+											width: 3,
+										},
+									},
+ 
 								],
+
+                annotations: [
+                  {
+                    x: mean - (max_score / 68),
+                    y: -.65,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Mean',
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getLightColor(mean / max_score * 100),
+                    },
+                  },
+                  {
+                    x: score - (max_score / 38),
+                    y: .65,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Your Score',
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(score / max_score * 100),
+                    },
+                  },
+                ],
 							};
+              for (let i = 5; i <= 10; i++) {
+                  let shape = {
+                    type: 'line',
+                    x0: max_score * i / 10,
+                    y0: -0.90,
+                    x1: max_score * i / 10,
+                    y1: -1.15,
+                    line: {
+                      color: getColor(i * 10),
+                      width: 2,
+                    },
+                  };
+                  layout.shapes.push(shape);
+              }
+            for (let i = 5; i <= 9; i++) {
+                  let annotation = {
+                    x: max_score * i / 10 + max_score / 20,
+                    y: -1.05,
+                    xref: 'x',
+                    yref: 'y',
+                    text: getLetterGrade(((i + 0.5) / 10) * 100),
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(((i + 0.5) / 10) * 100),
+                    },
+                  }
+                  layout.annotations.push(annotation);
+            }
+
+						
 
 
 							let TESTER = document.getElementById("stats_plot");
@@ -333,7 +487,7 @@
 							document.getElementById("stats_modal_caption").style.top = "30px";
 							document.getElementById("stats_modal_caption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 
-							document.getElementById("stats_modal_content").style.height = "350px";
+							document.getElementById("stats_modal_content").style.height = "365px";
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
 						} else {
 							
@@ -365,6 +519,7 @@
 			});
 			let classesTable = new Tabulator("#classesTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+        index: "name",
                 		selectable:1,
 				ajaxURL:"/data",
 				ajaxConfig:"post", //ajax HTTP request type
@@ -639,6 +794,7 @@
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
