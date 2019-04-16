@@ -162,7 +162,9 @@ button {
 
 /* Style the tab */
 .tab {
-	overflow: hidden;
+	overflow: visible;
+  /*overflow: visible;*/
+  display: inline-block;
 	border: 1px solid #ccc;
 	background-color: #f1f1f1;
 }
@@ -183,12 +185,14 @@ button {
 	float: right;
 }
 */
+
 .tab .GPA {
 	color: black !important;
 	float: right;
   font-size: 14px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 }
+
 
 .tab button#logout {
 	float: right;
@@ -630,6 +634,7 @@ p#add-calendar-error {
 
 .pdf_select-selected {
   background-color: DodgerBlue;
+
 }
 
 /* Style the arrow inside the select element: */
@@ -674,14 +679,13 @@ p#add-calendar-error {
   display: none;
 }
 
-.pdf_select-items div:hover, .same-as-selected {
+.pdf_select-items div:hover, .pdf_same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* The container must be positioned relative: */
 .custom-select {
   position: relative;
-  font-family: Arial;
 }
 
 .custom-select select {
@@ -689,33 +693,40 @@ p#add-calendar-error {
 }
 
 .select-selected {
-  background-color: DodgerBlue;
+  font-family: Arial;
 }
+.select-selected:hover {
+  background-color: #ddd;
+}
+
 
 /* Style the arrow inside the select element: */
 .select-selected:after {
+  color: black;
   position: absolute;
   content: "";
-  top: 14px;
+  top: 19px;
   right: 10px;
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
+  border-color: #000 transparent transparent transparent;
 }
 
 /* Point the arrow upwards when the select box is open (active): */
 .select-selected.select-arrow-active:after {
-  border-color: transparent transparent #fff transparent;
-  top: 7px;
+  border-color: transparent transparent #000 transparent;
+  top: 12px;
 }
 
 /* style the items (options), including the selected item: */
 .select-items div,.select-selected {
-  color: #ffffff;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  /*color: #ffffff;*/
+  color: black;
+  font-weight: bold;
+  padding: 14px 16px;
+  /*border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
   cursor: pointer;
 }
 
@@ -735,6 +746,6 @@ p#add-calendar-error {
 }
 
 .select-items div:hover, .same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #00551c;
 }
 

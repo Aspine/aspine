@@ -73,11 +73,14 @@
             <button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>
             <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
-            <div class="GPA custom-select" style="width:200px;">
+            <div class="GPA custom-select" style="width:230px;">
               <select>
-                <option id = "GPA" value="0">Quarter GPA: </option>
-                <option value="1">Audi</option>
-                <option value="2">BMW</option>
+                <option id="init_gpa" value="0">Current Quarter GPA: </option>
+                <option id="current_gpa" value="1">Current Quarter GPA: </option>
+                <option id="q1_gpa" value="1">Q1 GPA:</option>
+                <option id="q2_gpa" value="2">Q2 GPA:</option>
+                <option id="q3_gpa" value="3">Q3 GPA:</option>
+                <option id="q4_gpa" value="4">Q4 GPA:</option>
               </select>
             </div>
             <!--<button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button> -->
@@ -290,6 +293,7 @@ function closeAllSelect(elmnt) {
 			    hideModal();
 			  }
         pdf_closeAllSelect();
+        closeAllSelect();
 			});
 
 			$('#stats_plot').width($(window).width() * 7 / 11);
@@ -840,8 +844,14 @@ function closeAllSelect(elmnt) {
 					tableDataReset = JSON.parse(JSON.stringify(tableData));
 
 
-					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
-
+					$(".select-selected").html("Current Quarter GPA: " + tableData.GPA);
+          $(".select-items").children().each(function(i, elem) {
+            if (i == 0) {
+              $(this).html("Q" + i + " GPA: " + tableData.terms["current"].GPA);
+            } else {
+              $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
+            }
+          });
 					scheduleTable.setData(tableData.schedule.black);
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);

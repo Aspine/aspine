@@ -785,12 +785,12 @@ if(require.main === module) {
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
     // Send Stringified scrape_student() to samplejson.json
-    //fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
-    //  if (err) throw err;
-    //});
+    fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
+      if (err) throw err;
+    });
 
     // Print Stringified scrape_student() - good for checking json return
-		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
     
     // Print scrape_student() - good for checking fetch html return
 		//console.log((await scrape_student(result.username, result.password)));

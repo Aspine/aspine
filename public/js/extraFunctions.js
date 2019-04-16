@@ -542,3 +542,77 @@ if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFul
     }
   }
 }
+
+
+function parseTableData(classes) {
+  for(let i = 0; i < classes.length; i++) {
+
+    //initialize every the edited key for every class and set it to false
+    classes[i].edited = false;
+
+    //initialize category grades which will be used for the categoryGrades table
+    classes[i].categoryGrades = {};
+
+    //determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
+    if (!isNaN(parseFloat(classes[i].grade))) {
+      classes[i].decimals = parseFloat(classes[i].grade).countDecimals();
+    }
+
+
+    //cycle through each assignment of every class for further parsing
+    for (let j = 0; j < classes[i].assignments.length; j++) {
+      //initialize the percentage of the assignment.
+      classes[i].assignments[j].percentage = Math.round(classes[i].assignments[j].score / classes[i].assignments[j].max_score * 1000) / 10;
+      //initialize how the assignment should be colored in the table; based on percentage
+      classes[i].assignments[j].color = getColor(classes[i].assignments[j].percentage);
+
+      //an if statement to handle assignments without a score
+      if (isNaN(classes[i].assignments[j].score)) {
+        //an if statement to handle assignments with a special characteristic
+        if (classes[i].assignments[j].special) {
+
+          //an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
+          if (("" + classes[i].assignments[j].special).includes("(") && ("" + classes[i].assignments[j].special).includes(")")) {
+            // a reg expression to extract only the information from between the parenthesis.
+            var regExp = /\(([^)]+)\)/;
+
+            classes[i].assignments[j].score = (regExp.exec(classes[i].assignments[j].special))[1];
+            classes[i].assignments[j].max_score = (regExp.exec(classes[i].assignments[j].special))[1];
+          } else {
+            // if no parenthesis, set it equal to special in its entirety
+            classes[i].assignments[j].score = classes[i].assignments[j].special;
+            classes[i].assignments[j].max_score = classes[i].assignments[j].special;
+
+          }
+        } else {
+          // if no special and no grade, set score and max_score to ungraded
+          classes[i].assignments[j].score = "Ungraded";
+          classes[i].assignments[j].max_score = "Ungraded";
+
+        }
+      }
+    }
+
+    //initializing a calculated_grade for classes with a grade
+    if (classes[i].grade != "") {
+
+      let computingClassData = classes[i];
+
+      //getting calculated values related to classes
+      let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
+      //populating categoryDisplay which is the object used to display the category grading information
+      classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+
+      //setting grading type. Total vs. category
+      classes[i].type = gradeInfo.type;
+
+      //setting calculated_grade and initcalcGrade
+      classes[i].init_calculated_grade = gradeInfo.categoryPercent;
+
+      classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
+
+      //setting how the class should be colored in the classes table.
+      classes[i].color = getColor(classes[i].calculated_grade);
+    }
+  }
+}
