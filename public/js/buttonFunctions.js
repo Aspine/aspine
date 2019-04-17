@@ -55,7 +55,7 @@ let resetTableData = function() {
 
 	tableData.classes[selected_class_i].edited = false;
 
-	tableData = JSON.parse(JSON.stringify(tableDataReset));
+	tableData.classes = JSON.parse(JSON.stringify(classesReset));
 	assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
 	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 	classesTable.setData(tableData.classes);
@@ -64,10 +64,11 @@ let resetTableData = function() {
 
 
 	if (tableData.classes[selected_class_i].edited) {
-    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>");
+    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
+    //+ " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>"
 		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
-		document.getElementById("GPA").style.padding = "14px 16px 14px 16px";
+		$(".select-selected").css("padding", "14px 16px 14px 16px");
     $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
 		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
@@ -94,13 +95,44 @@ let updateGradePage = function() {
 	tableData.classes.calcGPA = computeGPA();
 
 	if (tableData.classes[selected_class_i].edited) {
-    $(".select-selected").css('padding', "5px 16px 5px 16px");
+    //fix the editing system in the if statement above to be true if any of the classes are edited
+    if (currentTerm == "current") {
+      $(".select-selected").css('padding', "5px 16px 5px 16px");
+      $(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
+      $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
+      $("#" + currentTerm).html("Current Quarter GPA:"  + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA:"  + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA:"  + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA;
+
+    } else {
+      $(".select-selected").css('padding', "5px 16px 5px 16px");
+      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
+
+      $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
+      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
+      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA;
+    }
+
+    //$(".select-items").children().each(function(i, elem) {
+    //  if (i == 0) {
+    //    $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
+    //    document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+    //    document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+    //  } else {
+    //    $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
+    //    document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
+    //  }
+    //});
+
 		//document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-    //
-    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>");
+    //+ " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>"
 		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
+		$(".select-selected").css("padding", "14px 16px 14px 16px");
+		$("#" + currentTerm).css("padding", "14px 16px 14px 16px");
+
     $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
+		$("#" + currentTerm).html("Quarter GPA: " + tableData.classes.GPA);
 		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
 }

@@ -694,6 +694,9 @@ p#add-calendar-error {
 
 .select-selected {
   font-family: Arial;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
 }
 .select-selected:hover {
   background-color: #ddd;
@@ -726,7 +729,7 @@ p#add-calendar-error {
   font-weight: bold;
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
-  border-width: 0px;
+  /*border-width: 0px;*/
 
   cursor: pointer;
 }
@@ -753,7 +756,7 @@ p#add-calendar-error {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   border-style: solid;
-  border-color: #248A48;
+  border-color: #248A48 !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
