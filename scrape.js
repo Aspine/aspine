@@ -577,8 +577,6 @@ async function scrape_academics(session_id) {
   $('select[name="termFilter"]').children().each(function(i, elem) {
     data.termFilters.push({"type": $(this).text(), "code": $(this).attr('value')});
   });
-  console.log("TERM FILTER");
-  console.log(data.termFilters);
 
 	return data;
 }

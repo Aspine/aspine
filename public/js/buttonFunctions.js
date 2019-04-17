@@ -60,14 +60,16 @@ let resetTableData = function() {
 	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
 	classesTable.setData(tableData.classes);
 	
-	tableData.calcGPA = computeGPA();
+	tableData.classes.calcGPA = computeGPA();
 
 
 	if (tableData.classes[selected_class_i].edited) {
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
+    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>");
+		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
 		document.getElementById("GPA").style.padding = "14px 16px 14px 16px";
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
+		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
 }
 
@@ -89,12 +91,16 @@ let updateGradePage = function() {
 
 	assignmentsTable.replaceData(tableData.classes[selected_class_i].assignments);
 
-	tableData.calcGPA = computeGPA();
+	tableData.classes.calcGPA = computeGPA();
 
 	if (tableData.classes[selected_class_i].edited) {
-		document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
+    $(".select-selected").css('padding', "5px 16px 5px 16px");
+		//document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
+    //
+    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>");
+		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
-		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
+		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
 }

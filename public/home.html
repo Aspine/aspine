@@ -218,7 +218,6 @@ for (i = 0; i < x.length; i++) {
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
           if (s.options[i].innerHTML == this.innerHTML) {
-            console.log("match click");
             if (i == 0 ) {
               tableData.classes = tableData.terms.current;
             } else {
@@ -244,6 +243,9 @@ for (i = 0; i < x.length; i++) {
   }
   x[i].appendChild(b);
   a.addEventListener("click", function(e) {
+    console.log("activate");
+    //$('.select-selected').addClass("activated-select-items");
+    //$('.select-items div').addClass("activated-select-items");
     /* When the select box is clicked, close any other select boxes,
     and open/close the current select box: */
     e.stopPropagation();
@@ -251,9 +253,14 @@ for (i = 0; i < x.length; i++) {
     this.nextSibling.classList.toggle("select-hide");
     this.classList.toggle("select-arrow-active");
   });
+  $('.select-selected').toggleClass("activated-selected-item");
+  $('.select-items div').toggleClass("activated-select-items");
+
 }
 
 function closeAllSelect(elmnt) {
+  $('.select-selected').toggleClass("activated-selected-item");
+  $('.select-items div').toggleClass("activated-select-items");
   /* A function that will close all select boxes in the document,
   except the current select box: */
   var x, y, i, arrNo = [];
