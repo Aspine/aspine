@@ -61,6 +61,9 @@ let getAttendanceEvent = function(value, data, cell, row, options) {
 let hideCategoriesFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
 };
+let refreshClassFormatter = function(value, data, cell, row, options) {
+	return "<i class=\"fa fa-refresh\"aria-hidden=\"true\"></i>";
+};
 function getLetterGrade(gradeToBeLettered) {
 
 	let parsed = parseFloat(gradeToBeLettered);
@@ -416,7 +419,32 @@ function pdf_closeAllSelect(elmnt) {
     }
   }
 }
+function closeAllSelect(elmnt) {
+//  $('.select-selected').removeClass("activated-selected-item");
+  $('.select-items div').removeClass("activated-select-items");
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  var x, y, i, arrNo = [];
+  x = document.getElementsByClassName("select-items");
+  y = document.getElementsByClassName("select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt == y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
+    }
+  }
+  if (!$(".select-selected").hasClass("select-arrow-active")) {
+    $('.select-selected').removeClass("activated-selected-item");
+    $('.select-items div').removeClass("activated-select-items");
+  }
 
+}
 //pdf dropdown stuff
 let initialize_dropdown = function() {      
 
@@ -496,6 +524,92 @@ let initialize_dropdown = function() {
       pdf_closeAllSelect(this);
       this.nextSibling.classList.toggle("pdf_select-hide");
       this.classList.toggle("pdf_select-arrow-active");
+    });
+  }
+
+
+
+  x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "custom-select": */
+  x = document.getElementsByClassName("custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "select-items select-hide");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.id = termConverter[j - 1];
+      c.addEventListener("click", function(e) {
+        /* When an item is clicked, update the original select box,
+        and the selected item: */
+
+        var y, i, k, s, h;
+        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+        h = this.parentNode.previousSibling;
+        for (i = 0; i < s.length; i++) {
+          if (s.options[i].innerHTML == this.innerHTML) {
+            if (i == 0) {
+              currentTerm = termConverter[i];
+            } else {
+              currentTerm = termConverter[i - 1];
+            }
+
+
+            if (anyEdited()) {
+              $(".select-selected").css('padding', "5px 16px 5px 16px");
+            } else {
+              $(".select-selected").css("padding", "14px 16px 14px 16px");
+            }
+            if (i == 0 ) {
+              tableData.classes = tableData.terms.current;
+            } else {
+              tableData.classes = tableData.terms["q" + (i - 1)];
+            }
+
+            classesTable.setData(tableData.classes);
+            classesReset = JSON.parse(JSON.stringify(tableData.classes));
+
+            $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+            $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+            //categoriesTable.setData(tableData[i].categoryDisplay);
+
+            s.selectedIndex = i;
+            h.innerHTML = this.innerHTML;
+            y = this.parentNode.getElementsByClassName("same-as-selected");
+            for (k = 0; k < y.length; k++) {
+              y[k].removeAttribute("class");
+            }
+            this.setAttribute("class", "same-as-selected");
+            break;
+          }
+        }
+        h.click();
+      });
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      //$('.select-selected').addClass("activated-select-items");
+      //$('.select-items div').addClass("activated-select-items");
+      /* When the select box is clicked, close any other select boxes,
+    and open/close the current select box: */
+
+      e.stopPropagation();
+      closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+      $('.select-selected').toggleClass("activated-selected-item");
+      $('.select-items div').toggleClass("activated-select-items");
+      //resetTableData();
     });
   }
 };
@@ -622,3 +736,16 @@ function parseTableData(classes) {
   classes.calcGPA = computeGPA();
   return classes;
 }
+let anyEdited = function() {
+  let termsEdited = (tableData.terms[currentTerm]).map(function(currentValue, index, array) {
+    return currentValue.edited
+  });
+  finalDecision = false;
+  termsEdited.forEach(function(editedMaybe) {
+    if (editedMaybe == true) {
+      finalDecision = true;
+    }
+  });
+  return finalDecision;
+}
+

@@ -314,6 +314,14 @@ i.fa.fa-eye-slash {
 
 }
 
+i.fa.fa-refresh {
+    color: #00551C;
+    padding-left: 38%;
+    padding-top: 11%;
+    font-size: large;
+    cursor: pointer;
+}
+
 canvas#large_clock {
     width: 100%;
     max-width: 400px;

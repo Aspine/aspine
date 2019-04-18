@@ -193,135 +193,11 @@
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
 
-      let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 
-var x, i, j, selElmnt, a, b, c;
-/* Look for any elements with the class "custom-select": */
-x = document.getElementsByClassName("custom-select");
-for (i = 0; i < x.length; i++) {
-  selElmnt = x[i].getElementsByTagName("select")[0];
-  /* For each element, create a new DIV that will act as the selected item: */
-  a = document.createElement("DIV");
-  a.setAttribute("class", "select-selected");
-  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-  x[i].appendChild(a);
-  /* For each element, create a new DIV that will contain the option list: */
-  b = document.createElement("DIV");
-  b.setAttribute("class", "select-items select-hide");
-  for (j = 1; j < selElmnt.length; j++) {
-    /* For each option in the original select element,
-    create a new DIV that will act as an option item: */
-    c = document.createElement("DIV");
-    c.innerHTML = selElmnt.options[j].innerHTML;
-    c.id = termConverter[j - 1];
-    c.addEventListener("click", function(e) {
-        /* When an item is clicked, update the original select box,
-        and the selected item: */
-
-        var y, i, k, s, h;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            if (i == 0) {
-              currentTerm = termConverter[i];
-            } else {
-              currentTerm = termConverter[i - 1];
-            }
-            let termsEdited = (tableData.terms[currentTerm]).map(function(currentValue, index, array) {
-              return currentValue.edited
-            });
-            let anyEdited = function() {
-              finalDecision = false;
-              termsEdited.forEach(function(editedMaybe) {
-                if (editedMaybe == true) {
-                  finalDecision = true;
-                }
-              });
-              return finalDecision;
-            }
-            
-            if (anyEdited()) {
-              $(".select-selected").css('padding', "5px 16px 5px 16px");
-            } else {
-              $(".select-selected").css("padding", "14px 16px 14px 16px");
-            }
-            if (i == 0 ) {
-              tableData.classes = tableData.terms.current;
-            } else {
-              tableData.classes = tableData.terms["q" + (i - 1)];
-            }
-
-            classesTable.setData(tableData.classes);
-            classesReset = JSON.parse(JSON.stringify(tableData.classes));
-
-            $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-            $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-            //categoriesTable.setData(tableData[i].categoryDisplay);
-
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute("class");
-            }
-            this.setAttribute("class", "same-as-selected");
-            break;
-          }
-        }
-        h.click();
-    });
-    b.appendChild(c);
-  }
-  x[i].appendChild(b);
-  a.addEventListener("click", function(e) {
-    //$('.select-selected').addClass("activated-select-items");
-    //$('.select-items div').addClass("activated-select-items");
-    /* When the select box is clicked, close any other select boxes,
-    and open/close the current select box: */
-
-    e.stopPropagation();
-    closeAllSelect(this);
-    this.nextSibling.classList.toggle("select-hide");
-    this.classList.toggle("select-arrow-active");
-    $('.select-selected').toggleClass("activated-selected-item");
-    $('.select-items div').toggleClass("activated-select-items");
-    //resetTableData();
-  });
-    $('.select-selected').toggleClass("activated-selected-item");
-    $('.select-items div').toggleClass("activated-select-items");
-  
-}
-
-function closeAllSelect(elmnt) {
-//  $('.select-selected').removeClass("activated-selected-item");
-  $('.select-items div').removeClass("activated-select-items");
-  /* A function that will close all select boxes in the document,
-  except the current select box: */
-  var x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
-  for (i = 0; i < y.length; i++) {
-    if (elmnt == y[i]) {
-      arrNo.push(i)
-    } else {
-      y[i].classList.remove("select-arrow-active");
-    }
-  }
-  for (i = 0; i < x.length; i++) {
-    if (arrNo.indexOf(i)) {
-      x[i].classList.add("select-hide");
-    }
-  }
-  if (!$(".select-selected").hasClass("select-arrow-active")) {
-    $('.select-selected').removeClass("activated-selected-item");
-    $('.select-items div').removeClass("activated-select-items");
-  }
-
-}
 
       ////////////////////Global Variables///////
       let pdf_index = 0;
+      let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
       let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
       let currentTerm = "current";
@@ -712,10 +588,7 @@ function closeAllSelect(elmnt) {
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
-            console.log("AFJJAWLEJFWOEIJF");
             console.log(response);
-          console.log("classeslength: " + response.classes.length);
-          console.log("classeslength: " + (response.classes.length == 0));
 
           if(((response.schedule)).login_fail) {
               location.href='/logout';
@@ -897,10 +770,14 @@ function closeAllSelect(elmnt) {
 					//tableData.calcGPA = computeGPA();
 					classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
+          initialize_dropdown();
 
+          console.log("NO");
 					$(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
+          //$("div[class*='select-items']").children().each(function(i, elem) {
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
+              console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
               $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
               document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
               document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
@@ -915,7 +792,6 @@ function closeAllSelect(elmnt) {
 
           redraw_clock();
 
-          initialize_dropdown();
 
 					return response.classes; //return the tableData property of a response json object
 
@@ -926,6 +802,7 @@ function closeAllSelect(elmnt) {
 				columns:[ //Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
+					{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
           assignmentsTable.clearFilter();
