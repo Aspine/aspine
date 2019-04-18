@@ -772,9 +772,7 @@
 
           initialize_dropdown();
 
-          console.log("NO");
 					$(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
-          //$("div[class*='select-items']").children().each(function(i, elem) {
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
               console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);

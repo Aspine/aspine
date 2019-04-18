@@ -82,30 +82,26 @@ let resetTableData = function() {
       $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
       document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA;
     }
-  }
+  } else {
+    console.log("trying");
+    if (currentTerm == "current") {
+      $(".select-selected").css("padding", "13px 16px 13px 16px");
+      $(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
 
-//  $(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
-//  $(".select-items").children().each(function(i, elem) {
-//    if (i == 0) {
-//      console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
-//      $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
-//      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-//      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-//    } else {
-//      $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
-//      document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
-//    }
-//  });
-//
-//	if (anyEdited()) {
-//    $(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA + "<br>Calculated GPA: " + tableData.classes.calcGPA);
-//    //+ " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>"
-//		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
-//	} else {
-//		$(".select-selected").css("padding", "14px 16px 14px 16px");
-//    $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
-//		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
-//	}
+      $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
+      $("#" + currentTerm).html("Current Quarter GPA:"  + tableData.terms[currentTerm].GPA);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA:"  + tableData.terms[currentTerm].GPA;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA:"  + tableData.terms[currentTerm].GPA;
+
+    } else {
+      $(".select-selected").css("padding", "13px 16px 13px 16px");
+      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA);
+
+      $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
+      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA);
+      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.terms[currentTerm].GPA;
+    }
+  }
 }
 
 let hideCategoriesTable = function() {
@@ -162,8 +158,8 @@ let updateGradePage = function() {
     //+ " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>"
 		//document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
 	} else {
-		$(".select-selected").css("padding", "14px 16px 14px 16px");
-		$("#" + currentTerm).css("padding", "14px 16px 14px 16px");
+		$(".select-selected").css("padding", "13px 16px 13px 16px");
+		$("#" + currentTerm).css("padding", "13px 16px 13px 16px");
 
     $(".select-selected").html("Quarter GPA: " + tableData.classes.GPA);
 		$("#" + currentTerm).html("Quarter GPA: " + tableData.classes.GPA);
