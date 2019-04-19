@@ -59,13 +59,25 @@ async function scrape_student(username, password) {
 
 	// Await on all class scrapers
 	return {
-		classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
+		currentTerm: {
+      classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean)
+    },
     terms: {
-      current: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
-      q1: (await Promise.all(class_scrapers)).slice(10, 20).filter(Boolean),
-      q2: (await Promise.all(class_scrapers)).slice(20, 30).filter(Boolean),
-      q3: (await Promise.all(class_scrapers)).slice(30, 40).filter(Boolean),
-      q4: (await Promise.all(class_scrapers)).slice(40, 50).filter(Boolean),
+      current: {
+        classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
+      },
+      q1: {
+        classes: (await Promise.all(class_scrapers)).slice(10, 20).filter(Boolean),
+      },
+      q2: {
+        classes: (await Promise.all(class_scrapers)).slice(20, 30).filter(Boolean),
+      },
+      q3: {
+        classes: (await Promise.all(class_scrapers)).slice(30, 40).filter(Boolean),
+      },
+      q4: {
+        classes: (await Promise.all(class_scrapers)).slice(40, 50).filter(Boolean),
+      },
     },
 		schedule: await schedule_scraper,
 		recent: await recent_scraper,

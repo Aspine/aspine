@@ -26,7 +26,7 @@
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 		<!--===============================================================================================-->
-		<link rel="stylesheet" type="text/css" href="css/util.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/util.css">-->
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
@@ -360,8 +360,8 @@ let termsReset = {};
 						editorParams:function(cell) {
 							let catCategories = [];
 
-							for (let k = 0; k < Object.keys(tableData.classes[selected_class_i].categories).length; k++) {
-								catCategories.push((Object.keys(tableData.classes[selected_class_i].categories)[k] + " (" + (Object.values(tableData.classes[selected_class_i].categories)[k] * 100)+ "%)"));
+							for (let k = 0; k < Object.keys(tableData.currentTerm.classes[selected_class_i].categories).length; k++) {
+								catCategories.push((Object.keys(tableData.currentTerm.classes[selected_class_i].categories)[k] + " (" + (Object.values(tableData.currentTerm.classes[selected_class_i].categories)[k] * 100)+ "%)"));
 							}
 							return {values: catCategories};
 						},
@@ -377,8 +377,8 @@ let termsReset = {};
 						document.getElementById("stats_modal_title").innerHTML = "";
 						document.getElementById('stats_modal').style.display = "inline-block";
 
-						let session_id = tableData.classes[selected_class_i].tokens.session_id;
-						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
+						let session_id = tableData.currentTerm.classes[selected_class_i].tokens.session_id;
+						let apache_token = tableData.currentTerm.classes[selected_class_i].tokens.apache_token;
 						let assignment_id = cell.getRow().getData().assignment_id;
 						let assignment = cell.getRow().getData().name;
 						let score = cell.getRow().getData().score;
@@ -586,6 +586,8 @@ let termsReset = {};
 				ajaxConfig:"post", //ajax HTTP request type
 				ajaxContentType:"json", // send parameters to the server as a JSON encoded string
 				ajaxResponse:function(url, params, response){
+          console.log("RESPONSE");
+            console.log(response);
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
@@ -594,10 +596,10 @@ let termsReset = {};
               location.href='/logout';
           }
 
-          if (response.classes.length == 0) {
+          if (response.currentTerm.classes.length == 0) {
             console.log("inside length 0");
 
-            response.classes = 
+            response.currentTerm.classes = 
             [
                 {
                   "name": "No Classes",
@@ -672,13 +674,14 @@ let termsReset = {};
 
 
 					//parsing the data extracted by the scrappers, and getting tableData ready for presentation
-            tableData.classes = parseTableData(tableData.classes);
-            tableData.terms.current = parseTableData(tableData.terms.current);
-            tableData.terms.q1 = parseTableData(tableData.terms.q1);
-            tableData.terms.q2 = parseTableData(tableData.terms.q2);
-            tableData.terms.q3 = parseTableData(tableData.terms.q3);
-            tableData.terms.q4 = parseTableData(tableData.terms.q4);
-          tableData.classes = tableData.terms.current;
+            tableData.currentTerm = parseTableData(tableData.currentTerm.classes);
+            tableData.terms.current = parseTableData(tableData.terms.current.classes);
+            tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
+            tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
+            tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
+            tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
+          tableData.currentTerm = tableData.terms.current;
+          console.log("PRINT");
           console.log(tableData);
 
 
@@ -743,18 +746,18 @@ let termsReset = {};
 						try {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
-						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
+						let classIndex = tableData.currentTerm.classes.map(x => x.name).indexOf(className);
 
-						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+						let assignmentIndex = tableData.currentTerm.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
 						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
 						tableData.recent.recentActivityArray[i].className = className;
 						tableData.recent.recentActivityArray[i].classIndex = classIndex;
 						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
-						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
-						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+						tableData.recent.recentActivityArray[i].max_score = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].max_score;
+						tableData.recent.recentActivityArray[i].percentage = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].percentage;
+						tableData.recent.recentActivityArray[i].color = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].color;
 						} catch(err) {
 							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
 
@@ -772,7 +775,7 @@ let termsReset = {};
           initialize_dropdown();
 					termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
-					$(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
+					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
               console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
@@ -791,7 +794,8 @@ let termsReset = {};
           redraw_clock();
 
 
-					return response.classes; //return the tableData property of a response json object
+          //console.log(typeof(tableData.currentTerm.classes));
+					return response.currentTerm.classes; //return the tableData property of a response json object
 
 				},
 				//ajaxParams:{key1:"value1", key2:"value2"},

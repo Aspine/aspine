@@ -570,12 +570,12 @@ let initialize_dropdown = function() {
               $(".select-selected").css("padding", "13px 16px 13px 16px");
             }
             if (i == 0 ) {
-              tableData.classes = tableData.terms.current;
+              tableData.currentTerm = tableData.terms.current;
             } else {
-              tableData.classes = tableData.terms["q" + (i - 1)];
+              tableData.currentTerm = tableData.terms["q" + (i - 1)];
             }
 
-            classesTable.setData(tableData.classes);
+            classesTable.setData(tableData.currentTerm.classes);
             //classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
             $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
@@ -731,13 +731,17 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
-  tableData.classes = classes;
-  classes.GPA = computeGPA();
-  classes.calcGPA = computeGPA();
-  return classes;
+  tableData.currentTerm.classes = classes;
+  let GPA = computeGPA();
+  let calcGPA = computeGPA();
+  return {
+    classes,
+    GPA,
+    calcGPA
+  };
 }
 let anyEdited = function() {
-  let termsEdited = (tableData.terms[currentTerm]).map(function(currentValue, index, array) {
+  let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
     return currentValue.edited
   });
   finalDecision = false;
