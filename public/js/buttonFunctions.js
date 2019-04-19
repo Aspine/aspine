@@ -53,17 +53,14 @@ let editAssignment = function(data) {
 
 let resetTableData = function() {
 
-  try {
-    tableData.classes[selected_class_i].edited = false;
-    tableData.classes = JSON.parse(JSON.stringify(classesReset));
-    assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
-    categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
-    classesTable.setData(tableData.classes);
+  //tableData.classes[selected_class_i].edited = false;
+  tableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
+  tableData.classes = tableData.terms[currentTerm];
+  assignmentsTable.setData(tableData.classes[selected_class_i].assignments);
+  categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
+  classesTable.setData(tableData.classes);
 
-    tableData.classes.calcGPA = computeGPA();
-  } catch (e) {
-
-  }
+  tableData.classes.calcGPA = computeGPA();
 	if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
     if (currentTerm == "current") {

@@ -248,7 +248,8 @@
 			//let request = require('request');
 			let tableData = {};
 			let selected_class_i;
-			let classesReset = {};
+			//let classesReset = {};
+let termsReset = {};
 
 			let recentAttendance = new Tabulator("#recentAttendance", {
 
@@ -588,7 +589,6 @@
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
-            console.log(response);
 
           if(((response.schedule)).login_fail) {
               location.href='/logout';
@@ -664,7 +664,6 @@
                 }
               ];
           }
-          console.log(response);
 
 					tableData = response;
 
@@ -680,6 +679,7 @@
             tableData.terms.q3 = parseTableData(tableData.terms.q3);
             tableData.terms.q4 = parseTableData(tableData.terms.q4);
           tableData.classes = tableData.terms.current;
+          console.log(tableData);
 
 
 
@@ -765,12 +765,12 @@
 
 					}
 
-					//final touches. declaring GPA, calcGPA, classesReset, and then setting the data for each of the tables.
+					//final touches. declaring GPA, calcGPA, termsReset, and then setting the data for each of the tables.
 					//tableData.GPA = computeGPA();
 					//tableData.calcGPA = computeGPA();
-					classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
           initialize_dropdown();
+					termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
 					$(".select-selected").html("Current Quarter GPA: " + tableData.classes.GPA);
           $(".select-items").children().each(function(i, elem) {

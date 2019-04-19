@@ -567,7 +567,7 @@ let initialize_dropdown = function() {
             if (anyEdited()) {
               $(".select-selected").css('padding', "5px 16px 5px 16px");
             } else {
-              $(".select-selected").css("padding", "14px 16px 14px 16px");
+              $(".select-selected").css("padding", "13px 16px 13px 16px");
             }
             if (i == 0 ) {
               tableData.classes = tableData.terms.current;
@@ -576,7 +576,7 @@ let initialize_dropdown = function() {
             }
 
             classesTable.setData(tableData.classes);
-            classesReset = JSON.parse(JSON.stringify(tableData.classes));
+            //classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
             $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
             $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
