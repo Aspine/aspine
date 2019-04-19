@@ -580,6 +580,7 @@ let initialize_dropdown = function() {
 
             $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
             $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+            selected_class_i = undefined;
             //categoriesTable.setData(tableData[i].categoryDisplay);
 
             s.selectedIndex = i;

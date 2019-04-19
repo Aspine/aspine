@@ -106,6 +106,8 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA;
     }
   }
+  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
 }
 
 let hideCategoriesTable = function() {
@@ -113,20 +115,21 @@ let hideCategoriesTable = function() {
 }
 
 let updateGradePage = function() {
-	let computingClassData = tableData.classes[selected_class_i];
+	let computingClassData = tableData.currentTerm.classes[selected_class_i];
 
 	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade));
 
-	tableData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+	tableData.currentTerm.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
 
-	tableData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+	tableData.currentTerm.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
-	classesTable.replaceData(tableData.classes);
-	categoriesTable.setData(tableData.classes[selected_class_i].categoryDisplay);
+	classesTable.replaceData(tableData.currentTerm.classes);
+	categoriesTable.setData(tableData.currentTerm.classes[selected_class_i].categoryDisplay);
 
-	assignmentsTable.replaceData(tableData.classes[selected_class_i].assignments);
+	assignmentsTable.replaceData(tableData.currentTerm.classes[selected_class_i].assignments);
 
-	tableData.classes.calcGPA = computeGPA();
+	tableData.currentTerm.calcGPA = computeGPA();
+  console.log(computeGPA());
 
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
