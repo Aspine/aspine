@@ -394,13 +394,13 @@ let termsReset = {};
 
 							stats = stats.split(",");
 							stats = stats.map(x => parseFloat(x.substring(1, x.length)));
-              console.log("Raw Stats: " + stats);
+              //console.log("Raw Stats: " + stats);
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
               let q1 = (low + median) / 2, q3 = (high + median) / 2;
 
               let graph_stats = [low, q1, median, q3, high];
-              console.log("Graph Stats: " + graph_stats);
-              console.log("Mean: " + mean)
+              //console.log("Graph Stats: " + graph_stats);
+              //console.log("Mean: " + mean)
 
 							var statsTrace = {
 							  x: graph_stats,
@@ -586,8 +586,6 @@ let termsReset = {};
 				ajaxConfig:"post", //ajax HTTP request type
 				ajaxContentType:"json", // send parameters to the server as a JSON encoded string
 				ajaxResponse:function(url, params, response){
-          console.log("RESPONSE");
-            console.log(response);
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
@@ -597,7 +595,6 @@ let termsReset = {};
           }
 
           if (response.currentTerm.classes.length == 0) {
-            console.log("inside length 0");
 
             response.currentTerm.classes = 
             [
@@ -681,8 +678,6 @@ let termsReset = {};
             tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
             tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
           tableData.currentTerm = tableData.terms.current;
-          console.log("PRINT");
-          console.log(tableData);
 
 
 
@@ -778,7 +773,6 @@ let termsReset = {};
 					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
-              console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
               $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
               document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
               document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
@@ -794,7 +788,6 @@ let termsReset = {};
           redraw_clock();
 
 
-          //console.log(typeof(tableData.currentTerm.classes));
 					return response.currentTerm.classes; //return the tableData property of a response json object
 
 				},
@@ -803,8 +796,8 @@ let termsReset = {};
 				layout:"fitColumns", //fit columns to width of table (optional)
 				columns:[ //Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
-					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
-					{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
+					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, width: 300, headerSort:false},
+					{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:156, headerSort: false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
           assignmentsTable.clearFilter();

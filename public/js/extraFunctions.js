@@ -62,7 +62,11 @@ let hideCategoriesFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
 };
 let refreshClassFormatter = function(value, data, cell, row, options) {
-	return "<i class=\"fa fa-refresh\"aria-hidden=\"true\"></i>";
+  //if (anyEdited()) {
+	return "<span> Reset Changes: <i class=\"fa fa-refresh\"aria-hidden=\"true\"></i> </span>";
+  //} else {
+   // return "";
+  //}
 };
 function getLetterGrade(gradeToBeLettered) {
 
@@ -618,7 +622,6 @@ let initialize_dropdown = function() {
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports'); 
 
-  console.log("attempting fullscreen");
 if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -742,6 +745,7 @@ function parseTableData(classes) {
   };
 }
 let anyEdited = function() {
+  //try {
   let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
     return currentValue.edited
   });
@@ -751,6 +755,9 @@ let anyEdited = function() {
       finalDecision = true;
     }
   });
-  return finalDecision;
+  return false;
+  //} catch (e) {
+  //  return false;
+  //}
 }
 
