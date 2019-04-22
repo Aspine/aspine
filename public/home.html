@@ -797,7 +797,7 @@ let termsReset = {};
 				columns:[ //Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, width: 300, headerSort:false},
-					{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:156, headerSort: false},
+					{title: "Hide", field: "refresh", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:156, headerSort: false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
           assignmentsTable.clearFilter();

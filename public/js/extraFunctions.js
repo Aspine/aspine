@@ -61,12 +61,14 @@ let getAttendanceEvent = function(value, data, cell, row, options) {
 let hideCategoriesFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
 };
+let testing = false;
 let refreshClassFormatter = function(value, data, cell, row, options) {
   //if (anyEdited()) {
-	return "<span> Reset Changes: <i class=\"fa fa-refresh\"aria-hidden=\"true\"></i> </span>";
-  //} else {
-   // return "";
-  //}
+  if (testing) {
+    return "<span> Reset Changes: <i class=\"fa fa-refresh\"aria-hidden=\"true\"></i> </span>";
+  } else {
+   return "";
+  }
 };
 function getLetterGrade(gradeToBeLettered) {
 
@@ -746,18 +748,20 @@ function parseTableData(classes) {
 }
 let anyEdited = function() {
   //try {
-  let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
-    return currentValue.edited
-  });
-  finalDecision = false;
-  termsEdited.forEach(function(editedMaybe) {
-    if (editedMaybe == true) {
-      finalDecision = true;
-    }
-  });
-  return false;
-  //} catch (e) {
-  //  return false;
-  //}
+  if (tableData.terms) {
+    let termsEdited = (tableData.terms[currentTerm].classes).map(
+      function(currentValue, index, array) {
+      return currentValue.edited
+    });
+    finalDecision = false;
+    termsEdited.forEach(function(editedMaybe) {
+      if (editedMaybe == true) {
+        finalDecision = true;
+      }
+    });
+    return finalDecision;
+  } else {
+    return false;
+  }
 }
 
