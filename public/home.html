@@ -85,11 +85,13 @@
           <div id="notgraph" style="position:relative;top:20px;">
             <p align="left" style="color:black;border-bottom: 1px solid #00551D;position:relative;top:15px;">Graph:</p>
             <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-
             <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
-            <p align="left" style="display:block;position:relative;top:40px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
 
-            <p id="stats_modal_caption" style="display:block;position:relative;top:60px;color:#0d0d0d;">Modal Caption..</p>
+            <p align="left" style="display:block;position:relative;top:40px;color:black;border-bottom: 1px solid #00551D;">Stats:</p>
+            <p id="stats_modal_caption" style="display:block;position:relative;top:48px;color:#0d0d0d;">Modal Caption..</p>
+
+            <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
+            <p id="stats_modal_info" style="display:block;position:relative;top:16px;color:#0d0d0d;">Modal Info..</p>
           </div>
         </div>
 		  </div>
@@ -412,8 +414,8 @@
             }
 
 						
-						let stats = await window.getStats(session_id, apache_token, assignment_id);
-						//let stats = '["8","6","8","7.5"]';
+						//let stats = await window.getStats(session_id, apache_token, assignment_id);
+						let stats = '["8","6","8","7.5"]';
 						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
@@ -572,8 +574,9 @@
 
 		
 							document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
-							document.getElementById("stats_modal_caption").style.top = "50px";
-              document.getElementById("stats_modal_caption").innerHTML = "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
+							document.getElementById("stats_modal_caption").style.top = "48px";
+            document.getElementById("stats_modal_caption").innerHTML = "Low: " + low + ", Median: " + median + ", High: " + high + "<br>" + "Mean: " + mean; 
+              document.getElementById("stats_modal_info").innerHTML = "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
 
 							document.getElementById("stats_modal_content").style.height = "465px";
 
