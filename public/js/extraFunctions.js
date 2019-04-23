@@ -271,8 +271,7 @@ let generate_pdf = function(index) {
       $('#pdf-container').css('height', $(window).height() + 'px');
     }
 
-    let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content};
-    let loadingTask = pdfjsLib.getDocument(pdfInitParams);
+    let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content}; let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
       let pageNumber = 1;
 
