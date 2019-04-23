@@ -253,6 +253,7 @@
 				//document.getElementById("there_are_stats").style.display = "none";
         $("#there_are_stats").hide();
         $("#there_are_no_stats").show();
+        document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
 				document.getElementById("stats_modal_caption").style.top = "7px";
 				document.getElementById("stats_modal_content").style.height = "80px";
 				//document.getElementById("stats_modal_content").style.margin = "300px auto";
@@ -384,11 +385,12 @@
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+
 					if (!isNaN(cell.getRow().getData().score)) {
 						noStats();
 						document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
 						//document.getElementById("stats_modal_title").innerHTML = "";
-						//document.getElementById('stats_modal').style.display = "inline-block";
+						document.getElementById('stats_modal').style.display = "inline-block";
             //$("#there_are_stats").hide();
             //$("#there_are_no_stats").show();
             //document.getElementById("stats_modal_caption").style.top = "7px";
@@ -571,13 +573,13 @@
 		
 							document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
 							document.getElementById("stats_modal_caption").style.top = "50px";
-              document.getElementById("stats_modal_caption").innerHTML = "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
+              document.getElementById("stats_modal_caption").innerHTML = "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
 
 							document.getElementById("stats_modal_content").style.height = "465px";
 
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
-              $("#there_are_stats").hide();
-              $("#there_are_no_stats").show();
+              $("#there_are_stats").show();
+              $("#there_are_no_stats").hide();
 						} else {
 							
 							noStats();
