@@ -277,7 +277,6 @@
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
-          console.log("select row");
           classesTable.selectRow(1);
 
 
@@ -295,7 +294,6 @@
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class = row.getData().classname;
 					tabledata = classesTable.getData();
-          console.log("select row");
           classesTable.deselectRow();
           classesTable.selectRow(selected_class);
           //classesTable.getRows()
@@ -312,7 +310,6 @@
 						}
 					}
 
-          console.log("select row");
           classesTable.selectRow(1);
 
 				},
@@ -589,17 +586,12 @@
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
-            console.log("AFJJAWLEJFWOEIJF");
-            console.log(response);
-          console.log("classeslength: " + response.classes.length);
-          console.log("classeslength: " + (response.classes.length == 0));
 
           if(((response.schedule)).login_fail) {
               location.href='/logout';
           }
 
           if (response.classes.length == 0) {
-            console.log("inside length 0");
 
             response.classes = 
             [
@@ -668,8 +660,6 @@
                 }
               ];
           }
-          console.log(response);
-
 					tableData = response;
 
 
