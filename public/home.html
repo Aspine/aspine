@@ -73,14 +73,18 @@
 
 		  <!-- Modal content -->
 		  <div id="stats_modal_content" class="modal-content">
-			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
-		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-        <p align="left">Graph:</p>
-		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-        <p class="divided">
-          <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:16px;color:#0d0d0d;border-bottom: 1px solid black;"><strong>Score</strong></p>
-          <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px;color:#0d0d0d;">Modal Caption..</p>
-        </p> 
+
+        <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
+        <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
+        <div id="notgraph" style="position:relative;top:20px;">
+          <p align="left" style="color:black;border-bottom: 1px solid #00551D;position:relative;top:15px;">Graph:</p>
+          <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
+
+          <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
+          <p align="left" style="display:block;position:relative;top:40px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
+
+          <p id="stats_modal_caption" style="display:block;position:relative;top:60px;color:#0d0d0d;">Modal Caption..</p>
+        </div>
 		  </div>
 
 		</div>
@@ -385,6 +389,12 @@
 						let assignment = cell.getRow().getData().name;
 						let score = cell.getRow().getData().score;
 						let max_score = cell.getRow().getData().max_score;
+            let date_assigned = cell.getRow().getData().date_assigned;
+            let date_due = cell.getRow().getData().date_due;
+            let assignment_feedback = cell.getRow().getData().feedback;
+            if (assignment_feedback == "") {
+            assignment_feedback = "None";
+            }
 
 						
 						//let stats = await window.getStats(session_id, apache_token, assignment_id);
@@ -547,10 +557,11 @@
 
 		
 							document.getElementById("stats_modal_title").innerHTML = assignment.substring(0, 30);
-							document.getElementById("stats_modal_caption").style.top = "30px";
-              document.getElementById("stats_modal_caption").innerHTML = "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + score + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + max_score + "<p>Assigment Feedback: " + median + "</p>";
+							document.getElementById("stats_modal_caption").style.top = "50px";
+              document.getElementById("stats_modal_caption").innerHTML = "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
 
-							document.getElementById("stats_modal_content").style.height = "365px";
+							document.getElementById("stats_modal_content").style.height = "465px";
+
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
 						} else {
 							
