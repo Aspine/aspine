@@ -668,3 +668,16 @@ p#add-calendar-error {
 .select-items div:hover, .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+
+/*For adding horizontal lines to stats modal*/
+.divided {
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  flex-grow: 1;
+  border-bottom: 1px solid black;
+  margin: 5px
+}
