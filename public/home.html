@@ -383,8 +383,8 @@
 						let max_score = cell.getRow().getData().max_score;
 
 						
-						let stats = await window.getStats(session_id, apache_token, assignment_id);
-						//let stats = '["8","6","8","7.5"]';
+						//let stats = await window.getStats(session_id, apache_token, assignment_id);
+						let stats = '["8","6","8","7.5"]';
 						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
@@ -544,7 +544,7 @@
 		
 							document.getElementById("stats_modal_title").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
 							document.getElementById("stats_modal_caption").style.top = "30px";
-							document.getElementById("stats_modal_caption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
+            document.getElementById("stats_modal_caption").innerHTML = "<strong>Score</strong>" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
 
 							document.getElementById("stats_modal_content").style.height = "365px";
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
