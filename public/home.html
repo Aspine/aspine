@@ -75,15 +75,22 @@
 		  <div id="stats_modal_content" class="modal-content">
 
         <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
-        <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-        <div id="notgraph" style="position:relative;top:20px;">
-          <p align="left" style="color:black;border-bottom: 1px solid #00551D;position:relative;top:15px;">Graph:</p>
-          <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
+        <div id="there_are_no_stats">
+            <p id="no_stats_caption" style="display:block;position:relative;top:7px;color:#0d0d0d;width:400px;margin:auto;">No Statistics information for this assignment.</p>
 
-          <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
-          <p align="left" style="display:block;position:relative;top:40px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
+        </div>
 
-          <p id="stats_modal_caption" style="display:block;position:relative;top:60px;color:#0d0d0d;">Modal Caption..</p>
+        <div id="there_are_stats">
+          <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
+          <div id="notgraph" style="position:relative;top:20px;">
+            <p align="left" style="color:black;border-bottom: 1px solid #00551D;position:relative;top:15px;">Graph:</p>
+            <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
+
+            <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
+            <p align="left" style="display:block;position:relative;top:40px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
+
+            <p id="stats_modal_caption" style="display:block;position:relative;top:60px;color:#0d0d0d;">Modal Caption..</p>
+          </div>
         </div>
 		  </div>
 
@@ -242,11 +249,11 @@
 				
 			}
 			let noStats = function() {
-				document.getElementById('stats_plot').style.display = "none";
-				document.getElementById("stats_plot").style.display = "none";
-				document.getElementById("stats_modal_caption").innerHTML = "No statistics information for this assignment.";
+				//document.getElementById("there_are_stats").style.display = "none";
+				//document.getElementById("there_are_stats").style.display = "none";
+        $("#there_are_stats").hide();
+        $("#there_are_no_stats").show();
 				document.getElementById("stats_modal_caption").style.top = "7px";
-				document.getElementById("stats_modal_title").innerHTML = "";
 				document.getElementById("stats_modal_content").style.height = "80px";
 				//document.getElementById("stats_modal_content").style.margin = "300px auto";
 				document.getElementById("stats_modal_content").style.top = "140px";
@@ -379,9 +386,15 @@
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
 					if (!isNaN(cell.getRow().getData().score)) {
 						noStats();
-						document.getElementById("stats_modal_caption").innerHTML = "Loading Statistics...";
-						document.getElementById("stats_modal_title").innerHTML = "";
-						document.getElementById('stats_modal').style.display = "inline-block";
+						document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
+						//document.getElementById("stats_modal_title").innerHTML = "";
+						//document.getElementById('stats_modal').style.display = "inline-block";
+            //$("#there_are_stats").hide();
+            //$("#there_are_no_stats").show();
+            //document.getElementById("stats_modal_caption").style.top = "7px";
+            //document.getElementById("stats_modal_content").style.height = "80px";
+            //document.getElementById("stats_modal_content").style.margin = "300px auto";
+            //document.getElementById("stats_modal_content").style.top = "140px";
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
 						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
@@ -393,12 +406,12 @@
             let date_due = cell.getRow().getData().date_due;
             let assignment_feedback = cell.getRow().getData().feedback;
             if (assignment_feedback == "") {
-            assignment_feedback = "None";
+              assignment_feedback = "None";
             }
 
 						
-						//let stats = await window.getStats(session_id, apache_token, assignment_id);
-						let stats = '["8","6","8","7.5"]';
+						let stats = await window.getStats(session_id, apache_token, assignment_id);
+						//let stats = '["8","6","8","7.5"]';
 						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
@@ -556,13 +569,15 @@
 							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("stats_modal_title").innerHTML = assignment.substring(0, 30);
+							document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
 							document.getElementById("stats_modal_caption").style.top = "50px";
               document.getElementById("stats_modal_caption").innerHTML = "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high + "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due + "<br>Assignment Feedback: " + assignment_feedback;
 
 							document.getElementById("stats_modal_content").style.height = "465px";
 
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
+              $("#there_are_stats").hide();
+              $("#there_are_no_stats").show();
 						} else {
 							
 							noStats();
