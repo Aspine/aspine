@@ -83,7 +83,8 @@
         <div id="there_are_stats">
           <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
           <div id="notgraph" style="position:relative;top:20px;">
-            <p align="left" style="color:black;position:relative;top:15px;border-bottom: 1px solid #00551D;">Graph:</p>
+            <p align="left" style="color:black;position:relative;top:15px;border-bottom: 1px solid #00551D;"><strong>Graph:</strong></p>
+            <!--border-bottom: 1px solid #00551D;-->
 
             <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
             <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
@@ -92,8 +93,8 @@
             <!--<p align="left" style="display:block;position:relative;top:40px;color:black;">Stats:</p>-->
 
             <div id="stats_info" style="top:5px;position:relative;">
-              <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;">Info:</p>
-              <p id="stats_modal_info" style="display:block;position:relative;top:16px;color:#0d0d0d;">Modal Info..</p>
+              <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;"><strong>Info:</strong></p>
+              <p id="stats_modal_info" style="display:block;position:relative;top:23px;color:#0d0d0d;">Modal Info..</p>
               <div id="feedback_container" style="display:block;position:relative;top:36px;color:#0d0d0d;overflow:auto;width:100%;height:70px">
                 <p id="stats_modal_feedback" align="left" style="color:black;">Modal Feedback</p>
               </div>
@@ -416,12 +417,14 @@
             let date_due = cell.getRow().getData().date_due;
             let assignment_feedback = cell.getRow().getData().feedback;
             if (assignment_feedback == "") {
-              assignment_feedback = "From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square. From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square.";
+              assignment_feedback = "None";
+
+              //"From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square. From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square.";
             }
 
 						
-						//let stats = await window.getStats(session_id, apache_token, assignment_id);
-						let stats = '["8","6","8","7.5"]';
+						let stats = await window.getStats(session_id, apache_token, assignment_id);
+						//let stats = '["8","6","8","7.5"]';
 						//let stats = 'No Statistics Data for this assignment';
 
 						if (stats.indexOf("[") === 0) {
