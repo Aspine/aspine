@@ -39,51 +39,54 @@ module.exports = {
 // Returns object of classes
 async function scrape_student(username, password) {
 
-	//Spawn class scrapers
-	let class_scrapers = [];
-	for(let i = 0; i < CLASS_THREADS; i++) {
-		class_scrapers[i] = scrape_class(username, password, i);
-	}
+	////Spawn class scrapers
+	//let class_scrapers = [];
+	//for(let i = 0; i < CLASS_THREADS; i++) {
+	//	class_scrapers[i] = scrape_class(username, password, i);
+	//}
 
-  // Spawn pdf scrapers
-	let pdf_scrapers = [];
-  for (let i = 0; i < PDF_THREADS; i++) {
-    pdf_scrapers[i] = scrape_pdf(username, password, i);
-  }
+  //// Spawn pdf scrapers
+	//let pdf_scrapers = [];
+  //for (let i = 0; i < PDF_THREADS; i++) {
+  //  pdf_scrapers[i] = scrape_pdf(username, password, i);
+  //}
 
 	// Spawn schedule scraper
   let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
 
 	// Spawn recent activity scraper
-  let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
+  //let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
 
 	// Await on all class scrapers
-	return {
-		currentTerm: {
-      classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean)
-    },
-    terms: {
-      current: {
-        classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
-      },
-      q1: {
-        classes: (await Promise.all(class_scrapers)).slice(10, 20).filter(Boolean),
-      },
-      q2: {
-        classes: (await Promise.all(class_scrapers)).slice(20, 30).filter(Boolean),
-      },
-      q3: {
-        classes: (await Promise.all(class_scrapers)).slice(30, 40).filter(Boolean),
-      },
-      q4: {
-        classes: (await Promise.all(class_scrapers)).slice(40, 50).filter(Boolean),
-      },
-    },
-		schedule: await schedule_scraper,
-		recent: await recent_scraper,
-    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
-    username: username,
-	}
+	//return {
+	//	currentTerm: {
+  //    classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean)
+  //  },
+  //  terms: {
+  //    current: {
+  //      classes: (await Promise.all(class_scrapers)).slice(0, 10).filter(Boolean),
+  //    },
+  //    q1: {
+  //      classes: (await Promise.all(class_scrapers)).slice(10, 20).filter(Boolean),
+  //    },
+  //    q2: {
+  //      classes: (await Promise.all(class_scrapers)).slice(20, 30).filter(Boolean),
+  //    },
+  //    q3: {
+  //      classes: (await Promise.all(class_scrapers)).slice(30, 40).filter(Boolean),
+  //    },
+  //    q4: {
+  //      classes: (await Promise.all(class_scrapers)).slice(40, 50).filter(Boolean),
+  //    },
+  //  },
+	//	schedule: await schedule_scraper,
+	//	recent: await recent_scraper,
+  //  pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
+  //  username: username,
+	//}
+  return {
+    schedule: await schedule_scraper,
+  }
 }
 
 
@@ -708,7 +711,8 @@ async function scrape_schedule(username, password, i) {
       resolve({"login_fail": true});
     }
 
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+
+		let schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 			{"credentials":"include",
 				"headers":{"Connection": "keep-alive",
 					"Upgrade-Insecure-Requests": "1",
@@ -725,17 +729,47 @@ async function scrape_schedule(username, password, i) {
 				"body":null,
 				"method":"GET",
 				"mode":"cors"}));
+    
+
+
+    if (schedule_page.includes("Matrix view")) {
+
+      schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=4/26/2019&userEvent=0",
+        {"credentials":"include",
+          "headers":{
+            "Connection": "keep-alive",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-US,en",
+            "DNT": "1",
+            "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Cookie": "deploymentId=x2sis; JSESSIONID=207E4F01FBD92B205106586E431A7D26; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1711451972.1556283231"
+          },
+          "referrer":"https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
+          "referrerPolicy":"strict-origin-when-cross-origin",
+          "body":null,
+          "method":"GET",
+          "mode":"cors"});
+    } 
+
+    let $ = cheerio.load(schedule_page);
 		let data = {black:[], silver:[]};
-		$('td[style="width: 125px"]').each(function(i, elem) {
-			const parts = $(this).html().trim().split('<br>').slice(0, 4);
-			const period = $(this).parentsUntil('td').prev().find('th').html().trim();
-			const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
-			if(i % 2 == 0) {
-				data.black[i/2] = block;
-			} else {
-				data.silver[Math.floor(i/2)] = block;
-			}
-		});
+
+    $('td[style="width: 125px"]').each(function(i, elem) {
+      const parts = $(this).html().trim().split('<br>').slice(0, 4);
+      const period = $(this).parentsUntil('td').prev().find('th').html().trim();
+      const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
+      if(i % 2 == 0) {
+        data.black[i/2] = block;
+      } else {
+        data.silver[Math.floor(i/2)] = block;
+      }
+    });
+
 		log(i, "schedule", data);
 		resolve(data);
 	});
@@ -758,6 +792,7 @@ function log(thread, name, obj) {
 	} else {
 		//console.log(`${thread}: ${name}\n`);
 	}
+
 }
 
 async function fetch_file(url, options) {
@@ -864,33 +899,38 @@ async function scrape_recent(username, password, i) {
 
 // ------------ TESTING ONLY -----------------
 if(require.main === module) {
-	let prompt = require('prompt');
-	let schema = {
-		properties: {
-			username: {
-				pattern: /^[0-9]+$/,
-				message: 'Username must be your student id',
-				required: true
-			},
-			password: {
-				hidden: true,
-				required: true
-			}
-		}
-	};
+  async function returnCole() {
+    console.log(JSON.stringify(await scrape_student("8006697", "student")));
+  }
 
-	prompt.start();
-	prompt.get(schema, async function(err, result) {
-    // Send Stringified scrape_student() to samplejson.json
-    fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
-      if (err) throw err;
-    });
+  returnCole();
+	//let prompt = require('prompt');
+	//let schema = {
+	//	properties: {
+	//		username: {
+	//			pattern: /^[0-9]+$/,
+	//			message: 'Username must be your student id',
+	//			required: true
+	//		},
+	//		password: {
+	//			hidden: true,
+	//			required: true
+	//		}
+	//	}
+	//};
 
-    // Print Stringified scrape_student() - good for checking json return
-		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-    
-    // Print scrape_student() - good for checking fetch html return
-		//console.log((await scrape_student(result.username, result.password)));
+	//prompt.start();
+	//prompt.get(schema, async function(err, result) {
+  //  // Send Stringified scrape_student() to samplejson.json
+  //  //fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
+  //  //  if (err) throw err;
+  //  //});
+
+  //  // Print Stringified scrape_student() - good for checking json return
+	//	console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+  //  
+  //  // Print scrape_student() - good for checking fetch html return
+	//	//console.log((await scrape_student(result.username, result.password)));
  
-	});
+	//});
 }
