@@ -128,15 +128,15 @@ function getLightColor(gradeToBeColored) {
   }
 
 	if (parseFloat(gradeToBeColored) >= 89.5) {
-		return "#99ff66";
+		return "#3d995c";
 	} else if (parseFloat(gradeToBeColored) >= 79.5) {
-		return "#66ccff";
+		return "#a3a3f5";
 	} else if (parseFloat(gradeToBeColored) >= 69.5) {
-		return "#ffff66";
+		return "#eba947";
 	} else if (parseFloat(gradeToBeColored) >= 59.5) {
-		return "#ff8533";
+		return "#ebb147";
 	} else if (parseFloat(gradeToBeColored) >= 0) {
-		return "#ff4d4d";
+		return "#eb4747";
 	} else {
 		return "black";
 	}
