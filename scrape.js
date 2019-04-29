@@ -613,6 +613,46 @@ async function scrape_schedule(username, password, i) {
 	});
 }
 
+// Returns body of fetch
+async function fetch_body(url, options) {
+	return (await fetch(url, options)).text();
+}
+
+async function fetch_pdf(url, options) {
+	return (await fetch(url, options)).buffer();
+}
+
+
+// Logger can easily be turned off or on and modified
+function log(thread, name, obj) {
+	if(obj) {
+		//console.log(`${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
+	} else {
+		//console.log(`${thread}: ${name}\n`);
+	}
+}
+
+async function fetch_file(url, options) {
+
+  let res = (await fetch(url, options));
+  let readable = res.body;
+
+  return new Promise((resolve, reject) => {
+    let chunks = [];
+
+    readable.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    readable.on("end", function() {
+      process.stdout.setDefaultEncoding('binary');
+      pdf_out = (Buffer.concat(chunks).toString('binary'));
+      resolve(pdf_out);
+    });
+  });
+
+}
+
 // --------------Compute Functions------------
 
 
@@ -637,12 +677,12 @@ if(require.main === module) {
 	prompt.start();
 	prompt.get(schema, async function(err, result) {
     // Send Stringified scrape_student() to samplejson.json
-    fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
-      if (err) throw err;
-    });
+    //fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
+    //  if (err) throw err;
+    //});
 
     // Print Stringified scrape_student() - good for checking json return
-		//console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
     
     // Print scrape_student() - good for checking fetch html return
 		//console.log((await scrape_student(result.username, result.password)));
