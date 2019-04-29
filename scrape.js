@@ -549,7 +549,8 @@ async function scrape_schedule(username, password, i) {
       resolve({"login_fail": true});
     }
 
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+
+		let schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
 			{"credentials":"include",
 				"headers":{"Connection": "keep-alive",
 					"Upgrade-Insecure-Requests": "1",
@@ -566,60 +567,50 @@ async function scrape_schedule(username, password, i) {
 				"body":null,
 				"method":"GET",
 				"mode":"cors"}));
+    
+
+
+    if (schedule_page.includes("Matrix view")) {
+
+      schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
+        {"credentials":"include",
+          "headers":{
+            "Connection": "keep-alive",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-US,en",
+            "DNT": "1",
+            "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1711451972.1556283231"
+          },
+          "referrer":"https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
+          "referrerPolicy":"strict-origin-when-cross-origin",
+          "body":null,
+          "method":"GET",
+          "mode":"cors"}));
+    } 
+
+    let $ = cheerio.load(schedule_page);
 		let data = {black:[], silver:[]};
-		$('td[style="width: 125px"]').each(function(i, elem) {
-			const parts = $(this).html().trim().split('<br>').slice(0, 4);
-			const period = $(this).parentsUntil('td').prev().find('th').html().trim();
-			const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
-			if(i % 2 == 0) {
-				data.black[i/2] = block;
-			} else {
-				data.silver[Math.floor(i/2)] = block;
-			}
-		});
+
+    $('td[style="width: 125px"]').each(function(i, elem) {
+      const parts = $(this).html().trim().split('<br>').slice(0, 4);
+      const period = $(this).parentsUntil('td').prev().find('th').html().trim();
+      const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
+      if(i % 2 == 0) {
+        data.black[i/2] = block;
+      } else {
+        data.silver[Math.floor(i/2)] = block;
+      }
+    });
+
 		log(i, "schedule", data);
 		resolve(data);
 	});
-}
-
-// Returns body of fetch
-async function fetch_body(url, options) {
-	return (await fetch(url, options)).text();
-}
-
-async function fetch_pdf(url, options) {
-	return (await fetch(url, options)).buffer();
-}
-
-
-// Logger can easily be turned off or on and modified
-function log(thread, name, obj) {
-	if(obj) {
-		//console.log(`${thread}:\n\t${name}:\n${util.inspect(obj, false, null, true)}\n`);
-	} else {
-		//console.log(`${thread}: ${name}\n`);
-	}
-}
-
-async function fetch_file(url, options) {
-
-  let res = (await fetch(url, options));
-  let readable = res.body;
-
-  return new Promise((resolve, reject) => {
-    let chunks = [];
-
-    readable.on("data", function (chunk) {
-      chunks.push(chunk);
-    });
-
-    readable.on("end", function() {
-      process.stdout.setDefaultEncoding('binary');
-      pdf_out = (Buffer.concat(chunks).toString('binary'));
-      resolve(pdf_out);
-    });
-  });
-
 }
 
 // --------------Compute Functions------------
