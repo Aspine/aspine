@@ -734,7 +734,7 @@ async function scrape_schedule(username, password, i) {
 
     if (schedule_page.includes("Matrix view")) {
 
-      schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=4/26/2019&userEvent=0",
+      schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
         {"credentials":"include",
           "headers":{
             "Connection": "keep-alive",
@@ -747,13 +747,13 @@ async function scrape_schedule(username, password, i) {
             "DNT": "1",
             "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
             "Accept-Encoding": "gzip, deflate, br",
-            "Cookie": "deploymentId=x2sis; JSESSIONID=207E4F01FBD92B205106586E431A7D26; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1711451972.1556283231"
+            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1711451972.1556283231"
           },
           "referrer":"https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
           "referrerPolicy":"strict-origin-when-cross-origin",
           "body":null,
           "method":"GET",
-          "mode":"cors"});
+          "mode":"cors"}));
     } 
 
     let $ = cheerio.load(schedule_page);
