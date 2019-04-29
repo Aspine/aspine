@@ -113,21 +113,22 @@ function getColor(gradeToBeColored) {
 	}
 }
 
+let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
 function getLightColor(gradeToBeColored) {
   if (vip_username_list.includes(tableData.username)) {
     return "#1E8541";
   }
 
 	if (parseFloat(gradeToBeColored) >= 89.5) {
-		return "#99ff66";
+		return lightColors[0];
 	} else if (parseFloat(gradeToBeColored) >= 79.5) {
-		return "#66ccff";
+		return lightColors[1];
 	} else if (parseFloat(gradeToBeColored) >= 69.5) {
-		return "#ffff66";
+		return lightColors[2];
 	} else if (parseFloat(gradeToBeColored) >= 59.5) {
-		return "#ff8533";
+		return lightColors[3];
 	} else if (parseFloat(gradeToBeColored) >= 0) {
-		return "#ff4d4d";
+		return lightColors[4];
 	} else {
 		return "black";
 	}
