@@ -114,7 +114,10 @@
 		</div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
-            <div id="mostRecentTable"></div>
+            <div id="mostRecentDiv">
+              <h3 align="left"> Most Recent Activity:</h3>
+              <div id="mostRecentTable"></div>
+            </div>
             <div id="categoriesTable"></div>
             <div id="assignmentsTable"></div>
         </div>
@@ -312,6 +315,7 @@
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          $("#mostRecentDiv").hide();
           classesTable.selectRow(1);
 
 
@@ -393,6 +397,9 @@
 					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
+
+          $("#mostRecentDiv").hide();
+
           classesTable.selectRow(1);
 
 
@@ -963,6 +970,8 @@
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          $("#mostRecentDiv").hide();
+
           assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
@@ -1029,6 +1038,10 @@
             } else {
                 document.getElementById("small_clock").style.display = "block";
                 document.getElementById("small_clock_period").style.display = "block";
+            }
+            if (tab_name =="grades") {
+                            //$("#mostRecentDiv").show();
+
             }
 
             if (tab_name == "reports") {
