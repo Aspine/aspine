@@ -114,7 +114,7 @@
 		</div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
-            <div id="mostRecentDiv">
+            <div id="mostRecentDiv" style="display:none">
               <h3 align="left"> Most Recent Activity:</h3>
               <div id="mostRecentTable"></div>
             </div>
@@ -307,12 +307,12 @@
 				layout:"fitColumns",
 
 				columns: [
-					{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
-					{title:"Class", field:"classname", formatter: rowFormatter, headerSort: false},
+					{title:"Date", field:"date", formatter: rowFormatter},
+					{title:"Class", field:"classname", formatter: classFormatter},
 					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
-					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
           $("#mostRecentDiv").hide();
@@ -389,12 +389,13 @@
 				layout:"fitColumns",
 
 				columns: [
-					{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
-					{title:"Class", field:"classname", formatter: rowFormatter, headerSort: false},
+					//{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
+					{title:"Date", field:"date", formatter: rowFormatter},
+					{title:"Class", field:"classname", formatter: classFormatter},
 					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
-					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
 					],
         rowClick:function(e, row){ //trigger an alert message when the row is clicked
 
@@ -949,7 +950,9 @@
           //Stuff to do now that tableData is initialized
 
 					scheduleTable.setData(tableData.schedule.black);
-					mostRecentTable.setData(tableData.recent.recentActivityArray.splice(0, 3));
+          $("#mostRecentDiv").show();
+					mostRecentTable.setData(tableData.recent.recentActivityArray.splice(0, 5));
+
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
 

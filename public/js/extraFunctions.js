@@ -169,6 +169,42 @@ let rowFormatter = function(cell, formatterParams) {
 	}
 }
 
+let classColors = [
+  "#FF7070",
+  "#FFB170",
+  "#00Ad00",
+  "#008282",
+  "#008500",
+  "#006464",
+  "#D90000",
+  "#00FFFF"
+]
+
+let classIndex = function(classname) {
+  classesArray = tableData.classes.map(x => x.name);
+  return (classesArray.indexOf(classname)) % 8;
+
+}
+
+let classFormatter = function(cell, formatterParams) {
+	let rowClass = cell.getRow().getData().classname;
+
+  classColor = classColors[classIndex(rowClass)];
+
+	let value = cell.getValue();
+
+  if (vip_username_list.includes(tableData.username)) {
+			return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
+
+  }
+
+	if (classColor === "black") {
+		return value;
+	} else {
+		return "<span style='color:" + classColor + "; font-weight:bold;'>" + value + "</span>";
+	}
+}
+
 let weightFormatter = function(cell, formatterParams) {
 	let value = cell.getValue();
 	let rowColor = cell.getRow().getData().color;
