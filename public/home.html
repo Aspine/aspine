@@ -36,8 +36,6 @@
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 		<!--===============================================================================================-->
-		<link rel="stylesheet" type="text/css" href="css/util.css">
-		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">
@@ -116,6 +114,7 @@
 		</div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
+            <div id="mostRecentTable"></div>
             <div id="categoriesTable"></div>
             <div id="assignmentsTable"></div>
         </div>
@@ -377,6 +376,62 @@
 
 
 			});
+
+			let mostRecentTable = new Tabulator("#mostRecentTable", {
+
+
+			//	height: 400,
+
+				layout:"fitColumns",
+
+				columns: [
+					{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
+					{title:"Class", field:"classname", formatter: rowFormatter, headerSort: false},
+					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
+					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
+					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
+					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          classesTable.selectRow(1);
+
+
+            var elem = document.getElementById("default_open");
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            // If cancelled, don't dispatch our event
+            var canceled = !elem.dispatchEvent(evt);
+
+          assignmentsTable.clearFilter();
+					document.getElementById("categoriesTable").style.display = "block";
+					document.getElementById("assignmentsTable").style.display = "block";
+					selected_class = row.getData().classname;
+					tabledata = classesTable.getData();
+          classesTable.deselectRow();
+          classesTable.selectRow(selected_class);
+          //classesTable.getRows()
+          //    .filter(row => row.getData().name == selected_class)
+          //    .forEach(row => row.toggleSelect());
+
+
+
+					for(let i in tabledata) {
+						if(tabledata[i].name == row.getData().classname) {
+							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
+							return;
+						}
+					}
+
+          classesTable.selectRow(1);
+
+				},
+
+			});
+
 
 			//create Tabulator on DOM element with id "assignmentsTable"
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
@@ -887,6 +942,7 @@
           //Stuff to do now that tableData is initialized
 
 					scheduleTable.setData(tableData.schedule.black);
+					mostRecentTable.setData(tableData.recent.recentActivityArray.splice(0, 3));
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
