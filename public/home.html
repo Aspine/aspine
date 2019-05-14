@@ -951,7 +951,7 @@
 
 					scheduleTable.setData(tableData.schedule.black);
           $("#mostRecentDiv").show();
-					mostRecentTable.setData(tableData.recent.recentActivityArray.splice(0, 5));
+					mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
 
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
