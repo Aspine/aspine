@@ -34,7 +34,9 @@
 		<!--===============================================================================================-->
 		<script type="text/javascript" src="./js/buttonFunctions.js"></script>
 		<!--===============================================================================================-->
-		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+		<!--<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">-->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">
+
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
@@ -362,6 +364,7 @@
 
                 selectable:1,
 				layout:"fitColumns",
+        layoutColumnsOnNewData:true,
 				columns: [
 					{title:"Category", field:"category", formatter: rowFormatter, headerSort: false},
 					{title:"Weight", field:"weight", formatter:weightFormatter, headerSort: false},
@@ -915,21 +918,27 @@
 
 					let activityArray = tableData.recent.recentActivityArray.slice();
 					for (let i = 0; i < activityArray.length; i++) {
-						try {
-						let assignmentName = activityArray[i].assignment;
-						let className = activityArray[i].classname;
-						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
+            try {
+              let assignmentName = activityArray[i].assignment;
+              let className = activityArray[i].classname;
+              let classIndex = tableData.classes.map(x => x.name).indexOf(className);
 
-						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+              let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
-						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
-						tableData.recent.recentActivityArray[i].className = className;
-						tableData.recent.recentActivityArray[i].classIndex = classIndex;
-						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+              console.log("assignmentName" + assignmentName);
+              console.log("className" + className);
+              console.log("classIndex" + classIndex);
+              console.log("assignmentIndex" + assignmentIndex);
 
-						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
-						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
-						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+              tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
+              tableData.recent.recentActivityArray[i].className = className;
+              tableData.recent.recentActivityArray[i].classIndex = classIndex;
+              tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+
+              tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
+              tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
+              tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+
 						} catch(err) {
 							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
 

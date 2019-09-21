@@ -421,11 +421,15 @@ async function scrape_academics(session_id) {
 			"mode":"cors"}));
 	let data = {"classes": []};
 	$("#dataGrid a").each(function(i, elem) {
-		data.classes[i] = {};
-		data.classes[i].name = $(this).text();
-		data.classes[i].grade = $(this).parent()
-			.nextAll().eq(5).text().trim();
-		data.classes[i].id = $(this).parent().attr("id");
+    if ($(this).parent().nextAll().eq(0).text().trim() == "FY" || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+      data.classes[i] = {};
+      // data.classes[i].name = $(this).text();
+      data.classes[i].name = $(this).parent()
+        .nextAll().eq(3).text().trim();
+      data.classes[i].grade = $(this).parent()
+        .nextAll().eq(5).text().trim();
+      data.classes[i].id = $(this).parent().attr("id");
+    }
 	});
 	data.oid = $("input[name=selectedStudentOid]").attr("value");
 	data.apache_token = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
@@ -492,8 +496,10 @@ async function scrape_assignments(session_id, apache_token) {
   while(true) {
     $("tr.listCell.listRowHeight").each(function(i, elem) {
       let row = {};
-      row["name"] = $(this).find("a").first().text();
-      row["category"] = $(this).children().eq(2).text().trim();
+      //row["name"] = $(this).find("a").first().text();
+      //row["category"] = $(this).children().eq(2).text().trim();
+      row["name"] = $(this).children().eq(2).text().trim();
+      row["category"] = $(this).find("a").first().text();
       row["date_assigned"] = $(this).children().eq(3).text().trim();
       row["date_due"] = $(this).children().eq(4).text().trim();
       row["feedback"] = $(this).children().eq(6).text().trim();

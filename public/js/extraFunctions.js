@@ -207,6 +207,8 @@ let classFormatter = function(cell, formatterParams) {
 
 let weightFormatter = function(cell, formatterParams) {
 	let value = cell.getValue();
+  console.log(value);
+
 	let rowColor = cell.getRow().getData().color;
 
   if (value.indexOf(".") != -1) {
