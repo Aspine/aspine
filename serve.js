@@ -35,9 +35,12 @@ client.on("error", function (err) {
 
 if(!args._.includes("insecure")) {
     // Certificate
-    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
+    // const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
+    // const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
+    // const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/cert.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/chain.pem', 'utf8');
 
     const credentials = {
         key: privateKey,
@@ -47,9 +50,9 @@ if(!args._.includes("insecure")) {
 
     app.all('*', ensureSecure); // at top of routing calls
 
-    http.createServer(app).listen(80)
-    https.createServer(credentials, app).listen(443, () => {
-        console.log('HTTPS Server running on port 443');
+    http.createServer(app).listen(8090)
+    https.createServer(credentials, app).listen(4430, () => { //443
+        console.log('HTTPS Server running on port 4430'); //443
     });
 
     function ensureSecure(req, res, next){
