@@ -58,13 +58,15 @@ async function scrape_student(username, password) {
   let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
 
 	// Await on all class scrapers
-	return {
-		classes: (await Promise.all(class_scrapers)).filter(Boolean),
-		schedule: await schedule_scraper,
-		recent: await recent_scraper,
+  return {
+    classes: (await Promise.all(class_scrapers)).filter(Boolean),
+    schedule: await schedule_scraper,
+    recent: await recent_scraper,
     pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
-    username: username,
-	}
+    username: (await Promise.all(pdf_scrapers)).filter(Boolean)
+    }
+  //return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
+
 }
 
 async function scrape_pdf(username, password, i) {

@@ -302,8 +302,7 @@ let generate_pdf = function(index) {
   if (!pdfrendering) {
     pdfrendering = true;
     let adjustedHeight = $(window).height() - 280;
-    if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-      $('#pdf-container').css('height', adjustedHeight + 'px');
+    if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) { $('#pdf-container').css('height', adjustedHeight + 'px');
     } else {
       $('#pdf-container').css('height', $(window).height() + 'px');
     }
