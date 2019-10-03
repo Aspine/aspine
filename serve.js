@@ -35,9 +35,12 @@ client.on("error", function (err) {
 
 if(!args._.includes("insecure")) {
     // Certificate
-    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
+    // const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
+    // const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
+    // const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/cert.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/chain.pem', 'utf8');
 
     const credentials = {
         key: privateKey,
@@ -47,9 +50,9 @@ if(!args._.includes("insecure")) {
 
     app.all('*', ensureSecure); // at top of routing calls
 
-    http.createServer(app).listen(80)
-    https.createServer(credentials, app).listen(443, () => {
-        console.log('HTTPS Server running on port 443');
+    http.createServer(app).listen(8090)
+    https.createServer(credentials, app).listen(4430, () => { //443
+        console.log('HTTPS Server running on port 4430'); //443
     });
 
     function ensureSecure(req, res, next){
@@ -100,11 +103,46 @@ app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
     if(!args._.includes("fake")) {
+        //res.send(await scraper.scrape_student(req.session.username, req.session.password));
+        //
         // USE REAL DATA:
-        res.send(await scraper.scrape_student(req.session.username, req.session.password));
+        response = await scraper.scrape_student(req.session.username, req.session.password);
+      res.send(response)
+        //if (response.classes.length == 0) {
+        //  res.sendFile('invalid.json', {root:"public"});
+
+        //} else {
+
+        //  res.send(response);
+        //}
+ 
+          //if(tableData.classes.length == 0) {
+          //  tableData.classes.push({
+          //    "name": "You Have No Classes/Assignments This Marking Period", 
+          //    "grade": "You Have No Grades This Marking Period",
+          //    "categories": {"Nothing": "1.0"},
+          //    "assignments": [{
+          //      "name": "No assignments", 
+          //      "category": "Nothing", 
+          //      "assignment_id": "GCD000000Fx62l", 
+          //      "special": "Nothing Special", 
+          //      "score": 10,
+          //      "max_score": 10,
+          //      "percentage": 100,
+          //      "color": "#ff9900"
+          //    }],
+          //    "tokens":{"session_id":"263A6A78DE0F001DDDFC8A525D31A8F0","apache_token":"572aa56a8c407a6d9a25b0a50843fc32"},
+          //    "edited":false,
+          //    "categoryGrades":{},
+          //    "decimals":2,
+          //    "type":"categoryPercent",
+          //    "calculated_grade":"100 A+",
+          //    "color":"#1E8541"
+          //  });
+
     } else {
         //USE FAKE DATA:
-        res.sendFile('sample.json', {root:"public"});
+        res.sendFile('sample2.json', {root:"public"});
     }
 });
 
@@ -119,7 +157,7 @@ app.get('/', async (req, res) => {
 app.post('/login', async (req, res) => {
 	req.session.username = req.body.username;
 	req.session.password = req.body.password;
-    res.redirect('/home.html');
+  res.redirect('/home.html');
 });
 
 app.get('/logout', async (req, res) => {

@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-
-
-
 <html lang="en">
 	<head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-149290199-1');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-138977655-1"></script>-->
+    <!--<script>-->
+      <!--window.dataLayer = window.dataLayer || [];-->
+      <!--function gtag(){dataLayer.push(arguments);}-->
+      <!--gtag('js', new Date());-->
+
+      <!--gtag('config', 'UA-138977655-1');-->
+    <!--</script>-->
+
 
 		<title>Aspine | CRLS Student Dashboard</title>
 
@@ -27,9 +44,9 @@
 		<!--===============================================================================================-->
 		<script type="text/javascript" src="./js/buttonFunctions.js"></script>
 		<!--===============================================================================================-->
-		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-		<!--===============================================================================================-->
-		<link rel="stylesheet" type="text/css" href="css/util.css">
+		<!--<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">-->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">
+
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<!--===============================================================================================-->
@@ -42,6 +59,11 @@
         <script src="js/plotly-latest.min.js"></script>
         <!--===============================================================================================-->
         <script src="js/jquery-3.3.1.min.js"></script>
+        <!--===============================================================================================-->
+        <!--<script src="pdf.js/src/pdf.js"></script>-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
+        <!--<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>-->
         <!--===============================================================================================-->
 
 
@@ -63,23 +85,52 @@
             <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
             <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
             <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
-            <button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>
+            <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
+            <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
-	    <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
+            <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
 		<div id="stats_modal" class="modal">
 
 		  <!-- Modal content -->
 		  <div id="stats_modal_content" class="modal-content">
-			  <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
-		    <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-		    <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-		    <p id="stats_modal_caption" style="display:inline-block;position:relative;top:7px">Modal Caption..</p>
+
+        <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
+        <div id="there_are_no_stats">
+            <p id="no_stats_caption" style="display:block;position:relative;top:7px;color:#0d0d0d;width:400px;margin:auto;">No Statistics information for this assignment.</p>
+
+        </div>
+
+        <div id="there_are_stats">
+          <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
+          <div id="notgraph" style="position:relative;top:20px;">
+            <p align="left" style="color:black;position:relative;top:15px;border-bottom: 1px solid #00551D;"><strong>Graph:</strong></p>
+            <!--border-bottom: 1px solid #00551D;-->
+
+            <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
+            <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
+            <p id="stats_modal_caption" style="display:none;position:relative;top:48px;color:#0d0d0d;">Modal Caption..</p>
+
+            <!--<p align="left" style="display:block;position:relative;top:40px;color:black;">Stats:</p>-->
+
+            <div id="stats_info" style="top:5px;position:relative;">
+              <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;"><strong>Info:</strong></p>
+              <p id="stats_modal_info" style="display:block;position:relative;top:23px;color:#0d0d0d;">Modal Info..</p>
+              <div id="feedback_container" style="display:block;position:relative;top:36px;color:#0d0d0d;overflow:auto;width:100%;height:70px">
+                <p id="stats_modal_feedback" align="left" style="color:black;">Modal Feedback</p>
+              </div>
+            </div>
+          </div>
+        </div>
 		  </div>
 
 		</div>
         <div id="grades" class="tabcontent">
             <div id="classesTable"></div>
+            <div id="mostRecentDiv" style="display:none">
+              <h3 align="left"> Most Recent Activity:</h3>
+              <div id="mostRecentTable"></div>
+            </div>
             <div id="categoriesTable"></div>
             <div id="assignmentsTable"></div>
         </div>
@@ -140,13 +191,64 @@
         	<div id="recentAttendance"></div>
 		
         </div>
+	<div id="reports" class="tabcontent">
 
-        	<script type="text/javascript" src="/js/clock.js"></script>
-        	<script type="text/javascript" src="/js/jscolor.js"></script>
+
+      <div class="topnav">
+
+        <div class="custom-select" style="display:inline-block;width:400px;">
+          <select id="pdf-select">
+<!--        <option value="0">Select car:</option> 
+            <option value="1">Audi</option>
+            <option value="2">BMW</option>
+            <option value="3">Citroen</option>
+            <option value="4">Ford</option>
+            <option value="5">Honda</option>
+            <option value="6">Jaguar</option>
+            <option value="7">Land Rover</option>
+            <option value="8">Mercedes</option>
+            <option value="9">Mini</option>
+            <option value="10">Nissan</option>
+            <option value="11">Toyota</option>
+            <option value="12">Volvo</option> -->
+          </select>
+        </div>
+
+        <span id="expand-pdf-icon" class="right hover" onclick="toggle_fullscreen_pdf()" style="cursor:pointer">
+          <i class="fa fa-expand" aria-hidden="true"></i>
+        </span>
+
+        <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px;">
+          |
+        </span>
+
+        <span class="right hover" onclick="zoom_in_pdf()" style="cursor:pointer">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </span>
+        <span class="right hover" onclick="generate_pdf(pdf_index)" style="cursor:pointer">
+          ZOOM
+        </span>
+        <span class="right hover" onclick="zoom_out_pdf()" style="cursor:pointer">
+          <i class="fa fa-minus" aria-hidden="true"></i>
+        </span>
+      </div>
+
+      <div id="pdf-container" style="background:#333;border: solid 3px;width:100%;height:60%;overflow-y:auto;overflow-x:auto;margin:auto;">
+        <h1 id="pdf_loading_text"> Loading... </h1>
+      <canvas id="pdf-canvas" width="400" height="400" style="margin:auto;border:1px solid black"></canvas>
+    </div>
+  </div>
+
+    <script type="text/javascript" src="/js/clock.js"></script>
+    <script type="text/javascript" src="/js/jscolor.js"></script>
 		<script type="text/javascript" src="/js/calculate_grade.js"></script>
 		<!--<script src="/js/request.js"></script>-->
 		<script src="/js/bundle.js"></script>
 		<script type="text/javascript">
+
+      ////////////////////Global Variables///////
+      let pdf_index = 0;
+      let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
 
 			// When the user clicks anywhere outside of the modal, close it
@@ -154,20 +256,39 @@
 			  if (event.target == statsModal) {
 			    hideModal();
 			  }
+        closeAllSelect();
 			});
+
 			$('#stats_plot').width($(window).width() * 7 / 11);
-			window.addEventListener('resize', function() { Plotly.Plots.resize(document.getElementById('stats_plot')); });
+			window.addEventListener('resize', function() { 
+        if ($('#stats_plot').is(":visible")) { 
+
+          Plotly.Plots.resize(document.getElementById('stats_plot')); 
+          let update_size = {
+            //width: 800,  // or any new width
+            width: $('#stats_modal_content').width(),
+            height: 120  // " "
+          };
+
+          Plotly.relayout('stats_plot', update_size);
+        }
+
+        if ($('#pdf-canvas').is(":visible") && !pdfrendering) { 
+          generate_pdf(pdf_index);
+        }
+      });
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
 				
 			}
 			let noStats = function() {
-				document.getElementById('stats_plot').style.display = "none";
-				document.getElementById("stats_plot").style.display = "none";
-				document.getElementById("stats_modal_caption").innerHTML = "No statistics information for this assignment.";
+				//document.getElementById("there_are_stats").style.display = "none";
+				//document.getElementById("there_are_stats").style.display = "none";
+        $("#there_are_stats").hide();
+        $("#there_are_no_stats").show();
+        document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
 				document.getElementById("stats_modal_caption").style.top = "7px";
-				document.getElementById("stats_modal_title").innerHTML = "";
 				document.getElementById("stats_modal_content").style.height = "80px";
 				//document.getElementById("stats_modal_content").style.margin = "300px auto";
 				document.getElementById("stats_modal_content").style.top = "140px";
@@ -199,23 +320,64 @@
 				layout:"fitColumns",
 
 				columns: [
-					{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
-					{title:"Class", field:"classname", formatter: rowFormatter, headerSort: false},
+					{title:"Date", field:"date", formatter: rowFormatter},
+					{title:"Class", field:"classname", formatter: classFormatter},
 					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
-					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          $("#mostRecentDiv").hide();
+          classesTable.selectRow(1);
+
+
+            var elem = document.getElementById("default_open");
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            // If cancelled, don't dispatch our event
+            var canceled = !elem.dispatchEvent(evt);
+
+          assignmentsTable.clearFilter();
+					document.getElementById("categoriesTable").style.display = "block";
+					document.getElementById("assignmentsTable").style.display = "block";
+					selected_class = row.getData().classname;
+					tabledata = classesTable.getData();
+          classesTable.deselectRow();
+          classesTable.selectRow(selected_class);
+          //classesTable.getRows()
+          //    .filter(row => row.getData().name == selected_class)
+          //    .forEach(row => row.toggleSelect());
+
+
+
+					for(let i in tabledata) {
+						if(tabledata[i].name == row.getData().classname) {
+							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
+							return;
+						}
+					}
+
+          classesTable.selectRow(1);
+
+				},
+
 
 			});
 			let categoriesTable = new Tabulator("#categoriesTable", {
 
 			//	height: 400,
 
+                selectable:1,
 				layout:"fitColumns",
+        layoutColumnsOnNewData:true,
 				columns: [
 					{title:"Category", field:"category", formatter: rowFormatter, headerSort: false},
-					{title:"Weight", field:"weight", formatter:rowFormatter, headerSort: false},
+					{title:"Weight", field:"weight", formatter:weightFormatter, headerSort: false},
 					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
 					{title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
 					{title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
@@ -223,8 +385,75 @@
 					//{title: "", width:1, align:"center", headerSort: false}, 
 					{title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
 					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          assignmentsTable.clearFilter();
+          assignmentsTable.addFilter([
+            {field: "category", type:"=", value: row.getData().category}
+            ]);
+				},
+
 
 			});
+
+			let mostRecentTable = new Tabulator("#mostRecentTable", {
+
+
+			//	height: 400,
+
+				layout:"fitColumns",
+
+				columns: [
+					//{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
+					{title:"Date", field:"date", formatter: rowFormatter},
+					{title:"Class", field:"classname", formatter: classFormatter},
+					{title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
+					{title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
+					{title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
+					{title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
+					],
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+
+          $("#mostRecentDiv").hide();
+
+          classesTable.selectRow(1);
+
+
+            var elem = document.getElementById("default_open");
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            // If cancelled, don't dispatch our event
+            var canceled = !elem.dispatchEvent(evt);
+
+          assignmentsTable.clearFilter();
+					document.getElementById("categoriesTable").style.display = "block";
+					document.getElementById("assignmentsTable").style.display = "block";
+					selected_class = row.getData().classname;
+					tabledata = classesTable.getData();
+          classesTable.deselectRow();
+          classesTable.selectRow(selected_class);
+          //classesTable.getRows()
+          //    .filter(row => row.getData().name == selected_class)
+          //    .forEach(row => row.toggleSelect());
+
+
+
+					for(let i in tabledata) {
+						if(tabledata[i].name == row.getData().classname) {
+							assignmentsTable.setData(tabledata[i].assignments);
+							categoriesTable.setData(tabledata[i].categoryDisplay);
+							return;
+						}
+					}
+
+          classesTable.selectRow(1);
+
+				},
+
+			});
+
 
 			//create Tabulator on DOM element with id "assignmentsTable"
 			let assignmentsTable = new Tabulator("#assignmentsTable", {
@@ -246,17 +475,24 @@
 							}
 							return {values: catCategories};
 						},
-						normatter: rowFormatter, headerSort:false,
+						formatter: rowFormatter, headerSort:false,
 					},
 					{title:"Score", field:"score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Max Score", field:"max_score", editor:"number", editorParams:{min:0, max:100, step:1,}, formatter: rowFormatter, headerSort:false,},
 					{title:"Percentage", field: "percentage", formatter: rowGradeFormatter, headerSort:false,},
 					{title: "Stats", titleFormatter: statInfoHeaderFormatter, formatter: statInfoFormatter, width:40, align:"center", cellClick: async function(e, cell){
+
 					if (!isNaN(cell.getRow().getData().score)) {
 						noStats();
-						document.getElementById("stats_modal_caption").innerHTML = "Loading Statistics...";
-						document.getElementById("stats_modal_title").innerHTML = "";
+						document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
+						//document.getElementById("stats_modal_title").innerHTML = "";
 						document.getElementById('stats_modal').style.display = "inline-block";
+            //$("#there_are_stats").hide();
+            //$("#there_are_no_stats").show();
+            //document.getElementById("stats_modal_caption").style.top = "7px";
+            //document.getElementById("stats_modal_content").style.height = "80px";
+            //document.getElementById("stats_modal_content").style.margin = "300px auto";
+            //document.getElementById("stats_modal_content").style.top = "140px";
 
 						let session_id = tableData.classes[selected_class_i].tokens.session_id;
 						let apache_token = tableData.classes[selected_class_i].tokens.apache_token;
@@ -264,6 +500,14 @@
 						let assignment = cell.getRow().getData().name;
 						let score = cell.getRow().getData().score;
 						let max_score = cell.getRow().getData().max_score;
+            let date_assigned = cell.getRow().getData().date_assigned;
+            let date_due = cell.getRow().getData().date_due;
+            let assignment_feedback = cell.getRow().getData().feedback;
+            if (assignment_feedback == "") {
+              assignment_feedback = "None";
+
+              //"From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square. From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square.";
+            }
 
 						
 						let stats = await window.getStats(session_id, apache_token, assignment_id);
@@ -272,32 +516,55 @@
 
 						if (stats.indexOf("[") === 0) {
 							stats = stats.substring(1, stats.length - 1);
+
 							stats = stats.split(",");
-							stats = stats.map(x => parseFloat(x.substring(1, stats.length)));
+							stats = stats.map(x => parseFloat(x.substring(1, x.length)));
+              console.log("Raw Stats: " + stats);
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
-							stats.push((low + median) / 2);
-							stats.push((high + median) / 2);
+              let q1 = (low + median) / 2, q3 = (high + median) / 2;
+
+              let graph_stats = [low, q1, median, q3, high];
+              console.log("Graph Stats: " + graph_stats);
+              console.log("Mean: " + mean)
 
 							var statsTrace = {
-							  x: stats,
+							  x: graph_stats,
 							  type: 'box',
 								name: " ",
+                marker:{
+                    //color: '#268A48'
+                    color: '#ff66ff'
+                  }
 							};
 
+              
 							var data = [statsTrace];
 
 							let layout = {
 								title: " ",
-								width: window.innerWidth * 10 / 15,
-								height: 100,
+								width: $('#stats_modal_content').width(),
+								height: 120,
+
 								xaxis: {
 									title: " ",
 									zeroline: true,
-									range: [0, high],
+									range: [0, 15 * max_score / 14],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								yaxis: {
-									range: [-0.5, 0.5],
+									range: [-1.15, 0.7],
+                  tickfont: {
+                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                    size: 12,
+                    color: '#000',
+                  },
 								},
+
 								margin: {
 									t: 20,
 									l: 20,
@@ -305,19 +572,94 @@
 									b: 20,
 								},
 								shapes: [
+                  //your score line
 									{
 										type: 'line',
-										x0:score,
-										y0:-0.5,
-										x1: score,
-										y1: 0.5,
+										x0:score  - (max_score / 1000),
+										y0:-0.50,
+										x1: score - (max_score / 1000),
+										y1: 0.50,
 										line: {
-											color: '#00551C',
+											color: getColor(score / max_score * 100),
 											width: 3,
 										},
-									}
+									},
+                  //mean line
+									{
+										type: 'line',
+										x0:mean - (max_score / 1000),
+										y0:-0.5,
+										x1: mean - (max_score / 1000),
+										y1: 0.5,
+										line: {
+											color: getLightColor(mean / max_score * 100),
+											width: 3,
+										},
+									},
+ 
 								],
+
+                annotations: [
+                  {
+                    x: mean - (max_score / 68),
+                    y: -.65,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Mean',
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getLightColor(mean / max_score * 100),
+                    },
+                  },
+                  {
+                    x: score - (max_score / 38),
+                    y: .65,
+                    xref: 'x',
+                    yref: 'y',
+                    text: 'Your Score',
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(score / max_score * 100),
+                    },
+                  },
+                ],
 							};
+              for (let i = 5; i <= 10; i++) {
+                  let shape = {
+                    type: 'line',
+                    x0: max_score * i / 10,
+                    y0: -0.90,
+                    x1: max_score * i / 10,
+                    y1: -1.15,
+                    line: {
+                      color: getColor(i * 10),
+                      width: 2,
+                    },
+                  };
+                  layout.shapes.push(shape);
+              }
+            for (let i = 5; i <= 9; i++) {
+                  let annotation = {
+                    x: max_score * i / 10 + max_score / 20,
+                    y: -1.05,
+                    xref: 'x',
+                    yref: 'y',
+                    text: getLetterGrade(((i + 0.5) / 10) * 100),
+                    showarrow: false,
+                    font: {
+                      family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                      size: 12,
+											color: getColor(((i + 0.5) / 10) * 100),
+                    },
+                  }
+                  layout.annotations.push(annotation);
+            }
+
+						
 
 
 							let TESTER = document.getElementById("stats_plot");
@@ -327,12 +669,17 @@
 							Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
 
 		
-							document.getElementById("stats_modal_title").innerHTML = "Grade Statistics for: <br>" + assignment.substring(0, 30);
-							document.getElementById("stats_modal_caption").style.top = "30px";
-							document.getElementById("stats_modal_caption").innerHTML = "Score" + "<br><br>" + "Your Score: " + score + ", Max Points: " + max_score + "<br>" + "Mean: " + mean + "<br>" + "Low: " + low + ", Median: " + median + ", High: " + high;
+							document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
+							document.getElementById("stats_modal_caption").style.top = "48px";
+            document.getElementById("stats_modal_caption").innerHTML = "Low: " + low + ", Median: " + median + ", High: " + high + "<br>" + "Mean: " + mean; 
+              document.getElementById("stats_modal_info").innerHTML = "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due;
+             $("#stats_modal_feedback").html("Assignment Feedback: " + assignment_feedback);
 
-							document.getElementById("stats_modal_content").style.height = "350px";
+							document.getElementById("stats_modal_content").style.height = "465px";
+
 							document.getElementById("stats_modal_content").style.margin = "15% auto";
+              $("#there_are_stats").show();
+              $("#there_are_no_stats").hide();
 						} else {
 							
 							noStats();
@@ -363,6 +710,7 @@
 			});
 			let classesTable = new Tabulator("#classesTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+        index: "name",
                 		selectable:1,
 				ajaxURL:"/data",
 				ajaxConfig:"post", //ajax HTTP request type
@@ -371,10 +719,82 @@
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
-                    if(response.classes.length == 0) {
-                        location.href='/logout';
+
+          if(((response.schedule)).login_fail) {
+              location.href='/logout';
+          }
+
+          if (response.classes.length == 0) {
+
+            response.classes = 
+            [
+                {
+                  "name": "No Classes",
+                  "grade": "No Grades",
+                  "categories": {
+                    "No Categories": "1.0"
+                  },
+                  "assignments": [
+                    {
+                      "name": "No Assignments",
+                      "category": "No Categories",
+                      "assignment_id": "GCD000000Fx62l",
+                      "special": "No Special",
+                      "score": 10,
+                      "max_score": 10,
+                      "percentage": 100,
+                      "color": "#6666FF"
                     }
+                  ],
+                  "tokens": {
+                    "session_id": "263A6A78DE0F001DDDFC8A525D31A8F0",
+                    "apache_token": "572aa56a8c407a6d9a25b0a50843fc32"
+                  },
+                  "edited": false,
+                  "categoryGrades": {},
+                  "decimals": 2,
+                  "categoryDisplay": [
+                    {
+                      "category": "HW, Classwork, Assessments",
+                      "weight": "30%",
+                      "score": 340,
+                      "maxScore": 400,
+                      "grade": "85%",
+                      "color": "#6666FF"
+                    },
+                    {
+                      "category": "Speak-Listen",
+                      "weight": "20%",
+                      "score": "Ungraded",
+                      "maxScore": "Ungraded",
+                      "grade": "No Grade",
+                      "color": "black"
+                    },
+                    {
+                      "category": "Tests, Quizzes, vocabulary",
+                      "weight": "30%",
+                      "score": 100,
+                      "maxScore": 100,
+                      "grade": "100%",
+                      "color": "#1E8541"
+                    },
+                    {
+                      "category": "timeliness, effort",
+                      "weight": "20%",
+                      "score": 200,
+                      "maxScore": 200,
+                      "grade": "100%",
+                      "color": "#1E8541"
+                    }
+                  ],
+                  "type": "categoryPercent",
+                  "calculated_grade": "94.05 A",
+                  "color": "#1E8541"
+                }
+              ];
+          }
 					tableData = response;
+
 
 					document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
 
@@ -508,21 +928,22 @@
 
 					let activityArray = tableData.recent.recentActivityArray.slice();
 					for (let i = 0; i < activityArray.length; i++) {
-						try {
-						let assignmentName = activityArray[i].assignment;
-						let className = activityArray[i].classname;
-						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
+            try {
+              let assignmentName = activityArray[i].assignment;
+              let className = activityArray[i].classname;
+              let classIndex = tableData.classes.map(x => x.name).indexOf(className);
 
-						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+              let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
-						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
-						tableData.recent.recentActivityArray[i].className = className;
-						tableData.recent.recentActivityArray[i].classIndex = classIndex;
-						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+              tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
+              tableData.recent.recentActivityArray[i].className = className;
+              tableData.recent.recentActivityArray[i].classIndex = classIndex;
+              tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
-						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
-						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+              tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
+              tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
+              tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+
 						} catch(err) {
 							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
 
@@ -541,11 +962,20 @@
 
 					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 
+          //Stuff to do now that tableData is initialized
+
 					scheduleTable.setData(tableData.schedule.black);
+          $("#mostRecentDiv").show();
+					mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
+
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
-                    redraw_clock();
+          redraw_clock();
+
+          initialize_dropdown();
+          $("#pdf_loading_text").hide();
+          generate_pdf(pdf_index);
 
 					return response.classes; //return the tableData property of a response json object
 
@@ -558,6 +988,9 @@
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
 				rowClick:function(e, row){ //trigger an alert message when the row is clicked
+          $("#mostRecentDiv").hide();
+
+          assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
@@ -604,13 +1037,13 @@
 		    // Get all elements with class="tabcontent" and hide them
 		    tabcontent = document.getElementsByClassName("tabcontent");
 		    for (i = 0; i < tabcontent.length; i++) {
-			tabcontent[i].style.display = "none";
+          tabcontent[i].style.display = "none";
 		    }
 
 		    // Get all elements with class="tablinks" and remove the class "active"
 		    tablinks = document.getElementsByClassName("tablinks");
 		    for (i = 0; i < tablinks.length; i++) {
-			tablinks[i].className = tablinks[i].className.replace(" active", "");
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
 		    }
 
 		    // Show the current tab, and add an "active" class to the button that opened the tab
@@ -623,6 +1056,22 @@
             } else {
                 document.getElementById("small_clock").style.display = "block";
                 document.getElementById("small_clock_period").style.display = "block";
+            }
+            if (tab_name =="grades") {
+                            //$("#mostRecentDiv").show();
+
+            }
+
+            if (tab_name == "reports") {
+
+
+
+
+              if (typeof tableData.pdf_files !== 'undefined' ) {
+                generate_pdf(pdf_index);
+              } else {
+
+              }
             }
 
 		    classesTable.redraw();
