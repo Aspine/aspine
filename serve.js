@@ -102,6 +102,9 @@ app.post('/stats', async (req, res) => {
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
+	fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
+		  if (err) throw err;
+	}); 
     if(!args._.includes("fake")) {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
