@@ -21,6 +21,7 @@
     "minimist": "^1.2.0",
     "moment": "^2.24.0",
     "node-fetch": "^2.3.0",
+    "path": "^0.12.7",
     "prompt": "^1.0.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
