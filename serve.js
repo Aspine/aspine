@@ -17,7 +17,6 @@ const compression = require('compression');
 const crypto = require('crypto');
 const validator = require('validator');
 const fetch = require('node-fetch');
-const path = require('path');
 // -------------------------------------------
 
 if (args.hasOwnProperty("help") || args._.includes("help")) {
