@@ -102,12 +102,31 @@ app.post('/stats', async (req, res) => {
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-    if(!args._.includes("fake")) {
+    if (args.hasOwnProperty("json")) {
+		// Check if "--json" command-line argument was provided, e.g.
+		// node serve.js --json ./public/sample.json
+		
+        // Use json file provided at command line
+        res.sendFile(args.json, {root: "."});
+    } else if (args._.includes("fake")) {
+		// For backwards compatibility
+		
+		res.sendFile('sample2.json', {root: "public"});
+	} else {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
-        // USE REAL DATA:
+        // Get data from scraper:
         response = await scraper.scrape_student(req.session.username, req.session.password);
-      res.send(response)
+		res.send(response)
+
+		// If "out" command-line argument provided, save JSON at the given path
+		if (args.hasOwnProperty("out")) {
+			fs.writeFile(
+				args.out, JSON.stringify(response),
+				(err) => { if (err) throw err; }
+			);
+		}
+		
         //if (response.classes.length == 0) {
         //  res.sendFile('invalid.json', {root:"public"});
 
@@ -140,9 +159,6 @@ app.post('/data', async (req, res) => {
           //    "color":"#1E8541"
           //  });
 
-    } else {
-        //USE FAKE DATA:
-        res.sendFile('sample2.json', {root:"public"});
     }
 });
 
