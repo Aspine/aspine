@@ -19,6 +19,19 @@ const validator = require('validator');
 const fetch = require('node-fetch');
 // -------------------------------------------
 
+if (args.hasOwnProperty("help") || args._.includes("help")) {
+	console.log(`Usage: ./serve.js [insecure] [fake] [OPTION]...
+Starts the Aspine web server.
+
+Options:
+  --fake         use file "public/sample2.json" instead of scraping Aspen
+  --insecure     do not use SSL/TLS (HTTPS)
+  --json=FILE    use JSON file FILE instead of scraping Aspen
+  --out=FILE     scrape Aspen as usual but dump JSON to file FILE
+  --help   display this help and exit
+`);
+	process.exit();
+}
 
 // ------------ Web Server -------------------
 const app = express();
@@ -33,7 +46,7 @@ client.on("error", function (err) {
     console.log("Error " + err);
 });
 
-if(!args._.includes("insecure")) {
+if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
     // Certificate
     // const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
     // const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
@@ -88,7 +101,7 @@ app.use(session({
 app.post('/stats', async (req, res) => {
 	console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
 
-    if(!args._.includes("fake")) {
+    if(!(args.hasOwnProperty("fake") || args._.includes("fake"))) {
         // USE REAL DATA:
         res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
     } else {
@@ -102,12 +115,31 @@ app.post('/stats', async (req, res) => {
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-    if(!args._.includes("fake")) {
+    if (args.hasOwnProperty("json")) {
+		// Check if "--json" command-line argument was provided, e.g.
+		// node serve.js --json=./public/sample.json
+		
+        // Use json file provided at command line
+        res.sendFile(args.json, {root: "."});
+    } else if (args._.includes("fake")) {
+		// For backwards compatibility
+		
+		res.sendFile('sample2.json', {root: "public"});
+	} else {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
-        // USE REAL DATA:
+        // Get data from scraper:
         response = await scraper.scrape_student(req.session.username, req.session.password);
-      res.send(response)
+		res.send(response)
+
+		// If "out" command-line argument provided, save JSON at the given path
+		if (args.hasOwnProperty("out")) {
+			fs.writeFile(
+				args.out, JSON.stringify(response),
+				(err) => { if (err) throw err; }
+			);
+		}
+		
         //if (response.classes.length == 0) {
         //  res.sendFile('invalid.json', {root:"public"});
 
@@ -140,9 +172,6 @@ app.post('/data', async (req, res) => {
           //    "color":"#1E8541"
           //  });
 
-    } else {
-        //USE FAKE DATA:
-        res.sendFile('sample2.json', {root:"public"});
     }
 });
 
