@@ -38,7 +38,7 @@
     "url": "git+https://github.com/maxtkc/aspine.git"
   },
   "author": "Max Katz-Christy, Cole Killian",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0-only",
   "bugs": {
     "url": "https://github.com/maxtkc/aspine/issues"
   },
