@@ -49,31 +49,31 @@ async function scrape_student(username, password) {
 
 	//Spawn class scrapers
 	let class_scrapers = [];
-	for(let i = 0; i < CLASS_THREADS; i++) {
+	for (let i = 0; i < CLASS_THREADS; i++) {
 		class_scrapers[i] = scrape_class(username, password, i);
 	}
 
-  // Spawn pdf scrapers
+	// Spawn pdf scrapers
 	let pdf_scrapers = [];
-  for (let i = 0; i < PDF_THREADS; i++) {
-    pdf_scrapers[i] = scrape_pdf(username, password, i);
-  }
+	for (let i = 0; i < PDF_THREADS; i++) {
+		pdf_scrapers[i] = scrape_pdf(username, password, i);
+	}
 
 	// Spawn schedule scraper
-  let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
+	let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
 
 	// Spawn recent activity scraper
-  let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
+	let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
 
 	// Await on all class scrapers
-  return {
-    classes: (await Promise.all(class_scrapers)).filter(Boolean),
-    schedule: await schedule_scraper,
-    recent: await recent_scraper,
-    pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
-    username: (await Promise.all(pdf_scrapers)).filter(Boolean)
-    }
-  //return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
+	return {
+		classes: (await Promise.all(class_scrapers)).filter(Boolean),
+		schedule: await schedule_scraper,
+		recent: await recent_scraper,
+		pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
+		username: (await Promise.all(pdf_scrapers)).filter(Boolean)
+	}
+	//return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
 
 }
 
@@ -84,106 +84,117 @@ async function scrape_pdf(username, password, i) {
 
 		log(i, "session", session);
 
-    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11", 
-      {"credentials":"include",
-        "headers":{
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id,
-          "Accept-Encoding": HEADERS["Accept-Encoding"],
-          "Accept-Language": HEADERS["Accept-Language"],
-          "User-Agent": HEADERS["User-Agent"],
-          "Accept": HEADERS["Accept"],
-          "Referer": "https://aspen.cpsd.us/aspen/home.do",
-          "Connection": "keep-alive"
-        },
-        "referrer":"https://aspen.cpsd.us/aspen/home.do",
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":null,
-        "method":"GET",
-        "mode":"cors"}));
+		let $ = cheerio.load(await fetch_body(
+			"https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11", 
+			{
+				"credentials": "include",
+				"headers": {
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id,
+					"Accept-Encoding": HEADERS["Accept-Encoding"],
+					"Accept-Language": HEADERS["Accept-Language"],
+					"User-Agent": HEADERS["User-Agent"],
+					"Accept": HEADERS["Accept"],
+					"Referer": "https://aspen.cpsd.us/aspen/home.do",
+					"Connection": "keep-alive"
+				},
+				"referrer": "https://aspen.cpsd.us/aspen/home.do",
+				"referrerPolicy": "strict-origin-when-cross-origin",
+				"body": null,
+				"method": "GET",
+				"mode": "cors"
+			}
+		));
 
 
-    let oids = [];
-    let deliveryRecipients = [];
-    let filenames = [];
-    let titles = [];
-    $('.portletListCell').each(function(i, elem) {
-      if ($(this).attr('id')) {
-        let raw = ($(this).children().first().children().first().html());
+		let oids = [];
+		let deliveryRecipients = [];
+		let filenames = [];
+		let titles = [];
+		$('.portletListCell').each(function(i, elem) {
+			if ($(this).attr('id')) {
+				let raw = ($(this).children().first().children().first().html());
 
-        oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
+				oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
 
-        deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
+				deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
 
-        
-        let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
-        filenames.push((raw_filename).replace(/ /g, "_") + ".pdf");
+				
+				let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
+				filenames.push((raw_filename).replace(/ /g, "_") + ".pdf");
 
-        let datetime = $(this).next().text().trim();
-        let date = datetime.substr(0, datetime.indexOf(" "));
+				let datetime = $(this).next().text().trim();
+				let date = datetime.substr(0, datetime.indexOf(" "));
 
-        let pretty_filename = raw_filename.split(' ').slice(0,2).join(' ');
+				let pretty_filename = raw_filename.split(' ').slice(0,2).join(' ');
 
-        titles.push(pretty_filename + " " + date);
-      }
-    });
+				titles.push(pretty_filename + " " + date);
+			}
+		});
 
-    let oid = oids[i];
-    let deliveryRecipient = deliveryRecipients[i];
-    let filename = filenames[i];
-    let title = titles[i];
+		let oid = oids[i];
+		let deliveryRecipient = deliveryRecipients[i];
+		let filename = filenames[i];
+		let title = titles[i];
 
-    (await fetch_body("https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
-       {"credentials":"include",
-         "headers":{
-           "Connection": "keep-alive",
-           "Pragma": "no-cache",
-           "Cache-Control": "no-cache",
-           "Upgrade-Insecure-Requests": "1",
-           "User-Agent": HEADERS["User-Agent"],
-           "Accept": HEADERS["Accept"],
-           "Accept-Language": HEADERS["Accept-Language"],
-           "Accept-Encoding": HEADERS["Accept-Encoding"],
-           "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-         },
-         "referrerPolicy":"strict-origin-when-cross-origin",
-         "body":null,
-         "method":"GET",
-         "mode":"cors"}));
+		(await fetch_body(
+			"https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
+			{"credentials": "include",
+			 "headers": {
+				 "Connection": "keep-alive",
+				 "Pragma": "no-cache",
+				 "Cache-Control": "no-cache",
+				 "Upgrade-Insecure-Requests": "1",
+				 "User-Agent": HEADERS["User-Agent"],
+				 "Accept": HEADERS["Accept"],
+				 "Accept-Language": HEADERS["Accept-Language"],
+				 "Accept-Encoding": HEADERS["Accept-Encoding"],
+				 "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id
+			 },
+			 "referrerPolicy": "strict-origin-when-cross-origin",
+			 "body": null,
+			 "method": "GET",
+			 "mode": "cors"}
+		));
 
-    fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
-      {"credentials":"include",
-        "headers":{
-          "Connection": "keep-alive",
-          "Pragma": "no-cache",
-          "Cache-Control": "no-cache",
-          "Upgrade-Insecure-Requests": "1",
-          "User-Agent": HEADERS["User-Agent"],
-          "Accept": HEADERS["Accept"],
-          "Accept-Language": HEADERS["Accept-Language"],
-          "Accept-Encoding": HEADERS["Accept-Encoding"],
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427"
-        },
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":null,
-        "method":"GET",
-        "mode":"cors"}));
+		fileReturn = (await fetch_file(
+			"https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
+			{
+				"credentials": "include",
+				"headers": {
+					"Connection": "keep-alive",
+					"Pragma": "no-cache",
+					"Cache-Control": "no-cache",
+					"Upgrade-Insecure-Requests": "1",
+					"User-Agent": HEADERS["User-Agent"],
+					"Accept": HEADERS["Accept"],
+					"Accept-Language": HEADERS["Accept-Language"],
+					"Accept-Encoding": HEADERS["Accept-Encoding"],
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id
+				},
+				"referrerPolicy": "strict-origin-when-cross-origin",
+				"body": null,
+				"method": "GET",
+				"mode": "cors"
+			}
+		));
 
-    log(i, "closing");
+		log(i, "closing");
 
-    resolve({
-      "title": title,
-      "content": fileReturn
-    });
+		resolve({
+			"title": title,
+			"content": fileReturn
+		});
 
-  });
+	});
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
 
-
-	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
-		{"credentials":"include",
-			"headers":{
+	let $ = cheerio.load(await fetch_body(
+		"https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
+		{
+			"credentials": "include",
+			"headers": {
 				"Connection": "keep-alive",
 				"Cache-Control": "max-age=0",
 				"Origin": "https://aspen.cpsd.us",
@@ -196,35 +207,38 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 				"Accept-Encoding": HEADERS["Accept-Encoding"],
 				"Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis"
 			},
-			"referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-			"referrerPolicy":"strict-origin-when-cross-origin",
-			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
-			"method":"POST",
-			"mode":"cors"}));
+			"referrer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+			"referrerPolicy": "strict-origin-when-cross-origin",
+			"body": "org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+			"method": "POST",
+			"mode": "cors"}));
 
-	(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-		{"credentials":"include",
-			"headers":{"Connection": "keep-alive",
-				"Upgrade-Insecure-Requests": "1",
-				"User-Agent": HEADERS["User-Agent"],
-				"Accept": HEADERS["Accept"],
-				"Accept-Language": HEADERS["Accept-Language"],
-				"Referer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
-				"Accept-Encoding": HEADERS["Accept-Encoding"],
-				"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
-			"referrer":"https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
-			"referrerPolicy":"strict-origin-when-cross-origin",
-			"body":null,
-			"method":"GET",
-			"mode":"cors"}));
+	(await fetch_body(
+		"https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+		{"credentials": "include",
+		 "headers": {"Connection": "keep-alive",
+					"Upgrade-Insecure-Requests": "1",
+					"User-Agent": HEADERS["User-Agent"],
+					"Accept": HEADERS["Accept"],
+					"Accept-Language": HEADERS["Accept-Language"],
+					"Referer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+					"Accept-Encoding": HEADERS["Accept-Encoding"],
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
+		 "referrer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+		 "referrerPolicy": "strict-origin-when-cross-origin",
+		 "body": null,
+		 "method": "GET",
+		 "mode": "cors"}));
 
 	let statistics = [];
 	
-	$('td[width="50%"]').eq(1).find('tr').parent().children().each(function(i, elem) {
-		if (i > 1 && i < 6) {
-			statistics[i - 2] = $(this).children().eq(1).text().trim();
+	$('td[width="50%"]').eq(1).find('tr').parent().children().each(
+		(i, elem) => {
+			if (i > 1 && i < 6) {
+				statistics[i - 2] = $(this).children().eq(1).text().trim();
+			}
 		}
-	});
+	);
 
 	if (statistics.length < 3) {
 		statistics = "No statistics data for this assignment";
@@ -239,17 +253,19 @@ async function scrape_recent(username, password, i) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
-    if (page) {
-      resolve({"login_fail": true});
-    }
+		if (page) {
+			resolve({"login_fail": true});
+		}
 
 		log(i, "session", session);
 
 
-		let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
-			{"credentials":"include",
-				"headers":{
-					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1525149286.1550969560",
+		let $ = cheerio.load(await fetch_body(
+			"https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
+			{
+				"credentials": "include",
+				"headers": {
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id,
 					"Accept-Encoding": HEADERS["Accept-Encoding"],
 					"Accept-Language": HEADERS["Accept-Language"],
 					"User-Agent": HEADERS["User-Agent"],
@@ -257,14 +273,17 @@ async function scrape_recent(username, password, i) {
 					"Referer": "https://aspen.cpsd.us/aspen/home.do",
 					"Connection": "keep-alive",
 				},
-				"referrer":"https://aspen.cpsd.us/aspen/home.do",
-				"referrerPolicy":"strict-origin-when-cross-origin",
-				"body":null,
-				"method":"GET",
-				"mode":"cors"}), {
-				xmlMode: true,
-				normalizeWhitespace: true,
-				decodeEntities: true});
+				"referrer": "https://aspen.cpsd.us/aspen/home.do",
+				"referrerPolicy": "strict-origin-when-cross-origin",
+				"body": null,
+				"method": "GET",
+				"mode": "cors"
+			}
+		), {
+			xmlMode: true,
+			normalizeWhitespace: true,
+			decodeEntities: true
+		});
 		log(i, "scrape recent widget", $);
 
 		let studentName = $('recent-activity').attr('studentname');
@@ -316,10 +335,10 @@ function scrape_class(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password,
 			session.apache_token, session.session_id);
-    if (page) {
-      resolve({"login_fail": true});
+	if (page) {
+	  resolve({"login_fail": true});
 
-    }
+	}
 		log(i, "session", session);
 
 		// Academics Page
@@ -345,7 +364,8 @@ function scrape_class(username, password, i) {
 
 		// Return promise
 		log(i, "closing");
-		resolve({"name": academics.classes[i].name,
+		resolve({
+			"name": academics.classes[i].name,
 			"grade": academics.classes[i].grade,
 			"categories": categories,
 			"assignments": assignments,
@@ -357,13 +377,13 @@ function scrape_class(username, password, i) {
 // Returns object with apache_token and session_id
 async function scrape_login(username, password) {
 	let page = await fetch_body("https://aspen.cpsd.us/aspen/logon.do",
-		{"credentials":"include",
-			"headers":{},
-			"referrer":"https://aspen.cpsd.us/aspen/logon.do",
-			"referrerPolicy":"strict-origin-when-cross-origin",
-			"body":null,
-			"method":"GET",
-			"mode":"cors"});
+		{"credentials": "include",
+			"headers": {},
+			"referrer": "https://aspen.cpsd.us/aspen/logon.do",
+			"referrerPolicy": "strict-origin-when-cross-origin",
+			"body": null,
+			"method": "GET",
+			"mode": "cors"});
 	const session_id = page.substr(page.indexOf("jsessionid=") + "jsessionid=".length, 32);
 	const apache_token = page.substr(page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32);
 	return {"session_id": session_id, "apache_token": apache_token};
@@ -371,9 +391,12 @@ async function scrape_login(username, password) {
 
 // Submits login with creds and session
 async function submit_login(username, password, apache_token, session_id) {
-	let page = await fetch_body("https://aspen.cpsd.us/aspen/logon.do",
-		{"credentials":"include",
-			"headers":{"Origin" : "https://aspen.cpsd.us",
+	let page = await fetch_body(
+		"https://aspen.cpsd.us/aspen/logon.do",
+		{
+			"credentials": "include",
+			"headers": {
+				"Origin" : "https://aspen.cpsd.us",
 				"Accept-Encoding" : HEADERS["Accept-Encoding"], 
 				"Accept-Language" : HEADERS["Accept-Language"],
 				"Cookie" : "deploymentId=x2sis; JSESSIONID=" + session_id,
@@ -385,20 +408,25 @@ async function submit_login(username, password, apache_token, session_id) {
 				"Cache-Control" : "max-age=0", 
 				"Referer" : "https://aspen.cpsd.us/aspen/logon.do", 
 			}, 
-			"referrer":"https://aspen.cpsd.us/aspen/logon.do", 
-			"referrerPolicy":"strict-origin-when-cross-origin", 
-			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password, 
-			"method":"POST", 
-			"mode":"cors"}); 
+			"referrer": "https://aspen.cpsd.us/aspen/logon.do", 
+			"referrerPolicy": "strict-origin-when-cross-origin", 
+			"body": "org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=930&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=username&mobile=false&SSOLoginDone=&username=" + username + "&password=" + password, 
+			"method": "POST", 
+			"mode": "cors"
+		}
+	);
 	return page.includes("Invalid login.");
 }
 
 // Returns object with classes (name, grade, id),
 // student oid, and apache_token
 async function scrape_academics(session_id) {
-	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
-		{"credentials":"include",
-			"headers":{"Cookie" : "deploymentId=x2sis; JSESSIONID=" + session_id,
+	let $ = cheerio.load(await fetch_body(
+		"https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
+		{
+			"credentials": "include",
+			"headers": {
+				"Cookie" : "deploymentId=x2sis; JSESSIONID=" + session_id,
 				"Accept-Encoding" : HEADERS["Accept-Encoding"],
 				"Accept-Language" : HEADERS["Accept-Language"],
 				"Upgrade-Insecure-Requests" : "1",
@@ -406,22 +434,25 @@ async function scrape_academics(session_id) {
 				"Accept" : HEADERS["Accept"],
 				"Referer" : "https://aspen.cpsd.us/aspen/home.do",
 				"Connection" : "keep-alive",},
-			"referrer":"https://aspen.cpsd.us/aspen/home.do",
-			"referrerPolicy":"strict-origin-when-cross-origin",
-			"body":null,
-			"method":"GET",
-			"mode":"cors"}));
+			"referrer": "https://aspen.cpsd.us/aspen/home.do",
+			"referrerPolicy": "strict-origin-when-cross-origin",
+			"body": null,
+			"method": "GET",
+			"mode": "cors"
+		}
+	));
 	let data = {"classes": []};
 	$("#dataGrid a").each(function(i, elem) {
-    if ($(this).parent().nextAll().eq(0).text().trim() == "FY" || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
-      data.classes[i] = {};
-      // data.classes[i].name = $(this).text();
-      data.classes[i].name = $(this).parent()
-        .nextAll().eq(3).text().trim();
-      data.classes[i].grade = $(this).parent()
-        .nextAll().eq(5).text().trim();
-      data.classes[i].id = $(this).parent().attr("id");
-    }
+		if ($(this).parent().nextAll().eq(0).text().trim() == "FY"
+			|| $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+			data.classes[i] = {};
+			// data.classes[i].name = $(this).text();
+			data.classes[i].name = $(this).parent()
+				.nextAll().eq(3).text().trim();
+			data.classes[i].grade = $(this).parent()
+				.nextAll().eq(5).text().trim();
+			data.classes[i].id = $(this).parent().attr("id");
+		}
 	});
 	data.oid = $("input[name=selectedStudentOid]").attr("value");
 	data.apache_token = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
@@ -431,30 +462,30 @@ async function scrape_academics(session_id) {
 // Returns object with categories (name, weight) as a dictionary
 async function scrape_details(session_id, apache_token, class_id, oid) {
   let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
-    {"credentials":"include",
-      "headers":{"Connection": "keep-alive",
-        "Cache-Control": "max-age=0",
-        "Origin": "https://aspen.cpsd.us",
-        "Upgrade-Insecure-Requests": "1",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": HEADERS["User-Agent"],
-        "Accept": HEADERS["Accept"],
-        "Accept-Language": HEADERS["Accept-Language"],
-        "Referer": "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list&maximized=false",
-        "Accept-Encoding": HEADERS["Accept-Encoding"],
-        "Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id },
-      "referrer":"https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list&maximized=false",
-      "referrerPolicy":"strict-origin-when-cross-origin",
-      "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + class_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=87&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=" + oid + "&jumpToSearch=&initialSearch=&yearFilter=current&termFilter=current&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=",
-      "method":"POST",
-      "mode":"cors"}));
+	{"credentials": "include",
+	  "headers": {"Connection": "keep-alive",
+		"Cache-Control": "max-age=0",
+		"Origin": "https://aspen.cpsd.us",
+		"Upgrade-Insecure-Requests": "1",
+		"Content-Type": "application/x-www-form-urlencoded",
+		"User-Agent": HEADERS["User-Agent"],
+		"Accept": HEADERS["Accept"],
+		"Accept-Language": HEADERS["Accept-Language"],
+		"Referer": "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list&maximized=false",
+		"Accept-Encoding": HEADERS["Accept-Encoding"],
+		"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id },
+	  "referrer": "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list&maximized=false",
+	  "referrerPolicy": "strict-origin-when-cross-origin",
+	  "body": "org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + class_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=87&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=" + oid + "&jumpToSearch=&initialSearch=&yearFilter=current&termFilter=current&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=",
+	  "method": "POST",
+	  "mode": "cors"}));
   let data = {};
   $("tr[class=listCell]", "#dataGrid").slice(3).each(function(i, elem) {
-    if(i % 2 === 0) {
-      let category = $(this).children().first().text();
-      let weight = $(this).children().eq(2).text();
-      data[category] = "" + parseFloat(weight.substr(0, weight.length - 1)) / 100;
-    }
+	if(i % 2 === 0) {
+	  let category = $(this).children().first().text();
+	  let weight = $(this).children().eq(2).text();
+	  data[category] = "" + parseFloat(weight.substr(0, weight.length - 1)) / 100;
+	}
   });
   return data;
 }
@@ -462,8 +493,8 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
 // Returns list of assignments (name, category, score, max_score)
 async function scrape_assignments(session_id, apache_token) {
   let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-    {"credentials":"include",
-      "headers":{"Connection": "keep-alive",
+    {"credentials": "include",
+      "headers": {"Connection": "keep-alive",
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": HEADERS["User-Agent"],
         "Accept": HEADERS["Accept"],
@@ -471,11 +502,11 @@ async function scrape_assignments(session_id, apache_token) {
         "Referer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
         "Accept-Encoding": HEADERS["Accept-Encoding"],
         "Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
-      "referrer":"https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
-      "referrerPolicy":"strict-origin-when-cross-origin",
-      "body":null,
-      "method":"GET",
-      "mode":"cors"}));
+      "referrer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+      "referrerPolicy": "strict-origin-when-cross-origin",
+      "body": null,
+      "method": "GET",
+      "mode": "cors"}));
 
   let data = [];
   let page = 1;
@@ -513,8 +544,8 @@ async function scrape_assignments(session_id, apache_token) {
     page++;
 
     $ = cheerio.load((await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do",
-      {"credentials":"include",
-        "headers":{
+      {"credentials": "include",
+        "headers": {
           "Connection": "keep-alive",
           "Cache-Control": "max-age=0",
           "Origin": "https://aspen.cpsd.us",
@@ -526,11 +557,11 @@ async function scrape_assignments(session_id, apache_token) {
           "Referer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do",
           "Accept-Encoding": HEADERS["Accept-Encoding"],
           "Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
-        "referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do",
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
-        "method":"POST",
-        "mode":"cors"})));
+        "referrer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": "org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=10&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&topPageSelected=1&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+        "method": "POST",
+        "mode": "cors"})));
   }
 }
 
@@ -544,29 +575,35 @@ async function scrape_schedule(username, password, i) {
     }
 
 
-		let schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
-			{"credentials":"include",
-				"headers":{"Connection": "keep-alive",
+		let schedule_page = (await fetch_body(
+			"https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+			{
+				"credentials": "include",
+				"headers": {
+					"Connection": "keep-alive",
 					"Upgrade-Insecure-Requests": "1",
 					"User-Agent": HEADERS["User-Agent"],
 					"Accept": HEADERS["Accept"],
 					"Accept-Language": HEADERS["Accept-Language"],
 					"Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
 					"Accept-Encoding": HEADERS["Accept-Encoding"],
-					"Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.774571258.1549380024"},
-				"referrer":"https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-				"referrerPolicy":"strict-origin-when-cross-origin",
-				"body":null,
-				"method":"GET",
-				"mode":"cors"}));
-    
+					"Cookie": "JSESSIONID=" + session.session_id
+				},
+				"referrer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+				"referrerPolicy": "strict-origin-when-cross-origin",
+				"body": null,
+				"method": "GET",
+				"mode": "cors"
+			}
+		));
+		
 
 
     if (schedule_page.includes("Matrix view")) {
 
       schedule_page = (await fetch_body("https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
-        {"credentials":"include",
-          "headers":{
+        {"credentials": "include",
+          "headers": {
             "Connection": "keep-alive",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
@@ -576,13 +613,13 @@ async function scrape_schedule(username, password, i) {
             "Accept-Language": HEADERS["Accept-Language"],
             "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
             "Accept-Encoding": HEADERS["Accept-Encoding"],
-            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1711451972.1556283231"
+            "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id
           },
-          "referrer":"https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
-          "referrerPolicy":"strict-origin-when-cross-origin",
-          "body":null,
-          "method":"GET",
-          "mode":"cors"}));
+          "referrer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
+          "referrerPolicy": "strict-origin-when-cross-origin",
+          "body": null,
+          "method": "GET",
+          "mode": "cors"}));
     } 
 
     let $ = cheerio.load(schedule_page);
