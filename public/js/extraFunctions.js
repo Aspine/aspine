@@ -1,5 +1,5 @@
 
-let vip_username_list = ["8006214", "8001874"];
+let vip_username_list = ["8006214", "8001874", "8006696"];
 // Cole: 8006697
 // Max: 2109723
 
