@@ -1,4 +1,4 @@
 node_modules/
 package-lock.json
 db/*.rdb
-log.txt
+usage_log.txt
