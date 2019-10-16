@@ -115,13 +115,17 @@ app.post('/stats', async (req, res) => {
 app.post('/data', async (req, res) => {
 	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-    if (args.hasOwnProperty("json")) {
-		// Check if "--json" command-line argument was provided, e.g.
+	fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
+		  if (err) throw err;
+	});
+  
+  if (args.hasOwnProperty("json")) {
+	  // Check if "--json" command-line argument was provided, e.g.
 		// node serve.js --json=./public/sample.json
 		
         // Use json file provided at command line
         res.sendFile(args.json, {root: "."});
-    } else if (args._.includes("fake")) {
+  } else if (args._.includes("fake")) {
 		// For backwards compatibility
 		
 		res.sendFile('sample2.json', {root: "public"});
