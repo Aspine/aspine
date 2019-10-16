@@ -51,13 +51,14 @@ Feel free to suggest an enhancement or post a bug issue either via github issues
 If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. To test your additions to Aspine:
 
 * Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
-  * On Windows or macOS, download node.js and redis from their websites, and install them.
-  * On GNU+Linux, you should be able to find these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
-* Open a terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `redis-server redis.conf`.
-* Open another terminal or command prompt, navigate to that same directory, and run `npm install` to install the required dependencies.
-* In the same terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
+  * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
+  * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively.
+  * On Windows, node.js (including npm) can be downloaded from its website and (an older version of) redis can be downloaded from <https://github.com/MicrosoftArchive/redis/releases/tag/win-3.0.504>. If you use [Chocolatey](https://chocolatey.org/), node.js (including npm) is available as [nodejs](https://www.chocolatey.org/packages/nodejs), and redis is available as [`redis-64`](https://www.chocolatey.org/packages/redis-64/). Please note that Microsoft has only ported Redis to 64-bit Windows. If your Windows installation is 32-bit (this is probably only if your computer is more than 8 years old), you may be able to build Redis from source or find an alternative method to download Redis.
+* Open a terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the required dependencies.
+* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`. If you are on Windows, you may need to create a directory called `db` for Redis to work properly.
+* In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
 
-These instructions have only been tested on GNU+Linux. You might need to change your `PATH` on Windows if you get an error saying that `node` is not found after installing node.js.
+These instructions have only been tested on GNU+Linux and Windows. You might need to change your `PATH` on Windows if you get an error saying that `node` is not found after installing node.js.
 
 ## Authors
 
