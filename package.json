@@ -42,5 +42,8 @@
   "bugs": {
     "url": "https://github.com/maxtkc/aspine/issues"
   },
-  "homepage": "https://github.com/maxtkc/aspine#readme"
+  "homepage": "https://github.com/maxtkc/aspine#readme",
+  "directories": {
+    "test": "test"
+  }
 }

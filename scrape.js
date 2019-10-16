@@ -63,7 +63,7 @@ async function scrape_student(username, password) {
     schedule: await schedule_scraper,
     recent: await recent_scraper,
     pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
-    username: (await Promise.all(pdf_scrapers)).filter(Boolean)
+    username: username
     }
   //return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
 
