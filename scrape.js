@@ -191,61 +191,55 @@ async function scrape_pdf(username, password, i) {
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
 
-	let $ = cheerio.load(await fetch_body(
-		"https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
-		{
-			"credentials": "include",
-			"headers": {
+
+	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
+		{"credentials":"include",
+			"headers":{
 				"Connection": "keep-alive",
 				"Cache-Control": "max-age=0",
 				"Origin": "https://aspen.cpsd.us",
 				"Upgrade-Insecure-Requests": "1",
 				"Content-Type": "application/x-www-form-urlencoded",
-				"User-Agent": HEADERS["User-Agent"],
-				"Accept": HEADERS["Accept"],
-				"Accept-Language": HEADERS["Accept-Language"],
+				"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.1 Chrome/69.0.3497.128 Safari/537.36",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+				"Accept-Language": "en-US,en",
+				"X-Do-Not-Track": "1",
+				"DNT": "1",
 				"Referer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-				"Accept-Encoding": HEADERS["Accept-Encoding"],
+				"Accept-Encoding": "gzip, deflate, br",
 				"Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis"
 			},
-			"referrer": "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-			"referrerPolicy": "strict-origin-when-cross-origin",
-			"body": "org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
-			"method": "POST",
-			"mode": "cors"
-		}
-	));
+			"referrer":"https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+			"referrerPolicy":"strict-origin-when-cross-origin",
+			"body":"org.apache.struts.taglib.html.TOKEN=" + apache_token + "&userEvent=2100&userParam=" + assignment_id + "&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&categoryOid=&gradeTermOid=GTM0000000C1sB&jumpToSearch=&initialSearch=&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2ClsGcd&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Date+due&editColumn=&editEnabled=false&runningSelection=",
+			"method":"POST",
+			"mode":"cors"}));
 
-	(await fetch_body(
-		"https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
-		{
-			"credentials": "include",
-			"headers": {
-				"Connection": "keep-alive",
+	(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd",
+		{"credentials":"include",
+			"headers":{"Connection": "keep-alive",
 				"Upgrade-Insecure-Requests": "1",
-				"User-Agent": HEADERS["User-Agent"],
-				"Accept": HEADERS["Accept"],
-				"Accept-Language": HEADERS["Accept-Language"],
+				"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.0 Chrome/69.0.3497.128 Safari/537.36",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+				"X-Do-Not-Track": "1",
+				"Accept-Language": "en-US,en",
+				"DNT": "1",
 				"Referer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
-				"Accept-Encoding": HEADERS["Accept-Encoding"],
+				"Accept-Encoding": "gzip, deflate, br",
 				"Cookie": "deploymentId=x2sis; JSESSIONID=" + session_id},
-			"referrer": "https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
-			"referrerPolicy": "strict-origin-when-cross-origin",
-			"body": null,
-			"method": "GET",
-			"mode": "cors"
-		}
-	));
+			"referrer":"https://aspen.cpsd.us/aspen/portalClassDetail.do?navkey=academics.classes.list.detail",
+			"referrerPolicy":"strict-origin-when-cross-origin",
+			"body":null,
+			"method":"GET",
+			"mode":"cors"}));
 
 	let statistics = [];
 	
-	$('td[width="50%"]').eq(1).find('tr').parent().children().each(
-		(i, elem) => {
-			if (i > 1 && i < 6) {
-				statistics[i - 2] = $(this).children().eq(1).text().trim();
-			}
+	$('td[width="50%"]').eq(1).find('tr').parent().children().each(function(i, elem) {
+		if (i > 1 && i < 6) {
+			statistics[i - 2] = $(this).children().eq(1).text().trim();
 		}
-	);
+	});
 
 	if (statistics.length < 3) {
 		statistics = "No statistics data for this assignment";
