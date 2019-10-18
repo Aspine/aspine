@@ -710,89 +710,89 @@
 			});
 			let classesTable = new Tabulator("#classesTable", {
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-        index: "name",
-                		selectable:1,
-				ajaxURL:"/data",
-				ajaxConfig:"post", //ajax HTTP request type
-				ajaxContentType:"json", // send parameters to the server as a JSON encoded string
-				ajaxResponse:function(url, params, response){
+				index: "name",
+				selectable: 1,
+				ajaxURL: "/data",
+				ajaxConfig: "post", // ajax HTTP request type
+				ajaxContentType: "json", // send parameters to the server as a JSON encoded string
+				ajaxResponse: function(url, params, response) {
 					//url - the URL of the request
 					//params - the parameters passed with the request
 					//response - the JSON object returned in the body of the response.
 
-          if(((response.schedule)).login_fail) {
-              location.href='/logout';
-          }
+					if(((response.schedule)).login_fail) {
+						location.href='/logout';
+					}
 
-          if (response.classes.length == 0) {
+					if (response.classes.length == 0) {
 
-            response.classes = 
-            [
-                {
-                  "name": "No Classes",
-                  "grade": "No Grades",
-                  "categories": {
-                    "No Categories": "1.0"
-                  },
-                  "assignments": [
-                    {
-                      "name": "No Assignments",
-                      "category": "No Categories",
-                      "assignment_id": "GCD000000Fx62l",
-                      "special": "No Special",
-                      "score": 10,
-                      "max_score": 10,
-                      "percentage": 100,
-                      "color": "#6666FF"
-                    }
-                  ],
-                  "tokens": {
-                    "session_id": "263A6A78DE0F001DDDFC8A525D31A8F0",
-                    "apache_token": "572aa56a8c407a6d9a25b0a50843fc32"
-                  },
-                  "edited": false,
-                  "categoryGrades": {},
-                  "decimals": 2,
-                  "categoryDisplay": [
-                    {
-                      "category": "HW, Classwork, Assessments",
-                      "weight": "30%",
-                      "score": 340,
-                      "maxScore": 400,
-                      "grade": "85%",
-                      "color": "#6666FF"
-                    },
-                    {
-                      "category": "Speak-Listen",
-                      "weight": "20%",
-                      "score": "Ungraded",
-                      "maxScore": "Ungraded",
-                      "grade": "No Grade",
-                      "color": "black"
-                    },
-                    {
-                      "category": "Tests, Quizzes, vocabulary",
-                      "weight": "30%",
-                      "score": 100,
-                      "maxScore": 100,
-                      "grade": "100%",
-                      "color": "#1E8541"
-                    },
-                    {
-                      "category": "timeliness, effort",
-                      "weight": "20%",
-                      "score": 200,
-                      "maxScore": 200,
-                      "grade": "100%",
-                      "color": "#1E8541"
-                    }
-                  ],
-                  "type": "categoryPercent",
-                  "calculated_grade": "94.05 A",
-                  "color": "#1E8541"
-                }
-              ];
-          }
+						response.classes = 
+							[
+								{
+									"name": "No Classes",
+									"grade": "No Grades",
+									"categories": {
+										"No Categories": "1.0"
+									},
+									"assignments": [
+										{
+											"name": "No Assignments",
+											"category": "No Categories",
+											"assignment_id": "GCD000000Fx62l",
+											"special": "No Special",
+											"score": 10,
+											"max_score": 10,
+											"percentage": 100,
+											"color": "#6666FF"
+										}
+									],
+									"tokens": {
+										"session_id": "263A6A78DE0F001DDDFC8A525D31A8F0",
+										"apache_token": "572aa56a8c407a6d9a25b0a50843fc32"
+									},
+									"edited": false,
+									"categoryGrades": {},
+									"decimals": 2,
+									"categoryDisplay": [
+										{
+											"category": "HW, Classwork, Assessments",
+											"weight": "30%",
+											"score": 340,
+											"maxScore": 400,
+											"grade": "85%",
+											"color": "#6666FF"
+										},
+										{
+											"category": "Speak-Listen",
+											"weight": "20%",
+											"score": "Ungraded",
+											"maxScore": "Ungraded",
+											"grade": "No Grade",
+											"color": "black"
+										},
+										{
+											"category": "Tests, Quizzes, vocabulary",
+											"weight": "30%",
+											"score": 100,
+											"maxScore": 100,
+											"grade": "100%",
+											"color": "#1E8541"
+										},
+										{
+											"category": "timeliness, effort",
+											"weight": "20%",
+											"score": 200,
+											"maxScore": 200,
+											"grade": "100%",
+											"color": "#1E8541"
+										}
+									],
+									"type": "categoryPercent",
+									"calculated_grade": "94.05 A",
+									"color": "#1E8541"
+								}
+							];
+					}
 					tableData = response;
 
 
@@ -800,7 +800,7 @@
 
 
 					//parsing the data extracted by the scrappers, and getting tableData ready for presentation
-					for(let i = 0; i < tableData.classes.length; i++) {
+					for (let i = 0; i < tableData.classes.length; i++) {
 
 						//initialize every the edited key for every class and set it to false
 						tableData.classes[i].edited = false;
@@ -971,31 +971,31 @@
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
-          redraw_clock();
+					redraw_clock();
 
-          initialize_dropdown();
-          $("#pdf_loading_text").hide();
-          generate_pdf(pdf_index);
+					initialize_dropdown();
+					$("#pdf_loading_text").hide();
+					generate_pdf(pdf_index);
 
 					return response.classes; //return the tableData property of a response json object
 
 				},
 				//ajaxParams:{key1:"value1", key2:"value2"},
 				//data:tabledata, //assign data to table
-				layout:"fitColumns", //fit columns to width of table (optional)
-				columns:[ //Define Table Columns
+				layout: "fitColumns", //fit columns to width of table (optional)
+				columns: [ // Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
 				],
-				rowClick:function(e, row){ //trigger an alert message when the row is clicked
-          $("#mostRecentDiv").hide();
+				rowClick: function(e, row) { // trigger an alert message when the row is clicked
+					$("#mostRecentDiv").hide();
 
-          assignmentsTable.clearFilter();
+					assignmentsTable.clearFilter();
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
 					tabledata = classesTable.getData();
-					for(let i in tabledata) {
+					for (let i in tabledata) {
 						if(tabledata[i].name == row.getData().name) {
 							assignmentsTable.setData(tabledata[i].assignments);
 							categoriesTable.setData(tabledata[i].categoryDisplay);
@@ -1005,7 +1005,7 @@
 				},
 			});
 			function recent_toggle() {
-				if(!document.getElementById("recent_toggle").checked) {
+				if (!document.getElementById("recent_toggle").checked) {
 					//recentActivity.setData(tableData.recent.recentActivityArray);
 					document.getElementById("recentActivity").style.display = "block";
 					document.getElementById("recentAttendance").style.display = "none";
@@ -1018,9 +1018,9 @@
 					document.getElementById("recent_title").innerHTML = "Attendance";
 		    			recentAttendance.redraw();
 				}
-		        }
+		    }
 			function schedule_toggle() {
-				if(document.getElementById("schedule_toggle").checked) {
+				if (document.getElementById("schedule_toggle").checked) {
 					scheduleTable.setData(tableData.schedule.silver);
 					document.getElementById("schedule_title").innerHTML = "Silver";
                     redraw_clock();
@@ -1029,7 +1029,7 @@
 					document.getElementById("schedule_title").innerHTML = "Black";
                     redraw_clock();
 				}
-		        }
+		    }
 		function openTab(evt, tab_name) {
 		    // Declare all variables
 		    var i, tabcontent, tablinks;
