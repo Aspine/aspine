@@ -17,7 +17,7 @@ let newAssignment = function() {
 		updateGradePage();		
 
 	}
-}
+};
 
 
 let editAssignment = function(data) {
@@ -49,7 +49,7 @@ let editAssignment = function(data) {
 	updateGradePage();
 
 	
-}
+};
 
 let resetTableData = function() {
 
@@ -69,11 +69,11 @@ let resetTableData = function() {
 		document.getElementById("GPA").style.padding = "14px 16px 14px 16px";
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
-}
+};
 
 let hideCategoriesTable = function() {
 	document.getElementById("categoriesTable").style.display = "none";
-}
+};
 
 let updateGradePage = function() {
 	let computingClassData = tableData.classes[selected_class_i];
@@ -97,4 +97,4 @@ let updateGradePage = function() {
 	} else {
 		document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
 	}
-}
+};

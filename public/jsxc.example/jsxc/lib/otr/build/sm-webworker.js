@@ -1,17 +1,17 @@
 ;(function (root) {
   "use strict";
 
-  root.OTR = {}
+  root.OTR = {};
 
-  var hasCrypto = false
+  var hasCrypto = false;
   if (root.crypto)
-    hasCrypto = true
+    hasCrypto = true;
   else
     root.crypto = {
       randomBytes: function () {
         throw new Error("Haven't seeded yet.")
       }
-    }
+    };
 
   // default imports
   var imports = [
@@ -22,7 +22,7 @@
     , 'lib/const.js'
     , 'lib/helpers.js'
     , 'lib/sm.js'
-  ]
+  ];
 
   function wrapPostMessage(method) {
     return function () {
@@ -33,36 +33,36 @@
     }
   }
 
-  var sm
+  var sm;
   onmessage = function (e) {
-    var data = e.data
+    var data = e.data;
     switch (data.type) {
       case 'seed':
-        if (data.imports) imports = data.imports
-        importScripts.apply(root, imports)
+        if (data.imports) imports = data.imports;
+        importScripts.apply(root, imports);
 
         if (hasCrypto)
-          break
+          break;
 
         // use salsa20 when there's no prng in webworkers
         var state = new root.Salsa20(
           data.seed.slice(0, 32),
           data.seed.slice(32)
-        )
+        );
         root.crypto.randomBytes = function (n) {
           return state.getBytes(n)
-        }
-        break
+        };
+        break;
       case 'init':
         sm = new root.OTR.SM(data.reqs)
         ;['trust','question', 'send', 'abort'].forEach(function (m) {
           sm.on(m, wrapPostMessage(m));
-        })
-        break
+        });
+        break;
       case 'method':
-        sm[data.method].apply(sm, data.args)
+        sm[data.method].apply(sm, data.args);
         break
     }
   }
 
-}(this))
+}(this));

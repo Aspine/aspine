@@ -177,7 +177,7 @@ var jsc = {
 					document.detachEvent('onreadystatechange', arguments.callee);
 					fireOnce();
 				}
-			})
+			});
 
 			// Fallback
 			window.attachEvent('onload', fireOnce);
@@ -621,9 +621,17 @@ var jsc = {
 		case 'pad':
 			// if the slider is at the bottom, move it up
 			switch (jsc.getSliderComponent(thisObj)) {
-			case 's': if (thisObj.hsv[1] === 0) { thisObj.fromHSV(null, 100, null); }; break;
-			case 'v': if (thisObj.hsv[2] === 0) { thisObj.fromHSV(null, null, 100); }; break;
-			}
+                case 's':
+                    if (thisObj.hsv[1] === 0) {
+                        thisObj.fromHSV(null, 100, null);
+                    }
+                    break;
+                case 'v':
+                    if (thisObj.hsv[2] === 0) {
+                        thisObj.fromHSV(null, null, 100);
+                    }
+                    break;
+            }
 			jsc.setPad(thisObj, e, 0, 0);
 			break;
 
@@ -806,7 +814,7 @@ var jsc = {
 			hGrad.type = 'gradient';
 			hGrad.method = 'linear';
 			hGrad.angle = '90';
-			hGrad.colors = '16.67% #F0F, 33.33% #00F, 50% #0FF, 66.67% #0F0, 83.33% #FF0'
+			hGrad.colors = '16.67% #F0F, 33.33% #00F, 50% #0FF, 66.67% #0F0, 83.33% #FF0';
 
 			var hRect = document.createElement(jsc._vmlNS + ':rect');
 			hRect.style.position = 'absolute';

@@ -1787,7 +1787,7 @@ code.google.com/p/crypto-js/wiki/License
             var keySize = key.sigBytes / 4;
 
             // Compute number of rounds
-            var nRounds = this._nRounds = keySize + 6
+            var nRounds = this._nRounds = keySize + 6;
 
             // Compute number of key schedule rows
             var ksRows = (nRounds + 1) * 4;
@@ -2398,7 +2398,7 @@ CryptoJS.mode.CTR = (function () {
     var Encryptor = CTR.Encryptor = CTR.extend({
         processBlock: function (words, offset) {
             // Shortcuts
-            var cipher = this._cipher
+            var cipher = this._cipher;
             var blockSize = cipher.blockSize;
             var iv = this._iv;
             var counter = this._counter;
@@ -2414,7 +2414,7 @@ CryptoJS.mode.CTR = (function () {
             cipher.encryptBlock(keystream, 0);
 
             // Increment counter
-            counter[blockSize - 1] = (counter[blockSize - 1] + 1) | 0
+            counter[blockSize - 1] = (counter[blockSize - 1] + 1) | 0;
 
             // Encrypt
             for (var i = 0; i < blockSize; i++) {
@@ -2431,4 +2431,4 @@ CryptoJS.mode.CTR = (function () {
 
   return CryptoJS
 
-}))
+}));

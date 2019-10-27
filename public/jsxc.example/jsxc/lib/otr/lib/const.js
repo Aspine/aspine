@@ -1,7 +1,7 @@
 ;(function () {
   "use strict";
 
-  var root = this
+  var root = this;
 
   var CONST = {
 
@@ -44,7 +44,7 @@
     , STATUS_AKE_SUCCESS : 2
     , STATUS_END_OTR     : 3
 
-  }
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONST
@@ -52,4 +52,4 @@
     root.OTR.CONST = CONST
   }
 
-}).call(this)
+}).call(this);

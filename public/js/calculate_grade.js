@@ -279,4 +279,4 @@ let getCategoryDisplay = function (gradeInfo, computingClassData) {
 	}
 
 	return categoryDisplay;
-}
+};

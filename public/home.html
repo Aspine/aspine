@@ -281,7 +281,7 @@
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
 				
-			}
+			};
 			let noStats = function() {
 				//document.getElementById("there_are_stats").style.display = "none";
 				//document.getElementById("there_are_stats").style.display = "none";
@@ -292,7 +292,7 @@
 				document.getElementById("stats_modal_content").style.height = "80px";
 				//document.getElementById("stats_modal_content").style.margin = "300px auto";
 				document.getElementById("stats_modal_content").style.top = "140px";
-			}
+			};
 
 			//let request = require('request');
 			let tableData = {};
@@ -525,7 +525,7 @@
 
               let graph_stats = [low, q1, median, q3, high];
               console.log("Graph Stats: " + graph_stats);
-              console.log("Mean: " + mean)
+              console.log("Mean: " + mean);
 
 							var statsTrace = {
 							  x: graph_stats,
@@ -655,7 +655,7 @@
                       size: 12,
 											color: getColor(((i + 0.5) / 10) * 100),
                     },
-                  }
+                  };
                   layout.annotations.push(annotation);
             }
 
@@ -877,7 +877,7 @@
 					let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
 					let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
 					let timesCounter = 0;
-					let times = []
+					let times = [];
 
 					for (let i = 0; i < periods.length; i++) {
 

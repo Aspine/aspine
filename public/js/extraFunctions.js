@@ -6,7 +6,7 @@ let vip_username_list = ["8006214", "8001874"];
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
     return this.toString().split(".")[1].length || 0; 
-}
+};
 
 function getGPA(gradeToBeGPA) {
 
@@ -49,11 +49,11 @@ let statInfoFormatter = function(cell, formatterParams) {
 	if (!isNaN(cell.getRow().getData().score)) {
 		return "<i class=\"fa fa-info\"aria-hidden=\"true\"></i>";
 	}
-}
+};
 
 let statInfoHeaderFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-info-circle\"aria-hidden=\"true\"></i>";
-}
+};
 
 let getAttendanceEvent = function(value, data, cell, row, options) {
 	return "Absent";
@@ -150,7 +150,7 @@ let classesRowFormatter = function(cell, formatterParams) {
 	}
 
 
-}
+};
 
 let rowFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
@@ -167,7 +167,7 @@ let rowFormatter = function(cell, formatterParams) {
 	} else {
 		return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
 	}
-}
+};
 
 let classColors = [
   "#FF7070",
@@ -178,13 +178,13 @@ let classColors = [
   "#006464",
   "#D90000",
   "#00FFFF"
-]
+];
 
 let classIndex = function(classname) {
   classesArray = tableData.classes.map(x => x.name);
   return (classesArray.indexOf(classname)) % 8;
 
-}
+};
 
 let classFormatter = function(cell, formatterParams) {
 	let rowClass = cell.getRow().getData().classname;
@@ -203,7 +203,7 @@ let classFormatter = function(cell, formatterParams) {
 	} else {
 		return "<span style='color:" + classColor + "; font-weight:bold;'>" + value + "</span>";
 	}
-}
+};
 
 let weightFormatter = function(cell, formatterParams) {
 	let value = cell.getValue();
@@ -223,7 +223,7 @@ let weightFormatter = function(cell, formatterParams) {
 	} else {
 		return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
 	}
-}
+};
 
 let rowGradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
@@ -249,7 +249,7 @@ let rowGradeFormatter = function(cell, formatterParams) {
 
 	}
 
-}
+};
 
 let gradeFormatter = function(cell, formatterParams) {
 	let numberGrade = parseFloat(cell.getValue());
@@ -295,7 +295,7 @@ let gradeFormatter = function(cell, formatterParams) {
 
 	}
 
-}
+};
 let scale = 1;
 let adjustedScale = 1;
 let controlAdjustedScale = adjustedScale;
@@ -314,7 +314,7 @@ let generate_pdf = function(index) {
 
       pdf.getPage(pageNumber).then(function(page) {
 
-        scale = 1
+        scale = 1;
 
         let viewport = page.getViewport({scale});
 
@@ -353,7 +353,7 @@ let generate_pdf = function(index) {
       console.error(reason);
     });
   }
-}
+};
 
 let zoom_in_pdf = function() {
   if (!pdfrendering) {
@@ -392,7 +392,7 @@ let zoom_in_pdf = function() {
       console.error(reason);
     });
   }
-}
+};
 let zoom_out_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
@@ -430,7 +430,7 @@ let zoom_out_pdf = function() {
       console.error(reason);
     });
   }
-}
+};
 
 
 function closeAllSelect(elmnt) {
@@ -579,4 +579,4 @@ if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFul
       $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
     }
   }
-}
+};

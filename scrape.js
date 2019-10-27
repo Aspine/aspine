@@ -6,36 +6,18 @@
 const CLASS_THREADS = 10;
 const PDF_THREADS = 5;
 
-// Solo-Threads
-const SCHEDULE_THREAD = CLASS_THREADS + PDF_THREADS + 1;
-const RECENT_THREAD = SCHEDULE_THREAD + 1;
-
 // -------------------------------------------
 
 
 // --------------- Includes ------------------
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const express = require('express');
-const util = require('util');
-const concat = require('concat-stream');
-const fs = require('fs');
-const streams = require('memory-streams');
- 
-// Initialize with the string
 
-
-// -------------------------------------------
-
-// --------------- Exports -------------------
 module.exports = {
 	scrape_student: scrape_student,
 	scrape_assignmentDetails: scrape_assignmentDetails
 };
 
-// -------------------------------------------
-
-// --------------- Scraping ------------------
 // Returns object of classes
 async function scrape_student(username, password) {
 
@@ -70,37 +52,38 @@ async function scrape_student(username, password) {
 }
 
 async function scrape_pdf(username, password, i) {
-	return new Promise(async function(resolve, reject) {
+	return new Promise(async (resolve) => {
 		let session = await scrape_login();
-		let page = await submit_login(username, password, session.apache_token, session.session_id);
 
 		log(i, "session", session);
-
-    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11&groupPageWidgetOid=GPW0000006UKen&1554939833156", 
-      {"credentials":"include",
-        "headers":{
-          "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
-          "DNT": "1",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Accept-Language": "en-US,en",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
-          "Accept": "*/*",
-          "Referer": "https://aspen.cpsd.us/aspen/home.do",
-          "X-Requested-With": "XMLHttpRequest",
-          "Connection": "keep-alive"
-        },
-        "referrer":"https://aspen.cpsd.us/aspen/home.do",
-        "referrerPolicy":"strict-origin-when-cross-origin",
-        "body":null,
-        "method":"GET",
-        "mode":"cors"}));
+	async function get() {
+		await fetch_body("https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11&groupPageWidgetOid=GPW0000006UKen&1554939833156",
+			{"credentials":"include",
+				"headers":{
+					"Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "; _ga=GA1.3.481904573.1547755534; _ga=GA1.2.1668470472.1547906676; _gid=GA1.3.1139820126.1554600427",
+					"DNT": "1",
+					"Accept-Encoding": "gzip, deflate, br",
+					"Accept-Language": "en-US,en",
+					"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.12.2 Chrome/69.0.3497.128 Safari/537.36",
+					"Accept": "*/*",
+					"Referer": "https://aspen.cpsd.us/aspen/home.do",
+					"X-Requested-With": "XMLHttpRequest",
+					"Connection": "keep-alive"
+				},
+				"referrer":"https://aspen.cpsd.us/aspen/home.do",
+				"referrerPolicy":"strict-origin-when-cross-origin",
+				"body":null,
+				"method":"GET",
+				"mode":"cors"})
+	}
+    let $ = cheerio.load(get());
 
 
     let oids = [];
     let deliveryRecipients = [];
     let filenames = [];
     let titles = [];
-    $('.portletListCell').each(function(i, elem) {
+    $('.portletListCell').each(() => {
       if ($(this).attr('id')) {
         let raw = ($(this).children().first().children().first().html());
 
@@ -145,7 +128,7 @@ async function scrape_pdf(username, password, i) {
          "method":"GET",
          "mode":"cors"}));
 
-    fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
+    let fileReturn = (await fetch_file("https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
       {"credentials":"include",
         "headers":{
           "Connection": "keep-alive",
@@ -177,7 +160,7 @@ async function scrape_pdf(username, password, i) {
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
 
 
-	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
+	let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do",
 		{"credentials":"include",
 			"headers":{
 				"Connection": "keep-alive",
@@ -220,7 +203,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 
 	let statistics = [];
 	
-	$('td[width="50%"]').eq(1).find('tr').parent().children().each(function(i, elem) {
+	$('td[width="50%"]').eq(1).find('tr').parent().children().each((i) => {
 		if (i > 1 && i < 6) {
 			statistics[i - 2] = $(this).children().eq(1).text().trim();
 		}
@@ -236,7 +219,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 
 // Returns object of recent activity
 async function scrape_recent(username, password, i) {
-	return new Promise(async function(resolve, reject) {
+	return new Promise(async (resolve) => {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page) {
@@ -291,7 +274,7 @@ async function scrape_recent(username, password, i) {
 		
 
 		$('recent-activity').children().filter('gradebookScore')
-		.each(function(i, elem) {
+		.each(() => {
 			recentActivityArray.push({
 				date: $(this).attr('date'),
 				classname: $(this).attr('classname'),
@@ -314,7 +297,7 @@ async function scrape_recent(username, password, i) {
 
 // Returns promise that contains object of all class data
 function scrape_class(username, password, i) {
-	return new Promise(async function(resolve, reject) {
+	return new Promise(async (resolve) => {
 		// Login
 		let session = await scrape_login();
 		let page = await submit_login(username, password,
@@ -330,7 +313,7 @@ function scrape_class(username, password, i) {
 		log(i, "academics", academics);
 
 		// Check if thread is extra
-		if(academics.classes[i] == undefined) {
+		if(academics.classes[i] === undefined) {
 			resolve(undefined);
 			log(i, "closing");
 			return;
@@ -358,7 +341,7 @@ function scrape_class(username, password, i) {
 }
 
 // Returns object with apache_token and session_id
-async function scrape_login(username, password) {
+async function scrape_login() {
 	let page = await fetch_body("https://aspen.cpsd.us/aspen/logon.do",
 		{"credentials":"include",
 			"headers":{},
@@ -420,8 +403,8 @@ async function scrape_academics(session_id) {
 			"method":"GET",
 			"mode":"cors"}));
 	let data = {"classes": []};
-	$("#dataGrid a").each(function(i, elem) {
-    if ($(this).parent().nextAll().eq(0).text().trim() == "FY" || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+	$("#dataGrid a").each((i) => {
+    if ($(this).parent().nextAll().eq(0).text().trim() === "FY" || $(this).parent().nextAll().eq(0).text().trim() === "S1") {
       data.classes[i] = {};
       // data.classes[i].name = $(this).text();
       data.classes[i].name = $(this).parent()
@@ -459,7 +442,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
       "method":"POST",
       "mode":"cors"}));
   let data = {};
-  $("tr[class=listCell]", "#dataGrid").slice(3).each(function(i, elem) {
+  $("tr[class=listCell]", "#dataGrid").slice(3).each((i) => {
     if(i % 2 === 0) {
       let category = $(this).children().first().text();
       let weight = $(this).children().eq(2).text();
@@ -494,7 +477,7 @@ async function scrape_assignments(session_id, apache_token) {
   let n_assignments = parseInt($("#totalRecordsCount").text());
 
   while(true) {
-    $("tr.listCell.listRowHeight").each(function(i, elem) {
+    $("tr.listCell.listRowHeight").each(() => {
       let row = {};
       //row["name"] = $(this).find("a").first().text();
       //row["category"] = $(this).children().eq(2).text().trim();
@@ -550,7 +533,7 @@ async function scrape_assignments(session_id, apache_token) {
 
 // Returns list of black/silver day pairs of class names and room numbers
 async function scrape_schedule(username, password, i) {
-	return new Promise(async function(resolve, reject) {
+	return new Promise(async (resolve) => {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page) {
@@ -605,11 +588,11 @@ async function scrape_schedule(username, password, i) {
     let $ = cheerio.load(schedule_page);
 		let data = {black:[], silver:[]};
 
-    $('td[style="width: 125px"]').each(function(i, elem) {
+    $('td[style="width: 125px"]').each((i) => {
       const parts = $(this).html().trim().split('<br>').slice(0, 4);
       const period = $(this).parentsUntil('td').prev().find('th').html().trim();
       const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
-      if(i % 2 == 0) {
+      if(i % 2 === 0) {
         data.black[i/2] = block;
       } else {
         data.silver[Math.floor(i/2)] = block;
@@ -625,12 +608,6 @@ async function scrape_schedule(username, password, i) {
 async function fetch_body(url, options) {
 	return (await fetch(url, options)).text();
 }
-
-async function fetch_pdf(url, options) {
-	return (await fetch(url, options)).buffer();
-}
-
-
 // Logger can easily be turned off or on and modified
 function log(thread, name, obj) {
 	if(obj) {
@@ -645,7 +622,7 @@ async function fetch_file(url, options) {
   let res = (await fetch(url, options));
   let readable = res.body;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let chunks = [];
 
     readable.on("data", function (chunk) {
@@ -654,46 +631,9 @@ async function fetch_file(url, options) {
 
     readable.on("end", function() {
       process.stdout.setDefaultEncoding('binary');
-      pdf_out = (Buffer.concat(chunks).toString('binary'));
+      let pdf_out = (Buffer.concat(chunks).toString('binary'));
       resolve(pdf_out);
     });
   });
 
-}
-
-// --------------Compute Functions------------
-
-
-
-// ------------ TESTING ONLY -----------------
-if(require.main === module) {
-	let prompt = require('prompt');
-	let schema = {
-		properties: {
-			username: {
-				pattern: /^[0-9]+$/,
-				message: 'Username must be your student id',
-				required: true
-			},
-			password: {
-				hidden: true,
-				required: true
-			}
-		}
-	};
-
-	prompt.start();
-	prompt.get(schema, async function(err, result) {
-    // Send Stringified scrape_student() to samplejson.json
-    //fs.writeFile('samplejson.json', JSON.stringify(await scrape_student(result.username, result.password)), (err) => {
-    //  if (err) throw err;
-    //});
-
-    // Print Stringified scrape_student() - good for checking json return
-		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
-    
-    // Print scrape_student() - good for checking fetch html return
-		//console.log((await scrape_student(result.username, result.password)));
- 
-	});
 }

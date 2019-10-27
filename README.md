@@ -55,7 +55,7 @@ If you would like to directly contribute to Aspine, you can fork this repository
   * On GNU+Linux, you should be able to find these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
 * Open a terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `redis-server redis.conf`.
 * Open another terminal or command prompt, navigate to that same directory, and run `npm install` to install the required dependencies.
-* In the same terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
+* In the same terminal or command prompt, run `node ./server.js insecure`, or `node ./server.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
 
 These instructions have only been tested on GNU+Linux. You might need to change your `PATH` on Windows if you get an error saying that `node` is not found after installing node.js.
 

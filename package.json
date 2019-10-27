@@ -2,7 +2,7 @@
   "name": "aspine",
   "version": "2.0.0",
   "description": "Aspen Scraper and Alternate Frontend",
-  "main": "serve.js",
+  "main": "server.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "serve": "./serve.js",
+    "serve": "server.js",
     "scrape": "./scrape.js"
   },
   "repository": {

@@ -17,7 +17,7 @@ window.getStats = async function (session_id, apache_token, assignment_id) {
 		);
 
 	});
-}
+};
 
 
 //module.exports.getStats = getStats;

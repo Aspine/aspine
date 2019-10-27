@@ -89,7 +89,7 @@ function fitText(ctx, text, fontface, width) {
     do {
         fontsize--;
         ctx.font = fontsize + "px " + fontface;
-    } while (ctx.measureText(text).width > width)
+    } while (ctx.measureText(text).width > width);
 
     return fontsize;
 }

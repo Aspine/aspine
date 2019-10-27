@@ -1564,38 +1564,38 @@
 
   // computes one - two mod n
   function subMod(one, two, n) {
-    one = mod(one, n)
-    two = mod(two, n)
-    if (greater(two, one)) one = add(one, n)
+    one = mod(one, n);
+    two = mod(two, n);
+    if (greater(two, one)) one = add(one, n);
     return sub(one, two)
   }
 
   // computes 2^m as a bigInt
   function twoToThe(m) {
-    var b = Math.floor(m / bpe) + 2
-    var t = new Array(b)
-    for (var i = 0; i < b; i++) t[i] = 0
-    t[b - 2] = 1 << (m % bpe)
+    var b = Math.floor(m / bpe) + 2;
+    var t = new Array(b);
+    for (var i = 0; i < b; i++) t[i] = 0;
+    t[b - 2] = 1 << (m % bpe);
     return t
   }
 
   // cache these results for faster lookup
   var _num2bin = (function () {
-    var i = 0, _num2bin= {}
+    var i = 0, _num2bin= {};
     for (; i < 0x100; ++i) {
       _num2bin[i] = String.fromCharCode(i)  // 0 -> "\00"
     }
     return _num2bin
-  }())
+  }());
 
   // serialize a bigInt to an ascii string
   // padded up to pad length
   function bigInt2bits(bi, pad) {
-    pad || (pad = 0)
-    bi = dup(bi)
-    var ba = ''
+    pad || (pad = 0);
+    bi = dup(bi);
+    var ba = '';
     while (!isZero(bi)) {
-      ba = _num2bin[bi[0] & 0xff] + ba
+      ba = _num2bin[bi[0] & 0xff] + ba;
       rightShift_(bi, 8)
     }
     while (ba.length < pad) {
@@ -1606,11 +1606,11 @@
 
   // converts a byte array to a bigInt
   function ba2bigInt(data) {
-    var mpi = str2bigInt('0', 10, data.length)
+    var mpi = str2bigInt('0', 10, data.length);
     data.forEach(function (d, i) {
-      if (i) leftShift_(mpi, 8)
+      if (i) leftShift_(mpi, 8);
       mpi[0] |= d
-    })
+    });
     return mpi
   }
 
@@ -1632,8 +1632,8 @@
     else if ( typeof crypto !== 'undefined' &&
       typeof crypto.getRandomValues === 'function' ) {
       return function (n) {
-        var buf = new Uint8Array(n)
-        crypto.getRandomValues(buf)
+        var buf = new Uint8Array(n);
+        crypto.getRandomValues(buf);
         return Array.prototype.slice.call(buf, 0)
       }
     }
@@ -1643,7 +1643,7 @@
       throw new Error('Keys should not be generated without CSPRNG.')
     }
 
-  }())
+  }());
 
   // Salsa 20 in webworker needs a 40 byte seed
   function getSeed() {
@@ -1657,13 +1657,13 @@
 
   // returns a k-bit random integer
   function randomBitInt(k) {
-    if (k > 31) throw new Error("Too many bits.")
-    var i = 0, r = 0
-    var b = Math.floor(k / 8)
-    var mask = (1 << (k % 8)) - 1
-    if (mask) r = randomByte() & mask
+    if (k > 31) throw new Error("Too many bits.");
+    var i = 0, r = 0;
+    var b = Math.floor(k / 8);
+    var mask = (1 << (k % 8)) - 1;
+    if (mask) r = randomByte() & mask;
     for (; i < b; i++)
-      r = (256 * r) + randomByte()
+      r = (256 * r) + randomByte();
     return r
   }
 
@@ -1702,4 +1702,4 @@
     , ba2bigInt     : ba2bigInt
   }
 
-}))
+}));

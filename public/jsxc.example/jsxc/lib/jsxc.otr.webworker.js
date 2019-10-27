@@ -3,18 +3,18 @@
 ;(function (root) {
   "use strict";
 
-  root.OTR = {}
-  root.DSA = {}
+  root.OTR = {};
+  root.DSA = {};
 
-  var hasCrypto = false
+  var hasCrypto = false;
   if (root.crypto)
-    hasCrypto = true
+    hasCrypto = true;
   else
     root.crypto = {
       randomBytes: function () {
         throw new Error("Haven't seeded yet.")
       }
-    }
+    };
 
   // default imports
   var imports = [
@@ -25,7 +25,7 @@
     , 'lib/const.js'
     , 'lib/helpers.js'
     , 'lib/dsa.js'
-  ]
+  ];
 
   function sendMsg(type, val) {
     postMessage({ type: type, val: val })
@@ -34,26 +34,26 @@
   onmessage = function (e) {
     var data = e.data;
 
-    if (data.imports) imports = data.imports
+    if (data.imports) imports = data.imports;
     importScripts.apply(root, imports);
 
     if (!hasCrypto) {
       // use salsa20 when there's no prng in webworkers
-      var state = new root.Salsa20(data.seed.slice(0, 32), data.seed.slice(32))
+      var state = new root.Salsa20(data.seed.slice(0, 32), data.seed.slice(32));
       root.crypto.randomBytes = function (n) {
         return state.getBytes(n)
       }
     }
 
-    if (data.debug) sendMsg('debug', 'DSA key creation started')
-    var dsa
+    if (data.debug) sendMsg('debug', 'DSA key creation started');
+    var dsa;
     try {
       dsa = new root.DSA()
     } catch (e) {
-      if (data.debug) sendMsg('debug', e.toString())
+      if (data.debug) sendMsg('debug', e.toString());
       return
     }
-    if (data.debug) sendMsg('debug', 'DSA key creation finished')
+    if (data.debug) sendMsg('debug', 'DSA key creation finished');
 
     sendMsg('data', dsa.packPrivate())
   }
@@ -1879,38 +1879,38 @@
 
   // computes one - two mod n
   function subMod(one, two, n) {
-    one = mod(one, n)
-    two = mod(two, n)
-    if (greater(two, one)) one = add(one, n)
+    one = mod(one, n);
+    two = mod(two, n);
+    if (greater(two, one)) one = add(one, n);
     return sub(one, two)
   }
 
   // computes 2^m as a bigInt
   function twoToThe(m) {
-    var b = Math.floor(m / bpe) + 2
-    var t = new Array(b)
-    for (var i = 0; i < b; i++) t[i] = 0
-    t[b - 2] = 1 << (m % bpe)
+    var b = Math.floor(m / bpe) + 2;
+    var t = new Array(b);
+    for (var i = 0; i < b; i++) t[i] = 0;
+    t[b - 2] = 1 << (m % bpe);
     return t
   }
 
   // cache these results for faster lookup
   var _num2bin = (function () {
-    var i = 0, _num2bin= {}
+    var i = 0, _num2bin= {};
     for (; i < 0x100; ++i) {
       _num2bin[i] = String.fromCharCode(i)  // 0 -> "\00"
     }
     return _num2bin
-  }())
+  }());
 
   // serialize a bigInt to an ascii string
   // padded up to pad length
   function bigInt2bits(bi, pad) {
-    pad || (pad = 0)
-    bi = dup(bi)
-    var ba = ''
+    pad || (pad = 0);
+    bi = dup(bi);
+    var ba = '';
     while (!isZero(bi)) {
-      ba = _num2bin[bi[0] & 0xff] + ba
+      ba = _num2bin[bi[0] & 0xff] + ba;
       rightShift_(bi, 8)
     }
     while (ba.length < pad) {
@@ -1921,11 +1921,11 @@
 
   // converts a byte array to a bigInt
   function ba2bigInt(data) {
-    var mpi = str2bigInt('0', 10, data.length)
+    var mpi = str2bigInt('0', 10, data.length);
     data.forEach(function (d, i) {
-      if (i) leftShift_(mpi, 8)
+      if (i) leftShift_(mpi, 8);
       mpi[0] |= d
-    })
+    });
     return mpi
   }
 
@@ -1947,8 +1947,8 @@
     else if ( typeof crypto !== 'undefined' &&
       typeof crypto.getRandomValues === 'function' ) {
       return function (n) {
-        var buf = new Uint8Array(n)
-        crypto.getRandomValues(buf)
+        var buf = new Uint8Array(n);
+        crypto.getRandomValues(buf);
         return Array.prototype.slice.call(buf, 0)
       }
     }
@@ -1958,7 +1958,7 @@
       throw new Error('Keys should not be generated without CSPRNG.')
     }
 
-  }())
+  }());
 
   // Salsa 20 in webworker needs a 40 byte seed
   function getSeed() {
@@ -1972,13 +1972,13 @@
 
   // returns a k-bit random integer
   function randomBitInt(k) {
-    if (k > 31) throw new Error("Too many bits.")
-    var i = 0, r = 0
-    var b = Math.floor(k / 8)
-    var mask = (1 << (k % 8)) - 1
-    if (mask) r = randomByte() & mask
+    if (k > 31) throw new Error("Too many bits.");
+    var i = 0, r = 0;
+    var b = Math.floor(k / 8);
+    var mask = (1 << (k % 8)) - 1;
+    if (mask) r = randomByte() & mask;
     for (; i < b; i++)
-      r = (256 * r) + randomByte()
+      r = (256 * r) + randomByte();
     return r
   }
 
@@ -3807,7 +3807,7 @@ code.google.com/p/crypto-js/wiki/License
             var keySize = key.sigBytes / 4;
 
             // Compute number of rounds
-            var nRounds = this._nRounds = keySize + 6
+            var nRounds = this._nRounds = keySize + 6;
 
             // Compute number of key schedule rows
             var ksRows = (nRounds + 1) * 4;
@@ -4418,7 +4418,7 @@ CryptoJS.mode.CTR = (function () {
     var Encryptor = CTR.Encryptor = CTR.extend({
         processBlock: function (words, offset) {
             // Shortcuts
-            var cipher = this._cipher
+            var cipher = this._cipher;
             var blockSize = cipher.blockSize;
             var iv = this._iv;
             var counter = this._counter;
@@ -4434,7 +4434,7 @@ CryptoJS.mode.CTR = (function () {
             cipher.encryptBlock(keystream, 0);
 
             // Increment counter
-            counter[blockSize - 1] = (counter[blockSize - 1] + 1) | 0
+            counter[blockSize - 1] = (counter[blockSize - 1] + 1) | 0;
 
             // Encrypt
             for (var i = 0; i < blockSize; i++) {
@@ -4908,10 +4908,10 @@ CryptoJS.mode.CTR = (function () {
 	}
 }.call(this));
 
-;(function () {
-  "use strict";
+(function () {
+    "use strict";
 
-  var root = this
+  var root = this;
 
   var CONST = {
 
@@ -4954,7 +4954,7 @@ CryptoJS.mode.CTR = (function () {
     , STATUS_AKE_SUCCESS : 2
     , STATUS_END_OTR     : 3
 
-  }
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONST
@@ -4966,17 +4966,17 @@ CryptoJS.mode.CTR = (function () {
 ;(function () {
   "use strict";
 
-  var root = this
+  var root = this;
 
-  var HLP = {}, CryptoJS, BigInt
+  var HLP = {}, CryptoJS, BigInt;
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HLP = {}
-    CryptoJS = require('../vendor/crypto.js')
+    module.exports = HLP = {};
+    CryptoJS = require('../vendor/crypto.js');
     BigInt = require('../vendor/bigint.js')
   } else {
-    if (root.OTR) root.OTR.HLP = HLP
-    if (root.DSA) root.DSA.HLP = HLP
-    CryptoJS = root.CryptoJS
+    if (root.OTR) root.OTR.HLP = HLP;
+    if (root.DSA) root.DSA.HLP = HLP;
+    CryptoJS = root.CryptoJS;
     BigInt = root.BigInt
   }
 
@@ -4988,13 +4988,13 @@ CryptoJS.mode.CTR = (function () {
     , CTR   : 8
     , MAC   : 20
     , SIG   : 40
-  }
+  };
 
   // otr message wrapper begin and end
   var WRAPPER_BEGIN = "?OTR"
-    , WRAPPER_END   = "."
+    , WRAPPER_END   = ".";
 
-  var TWO = BigInt.str2bigInt('2', 10)
+  var TWO = BigInt.str2bigInt('2', 10);
 
   HLP.debug = function (msg) {
     // used as HLP.debug.call(ctx, msg)
@@ -5002,7 +5002,7 @@ CryptoJS.mode.CTR = (function () {
          typeof this.debug !== 'function' &&
          typeof console !== 'undefined'
     ) console.log(msg)
-  }
+  };
 
   HLP.extend = function (child, parent) {
     for (var key in parent) {
@@ -5010,277 +5010,277 @@ CryptoJS.mode.CTR = (function () {
         child[key] = parent[key]
     }
     function Ctor() { this.constructor = child }
-    Ctor.prototype = parent.prototype
-    child.prototype = new Ctor()
+    Ctor.prototype = parent.prototype;
+    child.prototype = new Ctor();
     child.__super__ = parent.prototype
-  }
+  };
 
   // assumes 32-bit
   function intCompare(x, y) {
-    var z = ~(x ^ y)
-    z &= z >> 16
-    z &= z >> 8
-    z &= z >> 4
-    z &= z >> 2
-    z &= z >> 1
+    var z = ~(x ^ y);
+    z &= z >> 16;
+    z &= z >> 8;
+    z &= z >> 4;
+    z &= z >> 2;
+    z &= z >> 1;
     return z & 1
   }
 
   // constant-time string comparison
   HLP.compare = function (str1, str2) {
     if (str1.length !== str2.length)
-      return false
-    var i = 0, result = 0
+      return false;
+    var i = 0, result = 0;
     for (; i < str1.length; i++)
-      result |= str1[i].charCodeAt(0) ^ str2[i].charCodeAt(0)
+      result |= str1[i].charCodeAt(0) ^ str2[i].charCodeAt(0);
     return intCompare(result, 0)
-  }
+  };
 
   HLP.randomExponent = function () {
     return BigInt.randBigInt(1536)
-  }
+  };
 
   HLP.smpHash = function (version, fmpi, smpi) {
-    var sha256 = CryptoJS.algo.SHA256.create()
-    sha256.update(CryptoJS.enc.Latin1.parse(HLP.packBytes(version, DTS.BYTE)))
-    sha256.update(CryptoJS.enc.Latin1.parse(HLP.packMPI(fmpi)))
-    if (smpi) sha256.update(CryptoJS.enc.Latin1.parse(HLP.packMPI(smpi)))
-    var hash = sha256.finalize()
+    var sha256 = CryptoJS.algo.SHA256.create();
+    sha256.update(CryptoJS.enc.Latin1.parse(HLP.packBytes(version, DTS.BYTE)));
+    sha256.update(CryptoJS.enc.Latin1.parse(HLP.packMPI(fmpi)));
+    if (smpi) sha256.update(CryptoJS.enc.Latin1.parse(HLP.packMPI(smpi)));
+    var hash = sha256.finalize();
     return HLP.bits2bigInt(hash.toString(CryptoJS.enc.Latin1))
-  }
+  };
 
   HLP.makeMac = function (aesctr, m) {
-    var pass = CryptoJS.enc.Latin1.parse(m)
-    var mac = CryptoJS.HmacSHA256(CryptoJS.enc.Latin1.parse(aesctr), pass)
+    var pass = CryptoJS.enc.Latin1.parse(m);
+    var mac = CryptoJS.HmacSHA256(CryptoJS.enc.Latin1.parse(aesctr), pass);
     return HLP.mask(mac.toString(CryptoJS.enc.Latin1), 0, 160)
-  }
+  };
 
   HLP.make1Mac = function (aesctr, m) {
-    var pass = CryptoJS.enc.Latin1.parse(m)
-    var mac = CryptoJS.HmacSHA1(CryptoJS.enc.Latin1.parse(aesctr), pass)
+    var pass = CryptoJS.enc.Latin1.parse(m);
+    var mac = CryptoJS.HmacSHA1(CryptoJS.enc.Latin1.parse(aesctr), pass);
     return mac.toString(CryptoJS.enc.Latin1)
-  }
+  };
 
   HLP.encryptAes = function (msg, c, iv) {
     var opts = {
         mode: CryptoJS.mode.CTR
       , iv: CryptoJS.enc.Latin1.parse(iv)
       , padding: CryptoJS.pad.NoPadding
-    }
+    };
     var aesctr = CryptoJS.AES.encrypt(
         msg
       , CryptoJS.enc.Latin1.parse(c)
       , opts
-    )
-    var aesctr_decoded = CryptoJS.enc.Base64.parse(aesctr.toString())
+    );
+    var aesctr_decoded = CryptoJS.enc.Base64.parse(aesctr.toString());
     return CryptoJS.enc.Latin1.stringify(aesctr_decoded)
-  }
+  };
 
   HLP.decryptAes = function (msg, c, iv) {
-    msg = CryptoJS.enc.Latin1.parse(msg)
+    msg = CryptoJS.enc.Latin1.parse(msg);
     var opts = {
         mode: CryptoJS.mode.CTR
       , iv: CryptoJS.enc.Latin1.parse(iv)
       , padding: CryptoJS.pad.NoPadding
-    }
+    };
     return CryptoJS.AES.decrypt(
         CryptoJS.enc.Base64.stringify(msg)
       , CryptoJS.enc.Latin1.parse(c)
       , opts
     )
-  }
+  };
 
   HLP.multPowMod = function (a, b, c, d, e) {
     return BigInt.multMod(BigInt.powMod(a, b, e), BigInt.powMod(c, d, e), e)
-  }
+  };
 
   HLP.ZKP = function (v, c, d, e) {
     return BigInt.equals(c, HLP.smpHash(v, d, e))
-  }
+  };
 
   // greater than, or equal
   HLP.GTOE = function (a, b) {
     return (BigInt.equals(a, b) || BigInt.greater(a, b))
-  }
+  };
 
   HLP.between = function (x, a, b) {
     return (BigInt.greater(x, a) && BigInt.greater(b, x))
-  }
+  };
 
   HLP.checkGroup = function (g, N_MINUS_2) {
     return HLP.GTOE(g, TWO) && HLP.GTOE(N_MINUS_2, g)
-  }
+  };
 
   HLP.h1 = function (b, secbytes) {
-    var sha1 = CryptoJS.algo.SHA1.create()
-    sha1.update(CryptoJS.enc.Latin1.parse(b))
-    sha1.update(CryptoJS.enc.Latin1.parse(secbytes))
+    var sha1 = CryptoJS.algo.SHA1.create();
+    sha1.update(CryptoJS.enc.Latin1.parse(b));
+    sha1.update(CryptoJS.enc.Latin1.parse(secbytes));
     return (sha1.finalize()).toString(CryptoJS.enc.Latin1)
-  }
+  };
 
   HLP.h2 = function (b, secbytes) {
-    var sha256 = CryptoJS.algo.SHA256.create()
-    sha256.update(CryptoJS.enc.Latin1.parse(b))
-    sha256.update(CryptoJS.enc.Latin1.parse(secbytes))
+    var sha256 = CryptoJS.algo.SHA256.create();
+    sha256.update(CryptoJS.enc.Latin1.parse(b));
+    sha256.update(CryptoJS.enc.Latin1.parse(secbytes));
     return (sha256.finalize()).toString(CryptoJS.enc.Latin1)
-  }
+  };
 
   HLP.mask = function (bytes, start, n) {
     return bytes.substr(start / 8, n / 8)
-  }
+  };
 
   var _toString = String.fromCharCode;
   HLP.packBytes = function (val, bytes) {
-    val = val.toString(16)
-    var nex, res = ''  // big-endian, unsigned long
+    val = val.toString(16);
+    var nex, res = '';  // big-endian, unsigned long
     for (; bytes > 0; bytes--) {
-      nex = val.length ? val.substr(-2, 2) : '0'
-      val = val.substr(0, val.length - 2)
+      nex = val.length ? val.substr(-2, 2) : '0';
+      val = val.substr(0, val.length - 2);
       res = _toString(parseInt(nex, 16)) + res
     }
     return res
-  }
+  };
 
   HLP.packINT = function (d) {
     return HLP.packBytes(d, DTS.INT)
-  }
+  };
 
   HLP.packCtr = function (d) {
     return HLP.padCtr(HLP.packBytes(d, DTS.CTR))
-  }
+  };
 
   HLP.padCtr = function (ctr) {
     return ctr + '\x00\x00\x00\x00\x00\x00\x00\x00'
-  }
+  };
 
   HLP.unpackCtr = function (d) {
-    d = HLP.toByteArray(d.substring(0, 8))
+    d = HLP.toByteArray(d.substring(0, 8));
     return HLP.unpack(d)
-  }
+  };
 
   HLP.unpack = function (arr) {
-    var val = 0, i = 0, len = arr.length
+    var val = 0, i = 0, len = arr.length;
     for (; i < len; i++) {
       val = (val * 256) + arr[i]
     }
     return val
-  }
+  };
 
   HLP.packData = function (d) {
     return HLP.packINT(d.length) + d
-  }
+  };
 
   HLP.bits2bigInt = function (bits) {
-    bits = HLP.toByteArray(bits)
+    bits = HLP.toByteArray(bits);
     return BigInt.ba2bigInt(bits)
-  }
+  };
 
   HLP.packMPI = function (mpi) {
     return HLP.packData(BigInt.bigInt2bits(BigInt.trim(mpi, 0)))
-  }
+  };
 
   HLP.packSHORT = function (short) {
     return HLP.packBytes(short, DTS.SHORT)
-  }
+  };
 
   HLP.unpackSHORT = function (short) {
-    short = HLP.toByteArray(short)
+    short = HLP.toByteArray(short);
     return HLP.unpack(short)
-  }
+  };
 
   HLP.packTLV = function (type, value) {
     return HLP.packSHORT(type) + HLP.packSHORT(value.length) + value
-  }
+  };
 
   HLP.readLen = function (msg) {
-    msg = HLP.toByteArray(msg.substring(0, 4))
+    msg = HLP.toByteArray(msg.substring(0, 4));
     return HLP.unpack(msg)
-  }
+  };
 
   HLP.readData = function (data) {
-    var n = HLP.unpack(data.splice(0, 4))
+    var n = HLP.unpack(data.splice(0, 4));
     return [n, data]
-  }
+  };
 
   HLP.readMPI = function (data) {
-    data = HLP.toByteArray(data)
-    data = HLP.readData(data)
+    data = HLP.toByteArray(data);
+    data = HLP.readData(data);
     return BigInt.ba2bigInt(data[1])
-  }
+  };
 
   HLP.packMPIs = function (arr) {
     return arr.reduce(function (prv, cur) {
       return prv + HLP.packMPI(cur)
     }, '')
-  }
+  };
 
   HLP.unpackMPIs = function (num, mpis) {
-    var i = 0, arr = []
-    for (; i < num; i++) arr.push('MPI')
+    var i = 0, arr = [];
+    for (; i < num; i++) arr.push('MPI');
     return (HLP.splitype(arr, mpis)).map(function (m) {
       return HLP.readMPI(m)
     })
-  }
+  };
 
   HLP.wrapMsg = function (msg, fs, v3, our_it, their_it) {
-    msg = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Latin1.parse(msg))
-    msg = WRAPPER_BEGIN + ":" + msg + WRAPPER_END
+    msg = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Latin1.parse(msg));
+    msg = WRAPPER_BEGIN + ":" + msg + WRAPPER_END;
 
-    var its
+    var its;
     if (v3) {
-      its = '|'
-      its += (HLP.readLen(our_it)).toString(16)
-      its += '|'
+      its = '|';
+      its += (HLP.readLen(our_it)).toString(16);
+      its += '|';
       its += (HLP.readLen(their_it)).toString(16)
     }
 
-    if (!fs) return [null, msg]
+    if (!fs) return [null, msg];
 
-    var n = Math.ceil(msg.length / fs)
-    if (n > 65535) return ['Too many fragments']
-    if (n == 1) return [null, msg]
+    var n = Math.ceil(msg.length / fs);
+    if (n > 65535) return ['Too many fragments'];
+    if (n == 1) return [null, msg];
 
-    var k, bi, ei, frag, mf, mfs = []
+    var k, bi, ei, frag, mf, mfs = [];
     for (k = 1; k <= n; k++) {
-      bi = (k - 1) * fs
-      ei = k * fs
-      frag = msg.slice(bi, ei)
-      mf = WRAPPER_BEGIN
-      if (v3) mf += its
-      mf += ',' + k + ','
-      mf += n + ','
-      mf += frag + ','
+      bi = (k - 1) * fs;
+      ei = k * fs;
+      frag = msg.slice(bi, ei);
+      mf = WRAPPER_BEGIN;
+      if (v3) mf += its;
+      mf += ',' + k + ',';
+      mf += n + ',';
+      mf += frag + ',';
       mfs.push(mf)
     }
 
     return [null, mfs]
-  }
+  };
 
   HLP.splitype = function splitype(arr, msg) {
-    var data = []
+    var data = [];
     arr.forEach(function (a) {
-      var str
+      var str;
       switch (a) {
         case 'PUBKEY':
-          str = splitype(['SHORT', 'MPI', 'MPI', 'MPI', 'MPI'], msg).join('')
-          break
+          str = splitype(['SHORT', 'MPI', 'MPI', 'MPI', 'MPI'], msg).join('');
+          break;
         case 'DATA':  // falls through
         case 'MPI':
-          str = msg.substring(0, HLP.readLen(msg) + 4)
-          break
+          str = msg.substring(0, HLP.readLen(msg) + 4);
+          break;
         default:
           str = msg.substring(0, DTS[a])
       }
-      data.push(str)
+      data.push(str);
       msg = msg.substring(str.length)
-    })
+    });
     return data
-  }
+  };
 
   // https://github.com/msgpack/msgpack-javascript/blob/master/msgpack.js
 
   var _bin2num = (function () {
-    var i = 0, _bin2num = {}
+    var i = 0, _bin2num = {};
     for (; i < 0x100; ++i) {
       _bin2num[String.fromCharCode(i)] = i  // "\00" -> 0x00
     }
@@ -5288,20 +5288,20 @@ CryptoJS.mode.CTR = (function () {
       _bin2num[String.fromCharCode(0xf700 + i)] = i  // "\f780" -> 0x80
     }
     return _bin2num
-  }())
+  }());
 
   HLP.toByteArray = function (data) {
     var rv = []
       , ary = data.split("")
       , i = -1
       , iz = ary.length
-      , remain = iz % 8
+      , remain = iz % 8;
 
     while (remain--) {
-      ++i
+      ++i;
       rv[i] = _bin2num[ary[i]]
     }
-    remain = iz >> 3
+    remain = iz >> 3;
     while (remain--) {
       rv.push(_bin2num[ary[++i]], _bin2num[ary[++i]],
               _bin2num[ary[++i]], _bin2num[ary[++i]],
@@ -5315,73 +5315,73 @@ CryptoJS.mode.CTR = (function () {
 ;(function () {
   "use strict";
 
-  var root = this
+  var root = this;
 
-  var CryptoJS, BigInt, Worker, WWPath, HLP
+  var CryptoJS, BigInt, Worker, WWPath, HLP;
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = DSA
-    CryptoJS = require('../vendor/crypto.js')
-    BigInt = require('../vendor/bigint.js')
-    WWPath = require('path').join(__dirname, '/dsa-webworker.js')
+    module.exports = DSA;
+    CryptoJS = require('../vendor/crypto.js');
+    BigInt = require('../vendor/bigint.js');
+    WWPath = require('path').join(__dirname, '/dsa-webworker.js');
     HLP = require('./helpers.js')
   } else {
     // copy over and expose internals
     Object.keys(root.DSA).forEach(function (k) {
       DSA[k] = root.DSA[k]
-    })
-    root.DSA = DSA
-    CryptoJS = root.CryptoJS
-    BigInt = root.BigInt
-    Worker = root.Worker
-    WWPath = 'dsa-webworker.js'
+    });
+    root.DSA = DSA;
+    CryptoJS = root.CryptoJS;
+    BigInt = root.BigInt;
+    Worker = root.Worker;
+    WWPath = 'dsa-webworker.js';
     HLP = DSA.HLP
   }
 
   var ZERO = BigInt.str2bigInt('0', 10)
     , ONE = BigInt.str2bigInt('1', 10)
     , TWO = BigInt.str2bigInt('2', 10)
-    , KEY_TYPE = '\x00\x00'
+    , KEY_TYPE = '\x00\x00';
 
-  var DEBUG = false
+  var DEBUG = false;
   function timer() {
-    var start = (new Date()).getTime()
+    var start = (new Date()).getTime();
     return function (s) {
-      if (!DEBUG || typeof console === 'undefined') return
-      var t = (new Date()).getTime()
-      console.log(s + ': ' + (t - start))
+      if (!DEBUG || typeof console === 'undefined') return;
+      var t = (new Date()).getTime();
+      console.log(s + ': ' + (t - start));
       start = t
     }
   }
 
   function makeRandom(min, max) {
-    var c = BigInt.randBigInt(BigInt.bitSize(max))
-    if (!HLP.between(c, min, max)) return makeRandom(min, max)
+    var c = BigInt.randBigInt(BigInt.bitSize(max));
+    if (!HLP.between(c, min, max)) return makeRandom(min, max);
     return c
   }
 
   // altered BigInt.randProbPrime()
   // n rounds of Miller Rabin (after trial division with small primes)
-  var rpprb = []
+  var rpprb = [];
   function isProbPrime(k, n) {
-    var i, B = 30000, l = BigInt.bitSize(k)
-    var primes = BigInt.primes
+    var i, B = 30000, l = BigInt.bitSize(k);
+    var primes = BigInt.primes;
 
     if (primes.length === 0)
-      primes = BigInt.findPrimes(B)
+      primes = BigInt.findPrimes(B);
 
     if (rpprb.length != k.length)
-      rpprb = BigInt.dup(k)
+      rpprb = BigInt.dup(k);
 
     // check ans for divisibility by small primes up to B
     for (i = 0; (i < primes.length) && (primes[i] <= B); i++)
       if (BigInt.modInt(k, primes[i]) === 0 && !BigInt.equalsInt(k, primes[i]))
-        return 0
+        return 0;
 
     // do n rounds of Miller Rabin, with random bases less than k
     for (i = 0; i < n; i++) {
-      BigInt.randBigInt_(rpprb, l, 0)
+      BigInt.randBigInt_(rpprb, l, 0);
       while(!BigInt.greater(k, rpprb))  // pick a random rpprb that's < k
-        BigInt.randBigInt_(rpprb, l, 0)
+        BigInt.randBigInt_(rpprb, l, 0);
       if (!BigInt.millerRabin(k, rpprb))
         return 0
     }
@@ -5392,67 +5392,67 @@ CryptoJS.mode.CTR = (function () {
   var bit_lengths = {
       '1024': { N: 160, repeat: 40 }  // 40x should give 2^-80 confidence
     , '2048': { N: 224, repeat: 56 }
-  }
+  };
 
-  var primes = {}
+  var primes = {};
 
   // follows go lang http://golang.org/src/pkg/crypto/dsa/dsa.go
   // fips version was removed in 0c99af0df3e7
   function generatePrimes(bit_length) {
 
-    var t = timer()  // for debugging
+    var t = timer();  // for debugging
 
     // number of MR tests to perform
-    var repeat = bit_lengths[bit_length].repeat
+    var repeat = bit_lengths[bit_length].repeat;
 
-    var N = bit_lengths[bit_length].N
+    var N = bit_lengths[bit_length].N;
 
-    var LM1 = BigInt.twoToThe(bit_length - 1)
-    var bl4 = 4 * bit_length
-    var brk = false
+    var LM1 = BigInt.twoToThe(bit_length - 1);
+    var bl4 = 4 * bit_length;
+    var brk = false;
 
-    var q, p, rem, counter
+    var q, p, rem, counter;
     for (;;) {
 
-      q = BigInt.randBigInt(N, 1)
-      q[0] |= 1
+      q = BigInt.randBigInt(N, 1);
+      q[0] |= 1;
 
-      if (!isProbPrime(q, repeat)) continue
-      t('q')
+      if (!isProbPrime(q, repeat)) continue;
+      t('q');
 
       for (counter = 0; counter < bl4; counter++) {
-        p = BigInt.randBigInt(bit_length, 1)
-        p[0] |= 1
+        p = BigInt.randBigInt(bit_length, 1);
+        p[0] |= 1;
 
-        rem = BigInt.mod(p, q)
-        rem = BigInt.sub(rem, ONE)
-        p = BigInt.sub(p, rem)
+        rem = BigInt.mod(p, q);
+        rem = BigInt.sub(rem, ONE);
+        p = BigInt.sub(p, rem);
 
-        if (BigInt.greater(LM1, p)) continue
-        if (!isProbPrime(p, repeat)) continue
+        if (BigInt.greater(LM1, p)) continue;
+        if (!isProbPrime(p, repeat)) continue;
 
-        t('p')
-        primes[bit_length] = { p: p, q: q }
-        brk = true
+        t('p');
+        primes[bit_length] = { p: p, q: q };
+        brk = true;
         break
       }
 
       if (brk) break
     }
 
-    var h = BigInt.dup(TWO)
-    var pm1 = BigInt.sub(p, ONE)
-    var e = BigInt.multMod(pm1, BigInt.inverseMod(q, p), p)
+    var h = BigInt.dup(TWO);
+    var pm1 = BigInt.sub(p, ONE);
+    var e = BigInt.multMod(pm1, BigInt.inverseMod(q, p), p);
 
-    var g
+    var g;
     for (;;) {
-      g = BigInt.powMod(h, e, p)
+      g = BigInt.powMod(h, e, p);
       if (BigInt.equals(g, ONE)) {
-        h = BigInt.add(h, ONE)
+        h = BigInt.add(h, ONE);
         continue
       }
-      primes[bit_length].g = g
-      t('g')
+      primes[bit_length].g = g;
+      t('g');
       return
     }
 
@@ -5460,43 +5460,43 @@ CryptoJS.mode.CTR = (function () {
   }
 
   function DSA(obj, opts) {
-    if (!(this instanceof DSA)) return new DSA(obj, opts)
+    if (!(this instanceof DSA)) return new DSA(obj, opts);
 
     // options
-    opts = opts || {}
+    opts = opts || {};
 
     // inherit
     if (obj) {
       var self = this
       ;['p', 'q', 'g', 'y', 'x'].forEach(function (prop) {
         self[prop] = obj[prop]
-      })
-      this.type = obj.type || KEY_TYPE
+      });
+      this.type = obj.type || KEY_TYPE;
       return
     }
 
     // default to 1024
-    var bit_length = parseInt(opts.bit_length ? opts.bit_length : 1024, 10)
+    var bit_length = parseInt(opts.bit_length ? opts.bit_length : 1024, 10);
 
     if (!bit_lengths[bit_length])
-      throw new Error('Unsupported bit length.')
+      throw new Error('Unsupported bit length.');
 
     // set primes
     if (!primes[bit_length])
-      generatePrimes(bit_length)
+      generatePrimes(bit_length);
 
-    this.p = primes[bit_length].p
-    this.q = primes[bit_length].q
-    this.g = primes[bit_length].g
+    this.p = primes[bit_length].p;
+    this.q = primes[bit_length].q;
+    this.g = primes[bit_length].g;
 
     // key type
-    this.type = KEY_TYPE
+    this.type = KEY_TYPE;
 
     // private key
-    this.x = makeRandom(ZERO, this.q)
+    this.x = makeRandom(ZERO, this.q);
 
     // public keys (p, q, g, y)
-    this.y = BigInt.powMod(this.g, this.x, this.p)
+    this.y = BigInt.powMod(this.g, this.x, this.p);
 
     // nocache?
     if (opts.nocache) primes[bit_length] = null
@@ -5507,109 +5507,109 @@ CryptoJS.mode.CTR = (function () {
     constructor: DSA,
 
     packPublic: function () {
-      var str = this.type
-      str += HLP.packMPI(this.p)
-      str += HLP.packMPI(this.q)
-      str += HLP.packMPI(this.g)
-      str += HLP.packMPI(this.y)
+      var str = this.type;
+      str += HLP.packMPI(this.p);
+      str += HLP.packMPI(this.q);
+      str += HLP.packMPI(this.g);
+      str += HLP.packMPI(this.y);
       return str
     },
 
     packPrivate: function () {
-      var str = this.packPublic() + HLP.packMPI(this.x)
-      str = CryptoJS.enc.Latin1.parse(str)
+      var str = this.packPublic() + HLP.packMPI(this.x);
+      str = CryptoJS.enc.Latin1.parse(str);
       return str.toString(CryptoJS.enc.Base64)
     },
 
     // http://www.imperialviolet.org/2013/06/15/suddendeathentropy.html
     generateNonce: function (m) {
-      var priv = BigInt.bigInt2bits(BigInt.trim(this.x, 0))
-      var rand = BigInt.bigInt2bits(BigInt.randBigInt(256))
+      var priv = BigInt.bigInt2bits(BigInt.trim(this.x, 0));
+      var rand = BigInt.bigInt2bits(BigInt.randBigInt(256));
 
-      var sha256 = CryptoJS.algo.SHA256.create()
-      sha256.update(CryptoJS.enc.Latin1.parse(priv))
-      sha256.update(m)
-      sha256.update(CryptoJS.enc.Latin1.parse(rand))
+      var sha256 = CryptoJS.algo.SHA256.create();
+      sha256.update(CryptoJS.enc.Latin1.parse(priv));
+      sha256.update(m);
+      sha256.update(CryptoJS.enc.Latin1.parse(rand));
 
-      var hash = sha256.finalize()
-      hash = HLP.bits2bigInt(hash.toString(CryptoJS.enc.Latin1))
-      BigInt.rightShift_(hash, 256 - BigInt.bitSize(this.q))
+      var hash = sha256.finalize();
+      hash = HLP.bits2bigInt(hash.toString(CryptoJS.enc.Latin1));
+      BigInt.rightShift_(hash, 256 - BigInt.bitSize(this.q));
 
       return HLP.between(hash, ZERO, this.q) ? hash : this.generateNonce(m)
     },
 
     sign: function (m) {
-      m = CryptoJS.enc.Latin1.parse(m)
-      var b = BigInt.str2bigInt(m.toString(CryptoJS.enc.Hex), 16)
-      var k, r = ZERO, s = ZERO
+      m = CryptoJS.enc.Latin1.parse(m);
+      var b = BigInt.str2bigInt(m.toString(CryptoJS.enc.Hex), 16);
+      var k, r = ZERO, s = ZERO;
       while (BigInt.isZero(s) || BigInt.isZero(r)) {
-        k = this.generateNonce(m)
-        r = BigInt.mod(BigInt.powMod(this.g, k, this.p), this.q)
-        if (BigInt.isZero(r)) continue
-        s = BigInt.inverseMod(k, this.q)
-        s = BigInt.mult(s, BigInt.add(b, BigInt.mult(this.x, r)))
+        k = this.generateNonce(m);
+        r = BigInt.mod(BigInt.powMod(this.g, k, this.p), this.q);
+        if (BigInt.isZero(r)) continue;
+        s = BigInt.inverseMod(k, this.q);
+        s = BigInt.mult(s, BigInt.add(b, BigInt.mult(this.x, r)));
         s = BigInt.mod(s, this.q)
       }
       return [r, s]
     },
 
     fingerprint: function () {
-      var pk = this.packPublic()
-      if (this.type === KEY_TYPE) pk = pk.substring(2)
-      pk = CryptoJS.enc.Latin1.parse(pk)
+      var pk = this.packPublic();
+      if (this.type === KEY_TYPE) pk = pk.substring(2);
+      pk = CryptoJS.enc.Latin1.parse(pk);
       return CryptoJS.SHA1(pk).toString(CryptoJS.enc.Hex)
     }
 
-  }
+  };
 
   DSA.parsePublic = function (str, priv) {
-    var fields = ['SHORT', 'MPI', 'MPI', 'MPI', 'MPI']
-    if (priv) fields.push('MPI')
-    str = HLP.splitype(fields, str)
+    var fields = ['SHORT', 'MPI', 'MPI', 'MPI', 'MPI'];
+    if (priv) fields.push('MPI');
+    str = HLP.splitype(fields, str);
     var obj = {
         type: str[0]
       , p: HLP.readMPI(str[1])
       , q: HLP.readMPI(str[2])
       , g: HLP.readMPI(str[3])
       , y: HLP.readMPI(str[4])
-    }
-    if (priv) obj.x = HLP.readMPI(str[5])
+    };
+    if (priv) obj.x = HLP.readMPI(str[5]);
     return new DSA(obj)
-  }
+  };
 
   function tokenizeStr(str) {
-    var start, end
+    var start, end;
 
-    start = str.indexOf("(")
-    end = str.lastIndexOf(")")
+    start = str.indexOf("(");
+    end = str.lastIndexOf(")");
 
     if (start < 0 || end < 0)
-      throw new Error("Malformed S-Expression")
+      throw new Error("Malformed S-Expression");
 
-    str = str.substring(start + 1, end)
+    str = str.substring(start + 1, end);
 
-    var splt = str.search(/\s/)
+    var splt = str.search(/\s/);
     var obj = {
         type: str.substring(0, splt)
       , val: []
-    }
+    };
 
-    str = str.substring(splt + 1, end)
-    start = str.indexOf("(")
+    str = str.substring(splt + 1, end);
+    start = str.indexOf("(");
 
-    if (start < 0) obj.val.push(str)
+    if (start < 0) obj.val.push(str);
     else {
 
-      var i, len, ss, es
+      var i, len, ss, es;
       while (start > -1) {
-        i = start + 1
-        len = str.length
+        i = start + 1;
+        len = str.length;
         for (ss = 1, es = 0; i < len && es < ss; i++) {
-          if (str[i] === "(") ss++
+          if (str[i] === "(") ss++;
           if (str[i] === ")") es++
         }
-        obj.val.push(tokenizeStr(str.substring(start, ++i)))
-        str = str.substring(++i)
+        obj.val.push(tokenizeStr(str.substring(start, ++i)));
+        str = str.substring(++i);
         start = str.indexOf("(")
       }
 
@@ -5618,25 +5618,25 @@ CryptoJS.mode.CTR = (function () {
   }
 
   function parseLibotr(obj) {
-    if (!obj.type) throw new Error("Parse error.")
+    if (!obj.type) throw new Error("Parse error.");
 
-    var o, val
+    var o, val;
     if (obj.type === "privkeys") {
-      o = []
+      o = [];
       obj.val.forEach(function (i) {
         o.push(parseLibotr(i))
-      })
+      });
       return o
     }
 
-    o = {}
+    o = {};
     obj.val.forEach(function (i) {
 
-      val = i.val[0]
+      val = i.val[0];
       if (typeof val === "string") {
 
         if (val.indexOf("#") === 0) {
-          val = val.substring(1, val.lastIndexOf("#"))
+          val = val.substring(1, val.lastIndexOf("#"));
           val = BigInt.str2bigInt(val, 16)
         }
 
@@ -5645,70 +5645,70 @@ CryptoJS.mode.CTR = (function () {
       }
 
       o[i.type] = val
-    })
+    });
 
     return o
   }
 
   DSA.parsePrivate = function (str, libotr) {
     if (!libotr) {
-      str = CryptoJS.enc.Base64.parse(str)
-      str = str.toString(CryptoJS.enc.Latin1)
+      str = CryptoJS.enc.Base64.parse(str);
+      str = str.toString(CryptoJS.enc.Latin1);
       return DSA.parsePublic(str, true)
     }
     // only returning the first key found
     return parseLibotr(tokenizeStr(str))[0]["private-key"].dsa
-  }
+  };
 
   DSA.verify = function (key, m, r, s) {
     if (!HLP.between(r, ZERO, key.q) || !HLP.between(s, ZERO, key.q))
-      return false
+      return false;
 
-    var hm = CryptoJS.enc.Latin1.parse(m)  // CryptoJS.SHA1(m)
-    hm = BigInt.str2bigInt(hm.toString(CryptoJS.enc.Hex), 16)
+    var hm = CryptoJS.enc.Latin1.parse(m);  // CryptoJS.SHA1(m)
+    hm = BigInt.str2bigInt(hm.toString(CryptoJS.enc.Hex), 16);
 
-    var w = BigInt.inverseMod(s, key.q)
-    var u1 = BigInt.multMod(hm, w, key.q)
-    var u2 = BigInt.multMod(r, w, key.q)
+    var w = BigInt.inverseMod(s, key.q);
+    var u1 = BigInt.multMod(hm, w, key.q);
+    var u2 = BigInt.multMod(r, w, key.q);
 
-    u1 = BigInt.powMod(key.g, u1, key.p)
-    u2 = BigInt.powMod(key.y, u2, key.p)
+    u1 = BigInt.powMod(key.g, u1, key.p);
+    u2 = BigInt.powMod(key.y, u2, key.p);
 
-    var v = BigInt.mod(BigInt.multMod(u1, u2, key.p), key.q)
+    var v = BigInt.mod(BigInt.multMod(u1, u2, key.p), key.q);
 
     return BigInt.equals(v, r)
-  }
+  };
 
   DSA.createInWebWorker = function (options, cb) {
     var opts = {
         path: WWPath
       , seed: BigInt.getSeed
-    }
+    };
     if (options && typeof options === 'object')
       Object.keys(options).forEach(function (k) {
         opts[k] = options[k]
-      })
+      });
 
     // load optional dep. in node
     if (typeof module !== 'undefined' && module.exports)
-      Worker = require('webworker-threads').Worker
+      Worker = require('webworker-threads').Worker;
 
-    var worker = new Worker(opts.path)
+    var worker = new Worker(opts.path);
     worker.onmessage = function (e) {
-      var data = e.data
+      var data = e.data;
       switch (data.type) {
         case "debug":
-          if (!DEBUG || typeof console === 'undefined') return
-          console.log(data.val)
+          if (!DEBUG || typeof console === 'undefined') return;
+          console.log(data.val);
           break;
         case "data":
-          worker.terminate()
-          cb(DSA.parsePrivate(data.val))
+          worker.terminate();
+          cb(DSA.parsePrivate(data.val));
           break;
         default:
           throw new Error("Unrecognized type.")
       }
-    }
+    };
     worker.postMessage({
         seed: opts.seed()
       , imports: opts.imports
@@ -5716,4 +5716,4 @@ CryptoJS.mode.CTR = (function () {
     })
   }
 
-}).call(this)
+}).call(this);

@@ -2,8 +2,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /* Tabulator v4.1.5 (c) Oliver Folkerd */
 
-;(function (global, factory) {
-	if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined') {
+(function (global, factory) {
+    if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined') {
 		module.exports = factory();
 	} else if (typeof define === 'function' && define.amd) {
 		define(factory);
