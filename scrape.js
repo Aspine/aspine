@@ -64,10 +64,10 @@ async function scrape_student(username, password) {
 	*/
 
 	// Spawn schedule scraper
-	// let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
+	// let schedule_scraper = scrape_schedule(username, password);
 
 	// Spawn recent activity scraper
-	let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
+	let recent_scraper = scrape_recent(username, password);
 
 	// Await on all class scrapers
 	return {
@@ -263,7 +263,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 }
 
 // Returns object of recent activity
-async function scrape_recent(username, password, i) {
+async function scrape_recent(username, password) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
@@ -271,7 +271,7 @@ async function scrape_recent(username, password, i) {
 			resolve({"login_fail": true});
 		}
 
-		log(i, "session", session);
+		log("session", session);
 
 
 		let $ = cheerio.load(await fetch_body(
@@ -298,7 +298,7 @@ async function scrape_recent(username, password, i) {
 			normalizeWhitespace: true,
 			decodeEntities: true
 		});
-		log(i, "scrape recent widget", $);
+		log("scrape recent widget", $);
 
 		let studentName = $('recent-activity').attr('studentname');
 		let recentAttendanceArray = [];
@@ -317,7 +317,7 @@ async function scrape_recent(username, password, i) {
 					tardy: $(this).attr('tardy'),
 				});
 			});
-		log(i, "recentAttendance", recentAttendanceArray);
+		log("recentAttendance", recentAttendanceArray);
 		
 
 		$('recent-activity').children().filter('gradebookScore')
@@ -329,10 +329,10 @@ async function scrape_recent(username, password, i) {
 					assignment: $(this).attr('assignmentname'),
 				});
 			});
-		log(i, "recentGrades", recentActivityArray);
+		log("recentGrades", recentActivityArray);
 
 
-		log(i, "closing");
+		log("closing");
 		resolve({
 			recentAttendanceArray,
 			recentActivityArray,
@@ -340,7 +340,6 @@ async function scrape_recent(username, password, i) {
 		});
 	});
 }
-
 
 // Returns promise that contains object of all class data
 function scrape_class(username, password, i) {
