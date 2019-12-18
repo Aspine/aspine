@@ -738,7 +738,7 @@
 			// Callback for response from /data
 			function responseCallback(response) {
 				console.log(response);
-				if (response.schedule.login_fail) {
+				if (response.recent.login_fail) {
 					location.href='/logout';
 				}
 
@@ -774,10 +774,6 @@
 					}];
 				}
 				tableData = response;
-
-
-				document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
-
 
 				//parsing the data extracted by the scrappers, and getting tableData ready for presentation
 				for (let i = 0; i < tableData.classes.length; i++) {
@@ -851,43 +847,6 @@
 					}
 				}
 
-
-				//the following lines are used to set up the schedule table correctly
-				//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-				let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
-				let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
-				let timesCounter = 0;
-				let times = []
-
-				for (let i = 0; i < periods.length; i++) {
-
-					if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
-						times[i] = placeTimes[timesCounter];
-						timesCounter++;
-					} else {
-						times[i] = "";
-					}
-
-				}
-
-				periods = periods.filter(Boolean).map(x => "Period: " + x);
-
-
-				let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-
-
-				for (let i = 0; i < periods.length;  i++) {
-					tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-					tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
-					tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-
-					tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-					tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
-					tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-				}
-
-
-
 				//populates the event for each row in the recentAttendance table
 				for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
 					tableData.recent.recentAttendanceArray[i].event = "";
@@ -944,14 +903,11 @@
 
 				//Stuff to do now that tableData is initialized
 
-				scheduleTable.setData(tableData.schedule.black);
 				$("#mostRecentDiv").show();
 				mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
 
 				recentActivity.setData(tableData.recent.recentActivityArray);
 				recentAttendance.setData(tableData.recent.recentAttendanceArray);
-
-				redraw_clock();
 
 				initialize_dropdown();
 				$("#pdf_loading_text").hide();
@@ -960,12 +916,57 @@
 				classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 			}
 
+			// Callback for response from /schedule
+			function scheduleCallback(response) {
+				console.log(response);
+				tableData.schedule = response;
+
+				document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
+				//the following lines are used to set up the schedule table correctly
+				//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
+				let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+				let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
+				let timesCounter = 0;
+				let times = []
+
+				for (let i = 0; i < periods.length; i++) {
+
+					if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
+						times[i] = placeTimes[timesCounter];
+						timesCounter++;
+					} else {
+						times[i] = "";
+					}
+
+				}
+
+				periods = periods.filter(Boolean).map(x => "Period: " + x);
+
+
+				let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
+
+				for (let i = 0; i < periods.length;  i++) {
+					tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+					tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
+					tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+
+					tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+					tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
+					tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+				}
+
+				scheduleTable.setData(tableData.schedule.black);
+
+				redraw_clock();
+			}
+
 			$.ajax({
 				url: "/data",
 				method: "POST",
 				dataType: "json json",
 				success: responseCallback
 			});
+
 			function recent_toggle() {
 				if (!document.getElementById("recent_toggle").checked) {
 					//recentActivity.setData(tableData.recent.recentActivityArray);
@@ -1034,7 +1035,15 @@
               } else {
 
               }
-            }
+			}
+			if (tab_name == "schedule" && !tableData.schedule) {
+				$.ajax({
+					url: "/schedule",
+					method: "POST",
+					dataType: "json json",
+					success: scheduleCallback
+				});
+			}
 
 		    classesTable.redraw();
 		    assignmentsTable.redraw();
