@@ -183,6 +183,10 @@ app.post('/schedule', async (req, res) => {
     res.send(await scraper.scrape_schedule(req.session.username, req.session.password));
 });
 
+app.post('/pdf', async (req, res) => {
+    res.send(await scraper.scrape_pdf_files(req.session.username, req.session.password));
+});
+
 app.get('/', async (req, res) => {
     if(typeof(req.session) != "undefined") {
         res.redirect('/home.html');

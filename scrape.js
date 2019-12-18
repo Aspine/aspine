@@ -39,6 +39,7 @@ const streams = require('memory-streams');
 module.exports = {
 	scrape_student: scrape_student,
 	scrape_schedule: scrape_schedule,
+	scrape_pdf_files: scrape_pdf_files,
 	scrape_assignmentDetails: scrape_assignmentDetails
 };
 
@@ -55,10 +56,12 @@ async function scrape_student(username, password) {
 	}
 
 	// Spawn pdf scrapers
+	/*
 	let pdf_scrapers = [];
 	for (let i = 0; i < PDF_THREADS; i++) {
 		pdf_scrapers[i] = scrape_pdf(username, password, i);
 	}
+	*/
 
 	// Spawn schedule scraper
 	// let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
@@ -71,10 +74,19 @@ async function scrape_student(username, password) {
 		classes: (await Promise.all(class_scrapers)).filter(Boolean),
 		// schedule: await schedule_scraper,
 		recent: await recent_scraper,
-		pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
+		// pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
 		username: username
 	}
 	//return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
+}
+
+// Returns object of PDF files
+async function scrape_pdf_files(username, password) {
+	let pdf_scrapers = [];
+	for (let i = 0; i < PDF_THREADS; i++) {
+		pdf_scrapers[i] = scrape_pdf(username, password, i);
+	}
+	return (await Promise.all(pdf_scrapers)).filter(Boolean);
 }
 
 async function scrape_pdf(username, password, i) {
