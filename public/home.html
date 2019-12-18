@@ -737,6 +737,7 @@
 			
 			// Callback for response from /data
 			function responseCallback(response) {
+				console.log(response);
 				if (response.schedule.login_fail) {
 					location.href='/logout';
 				}
@@ -963,9 +964,7 @@
 				url: "/data",
 				method: "POST",
 				dataType: "json json",
-				success: function(response) {
-					
-				}
+				success: responseCallback
 			});
 			function recent_toggle() {
 				if (!document.getElementById("recent_toggle").checked) {
