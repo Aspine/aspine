@@ -742,42 +742,35 @@
 				}
 
 				if (response.classes.length == 0) {
-					response.classes = 
-						[
-							{
-								"name": "No Classes",
-								"grade": "No Grades",
-								"categories": {
-									"No Categories": "1.0"
-								},
-								"assignments": [
-									{
-										"name": "No Assignments",
-										"category": "No Categories",
-										"assignment_id": "GCD000000Fx62l",
-										"special": "No Special",
-										"score": 10,
-										"max_score": 10,
-										"percentage": 100,
-										"color": "#6666FF"
-									}
-								],
-								"edited": false,
-								"categoryDisplay": [
-									{
-										"category": "No Categories",
-										"weight": "100%",
-										"score": 10,
-										"maxScore": 10,
-										"grade": "100%",
-										"color": "#6666FF"
-									},
-								],
-								"type": "categoryPercent",
-								"calculated_grade": "100 A+",
-								"color": "#1E8541"
-							}
-						];
+					response.classes = [{
+						"name": "No Classes",
+						"grade": "No Grades",
+						"categories": {
+							"No Categories": "1.0"
+						},
+						"assignments": [{
+							"name": "No Assignments",
+							"category": "No Categories",
+							"assignment_id": "GCD000000Fx62l",
+							"special": "No Special",
+							"score": 10,
+							"max_score": 10,
+							"percentage": 100,
+							"color": "#6666FF"
+						}],
+						"edited": false,
+						"categoryDisplay": [{
+							"category": "No Categories",
+							"weight": "100%",
+							"score": 10,
+							"maxScore": 10,
+							"grade": "100%",
+							"color": "#6666FF"
+						}],
+						"type": "categoryPercent",
+						"calculated_grade": "100 A+",
+						"color": "#1E8541"
+					}];
 				}
 				tableData = response;
 
