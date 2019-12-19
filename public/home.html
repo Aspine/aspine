@@ -44,8 +44,8 @@
 		<!--===============================================================================================-->
 		<script type="text/javascript" src="./js/buttonFunctions.js"></script>
 		<!--===============================================================================================-->
-		<!--<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">-->
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+		<!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">-->
 
 		<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="css/main.css">
@@ -881,10 +881,9 @@
 						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
 						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
 						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
-
+            
 					} catch(err) {
 						console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
-
 					}
 
 
@@ -945,16 +944,19 @@
 
 
 				let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-
-				for (let i = 0; i < periods.length;  i++) {
-					tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-					tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
-					tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-
-					tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-					tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
-					tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-				}
+        
+        for (let i = 0; i < periods.length;  i++) {
+						if (tableData.schedule.black[i]) {
+							tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+							tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
+							tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+						}
+						if (tableData.schedule.silver[i]) {
+							tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+							tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
+							tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+						}
+        }
 
 				scheduleTable.setData(tableData.schedule.black);
 
