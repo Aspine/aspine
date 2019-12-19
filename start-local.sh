@@ -1,1 +1,2 @@
-redis-server redis.conf && node ./serve.js insecure
+redis-server redis.conf &
+node ./serve.js insecure &

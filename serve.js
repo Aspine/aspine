@@ -194,7 +194,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', async (req, res) => {
-    req.session.destroy();
+  req.session.destroy();
 	res.redirect('/login.html');
 });
 
