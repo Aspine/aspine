@@ -90,6 +90,19 @@
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
             <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
+
+        <!--<div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">-->
+
+          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">-->
+          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;border: 2px solid black;background-color: white;">-->
+            <div id="loader" style="z-index: 10; margin: auto; display: block; position: absolute; margin: auto; width: 100%; height: 150px; top: 45%;">
+              <div class="loader" style="position:relative; margin: auto;"></div>
+            </div> 
+            <!--<h1 style="top: 25%; position: relative;"> Loading! </h1>-->
+          <!--</div>-->
+
+        <!--</div>-->
+
 		<div id="stats_modal" class="modal">
 
 		  <!-- Modal content -->
@@ -271,7 +284,6 @@
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
-				
 			}
 			let noStats = function() {
 				//document.getElementById("there_are_stats").style.display = "none";
@@ -769,6 +781,10 @@
           tableData = response;
         }
 
+        $("#loader").hide();
+
+
+
 				//parsing the data extracted by the scrappers, and getting tableData ready for presentation
 				for (let i = 0; i < tableData.classes.length; i++) {
 
@@ -959,6 +975,8 @@
 			}
 
 			function pdfCallback(response) {
+
+        $("#loader").hide();
         // console.log(response);
 				tableData.pdf_files = response;
 				
@@ -1036,8 +1054,9 @@
 
             }
 
-            if (tab_name == "reports") {
+      if (tab_name == "reports") {
 				if (!tableData.pdf_files) {
+          $("#loader").show();
 					$.ajax({
 						url: "/pdf",
 						method: "POST",
