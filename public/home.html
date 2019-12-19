@@ -910,12 +910,19 @@
 				recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
 				classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+
+				$.ajax({
+					url: "/schedule",
+					method: "POST",
+					dataType: "json json",
+					success: scheduleCallback
+				});
 			}
 
 			// Callback for response from /schedule
 			function scheduleCallback(response) {
 				console.log(response);
-				tableData.schedule = response;
+				if (!tableData.schedule) tableData.schedule = response;
 
 				document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
 				//the following lines are used to set up the schedule table correctly
