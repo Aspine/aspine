@@ -1,2 +1,5 @@
-pkill serve.js
-node ./serve.js
+pkill "node"
+pkill "redis-server"
+
+redis-server redis.conf &
+node ./serve.js &
