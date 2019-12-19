@@ -55,29 +55,15 @@ async function scrape_student(username, password) {
 		class_scrapers[i] = scrape_class(username, password, i);
 	}
 
-	// Spawn pdf scrapers
-	/*
-	let pdf_scrapers = [];
-	for (let i = 0; i < PDF_THREADS; i++) {
-		pdf_scrapers[i] = scrape_pdf(username, password, i);
-	}
-	*/
-
-	// Spawn schedule scraper
-	// let schedule_scraper = scrape_schedule(username, password);
-
 	// Spawn recent activity scraper
 	let recent_scraper = scrape_recent(username, password);
 
 	// Await on all class scrapers
 	return {
 		classes: (await Promise.all(class_scrapers)).filter(Boolean),
-		// schedule: await schedule_scraper,
 		recent: await recent_scraper,
-		// pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
 		username: username
 	}
-	//return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
 }
 
 // Returns object of PDF files

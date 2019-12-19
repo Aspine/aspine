@@ -737,7 +737,6 @@
 			
 			// Callback for response from /data
 			function responseCallback(response) {
-				console.log(response);
 				if (response.recent.login_fail) {
 					location.href='/logout';
 				}
@@ -921,7 +920,6 @@
 
 			// Callback for response from /schedule
 			function scheduleCallback(response) {
-				console.log(response);
 				if (!tableData.schedule) tableData.schedule = response;
 
 				document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
