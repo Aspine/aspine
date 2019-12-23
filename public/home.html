@@ -90,6 +90,19 @@
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
             <button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button>
         </div>
+
+        <!--<div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">-->
+
+          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">-->
+          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;border: 2px solid black;background-color: white;">-->
+            <div id="loader" style="z-index: 10; margin: auto; display: block; position: absolute; margin: auto; width: 100%; height: 150px; top: 45%;">
+              <div class="loader" style="position:relative; margin: auto;"></div>
+            </div> 
+            <!--<h1 style="top: 25%; position: relative;"> Loading! </h1>-->
+          <!--</div>-->
+
+        <!--</div>-->
+
 		<div id="stats_modal" class="modal">
 
 		  <!-- Modal content -->
@@ -200,16 +213,6 @@
           <select id="pdf-select">
 <!--        <option value="0">Select car:</option> 
             <option value="1">Audi</option>
-            <option value="2">BMW</option>
-            <option value="3">Citroen</option>
-            <option value="4">Ford</option>
-            <option value="5">Honda</option>
-            <option value="6">Jaguar</option>
-            <option value="7">Land Rover</option>
-            <option value="8">Mercedes</option>
-            <option value="9">Mini</option>
-            <option value="10">Nissan</option>
-            <option value="11">Toyota</option>
             <option value="12">Volvo</option> -->
           </select>
         </div>
@@ -261,26 +264,26 @@
 
 			$('#stats_plot').width($(window).width() * 7 / 11);
 			window.addEventListener('resize', function() { 
-        if ($('#stats_plot').is(":visible")) { 
+        // console.log("Resizing");
+        // if ($('#stats_plot').is(":visible")) { 
 
-          Plotly.Plots.resize(document.getElementById('stats_plot')); 
-          let update_size = {
-            //width: 800,  // or any new width
-            width: $('#stats_modal_content').width(),
-            height: 120  // " "
-          };
+        //   Plotly.Plots.resize(document.getElementById('stats_plot')); 
+        //   let update_size = {
+        //     //width: 800,  // or any new width
+        //     width: $('#stats_modal_content').width(),
+        //     height: 120  // " "
+        //   };
 
-          Plotly.relayout('stats_plot', update_size);
-        }
+        //   Plotly.relayout('stats_plot', update_size);
+        // }
 
-        if ($('#pdf-canvas').is(":visible") && !pdfrendering) { 
-          generate_pdf(pdf_index);
-        }
+        // if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') { 
+        //   generate_pdf(pdf_index);
+        // }
       });
 			let hideModal = function() {
 				document.getElementById('stats_modal').style.display = "none";
 				noStats();
-				
 			}
 			let noStats = function() {
 				//document.getElementById("there_are_stats").style.display = "none";
@@ -519,13 +522,13 @@
 
 							stats = stats.split(",");
 							stats = stats.map(x => parseFloat(x.substring(1, x.length)));
-              console.log("Raw Stats: " + stats);
+              // console.log("Raw Stats: " + stats);
 							let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
               let q1 = (low + median) / 2, q3 = (high + median) / 2;
 
               let graph_stats = [low, q1, median, q3, high];
-              console.log("Graph Stats: " + graph_stats);
-              console.log("Mean: " + mean)
+              // console.log("Graph Stats: " + graph_stats);
+              // console.log("Mean: " + mean)
 
 							var statsTrace = {
 							  x: graph_stats,
@@ -712,279 +715,6 @@
 				//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 				index: "name",
 				selectable: 1,
-				ajaxURL: "/data",
-				ajaxConfig: "post", // ajax HTTP request type
-				ajaxContentType: "json", // send parameters to the server as a JSON encoded string
-				ajaxResponse: function(url, params, response) {
-					//url - the URL of the request
-					//params - the parameters passed with the request
-					//response - the JSON object returned in the body of the response.
-
-					if(((response.schedule)).login_fail) {
-						location.href='/logout';
-					}
-
-					if (response.classes.length == 0) {
-
-						response.classes = 
-							[
-								{
-									"name": "No Classes",
-									"grade": "No Grades",
-									"categories": {
-										"No Categories": "1.0"
-									},
-									"assignments": [
-										{
-											"name": "No Assignments",
-											"category": "No Categories",
-											"assignment_id": "GCD000000Fx62l",
-											"special": "No Special",
-											"score": 10,
-											"max_score": 10,
-											"percentage": 100,
-											"color": "#6666FF"
-										}
-									],
-									"tokens": {
-										"session_id": "263A6A78DE0F001DDDFC8A525D31A8F0",
-										"apache_token": "572aa56a8c407a6d9a25b0a50843fc32"
-									},
-									"edited": false,
-									"categoryGrades": {},
-									"decimals": 2,
-									"categoryDisplay": [
-										{
-											"category": "HW, Classwork, Assessments",
-											"weight": "30%",
-											"score": 340,
-											"maxScore": 400,
-											"grade": "85%",
-											"color": "#6666FF"
-										},
-										{
-											"category": "Speak-Listen",
-											"weight": "20%",
-											"score": "Ungraded",
-											"maxScore": "Ungraded",
-											"grade": "No Grade",
-											"color": "black"
-										},
-										{
-											"category": "Tests, Quizzes, vocabulary",
-											"weight": "30%",
-											"score": 100,
-											"maxScore": 100,
-											"grade": "100%",
-											"color": "#1E8541"
-										},
-										{
-											"category": "timeliness, effort",
-											"weight": "20%",
-											"score": 200,
-											"maxScore": 200,
-											"grade": "100%",
-											"color": "#1E8541"
-										}
-									],
-									"type": "categoryPercent",
-									"calculated_grade": "94.05 A",
-									"color": "#1E8541"
-								}
-							];
-					}
-					tableData = response;
-
-
-					document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
-
-
-					//parsing the data extracted by the scrappers, and getting tableData ready for presentation
-					for (let i = 0; i < tableData.classes.length; i++) {
-
-						//initialize every the edited key for every class and set it to false
-						tableData.classes[i].edited = false;
-
-						//initialize category grades which will be used for the categoryGrades table
-						tableData.classes[i].categoryGrades = {};
-
-						//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
-						if (!isNaN(parseFloat(tableData.classes[i].grade))) {
-							tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
-						}
-
-
-						//cycle through each assignment of every class for further parsing
-						for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
-							//initialize the percentage of the assignment.
-							tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
-							//initialize how the assignment should be colored in the table; based on percentage
-							tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
-
-							//an if statement to handle assignments without a score
-							if (isNaN(tableData.classes[i].assignments[j].score)) {
-								//an if statement to handle assignments with a special characteristic
-								if (tableData.classes[i].assignments[j].special) {
-
-									//an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
-									if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
-										// a reg expression to extract only the information from between the parenthesis.
-										var regExp = /\(([^)]+)\)/;
-
-										tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-										tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-									} else {
-										// if no parenthesis, set it equal to special in its entirety
-										tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
-										tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
-
-									}
-								} else {
-									// if no special and no grade, set score and max_score to ungraded
-									tableData.classes[i].assignments[j].score = "Ungraded";
-									tableData.classes[i].assignments[j].max_score = "Ungraded";
-
-								}
-							}
-						}
-
-						//initializing a calculated_grade for classes with a grade
-						if (tableData.classes[i].grade != "") {
-
-							let computingClassData = tableData.classes[i];
-
-							//getting calculated values related to classes
-							let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
-							//populating categoryDisplay which is the object used to display the category grading information
-							tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
-
-							//setting grading type. Total vs. category
-							tableData.classes[i].type = gradeInfo.type;
-
-							//setting calculated_grade and initcalcGrade
-							tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
-
-							tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
-
-							//setting how the class should be colored in the classes table.
-							tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
-						}
-					}
-
-
-					//the following lines are used to set up the schedule table correctly
-					//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-					let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
-					let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
-					let timesCounter = 0;
-					let times = []
-
-					for (let i = 0; i < periods.length; i++) {
-
-						if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
-							times[i] = placeTimes[timesCounter];
-							timesCounter++;
-						} else {
-							times[i] = "";
-						}
-
-					}
-
-					periods = periods.filter(Boolean).map(x => "Period: " + x);
-
-
-					let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-
-
-					for (let i = 0; i < periods.length;  i++) {
-						if (tableData.schedule.black[i]) {
-							tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-							tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
-							tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-						}
-						if (tableData.schedule.silver[i]) {
-							tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-							tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
-							tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-						}
-					}
-
-
-
-					//populates the event for each row in the recentAttendance table
-					for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
-						tableData.recent.recentAttendanceArray[i].event = "";
-						if (tableData.recent.recentAttendanceArray[i].dismissed === "true") {
-							tableData.recent.recentAttendanceArray[i].event += "Dismissed ";
-						}
-						if (tableData.recent.recentAttendanceArray[i].excused === "true") {
-							tableData.recent.recentAttendanceArray[i].event += "Excused ";
-						}
-						if (tableData.recent.recentAttendanceArray[i].absent === "true") {
-							tableData.recent.recentAttendanceArray[i].event += "Absent ";
-						}
-						if (tableData.recent.recentAttendanceArray[i].tardy === "true") {
-							tableData.recent.recentAttendanceArray[i].event += "Tardy ";
-						}
-					}
-
-
-					let activityArray = tableData.recent.recentActivityArray.slice();
-					for (let i = 0; i < activityArray.length; i++) {
-            try {
-              let assignmentName = activityArray[i].assignment;
-              let className = activityArray[i].classname;
-              let classIndex = tableData.classes.map(x => x.name).indexOf(className);
-
-              let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
-
-              tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
-              tableData.recent.recentActivityArray[i].className = className;
-              tableData.recent.recentActivityArray[i].classIndex = classIndex;
-              tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
-
-              tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
-              tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
-              tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
-
-						} catch(err) {
-							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
-
-						}
-
-
-
-
-					}
-
-					//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
-					tableData.GPA = computeGPA();
-					tableData.calcGPA = computeGPA();
-					tableDataReset = JSON.parse(JSON.stringify(tableData));
-
-
-					document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
-
-          //Stuff to do now that tableData is initialized
-
-					scheduleTable.setData(tableData.schedule.black);
-          $("#mostRecentDiv").show();
-					mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
-
-					recentActivity.setData(tableData.recent.recentActivityArray);
-					recentAttendance.setData(tableData.recent.recentAttendanceArray);
-
-					redraw_clock();
-
-					initialize_dropdown();
-					$("#pdf_loading_text").hide();
-					generate_pdf(pdf_index);
-
-					return response.classes; //return the tableData property of a response json object
-
-				},
-				//ajaxParams:{key1:"value1", key2:"value2"},
-				//data:tabledata, //assign data to table
 				layout: "fitColumns", //fit columns to width of table (optional)
 				columns: [ // Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
@@ -1007,6 +737,264 @@
 					}
 				},
 			});
+			
+			// Callback for response from /data
+			function responseCallback(response) {
+				if (response.recent.login_fail) {
+					location.href='/logout';
+				}
+
+				if (response.classes.length == 0) {
+					response.classes = [{
+						"name": "No Classes",
+						"grade": "No Grades",
+						"categories": {
+							"No Categories": "1.0"
+						},
+						"assignments": [{
+							"name": "No Assignments",
+							"category": "No Categories",
+							"assignment_id": "GCD000000Fx62l",
+							"special": "No Special",
+							"score": 10,
+							"max_score": 10,
+							"percentage": 100,
+							"color": "#6666FF"
+						}],
+						"edited": false,
+						"categoryDisplay": [{
+							"category": "No Categories",
+							"weight": "100%",
+							"score": 10,
+							"maxScore": 10,
+							"grade": "100%",
+							"color": "#6666FF"
+						}],
+						"type": "categoryPercent",
+						"calculated_grade": "100 A+",
+						"color": "#1E8541"
+					}];
+				}
+        if (typeof tableData !== 'undefined') {
+          $.extend(tableData, response);
+        } else {
+          tableData = response;
+        }
+
+        $("#loader").hide();
+
+
+
+				//parsing the data extracted by the scrappers, and getting tableData ready for presentation
+				for (let i = 0; i < tableData.classes.length; i++) {
+
+					//initialize every the edited key for every class and set it to false
+					tableData.classes[i].edited = false;
+
+					//initialize category grades which will be used for the categoryGrades table
+					tableData.classes[i].categoryGrades = {};
+
+					//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
+					if (!isNaN(parseFloat(tableData.classes[i].grade))) {
+						tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
+					}
+
+
+					//cycle through each assignment of every class for further parsing
+					for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
+						//initialize the percentage of the assignment.
+						tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
+						//initialize how the assignment should be colored in the table; based on percentage
+						tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
+
+						//an if statement to handle assignments without a score
+						if (isNaN(tableData.classes[i].assignments[j].score)) {
+							//an if statement to handle assignments with a special characteristic
+							if (tableData.classes[i].assignments[j].special) {
+
+								//an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
+								if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
+									// a reg expression to extract only the information from between the parenthesis.
+									var regExp = /\(([^)]+)\)/;
+
+									tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
+									tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
+								} else {
+									// if no parenthesis, set it equal to special in its entirety
+									tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
+									tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
+
+								}
+							} else {
+								// if no special and no grade, set score and max_score to ungraded
+								tableData.classes[i].assignments[j].score = "Ungraded";
+								tableData.classes[i].assignments[j].max_score = "Ungraded";
+
+							}
+						}
+					}
+
+					//initializing a calculated_grade for classes with a grade
+					if (tableData.classes[i].grade != "") {
+
+						let computingClassData = tableData.classes[i];
+
+						//getting calculated values related to classes
+						let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
+						//populating categoryDisplay which is the object used to display the category grading information
+						tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+
+						//setting grading type. Total vs. category
+						tableData.classes[i].type = gradeInfo.type;
+
+						//setting calculated_grade and initcalcGrade
+						tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
+
+						tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
+
+						//setting how the class should be colored in the classes table.
+						tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
+					}
+				}
+
+				//populates the event for each row in the recentAttendance table
+				for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
+					tableData.recent.recentAttendanceArray[i].event = "";
+					if (tableData.recent.recentAttendanceArray[i].dismissed === "true") {
+						tableData.recent.recentAttendanceArray[i].event += "Dismissed ";
+					}
+					if (tableData.recent.recentAttendanceArray[i].excused === "true") {
+						tableData.recent.recentAttendanceArray[i].event += "Excused ";
+					}
+					if (tableData.recent.recentAttendanceArray[i].absent === "true") {
+						tableData.recent.recentAttendanceArray[i].event += "Absent ";
+					}
+					if (tableData.recent.recentAttendanceArray[i].tardy === "true") {
+						tableData.recent.recentAttendanceArray[i].event += "Tardy ";
+					}
+				}
+
+
+				let activityArray = tableData.recent.recentActivityArray.slice();
+				for (let i = 0; i < activityArray.length; i++) {
+					try {
+						let assignmentName = activityArray[i].assignment;
+						let className = activityArray[i].classname;
+						let classIndex = tableData.classes.map(x => x.name).indexOf(className);
+
+						let assignmentIndex = tableData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+
+						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
+						tableData.recent.recentActivityArray[i].className = className;
+						tableData.recent.recentActivityArray[i].classIndex = classIndex;
+						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+
+						tableData.recent.recentActivityArray[i].max_score = tableData.classes[classIndex].assignments[assignmentIndex].max_score;
+						tableData.recent.recentActivityArray[i].percentage = tableData.classes[classIndex].assignments[assignmentIndex].percentage;
+						tableData.recent.recentActivityArray[i].color = tableData.classes[classIndex].assignments[assignmentIndex].color;
+            
+					} catch(err) {
+						console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+					}
+
+
+
+
+				}
+
+				//final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
+				tableData.GPA = computeGPA();
+				tableData.calcGPA = computeGPA();
+				tableDataReset = JSON.parse(JSON.stringify(tableData));
+
+
+				document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA;
+
+				//Stuff to do now that tableData is initialized
+
+				$("#mostRecentDiv").show();
+				mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
+
+				recentActivity.setData(tableData.recent.recentActivityArray);
+				recentAttendance.setData(tableData.recent.recentAttendanceArray);
+
+				classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+
+				$.ajax({
+					url: "/schedule",
+					method: "POST",
+					dataType: "json json",
+					success: scheduleCallback
+				});
+			}
+
+			// Callback for response from /schedule
+			function scheduleCallback(response) {
+				if (!tableData.schedule) tableData.schedule = response;
+
+				document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
+				//the following lines are used to set up the schedule table correctly
+				//let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
+				let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+				let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
+				let timesCounter = 0;
+				let times = []
+
+				for (let i = 0; i < periods.length; i++) {
+
+					if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
+						times[i] = placeTimes[timesCounter];
+						timesCounter++;
+					} else {
+						times[i] = "";
+					}
+
+				}
+
+				periods = periods.filter(Boolean).map(x => "Period: " + x);
+
+
+				let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
+        
+        for (let i = 0; i < periods.length;  i++) {
+						if (tableData.schedule.black[i]) {
+							tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+							tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
+							tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+						}
+						if (tableData.schedule.silver[i]) {
+							tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+							tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
+							tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+						}
+        }
+
+				scheduleTable.setData(tableData.schedule.black);
+
+				redraw_clock();
+			}
+
+			function pdfCallback(response) {
+
+        $("#loader").hide();
+        // console.log(response);
+				tableData.pdf_files = response;
+				
+				initialize_dropdown();
+				$("#pdf_loading_text").hide();
+
+				if (typeof tableData.pdf_files !== 'undefined') {
+					generate_pdf(pdf_index);
+				}
+			}
+
+			$.ajax({
+				url: "/data",
+				method: "POST",
+				dataType: "json json",
+				success: responseCallback
+			});
+
 			function recent_toggle() {
 				if (!document.getElementById("recent_toggle").checked) {
 					//recentActivity.setData(tableData.recent.recentActivityArray);
@@ -1062,20 +1050,32 @@
             }
             if (tab_name =="grades") {
                             //$("#mostRecentDiv").show();
+                mostRecentTable.redraw();
 
             }
 
-            if (tab_name == "reports") {
-
-
-
-
-              if (typeof tableData.pdf_files !== 'undefined' ) {
-                generate_pdf(pdf_index);
-              } else {
-
-              }
-            }
+      if (tab_name == "reports") {
+				if (!tableData.pdf_files) {
+          $("#loader").show();
+					$.ajax({
+						url: "/pdf",
+						method: "POST",
+						dataType: "json json",
+						success: pdfCallback
+					});
+				}
+				else if (typeof tableData.pdf_files !== 'undefined') {
+					generate_pdf(pdf_index);
+				}
+			}
+			if (tab_name == "schedule" && !tableData.schedule) {
+				$.ajax({
+					url: "/schedule",
+					method: "POST",
+					dataType: "json json",
+					success: scheduleCallback
+				});
+			}
 
 		    classesTable.redraw();
 		    assignmentsTable.redraw();

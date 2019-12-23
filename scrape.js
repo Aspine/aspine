@@ -38,6 +38,8 @@ const streams = require('memory-streams');
 // --------------- Exports -------------------
 module.exports = {
 	scrape_student: scrape_student,
+	scrape_schedule: scrape_schedule,
+	scrape_pdf_files: scrape_pdf_files,
 	scrape_assignmentDetails: scrape_assignmentDetails
 };
 
@@ -53,27 +55,24 @@ async function scrape_student(username, password) {
 		class_scrapers[i] = scrape_class(username, password, i);
 	}
 
-	// Spawn pdf scrapers
-	let pdf_scrapers = [];
-	for (let i = 0; i < PDF_THREADS; i++) {
-		pdf_scrapers[i] = scrape_pdf(username, password, i);
-	}
-
-	// Spawn schedule scraper
-	let schedule_scraper = scrape_schedule(username, password, "SCHEDULE_THREAD");
-
 	// Spawn recent activity scraper
-	let recent_scraper = scrape_recent(username, password, "RECENT_THREAD");
+	let recent_scraper = scrape_recent(username, password);
 
 	// Await on all class scrapers
 	return {
 		classes: (await Promise.all(class_scrapers)).filter(Boolean),
-		schedule: await schedule_scraper,
 		recent: await recent_scraper,
-		pdf_files: (await Promise.all(pdf_scrapers)).filter(Boolean),
 		username: username
 	}
-	//return (await Promise.all(pdf_scrapers)).filter(Boolean)[0].content
+}
+
+// Returns object of PDF files
+async function scrape_pdf_files(username, password) {
+	let pdf_scrapers = [];
+	for (let i = 0; i < PDF_THREADS; i++) {
+		pdf_scrapers[i] = scrape_pdf(username, password, i);
+	}
+	return (await Promise.all(pdf_scrapers)).filter(Boolean);
 }
 
 async function scrape_pdf(username, password, i) {
@@ -250,7 +249,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 }
 
 // Returns object of recent activity
-async function scrape_recent(username, password, i) {
+async function scrape_recent(username, password) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
@@ -258,7 +257,7 @@ async function scrape_recent(username, password, i) {
 			resolve({"login_fail": true});
 		}
 
-		log(i, "session", session);
+		log("session", session);
 
 
 		let $ = cheerio.load(await fetch_body(
@@ -285,7 +284,7 @@ async function scrape_recent(username, password, i) {
 			normalizeWhitespace: true,
 			decodeEntities: true
 		});
-		log(i, "scrape recent widget", $);
+		log("scrape recent widget", $);
 
 		let studentName = $('recent-activity').attr('studentname');
 		let recentAttendanceArray = [];
@@ -304,7 +303,7 @@ async function scrape_recent(username, password, i) {
 					tardy: $(this).attr('tardy'),
 				});
 			});
-		log(i, "recentAttendance", recentAttendanceArray);
+		log("recentAttendance", recentAttendanceArray);
 		
 
 		$('recent-activity').children().filter('gradebookScore')
@@ -316,10 +315,10 @@ async function scrape_recent(username, password, i) {
 					assignment: $(this).attr('assignmentname'),
 				});
 			});
-		log(i, "recentGrades", recentActivityArray);
+		log("recentGrades", recentActivityArray);
 
 
-		log(i, "closing");
+		log("closing");
 		resolve({
 			recentAttendanceArray,
 			recentActivityArray,
@@ -327,7 +326,6 @@ async function scrape_recent(username, password, i) {
 		});
 	});
 }
-
 
 // Returns promise that contains object of all class data
 function scrape_class(username, password, i) {
@@ -596,7 +594,7 @@ async function scrape_assignments(session_id, apache_token) {
 }
 
 // Returns list of black/silver day pairs of class names and room numbers
-async function scrape_schedule(username, password, i) {
+async function scrape_schedule(username, password) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
@@ -669,7 +667,7 @@ async function scrape_schedule(username, password, i) {
 			}
 		});
 
-		log(i, "schedule", data);
+		log("schedule", data);
 		resolve(data);
 	});
 }

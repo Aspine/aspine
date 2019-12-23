@@ -131,6 +131,9 @@ function get_period_name(default_name) {
     if(typeof(tableData) == "undefined" || Object.keys(tableData).length == 0) {
         return default_name;
     }
+    if (typeof(tableData.schedule) == "undefined" || Object.keys(tableData.schedule).length == 0) {
+        return default_name;
+    }
     if(period_names.black.length == 0) {
         // set period_names -- should only be run once
         for(let i in tableData.schedule.black) {
