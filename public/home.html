@@ -961,7 +961,6 @@ let termsReset = {};
 				recentActivity.setData(tableData.recent.recentActivityArray);
 				recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
-<<<<<<< HEAD
 				classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 
 				$.ajax({
@@ -991,33 +990,31 @@ let termsReset = {};
 						timesCounter++;
 					} else {
 						times[i] = "";
-=======
 
-          //console.log(typeof(tableData.currentTerm.classes));
-					return response.currentTerm.classes; //return the tableData property of a response json object
+        //   //console.log(typeof(tableData.currentTerm.classes));
+				// 	return response.currentTerm.classes; //return the tableData property of a response json object
 
-				},
-				//ajaxParams:{key1:"value1", key2:"value2"},
-				//data:tabledata, //assign data to table
-				layout:"fitColumns", //fit columns to width of table (optional)
-				columns:[ //Define Table Columns
-					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
-					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
-					{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
-				],
-				rowClick:function(e, row){ //trigger an alert message when the row is clicked
-          assignmentsTable.clearFilter();
-					document.getElementById("categoriesTable").style.display = "block";
-					document.getElementById("assignmentsTable").style.display = "block";
-					selected_class_i = row.getPosition();
-					tabledata = classesTable.getData();
-					for(let i in tabledata) {
-						if(tabledata[i].name == row.getData().name) {
-							assignmentsTable.setData(tabledata[i].assignments);
-							categoriesTable.setData(tabledata[i].categoryDisplay);
-							return;
-						}
->>>>>>> more_grades
+				// ,
+				// //ajaxParams:{key1:"value1", key2:"value2"},
+				// //data:tabledata, //assign data to table
+				// layout:"fitColumns", //fit columns to width of table (optional)
+				// columns:[ //Define Table Columns
+				// 	{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
+				// 	{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
+				// 	{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
+				// ],
+				// rowClick:function(e, row) //trigger an alert message when the row is clicked
+        //   assignmentsTable.clearFilter();
+				// 	document.getElementById("categoriesTable").style.display = "block";
+				// 	document.getElementById("assignmentsTable").style.display = "block";
+				// 	selected_class_i = row.getPosition();
+				// 	tabledata = classesTable.getData();
+				// 	for(let i in tabledata) 
+				// 		if(tabledata[i].name == row.getData().name) {
+				// 			assignmentsTable.setData(tabledata[i].assignments);
+				// 			categoriesTable.setData(tabledata[i].categoryDisplay);
+				// 			return;
+				// 		}
 					}
 
 				}
