@@ -870,8 +870,37 @@ let termsReset = {};
 				// 		tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
 				// 	}
 				// }
-					// //parsing the data extracted by the scrappers, and getting tableData ready for presentation
-          tableData.currentTerm = parseTableData(tableData.currentTerm.classes);
+					 //parsing the data extracted by the scrappers, and getting tableData ready for presentation
+
+            console.log(tableData);
+            
+            if (response.quarter == 0) {
+              tableData.currentTerm = {classes: tableData.classes};
+              tableData.terms = {current: tableData.currentTerm};
+
+              tableData.currentTerm = parseTableData(response.classes);
+              tableData.terms.current = parseTableData(tableData.terms.current.classes);
+            } else if (response.quarter == 1) {
+              tableData.terms.q1 = {classes: tableData.classes};
+             tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
+
+            } else if (response.quarter == 2) {
+              tableData.terms.q2 = {classes: tableData.classes};
+             tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
+
+            } else if (response.quarter == 3) {
+              tableData.terms.q3 = {classes: tableData.classes};
+             tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
+
+            } else if (response.quarter == 4) {
+              tableData.terms.q4 = {classes: tableData.classes};
+             tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
+
+            } 
+
+
+
+          // tableData.currentTerm = parseTableData(tableData.currentTerm.classes);
           // tableData.terms.current = parseTableData(tableData.terms.current.classes);
           //   tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
           //   tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
@@ -1059,7 +1088,7 @@ let termsReset = {};
 			$.ajax({
 				url: "/data",
 				method: "POST",
-        data: { quarter: 1 },
+        data: { quarter: 0 },
 				dataType: "json json",
 				success: responseCallback
 			});

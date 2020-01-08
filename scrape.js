@@ -3,7 +3,7 @@
 
 // --------------- Parameters ----------------
 // Multi-Threads
-const CLASS_THREADS = 50;
+const CLASS_THREADS = 10;
 const PDF_THREADS = 5;
 
 // Solo-Threads
@@ -63,7 +63,8 @@ async function scrape_student(username, password, quarter) {
     return {
       classes: (await Promise.all(class_scrapers)).filter(Boolean),
       recent: await recent_scraper,
-      username: username
+      username: username,
+      quarter: quarter
     }
 
   } else {
@@ -71,6 +72,7 @@ async function scrape_student(username, password, quarter) {
     // Spawn class scrapers
     let class_scrapers = [];
     for (let i = quarter * 10; i < CLASS_THREADS + quarter * 10; i++) {
+      console.log(i)
       class_scrapers[i] = scrape_quarter(username, password, i);
     }
 
@@ -79,7 +81,7 @@ async function scrape_student(username, password, quarter) {
 
     // Await on all class scrapers
     return {
-      classes: (await Promise.all(class_scrapers)).filter(Boolean),
+      currentTerm: (await Promise.all(class_scrapers)).filter(Boolean),
       recent: await recent_scraper,
       username: username
     }
@@ -485,12 +487,15 @@ function scrape_quarter(username, password, i) {
 
 		// Academics Page
 		let academics = await scrape_academics(session.session_id);
-    console.log("Academics:");
-    console.log(academics);
-		log(i, "academics", academics);
+    log(i, "academics", academics);
 
     let term = Math.floor(i / 10);
     i = i % 10;
+
+    console.log("Term Filters");
+    console.log(academics.termFilters);
+    console.log(term + 1);
+
 
     if (term != 0) {
       academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, i);
