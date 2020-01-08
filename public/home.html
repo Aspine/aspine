@@ -265,7 +265,7 @@
       let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
       let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
-      let currentTerm = "current";
+      // let currentTerm = "current";
 
 			// When the user clicks anywhere outside of the modal, close it
 			window.addEventListener("click", function(event) {
@@ -875,13 +875,7 @@ let termsReset = {};
 
 
             if (typeof tableData.terms == 'undefined') {
-              tableData.terms = {
-                current: {},
-                q1: {},
-                q2: {},
-                q3: {},
-                q4: {}
-              }
+              tableData.terms = {}
             }
             tableData.currentTerm = {classes: tableData.classes};
             tableData.currentTerm = parseTableData(response.classes);
@@ -916,7 +910,7 @@ let termsReset = {};
           //   tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
           //   tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
           //   tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
-          tableData.currentTerm = tableData.terms.current;
+          // tableData.currentTerm = tableData.terms.current;
           console.log(tableData);
 
 
@@ -983,9 +977,9 @@ let termsReset = {};
 					termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
 					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-          $("#current").html("Current Quarter GPA: " + tableData.terms["current"].GPA);
-          document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-          document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+          $("#current").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
+          document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
+          document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
 
           // $(".select-items").children().each(function(i, elem) {
           //   if (i == 0) {
@@ -1014,64 +1008,48 @@ let termsReset = {};
 			}
 
       function responseCallbackPartial(response) {
-        response.quarter = parseFloat(response.quarter);
+          response.quarter = parseFloat(response.quarter);
             console.log(response);
 				
         $("#loader").hide();
 
-            tableData.currentTerm = {classes: tableData.classes};
+            // tableData.currentTerm = {classes: tableData.classes};
             tableData.currentTerm = parseTableData(response.classes);
             
             if (response.quarter == 0) {
-              tableData.terms = {current: tableData.currentTerm};
-              tableData.terms.current = parseTableData(tableData.terms.current.classes);
+              tableData.terms.current = parseTableData(response.classes);
 
             } else if (response.quarter == 1) {
-              tableData.terms.q1 = {classes: tableData.classes};
-              tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
+              tableData.terms.q1 = parseTableData(response.classes);
 
             } else if (response.quarter == 2) {
-              tableData.terms.q2 = {classes: tableData.classes};
-              tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
+              tableData.terms.q2 = parseTableData(response.classes);
 
             } else if (response.quarter == 3) {
-              tableData.terms.q3 = {classes: tableData.classes};
-              tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
+              tableData.terms.q3 = parseTableData(response.classes);
 
             } else if (response.quarter == 4) {
-              tableData.terms.q4 = {classes: tableData.classes};
-              tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
+              tableData.terms.q4 = parseTableData(response.classes);
 
             } 
 
             termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
-            console.log(response.quarter);
+            console.log(tableData.currentTerm);
 
             if (response.quarter == 0) {
               $(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
               $("#current").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
 
             } else {
-              $(".select-selected").html("Q" + response.quarter + " GPA: " + tableData.terms["q" + response.quarter].GPA);
-              $("#q" + response.quarter).html("Q" + response.quarter + " GPA: " + tableData.terms["q" + response.quarter].GPA);
-              document.getElementById('gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.terms["q" + response.quarter].GPA; 
-              // document.getElementById('view_gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.terms["q" + response.quarter].GPA; 
+              $(".select-selected").html("Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA);
+              $("#q" + response.quarter).html("Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA);
+              document.getElementById('gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA; 
             }
 
-            // $(".select-items").children().each(function(i, elem) {
-            //   if (i == 0) {
-            //     console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
-            //     $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
-            //     document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-            //     document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-            //   } else {
-            //     $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
-            //     document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
-            //   }
-            // });
+
             scheduleTable.setData(tableData.schedule.black);
 
             $("#classesTable").show();
