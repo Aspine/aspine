@@ -177,12 +177,12 @@ function getRGB(gradeToBeColored) {
 function computeGPA() {
 	let sum = 0;
 	let counter = 0.0;
-	for (let i = 0; i < tableData.classes.length; i++) {
-		if (!isNaN(parseFloat(tableData.classes[i].calculated_grade))) {
-			if (parseFloat(tableData.classes[i].calculated_grade) > 100) {
+	for (let i = 0; i < tableData.currentTerm.classes.length; i++) {
+		if (!isNaN(parseFloat(tableData.currentTerm.classes[i].calculated_grade))) {
+			if (parseFloat(tableData.currentTerm.classes[i].calculated_grade) > 100) {
 				sum += 100;
 			} else {
-				sum += parseFloat(tableData.classes[i].calculated_grade);
+				sum += parseFloat(tableData.currentTerm.classes[i].calculated_grade);
 			}
 			counter += 1.0;
 		}
