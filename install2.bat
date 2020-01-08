@@ -63,19 +63,10 @@ goto :nodejs
 
 :check_permissions_failure
 echo Failure: Current permissions inadequate.
-echo To run this script as an administrator:
-echo 1) Open the Start menu or Start screen. This is typically done by moving
-echo    your mouse pointer to the lower left-hand corner of your screen and
-echo    clicking.
-echo 2) Type "cmd", excluding the quotation marks.
-echo 3) Press CTRL-SHIFT-ENTER.
-echo 4) Agree to any prompts asking for authorization of administrative action,
-echo    providing passwords as necessary.
-echo 5) Type "cd" (excluding quotation marks), followed by a space, followed by
-echo    the full path (enclosed in double quotes) to the directory (folder)
-echo    in which you have cloned or downloaded the Aspine repository, and
-echo    press ENTER on your keyboard.
-echo 6) Type "install2.bat" (excluding quotation marks).
+echo To run this script as an administrator,
+echo right-click on "install2.bat" and click "Run as administrator".
+echo.
+echo Press any key to close this window.
 goto :eof
 
 :nodejs
@@ -94,12 +85,7 @@ echo The necessary development tools have been installed.
 echo You might need to restart your computer before performing the following steps;
 echo if so, take a screenshot or photo of this screen before restarting your computer.
 echo.
-echo Please close this Command Prompt window and open a new non-administrative
-echo Command Prompt window (this can be done by typing "cmd" in the Start Menu
-echo and pressing ENTER without CTRL or SHIFT).
-echo.
-echo In the new window, type "npm install" (excluding quotation marks).
-echo Once that process has completed, close that Command Prompt window.
-echo To run Aspine, double-click on the file "start.bat".
+echo Please close this Command Prompt window and double-click on the "npminstall.bat".
+pause
 
 :eof
