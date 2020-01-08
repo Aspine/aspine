@@ -85,20 +85,11 @@ goto :choco
 
 :check_permissions_failure
 echo Failure: Current permissions inadequate.
-echo To run this script as an administrator:
-echo 1) Open the Start menu or Start screen. This is typically done by moving
-echo    your mouse pointer to the lower left-hand corner of your screen and
-echo    clicking.
-echo 2) Type "cmd", excluding the quotation marks.
-echo 3) Press CTRL-SHIFT-ENTER.
-echo 4) Agree to any prompts asking for authorization of administrative action,
-echo    providing passwords as necessary.
-echo 5) Type "cd" (excluding quotation marks), followed by a space, followed by
-echo    the full path (enclosed in double quotes) to the directory (folder)
-echo    in which you have cloned or downloaded the Aspine repository, and
-echo    press ENTER on your keyboard.
-echo 6) Type "install1.bat" (excluding quotation marks).
-echo    That is the word "install" followed by a numeral one.
+echo To run this script as an administrator,
+echo right-click on "install1.bat" and click "Run as administrator".
+echo.
+echo Press any key to close this window.
+pause
 goto :eof
 
 :choco
@@ -113,7 +104,8 @@ echo.
 echo If you see the text "Chocolatey (choco.exe) is now ready" above,
 echo Chocolatey has been successfully installed and you may safely proceed to
 echo the next step.
-echo Please close this Command Prompt window and open a new Command Prompt
-echo window to run the second script, "install2.bat".
+echo Please close this Command Prompt window and run the next script,
+echo install2.bat, as an administrator, by right-clicking on it and clicking
+echo "Run as administrator".
 
 :eof
