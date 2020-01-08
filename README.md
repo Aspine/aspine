@@ -44,33 +44,28 @@ Note:
 * [CRLS Clock](https://github.com/CRLSCSClub/CRLSTime)
 * [Full Calendar](https://fullcalendar.io/)
 
-## Contributing
+## Contributing / Locally Running Aspine
 
 Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
-If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. To test your additions to Aspine:
+If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client.
+
+If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
+
+If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.
 
 * Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
   * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
-  * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively.
-  * On Windows:
-    1. First install the [Chocolatey](https://chocolatey.org/) package manager using the installation instructions on [their website](https://chocolatey.org/) (access to an administrator account is required).
-    1. Then, open a new administrative command prompt window (open the Start menu, type `cmd`, and press Ctrl+Shift+Enter), and type these commands:
-      ```
-      choco install nodejs
-      choco install redis-64
-      ```
-    * Please note that this procedure will only work on 64-bit versions of Windows 7, 8, 8.1, or 10 (most computers since around 2012). If you are unsure, please follow the instructions in this article: <https://www.howtogeek.com/howto/21726/how-do-i-know-if-im-running-32-bit-or-64-bit-windows-answers/>
-* Open a terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the required dependencies.
-* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`. If you are on Windows, you may need to create a directory called `db` for Redis to work properly.
+  * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively. You can run the script `install.sh` to install these dependencies.
+  * Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
+* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.
 * In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
-
-These instructions have only been tested on GNU+Linux and Windows. You might need to change your `PATH` on Windows if you get an error saying that `node` is not found after installing node.js.
 
 ## Authors
 
 * [**Max Katz-Christy**](https://github.com/maxtkc)
 * [**Cole Killian**](https://github.com/ruborcalor)
+* [**psvenk**](https://github.com/psvenk)
 
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
