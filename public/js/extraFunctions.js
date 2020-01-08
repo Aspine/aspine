@@ -482,6 +482,7 @@ function closeAllSelect(elmnt) {
   }
 
 }
+
 //pdf dropdown stuff
 let initialize_dropdown = function() {      
 

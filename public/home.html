@@ -755,6 +755,7 @@ let termsReset = {};
 			
 			// Callback for response from /data
 			function responseCallback(response) {
+            console.log(response);
 				if (response.recent.login_fail) {
 					location.href='/logout';
 				}
@@ -872,13 +873,22 @@ let termsReset = {};
 				// }
 					 //parsing the data extracted by the scrappers, and getting tableData ready for presentation
 
-            console.log(tableData);
+
+            if (typeof tableData.terms == 'undefined') {
+              tableData.terms = {
+                current: {},
+                q1: {},
+                q2: {},
+                q3: {},
+                q4: {}
+              }
+            }
+            tableData.currentTerm = {classes: tableData.classes};
+            tableData.currentTerm = parseTableData(response.classes);
             
             if (response.quarter == 0) {
-              tableData.currentTerm = {classes: tableData.classes};
               tableData.terms = {current: tableData.currentTerm};
 
-              tableData.currentTerm = parseTableData(response.classes);
               tableData.terms.current = parseTableData(tableData.terms.current.classes);
             } else if (response.quarter == 1) {
               tableData.terms.q1 = {classes: tableData.classes};
@@ -907,7 +917,6 @@ let termsReset = {};
           //   tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
           //   tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
           tableData.currentTerm = tableData.terms.current;
-          console.log("PRINT");
           console.log(tableData);
 
 
@@ -968,7 +977,7 @@ let termsReset = {};
 					//tableData.GPA = computeGPA();
 					//tableData.calcGPA = computeGPA();
 
-          initialize_dropdown();
+          // initialize_dropdown();
 					termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
 					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
@@ -983,12 +992,9 @@ let termsReset = {};
               document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
             }
           });
-					scheduleTable.setData(tableData.schedule.black);
+					// scheduleTable.setData(tableData.schedule.black);
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
-
-				recentActivity.setData(tableData.recent.recentActivityArray);
-				recentAttendance.setData(tableData.recent.recentAttendanceArray);
 
 				classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 
@@ -1088,7 +1094,7 @@ let termsReset = {};
 			$.ajax({
 				url: "/data",
 				method: "POST",
-        data: { quarter: 0 },
+        data: { quarter: 1 },
 				dataType: "json json",
 				success: responseCallback
 			});

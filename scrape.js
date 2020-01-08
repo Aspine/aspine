@@ -69,10 +69,10 @@ async function scrape_student(username, password, quarter) {
 
   } else {
     
+    quarter = parseFloat(quarter) + 1;
     // Spawn class scrapers
     let class_scrapers = [];
-    for (let i = quarter * 10; i < CLASS_THREADS + quarter * 10; i++) {
-      console.log(i)
+    for (let i = (quarter) * 10; i < CLASS_THREADS + (quarter ) * 10; i++) {
       class_scrapers[i] = scrape_quarter(username, password, i);
     }
 
@@ -81,9 +81,10 @@ async function scrape_student(username, password, quarter) {
 
     // Await on all class scrapers
     return {
-      currentTerm: (await Promise.all(class_scrapers)).filter(Boolean),
+      classes: (await Promise.all(class_scrapers)).filter(Boolean),
       recent: await recent_scraper,
-      username: username
+      username: username,
+      quarter: quarter
     }
 
   }
@@ -431,7 +432,6 @@ async function change_term_assignments(session_id, apache_token, student_oid, te
 	    row["assignment_id"] = $(this).find("input").attr("id");
 	    let scores = $(this).find("tr")
                 .children().slice(0, 2);
-		//console.log(scores.text());
 		row["special"] = scores.text();
             if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
 		    scores = scores.eq(1).text().split("/");
@@ -492,9 +492,6 @@ function scrape_quarter(username, password, i) {
     let term = Math.floor(i / 10);
     i = i % 10;
 
-    console.log("Term Filters");
-    console.log(academics.termFilters);
-    console.log(term + 1);
 
 
     if (term != 0) {
@@ -512,7 +509,6 @@ function scrape_quarter(username, password, i) {
 		let categories = await scrape_details(session.session_id,
 			academics.apache_token, academics.classes[i].id,
 			academics.oid);
-    //console.log(categories);
 		log(i, "categories", categories);
 
 
@@ -624,7 +620,6 @@ async function change_term_assignments(session_id, apache_token, student_oid, te
 	    row["assignment_id"] = $(this).find("input").attr("id");
 	    let scores = $(this).find("tr")
                 .children().slice(0, 2);
-		//console.log(scores.text());
 		row["special"] = scores.text();
             if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
 		    scores = scores.eq(1).text().split("/");
@@ -703,13 +698,9 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
 	data.oid = $("input[name=selectedStudentOid]").attr("value");
 	data.apache_token = $("input[name='org.apache.struts.taglib.html.TOKEN']").attr("value");
   data.termFilters = [];
-  console.log("termfilter:");
-  console.log(data.termFilters);
   $('select[name="termFilter"]').children().each(function(i, elem) {
     data.termFilters.push({"type": $(this).text(), "code": $(this).attr('value')});
   });
-  console.log("termfilter:");
-  console.log(data.termFilters);
 
 
 
