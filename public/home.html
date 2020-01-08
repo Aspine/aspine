@@ -991,6 +991,7 @@
 			$.ajax({
 				url: "/data",
 				method: "POST",
+        data: { quarter: 1 },
 				dataType: "json json",
 				success: responseCallback
 			});

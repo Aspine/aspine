@@ -113,11 +113,11 @@ app.post('/stats', async (req, res) => {
 });
 
 app.post('/data', async (req, res) => {
-	console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
+	// console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-	fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
-		  if (err) throw err;
-	});
+	// fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
+	// 	  if (err) throw err;
+	// });
   
   if (args.hasOwnProperty("json")) {
 	  // Check if "--json" command-line argument was provided, e.g.
@@ -133,7 +133,7 @@ app.post('/data', async (req, res) => {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
         // Get data from scraper:
-        response = await scraper.scrape_student(req.session.username, req.session.password);
+        response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
 		res.send(response)
 
 		// If "out" command-line argument provided, save JSON at the given path
