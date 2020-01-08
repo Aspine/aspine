@@ -583,6 +583,7 @@ let initialize_quarter_dropdown = function() {
     /* For each element, create a new DIV that will contain the option list: */
     b = document.createElement("DIV");
     b.setAttribute("class", "select-items select-hide");
+    b.setAttribute("id", "view_gpa_select");
     for (j = 1; j < selElmnt.length; j++) {
       /* For each option in the original select element,
     create a new DIV that will act as an option item: */
@@ -590,6 +591,7 @@ let initialize_quarter_dropdown = function() {
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1];
       c.addEventListener("click", function(e) {
+        console.log("Click on box");
         /* When an item is clicked, update the original select box,
         and the selected item: */
 
@@ -611,10 +613,9 @@ let initialize_quarter_dropdown = function() {
             //   $(".select-selected").css("padding", "13px 16px 13px 16px");
             // }
             if (typeof tableData.terms[currentTerm] == 'undefined') {
+              console.log("Undefined term");
 
-
-              $("#loader").show();
-               $.ajax({
+              $.ajax({
                 url: "/data",
                 method: "POST",
                 data: { quarter: (i - 1) },
@@ -622,7 +623,25 @@ let initialize_quarter_dropdown = function() {
                 success: responseCallbackPartial
               });
 
+              $("#loader").show();
+              $("#classesTable").hide();
+              $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+              $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+              $("#mostRecentDiv").hide();
+
+              s.selectedIndex = i;
+              h.innerHTML = this.innerHTML;
+              y = this.parentNode.getElementsByClassName("same-as-selected");
+              for (k = 0; k < y.length; k++) {
+                y[k].removeAttribute("class");
+              }
+              this.setAttribute("class", "same-as-selected");
+              break;
+
+
+
             } else {
+              console.log("Not undefined");
 
               if (i == 0) {
                 tableData.currentTerm = tableData.terms.current;
