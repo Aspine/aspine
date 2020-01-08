@@ -484,7 +484,7 @@ function closeAllSelect(elmnt) {
 }
 
 //pdf dropdown stuff
-let initialize_dropdown = function() {      
+let initialize_pdf_dropdown = function() { 
 
     //let o = new Option(tableData.pdf_files[i].title, i);
     ///// jquerify the DOM object 'o' so we can use the html method
@@ -566,8 +566,11 @@ let initialize_dropdown = function() {
   }
 
 
+}
 
-  x, i, j, selElmnt, a, b, c;
+let initialize_quarter_dropdown = function() {
+
+  let x, i, j, selElmnt, a, b, c;
   /* Look for any elements with the class "custom-select": */
   x = document.getElementsByClassName("custom-select");
   for (i = 0; i < x.length; i++) {
@@ -602,33 +605,48 @@ let initialize_dropdown = function() {
             }
 
 
-            if (anyEdited()) {
-              $(".select-selected").css('padding', "5px 16px 5px 16px");
+            // if (anyEdited()) {
+            //   $(".select-selected").css('padding', "5px 16px 5px 16px");
+            // } else {
+            //   $(".select-selected").css("padding", "13px 16px 13px 16px");
+            // }
+            if (typeof tableData.terms[currentTerm] == 'undefined') {
+
+
+              $("#loader").show();
+               $.ajax({
+                url: "/data",
+                method: "POST",
+                data: { quarter: (i - 1) },
+                dataType: "json json",
+                success: responseCallbackPartial
+              });
+
             } else {
-              $(".select-selected").css("padding", "13px 16px 13px 16px");
-            }
-            if (i == 0 ) {
-              tableData.currentTerm = tableData.terms.current;
-            } else {
-              tableData.currentTerm = tableData.terms["q" + (i - 1)];
-            }
 
-            classesTable.setData(tableData.currentTerm.classes);
-            //classesReset = JSON.parse(JSON.stringify(tableData.classes));
+              if (i == 0) {
+                tableData.currentTerm = tableData.terms.current;
+              } else {
+                tableData.currentTerm = tableData.terms["q" + (i - 1)];
+              }
 
-            $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-            $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-            selected_class_i = undefined;
-            //categoriesTable.setData(tableData[i].categoryDisplay);
+              classesTable.setData(tableData.currentTerm.classes);
+              //classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute("class");
+              $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+              $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+              selected_class_i = undefined;
+              //categoriesTable.setData(tableData[i].categoryDisplay);
+
+              s.selectedIndex = i;
+              h.innerHTML = this.innerHTML;
+              y = this.parentNode.getElementsByClassName("same-as-selected");
+              for (k = 0; k < y.length; k++) {
+                y[k].removeAttribute("class");
+              }
+              this.setAttribute("class", "same-as-selected");
+              break;
             }
-            this.setAttribute("class", "same-as-selected");
-            break;
           }
         }
         h.click();
