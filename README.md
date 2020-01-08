@@ -44,22 +44,20 @@ Note:
 * [CRLS Clock](https://github.com/CRLSCSClub/CRLSTime)
 * [Full Calendar](https://fullcalendar.io/)
 
-## Contributing
+## Contributing / Locally Running Aspine
 
 Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
-If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. To test your additions to Aspine:
+If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client.
+
+If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
+
+If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.
 
 * Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
   * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
   * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively. You can run the script `install.sh` to install these dependencies.
-  * On Windows:
-    1. Open the Start menu or Start screen. This is typically done by moving your mouse pointer to the lower left-hand corner of your screen and clicking.
-    1. Type `cmd` and press `CTRL`+`SHIFT`+`ENTER`.
-    1. Agree to any prompts asking for authorization of administrative action, providing passwords as necessary.
-    1. Type `cd`, followed by a space, followed by the full path (enclosed in double quotes) to the directory (folder) in which you have cloned or downloaded the Aspine repository, and press `ENTER` on your keyboard.
-    1. Type `install1.bat` and press `ENTER`, and follow the on-screen prompts.
-* Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
+  * Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
 * Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.
 * In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
 
@@ -67,6 +65,7 @@ If you would like to directly contribute to Aspine, you can fork this repository
 
 * [**Max Katz-Christy**](https://github.com/maxtkc)
 * [**Cole Killian**](https://github.com/ruborcalor)
+* [**psvenk**](https://github.com/psvenk)
 
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
