@@ -1169,8 +1169,7 @@ if (require.main === module) {
 		//});
 
 		// Print Stringified scrape_student() - good for checking json return
-		// console.log(JSON.stringify(await scrape_student(result.username, result.password, 0)));
-    (JSON.stringify(await scrape_student("8006696", "Tylerkill27", 0)));
+		console.log(JSON.stringify(await scrape_student(result.username, result.password, 0)));
 		
 		// Print scrape_student() - good for checking fetch html return
 		//console.log((await scrape_student(result.username, result.password)));
