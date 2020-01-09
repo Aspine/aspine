@@ -51,30 +51,25 @@ async function scrape_student(username, password, quarter) {
 
   if (quarter == 0) {
 
-    // // Spawn class scrapers
-    // let class_scrapers = [];
-    // for (let i = 0; i < CLASS_THREADS; i++) {
-    //   class_scrapers[i] = scrape_class(username, password, i);
-    // }
+    // Spawn class scrapers
+    let class_scrapers = [];
+    for (let i = 0; i < CLASS_THREADS; i++) {
+      class_scrapers[i] = scrape_class(username, password, i);
+    }
 
-    // // Spawn recent activity scraper
-    // let recent_scraper = scrape_recent(username, password);
-    // let overview_scraper = scrape_overview(username, password);
-
-    // // Await on all class scrapers
-    // return {
-    //   classes: (await Promise.all(class_scrapers)).filter(Boolean),
-    //   recent: await recent_scraper,
-    //   username: username,
-    //   quarter: quarter
-    // }
-
+    // Spawn recent activity scraper
+    let recent_scraper = scrape_recent(username, password);
     let overview_scraper = scrape_overview(username, password);
 
     // Await on all class scrapers
     return {
-      overview: await overview_scraper
+      classes: (await Promise.all(class_scrapers)).filter(Boolean),
+      recent: await recent_scraper,
+      overview: await overview_scraper,
+      username: username,
+      quarter: quarter
     }
+
 
 
   } else {
@@ -354,13 +349,10 @@ let scrape_overview = function(username, password) {
     if (page.success) {
       resolve({"login_fail": true});
     }
-    console.log(session.session_id);
     let info = await get_home(session.session_id);
-    console.log(info.apache_token);
-    console.log(info.student_oid);
 
 
-    let re = await fetch_body("https://aspen.cpsd.us/aspen/gradesWidget.do?org.apache.struts.taglib.html.TOKEN=" + info.apache_token + "&userEvent=950&userParam=&groupPageWidgetOid=gpwX2000000013&editMode=false&widgetId=grades_3&displayProperties=relSscMstOid.mstDescription%2CrelSscMstOid.mstStaffView%2CrelSscMstOid.mstTermView&studentOid=" + info.student_oid, {
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/gradesWidget.do?org.apache.struts.taglib.html.TOKEN=" + info.apache_token + "&userEvent=950&userParam=&groupPageWidgetOid=gpwX2000000013&editMode=false&widgetId=grades_3&displayProperties=relSscMstOid.mstDescription%2CrelSscMstOid.mstStaffView%2CrelSscMstOid.mstTermView&studentOid=" + info.student_oid, {
         "credentials": "include",
         "headers": {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0",
@@ -372,43 +364,32 @@ let scrape_overview = function(username, password) {
         "referrer": "https://aspen.cpsd.us/aspen/home.do",
         "method": "GET",
         "mode": "cors"
-    });
-     console.log(re);
+    }));
 
 
-    // console.log($("td.portletTitle").html());
-    // $("tr.listCell.listRowHeight").each(function(i, elem) {
-//     $("tr.gradesCell").each(function(i, elem) {
-//       // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
-//       let row = {};
-//       //row["name"] = $(this).find("a").first().text();
-//       //row["category"] = $(this).children().eq(2).text().trim();
-//       row["class"] = $(this).children().eq(1).text().trim();
-//       row["category"] = $(this).find("a").first().text();
-//       row["date_assigned"] = $(this).children().eq(3).text().trim();
-//       row["date_due"] = $(this).children().eq(4).text().trim();
-//       row["feedback"] = $(this).children().eq(6).text().trim();
-//       //let scores = $(this).find("div[class=percentFieldContainer]");
-//       row["assignment_id"] = $(this).find("input").attr("id");
-//       let scores = $(this).find("tr")
-//         .children().slice(0, 2);
-// 
-//       row["special"] = scores.text();
-// 
-//       if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
-//         scores = scores.eq(1).text().split("/");
-//         row["score"] = Number(scores[0]);
-//         row["max_score"] = Number(scores[1]);
-// 
-//       }
-//       data.push(row);
-//     });
-// 
-// 
+    let data = [];
+     $("tr.gradesCell").each(function(i, elem) {
+       // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
+       let row = {};
+       //row["name"] = $(this).find("a").first().text();
+       //row["category"] = $(this).children().eq(2).text().trim();
+       row["class"] = $(this).children().eq(0).text().trim();
+       row["teacher"] = $(this).children().eq(1).text().trim();
+       row["term"] = $(this).children().eq(2).text().trim();
+       row["q1"] = $(this).children().eq(3).text().trim();
+       row["q2"] = $(this).children().eq(4).text().trim();
+       row["q3"] = $(this).children().eq(5).text().trim();
+       row["q4"] = $(this).children().eq(6).text().trim();
+       row["ytd"] = $(this).children().eq(7).text().trim();
+       row["absent"] = $(this).children().eq(8).text().trim();
+       row["tardy"] = $(this).children().eq(9).text().trim();
+       row["dismissed"] = $(this).children().eq(10).text().trim();
+       data.push(row);
+     });
+ 
+ 
     log("closing");
-    resolve({
-      "hi": "go",
-    });
+    resolve(data );
   })
 }
 
@@ -717,7 +698,6 @@ async function scrape_login(username, password) {
 
 // Submits login with creds and session
 async function get_home(session_id) {
-  console.log("Session ID:" + session_id + "!");
 
 
 	let page = await fetch_body(
@@ -745,11 +725,9 @@ async function get_home(session_id) {
 		}
 	);
 
-  console.log("Correct Page: " + (!page.includes("Log on now")));
 
   let $ = cheerio.load(page);
 
-  // console.log("?");
   let student_oid = ($('#studentSelector').children().first().attr("value"));
 
 	return {
@@ -788,7 +766,6 @@ async function submit_login(username, password, apache_token, session_id) {
 			"mode": "cors"
 		}
 	);
-  console.log("Login success:" + (!page.includes("Invalid login.")));
 
 	return {
     success: page.includes("Invalid login."),
