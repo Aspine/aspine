@@ -50,22 +50,32 @@ module.exports = {
 async function scrape_student(username, password, quarter) {
 
   if (quarter == 0) {
-    // Spawn class scrapers
-    let class_scrapers = [];
-    for (let i = 0; i < CLASS_THREADS; i++) {
-      class_scrapers[i] = scrape_class(username, password, i);
-    }
 
-    // Spawn recent activity scraper
-    let recent_scraper = scrape_recent(username, password);
+    // // Spawn class scrapers
+    // let class_scrapers = [];
+    // for (let i = 0; i < CLASS_THREADS; i++) {
+    //   class_scrapers[i] = scrape_class(username, password, i);
+    // }
+
+    // // Spawn recent activity scraper
+    // let recent_scraper = scrape_recent(username, password);
+    // let overview_scraper = scrape_overview(username, password);
+
+    // // Await on all class scrapers
+    // return {
+    //   classes: (await Promise.all(class_scrapers)).filter(Boolean),
+    //   recent: await recent_scraper,
+    //   username: username,
+    //   quarter: quarter
+    // }
+
+    let overview_scraper = scrape_overview(username, password);
 
     // Await on all class scrapers
     return {
-      classes: (await Promise.all(class_scrapers)).filter(Boolean),
-      recent: await recent_scraper,
-      username: username,
-      quarter: quarter
+      overview: await overview_scraper
     }
+
 
   } else {
     
@@ -84,7 +94,7 @@ async function scrape_student(username, password, quarter) {
       classes: (await Promise.all(class_scrapers)).filter(Boolean),
       recent: await recent_scraper,
       username: username,
-      quarter: quarter
+      quarter: quarter,
     }
 
   }
@@ -336,13 +346,81 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
 	return data;
 }
 
+let scrape_overview = function(username, password) {
+
+  return new Promise(async function(resolve, reject) {
+    let session = await scrape_login();
+    let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page.success) {
+      resolve({"login_fail": true});
+    }
+    console.log(session.session_id);
+    let info = await get_home(session.session_id);
+    console.log(info.apache_token);
+    console.log(info.student_oid);
+
+
+    let re = await fetch_body("https://aspen.cpsd.us/aspen/gradesWidget.do?org.apache.struts.taglib.html.TOKEN=" + info.apache_token + "&userEvent=950&userParam=&groupPageWidgetOid=gpwX2000000013&editMode=false&widgetId=grades_3&displayProperties=relSscMstOid.mstDescription%2CrelSscMstOid.mstStaffView%2CrelSscMstOid.mstTermView&studentOid=" + info.student_oid, {
+        "credentials": "include",
+        "headers": {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0",
+            "Accept": "*/*",
+            "Accept-Language": "en-US,en;q=0.5",
+            "X-Requested-With": "XMLHttpRequest",
+            "Cookie": "JSESSIONID=" + session.session_id + "; deploymentId=x2sis"
+        },
+        "referrer": "https://aspen.cpsd.us/aspen/home.do",
+        "method": "GET",
+        "mode": "cors"
+    });
+     console.log(re);
+
+
+    // console.log($("td.portletTitle").html());
+    // $("tr.listCell.listRowHeight").each(function(i, elem) {
+//     $("tr.gradesCell").each(function(i, elem) {
+//       // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
+//       let row = {};
+//       //row["name"] = $(this).find("a").first().text();
+//       //row["category"] = $(this).children().eq(2).text().trim();
+//       row["class"] = $(this).children().eq(1).text().trim();
+//       row["category"] = $(this).find("a").first().text();
+//       row["date_assigned"] = $(this).children().eq(3).text().trim();
+//       row["date_due"] = $(this).children().eq(4).text().trim();
+//       row["feedback"] = $(this).children().eq(6).text().trim();
+//       //let scores = $(this).find("div[class=percentFieldContainer]");
+//       row["assignment_id"] = $(this).find("input").attr("id");
+//       let scores = $(this).find("tr")
+//         .children().slice(0, 2);
+// 
+//       row["special"] = scores.text();
+// 
+//       if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
+//         scores = scores.eq(1).text().split("/");
+//         row["score"] = Number(scores[0]);
+//         row["max_score"] = Number(scores[1]);
+// 
+//       }
+//       data.push(row);
+//     });
+// 
+// 
+    log("closing");
+    resolve({
+      "hi": "go",
+    });
+  })
+}
+
+
+
 
 // Returns object of recent activity
 async function scrape_recent(username, password) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
-		if (page) {
+		if (page.success) {
 			resolve({"login_fail": true});
 		}
 
@@ -463,11 +541,8 @@ async function change_term_assignments(session_id, apache_token, student_oid, te
 
 			if (!isNaN(parseFloat(scores.eq(1).text()))) { // No score
 				scores = scores.eq(1).text().split("/");
-        console.log("Scores:");
-        console.log(scores);
 				row["score"] = Number(scores[0]);
 				row["max_score"] = Number(scores[1]);
-        console.log(row["max_score"]);
 
 			}
 			data.push(row);
@@ -512,7 +587,7 @@ function scrape_quarter(username, password, i) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password,
 			session.apache_token, session.session_id);
-    if (page) {
+    if (page.success) {
       resolve({"login_fail": true});
 
     }
@@ -573,7 +648,7 @@ function scrape_class(username, password, i) {
 		let page = await submit_login(
 			username, password, session.apache_token, session.session_id
 		);
-		if (page) {
+		if (page.success) {
 			resolve({"login_fail": true});
 		}
 		log(i, "session", session);
@@ -641,6 +716,53 @@ async function scrape_login(username, password) {
 }
 
 // Submits login with creds and session
+async function get_home(session_id) {
+  console.log("Session ID:" + session_id + "!");
+
+
+	let page = await fetch_body(
+		"https://aspen.cpsd.us/aspen/toDoWidget.do?groupPageWidgetOid=GPW0000004IwUo&widgetId=toDo_4&groupPageWidgetOid=GPW0000004IwUo",
+		{
+			"credentials": "include",
+			"headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Upgrade-Insecure-Requests": "1",
+        'DNT': '1',
+				"Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis",
+				"Connection": "keep-alive", 
+				"Upgrade-Insecure-Requests": "1", 
+				"Content-Type": "application/x-www-form-urlencoded", 
+				"Cache-Control": "max-age=0", 
+				"Referer": "https://aspen.cpsd.us/aspen/logon.do", 
+				"User-Agent": HEADERS["User-Agent"], 
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+			}, 
+			"referrer": "https://aspen.cpsd.us/aspen/logon.do", 
+			"method": "GET", 
+			"mode": "cors",
+		}
+	);
+
+  console.log("Correct Page: " + (!page.includes("Log on now")));
+
+  let $ = cheerio.load(page);
+
+  // console.log("?");
+  let student_oid = ($('#studentSelector').children().first().attr("value"));
+
+	return {
+    success: page.includes("Invalid login."),
+    apache_token: page.substr( page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32),
+    session_id: page.substr( page.indexOf("jsessionid=") + "jsessionid=".length, 32),
+    student_oid: student_oid
+  }
+
+}
+
+
+// Submits login with creds and session
 async function submit_login(username, password, apache_token, session_id) {
 	let page = await fetch_body(
 		"https://aspen.cpsd.us/aspen/logon.do",
@@ -666,7 +788,12 @@ async function submit_login(username, password, apache_token, session_id) {
 			"mode": "cors"
 		}
 	);
-	return page.includes("Invalid login.");
+  console.log("Login success:" + (!page.includes("Invalid login.")));
+
+	return {
+    success: page.includes("Invalid login."),
+  }
+
 }
 
 // Returns object with classes (name, grade, id),
@@ -843,7 +970,7 @@ async function scrape_schedule(username, password) {
 	return new Promise(async function(resolve, reject) {
 		let session = await scrape_login();
 		let page = await submit_login(username, password, session.apache_token, session.session_id);
-		if (page) {
+		if (page.success) {
 			resolve({"login_fail": true});
 		}
 
@@ -1040,6 +1167,8 @@ async function scrape_recent(username, password, i) {
 
 // ------------ TESTING ONLY -----------------
 if (require.main === module) {
+
+
 	let prompt = require('prompt');
 	let schema = {
 		properties: {
@@ -1063,7 +1192,8 @@ if (require.main === module) {
 		//});
 
 		// Print Stringified scrape_student() - good for checking json return
-		console.log(JSON.stringify(await scrape_student(result.username, result.password)));
+		// console.log(JSON.stringify(await scrape_student(result.username, result.password, 0)));
+    (JSON.stringify(await scrape_student("8006696", "Tylerkill27", 0)));
 		
 		// Print scrape_student() - good for checking fetch html return
 		//console.log((await scrape_student(result.username, result.password)));

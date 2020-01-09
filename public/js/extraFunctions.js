@@ -607,11 +607,7 @@ let initialize_quarter_dropdown = function() {
             }
 
 
-            // if (anyEdited()) {
-            //   $(".select-selected").css('padding', "5px 16px 5px 16px");
-            // } else {
-            //   $(".select-selected").css("padding", "13px 16px 13px 16px");
-            // }
+
             if (typeof tableData.terms[currentTerm] == 'undefined') {
               console.log("Undefined term");
 
@@ -642,6 +638,11 @@ let initialize_quarter_dropdown = function() {
 
             } else {
               console.log("Not undefined");
+            if (anyEdited()) {
+              $(".select-selected").css('padding', "5px 16px 5px 16px");
+            } else {
+              $(".select-selected").css("padding", "13px 16px 13px 16px");
+            }
 
               if (i == 0) {
                 tableData.currentTerm = tableData.terms.current;
