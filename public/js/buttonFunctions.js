@@ -115,20 +115,21 @@ let hideCategoriesTable = function() {
 }
 
 let updateGradePage = function() {
-	let computingClassData = tableData.currentTermDataclasses[selected_class_i];
+	let computingClassData = tableData.currentTermData.classes[selected_class_i];
 
 	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade));
 
-	tableData.currentTermDataclasses[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+	tableData.currentTermData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
 
-	tableData.currentTermDataclasses[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+	tableData.currentTermData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
-	classesTable.replaceData(tableData.currentTermDataclasses);
-	categoriesTable.setData(tableData.currentTermDataclasses[selected_class_i].categoryDisplay);
+	classesTable.replaceData(tableData.currentTermData.classes);
+	categoriesTable.setData(tableData.currentTermData.classes[selected_class_i].categoryDisplay);
 
-	assignmentsTable.replaceData(tableData.currentTermDataclasses[selected_class_i].assignments);
+	assignmentsTable.replaceData(tableData.currentTermData.classes[selected_class_i].assignments);
 
-	tableData.currentTermDatacalcGPA = computeGPA();
+	tableData.currentTermData.calcGPA = computeGPA();
+	tableData.terms[currentTerm].calcGPA = computeGPA();
   console.log(computeGPA());
 
   let GPA = tableData.terms[currentTerm].GPA;

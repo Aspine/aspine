@@ -185,8 +185,9 @@ let classColors = [
 ]
 
 let classIndex = function(classname) {
-  classesArray = tableData.classes.map(x => x.name);
-  return (classesArray.indexOf(classname)) % 8;
+  classesArray = tableData.currentTermData.classes.map(x => x.name);
+  return (classesArray.indexOf(classname));
+  // why the mod 8?
 
 }
 
@@ -617,6 +618,12 @@ let initialize_quarter_dropdown = function() {
                 console.log(currentTerm);
 
                 if (typeof tableData.terms[currentTerm].classes == 'undefined') {
+                  // if (anyEdited()) {
+                    // $(".select-selected").css('padding', "5px 16px 5px 16px");
+                  // } else {
+                    $(".select-selected").css("padding", "13px 16px 13px 16px");
+                  // }
+
                   console.log("Undefined term");
 
                   term_dropdown_active = false;
@@ -647,6 +654,7 @@ let initialize_quarter_dropdown = function() {
 
 
                 } else {
+
                   console.log("Not undefined");
                 if (anyEdited()) {
                   $(".select-selected").css('padding', "5px 16px 5px 16px");
@@ -661,7 +669,6 @@ let initialize_quarter_dropdown = function() {
                   }
 
                   classesTable.setData(tableData.currentTermData.classes);
-                  //classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
                   $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
                   $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);

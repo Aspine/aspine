@@ -100,7 +100,6 @@
                 <option id="q4_gpa" value="4">Q4 GPA:</option>
               </select>
             </div>
-            <!--<button class="tablinks" id="GPA" onclick="resetTableData()">Quarter GPA: </button> -->
         </div>
 
         <!--<div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">-->
@@ -316,7 +315,7 @@
 			let tableData = {};
 			let selected_class_i;
 			//let classesReset = {};
-let termsReset = {};
+      let termsReset = {};
 
 			let recentAttendance = new Tabulator("#recentAttendance", {
 
@@ -736,7 +735,7 @@ let termsReset = {};
 				columns: [ // Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
-				 	// {title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
+				  {title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
 				],
 				rowClick: function(e, row) { // trigger an alert message when the row is clicked
 					$("#mostRecentDiv").hide();
@@ -794,86 +793,23 @@ let termsReset = {};
 						"color": "#1E8541"
 					}];
 				}
+
         if (typeof tableData !== 'undefined') {
-          $.extend(tableData, response);
+            tableData.recent = response.recent;
+            tableData.overview = response.overview;
+            tableData.username = response.username;
+
+
         } else {
-          tableData = response;
+            tableData = {};
+            tableData.recent = response.recent;
+            tableData.overview = response.overview;
+            tableData.username = response.username;
         }
 
         $("#loader").hide();
 
 
-				// //parsing the data extracted by the scrappers, and getting tableData ready for presentation
-				// for (let i = 0; i < tableData.classes.length; i++) {
-
-				// 	//initialize every the edited key for every class and set it to false
-				// 	tableData.classes[i].edited = false;
-
-				// 	//initialize category grades which will be used for the categoryGrades table
-				// 	tableData.classes[i].categoryGrades = {};
-
-				// 	//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
-				// 	if (!isNaN(parseFloat(tableData.classes[i].grade))) {
-				// 		tableData.classes[i].decimals = parseFloat(tableData.classes[i].grade).countDecimals();
-				// 	}
-
-
-				// 	//cycle through each assignment of every class for further parsing
-				// 	for (let j = 0; j < tableData.classes[i].assignments.length; j++) {
-				// 		//initialize the percentage of the assignment.
-				// 		tableData.classes[i].assignments[j].percentage = Math.round(tableData.classes[i].assignments[j].score / tableData.classes[i].assignments[j].max_score * 1000) / 10;
-				// 		//initialize how the assignment should be colored in the table; based on percentage
-				// 		tableData.classes[i].assignments[j].color = getColor(tableData.classes[i].assignments[j].percentage);
-
-				// 		//an if statement to handle assignments without a score
-				// 		if (isNaN(tableData.classes[i].assignments[j].score)) {
-				// 			//an if statement to handle assignments with a special characteristic
-				// 			if (tableData.classes[i].assignments[j].special) {
-
-				// 				//an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
-				// 				if (("" + tableData.classes[i].assignments[j].special).includes("(") && ("" + tableData.classes[i].assignments[j].special).includes(")")) {
-				// 					// a reg expression to extract only the information from between the parenthesis.
-				// 					var regExp = /\(([^)]+)\)/;
-
-				// 					tableData.classes[i].assignments[j].score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-				// 					tableData.classes[i].assignments[j].max_score = (regExp.exec(tableData.classes[i].assignments[j].special))[1];
-				// 				} else {
-				// 					// if no parenthesis, set it equal to special in its entirety
-				// 					tableData.classes[i].assignments[j].score = tableData.classes[i].assignments[j].special;
-				// 					tableData.classes[i].assignments[j].max_score = tableData.classes[i].assignments[j].special;
-
-				// 				}
-				// 			} else {
-				// 				// if no special and no grade, set score and max_score to ungraded
-				// 				tableData.classes[i].assignments[j].score = "Ungraded";
-				// 				tableData.classes[i].assignments[j].max_score = "Ungraded";
-
-				// 			}
-				// 		}
-				// 	}
-
-				// 	//initializing a calculated_grade for classes with a grade
-				// 	if (tableData.classes[i].grade != "") {
-
-				// 		let computingClassData = tableData.classes[i];
-
-				// 		//getting calculated values related to classes
-				// 		let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
-				// 		//populating categoryDisplay which is the object used to display the category grading information
-				// 		tableData.classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
-
-				// 		//setting grading type. Total vs. category
-				// 		tableData.classes[i].type = gradeInfo.type;
-
-				// 		//setting calculated_grade and initcalcGrade
-				// 		tableData.classes[i].init_calculated_grade = gradeInfo.categoryPercent;
-
-				// 		tableData.classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
-
-				// 		//setting how the class should be colored in the classes table.
-				// 		tableData.classes[i].color = getColor(tableData.classes[i].calculated_grade);
-				// 	}
-				// }
 					 //parsing the data extracted by the scrappers, and getting tableData ready for presentation
 
 
@@ -893,29 +829,8 @@ let termsReset = {};
         }
             tableData.currentTermData = parseTableData(response.classes);
             
-            if (response.quarter == 0) {
-              // tableData.terms = {current: tableData.currentTermData};
-              tableData.terms.current = parseTableData(response.classes);
 
-            } else if (response.quarter == 1) {
-              // tableData.terms.q1 = {classes: tableData.classes};
-              tableData.terms.q1 = parseTableData(response.classes);
-
-            } else if (response.quarter == 2) {
-              // tableData.terms.q2 = {classes: tableData.classes};
-              tableData.terms.q2 = parseTableData(response.classes);
-
-            } else if (response.quarter == 3) {
-              // tableData.terms.q3 = {classes: tableData.classes};
-              tableData.terms.q3 = parseTableData(response.classes);
-
-            } else if (response.quarter == 4) {
-              // tableData.terms.q4 = {classes: tableData.classes};
-              tableData.terms.q4 = parseTableData(response.classes);
-
-            } 
-
-
+            tableData.terms[currentTerm] = parseTableData(response.classes);
 
 
           console.log(tableData);
@@ -944,18 +859,18 @@ let termsReset = {};
 					try {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
-						let classIndex = tableData.currentTermData.classes.map(x => x.name).indexOf(className);
+						let temp_classIndex = classIndex(className);
 
-						let assignmentIndex = tableData.currentTermData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+						let assignmentIndex = tableData.currentTermData.classes[temp_classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
 						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
 						tableData.recent.recentActivityArray[i].className = className;
-						tableData.recent.recentActivityArray[i].classIndex = classIndex;
+						tableData.recent.recentActivityArray[i].temp_classIndex = temp_classIndex;
 						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						tableData.recent.recentActivityArray[i].max_score = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].max_score;
-						tableData.recent.recentActivityArray[i].percentage = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].percentage;
-						tableData.recent.recentActivityArray[i].color = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].color;
+						tableData.recent.recentActivityArray[i].max_score = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
+						tableData.recent.recentActivityArray[i].percentage = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
+						tableData.recent.recentActivityArray[i].color = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
 						} catch(err) {
 							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
             }
@@ -983,7 +898,7 @@ let termsReset = {};
 				mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
 
           initialize_quarter_dropdown();
-					termsReset = JSON.parse(JSON.stringify(tableData.terms));
+					termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
 
 					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
           $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
@@ -1022,45 +937,26 @@ let termsReset = {};
 			}
 
       function responseCallbackPartial(response) {
-          response.quarter = parseFloat(response.quarter);
             console.log(response);
 				
         $("#loader").hide();
 
-            // tableData.currentTermData = {classes: tableData.classes};
             tableData.currentTermData = parseTableData(response.classes);
             
-            if (response.quarter == 0) {
-              tableData.terms.current = parseTableData(response.classes);
-
-            } else if (response.quarter == 1) {
-              tableData.terms.q1 = parseTableData(response.classes);
-
-            } else if (response.quarter == 2) {
-              tableData.terms.q2 = parseTableData(response.classes);
-
-            } else if (response.quarter == 3) {
-              tableData.terms.q3 = parseTableData(response.classes);
-
-            } else if (response.quarter == 4) {
-              tableData.terms.q4 = parseTableData(response.classes);
-
-            } 
-
-            termsReset = JSON.parse(JSON.stringify(tableData.terms));
+            tableData.terms[currentTerm] = parseTableData(response.classes);
 
             console.log(tableData.currentTermData);
 
-            if (response.quarter == 0) {
+            if (currentTerm == 'current') {
               $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
               $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
               document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
               document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
 
             } else {
-              $(".select-selected").html("Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA);
-              $("#q" + response.quarter).html("Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA);
-              document.getElementById('gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA; 
+              $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA);
+              $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA);
+              document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA; 
             }
 
 
@@ -1069,6 +965,8 @@ let termsReset = {};
             $("#classesTable").show();
 
             classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+
+            termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
 
             term_dropdown_active = true;
 
@@ -1095,31 +993,6 @@ let termsReset = {};
 						timesCounter++;
 					} else {
 						times[i] = "";
-
-        //   //console.log(typeof(tableData.currentTermData.classes));
-				// 	return response.currentTermData.classes; //return the tableData property of a response json object
-
-				// ,
-				// //ajaxParams:{key1:"value1", key2:"value2"},
-				// //data:tabledata, //assign data to table
-				// layout:"fitColumns", //fit columns to width of table (optional)
-				// columns:[ //Define Table Columns
-				// 	{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
-				// 	{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
-				// 	{title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
-				// ],
-				// rowClick:function(e, row) //trigger an alert message when the row is clicked
-        //   assignmentsTable.clearFilter();
-				// 	document.getElementById("categoriesTable").style.display = "block";
-				// 	document.getElementById("assignmentsTable").style.display = "block";
-				// 	selected_class_i = row.getPosition();
-				// 	tabledata = classesTable.getData();
-				// 	for(let i in tabledata) 
-				// 		if(tabledata[i].name == row.getData().name) {
-				// 			assignmentsTable.setData(tabledata[i].assignments);
-				// 			categoriesTable.setData(tabledata[i].categoryDisplay);
-				// 			return;
-				// 		}
 					}
 
 				}
