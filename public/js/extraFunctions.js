@@ -590,86 +590,100 @@ let initialize_quarter_dropdown = function() {
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1];
+      console.log(j);
+      console.log(!isNaN(tableData.terms[termConverter[j - 1]].GPA));
+      console.log(tableData.terms[termConverter[j - 1]].GPA);
+      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA)) {
       c.addEventListener("click", function(e) {
+        if (!this.innerHTML.includes("None")) {
         console.log("Click on box");
         /* When an item is clicked, update the original select box,
         and the selected item: */
 
-        var y, i, k, s, h;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            if (i == 0) {
-              currentTerm = termConverter[i];
-            } else {
-              currentTerm = termConverter[i - 1];
-            }
+        if (term_dropdown_active) {
+          var y, i, k, s, h;
+          s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+          h = this.parentNode.previousSibling;
+          for (i = 0; i < s.length; i++) {
+              if (s.options[i].innerHTML == this.innerHTML) {
+                if (i == 0) {
+                  currentTerm = termConverter[i];
+                } else {
+                  currentTerm = termConverter[i - 1];
+                }
 
 
 
-            if (typeof tableData.terms[currentTerm] == 'undefined') {
-              console.log("Undefined term");
+                console.log(currentTerm);
 
-              $.ajax({
-                url: "/data",
-                method: "POST",
-                data: { quarter: (i - 1) },
-                dataType: "json json",
-                success: responseCallbackPartial
-              });
+                if (typeof tableData.terms[currentTerm].classes == 'undefined') {
+                  console.log("Undefined term");
 
-              $("#loader").show();
-              $("#classesTable").hide();
-              $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-              $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-              $("#mostRecentDiv").hide();
+                  term_dropdown_active = false;
 
-              s.selectedIndex = i;
-              h.innerHTML = this.innerHTML;
-              y = this.parentNode.getElementsByClassName("same-as-selected");
-              for (k = 0; k < y.length; k++) {
-                y[k].removeAttribute("class");
+                  $.ajax({
+                    url: "/data",
+                    method: "POST",
+                    data: { quarter: (i - 1) },
+                    dataType: "json json",
+                    success: responseCallbackPartial
+                  });
+
+                  $("#loader").show();
+                  $("#classesTable").hide();
+                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+                  $("#mostRecentDiv").hide();
+
+                  s.selectedIndex = i;
+                  h.innerHTML = this.innerHTML;
+                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  for (k = 0; k < y.length; k++) {
+                    y[k].removeAttribute("class");
+                  }
+                  this.setAttribute("class", "same-as-selected");
+                  break;
+
+
+
+                } else {
+                  console.log("Not undefined");
+                if (anyEdited()) {
+                  $(".select-selected").css('padding', "5px 16px 5px 16px");
+                } else {
+                  $(".select-selected").css("padding", "13px 16px 13px 16px");
+                }
+
+                  if (i == 0) {
+                    tableData.currentTerm = tableData.terms.current;
+                  } else {
+                    tableData.currentTerm = tableData.terms["q" + (i - 1)];
+                  }
+
+                  classesTable.setData(tableData.currentTerm.classes);
+                  //classesReset = JSON.parse(JSON.stringify(tableData.classes));
+
+                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+                  selected_class_i = undefined;
+                  //categoriesTable.setData(tableData[i].categoryDisplay);
+
+                  s.selectedIndex = i;
+                  h.innerHTML = this.innerHTML;
+                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  for (k = 0; k < y.length; k++) {
+                    y[k].removeAttribute("class");
+                  }
+                  this.setAttribute("class", "same-as-selected");
+                  break;
+                }
               }
-              this.setAttribute("class", "same-as-selected");
-              break;
-
-
-
-            } else {
-              console.log("Not undefined");
-            if (anyEdited()) {
-              $(".select-selected").css('padding', "5px 16px 5px 16px");
-            } else {
-              $(".select-selected").css("padding", "13px 16px 13px 16px");
-            }
-
-              if (i == 0) {
-                tableData.currentTerm = tableData.terms.current;
-              } else {
-                tableData.currentTerm = tableData.terms["q" + (i - 1)];
-              }
-
-              classesTable.setData(tableData.currentTerm.classes);
-              //classesReset = JSON.parse(JSON.stringify(tableData.classes));
-
-              $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-              $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-              selected_class_i = undefined;
-              //categoriesTable.setData(tableData[i].categoryDisplay);
-
-              s.selectedIndex = i;
-              h.innerHTML = this.innerHTML;
-              y = this.parentNode.getElementsByClassName("same-as-selected");
-              for (k = 0; k < y.length; k++) {
-                y[k].removeAttribute("class");
-              }
-              this.setAttribute("class", "same-as-selected");
-              break;
-            }
           }
+          h.click();
+        } else {
+          console.log("Term dropdown not active");
         }
-        h.click();
+        }
       });
       b.appendChild(c);
     }

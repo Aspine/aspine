@@ -90,7 +90,7 @@
             <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
             <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
             <button class="tablinks" onclick="location.href='/logout'" id="logout">Logout</button>
-            <div class="GPA custom-select" style="width:230px;">
+            <div class="GPA custom-select" style="width:270px;">
               <select id="gpa_select">
                 <option id="init_gpa" value="0">Current Quarter GPA: </option>
                 <option id="current_gpa" value="1">Current Quarter GPA: </option>
@@ -265,6 +265,7 @@
       let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
       let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
+      let term_dropdown_active = true;
       // let currentTerm = "current";
 
 			// When the user clicks anywhere outside of the modal, close it
@@ -1066,6 +1067,8 @@ let termsReset = {};
             $("#classesTable").show();
 
             classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+
+            term_dropdown_active = true;
 
 
 			}
