@@ -875,42 +875,46 @@ let termsReset = {};
 
 
             if (typeof tableData.terms == 'undefined') {
-              tableData.terms = {}
+              tableData.terms = {
+                current: {},
+                q1: {},
+                q2: {},
+                q3: {},
+                q4: {},
+              };
+
             }
-            tableData.currentTerm = {classes: tableData.classes};
+
+        if (typeof tableData.currentTerm == 'undefined') {
+          tableData.currentTerm = {};
+        }
             tableData.currentTerm = parseTableData(response.classes);
             
             if (response.quarter == 0) {
-              tableData.terms = {current: tableData.currentTerm};
-              tableData.terms.current = parseTableData(tableData.terms.current.classes);
+              // tableData.terms = {current: tableData.currentTerm};
+              tableData.terms.current = parseTableData(response.classes);
 
             } else if (response.quarter == 1) {
-              tableData.terms.q1 = {classes: tableData.classes};
-              tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
+              // tableData.terms.q1 = {classes: tableData.classes};
+              tableData.terms.q1 = parseTableData(response.classes);
 
             } else if (response.quarter == 2) {
-              tableData.terms.q2 = {classes: tableData.classes};
-              tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
+              // tableData.terms.q2 = {classes: tableData.classes};
+              tableData.terms.q2 = parseTableData(response.classes);
 
             } else if (response.quarter == 3) {
-              tableData.terms.q3 = {classes: tableData.classes};
-              tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
+              // tableData.terms.q3 = {classes: tableData.classes};
+              tableData.terms.q3 = parseTableData(response.classes);
 
             } else if (response.quarter == 4) {
-              tableData.terms.q4 = {classes: tableData.classes};
-              tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
+              // tableData.terms.q4 = {classes: tableData.classes};
+              tableData.terms.q4 = parseTableData(response.classes);
 
             } 
 
 
 
-          // tableData.currentTerm = parseTableData(tableData.currentTerm.classes);
-          // tableData.terms.current = parseTableData(tableData.terms.current.classes);
-          //   tableData.terms.q1 = parseTableData(tableData.terms.q1.classes);
-          //   tableData.terms.q2 = parseTableData(tableData.terms.q2.classes);
-          //   tableData.terms.q3 = parseTableData(tableData.terms.q3.classes);
-          //   tableData.terms.q4 = parseTableData(tableData.terms.q4.classes);
-          // tableData.currentTerm = tableData.terms.current;
+
           console.log(tableData);
 
 
@@ -955,23 +959,25 @@ let termsReset = {};
 
         }
 
-				// //final touches. declaring GPA, calcGPA, tableDataReset, and then setting the data for each of the tables.
-				// tableData.GPA = computeGPA();
-				// tableData.calcGPA = computeGPA();
-				// tableDataReset = JSON.parse(JSON.stringify(tableData));
-
-
+        tableData.overview = response.overview;
+        for (let i = 1; i <= 4; i++) {
+            let sum = 0;
+            let count = 0;
+          for (let j = 0; j < tableData.overview.length; j++) {
+              if (tableData.overview[j]["q" + i] != "") {
+                sum += parseFloat(tableData.overview[j]["q" + i]);
+                count++;
+              }
+          }
+            // console.log(sum);
+            // console.log(count);
+            tableData.terms["q" + i].GPA = sum / count;
+        }
 
 				//Stuff to do now that tableData is initialized
 
 				$("#mostRecentDiv").show();
 				mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
-
-					//final touches. declaring GPA, calcGPA, termsReset, and then setting the data for each of the tables.
-					//tableData.GPA = computeGPA();
-					//tableData.calcGPA = computeGPA();
-
-          // initialize_dropdown();
 
           initialize_quarter_dropdown();
 					termsReset = JSON.parse(JSON.stringify(tableData.terms));
@@ -981,17 +987,22 @@ let termsReset = {};
           document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
           document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
 
-          // $(".select-items").children().each(function(i, elem) {
-          //   if (i == 0) {
-          //     console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
-          //     $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
-          //     document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-          //     document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-          //   } else {
-          //     $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
-          //     document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
-          //   }
-          // });
+          $(".select-items").children().each(function(i, elem) {
+            if (i == 0) {
+              console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
+              $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+            } else {
+              if (!isNaN(tableData.terms["q" + i].GPA)) {
+                $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
+                document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA; 
+              } else {
+                $(this).html("Q" + i + " GPA: None");
+                document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
+              }
+            }
+          });
 					// scheduleTable.setData(tableData.schedule.black);
 					recentActivity.setData(tableData.recent.recentActivityArray);
 					recentAttendance.setData(tableData.recent.recentAttendanceArray);
