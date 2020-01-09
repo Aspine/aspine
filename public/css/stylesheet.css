@@ -19,6 +19,7 @@ h4#title {
 	position: absolute;
 	font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
 	font-size: 80px;
+	font-weight: normal;
 	color: #00551D;
 	left: 0px;
 	right: 0px;
