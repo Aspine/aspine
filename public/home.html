@@ -266,7 +266,7 @@
       let pdfrendering = false;
 			let statsModal = document.getElementById('stats_modal');
       let term_dropdown_active = true;
-      // let currentTerm = "current";
+      let currentTerm = "current";
 
 			// When the user clicks anywhere outside of the modal, close it
 			window.addEventListener("click", function(event) {
@@ -490,8 +490,8 @@ let termsReset = {};
 						editorParams:function(cell) {
 							let catCategories = [];
 
-							for (let k = 0; k < Object.keys(tableData.currentTerm.classes[selected_class_i].categories).length; k++) {
-								catCategories.push((Object.keys(tableData.currentTerm.classes[selected_class_i].categories)[k] + " (" + (Object.values(tableData.currentTerm.classes[selected_class_i].categories)[k] * 100)+ "%)"));
+							for (let k = 0; k < Object.keys(tableData.currentTermData.classes[selected_class_i].categories).length; k++) {
+								catCategories.push((Object.keys(tableData.currentTermData.classes[selected_class_i].categories)[k] + " (" + (Object.values(tableData.currentTermData.classes[selected_class_i].categories)[k] * 100)+ "%)"));
 							}
 							return {values: catCategories};
 						},
@@ -514,8 +514,8 @@ let termsReset = {};
             //document.getElementById("stats_modal_content").style.margin = "300px auto";
             //document.getElementById("stats_modal_content").style.top = "140px";
 
-						let session_id = tableData.currentTerm.classes[selected_class_i].tokens.session_id;
-						let apache_token = tableData.currentTerm.classes[selected_class_i].tokens.apache_token;
+						let session_id = tableData.currentTermData.classes[selected_class_i].tokens.session_id;
+						let apache_token = tableData.currentTermData.classes[selected_class_i].tokens.apache_token;
 						let assignment_id = cell.getRow().getData().assignment_id;
 						let assignment = cell.getRow().getData().name;
 						let score = cell.getRow().getData().score;
@@ -736,6 +736,7 @@ let termsReset = {};
 				columns: [ // Define Table Columns
 					{title:"Class", field:"name", formatter: classesRowFormatter, headerSort:false},
 					{title:"Grade", field:"grade", align:"left", formatter:gradeFormatter, headerSort:false},
+				 	// {title: "Hide", titleFormatter:refreshClassFormatter, headerClick: resetTableData, width:76, headerSort: false},
 				],
 				rowClick: function(e, row) { // trigger an alert message when the row is clicked
 					$("#mostRecentDiv").hide();
@@ -743,6 +744,7 @@ let termsReset = {};
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
+            console.log("set " + row.getPosition() + "as selected class");
 					tabledata = classesTable.getData();
 					for (let i in tabledata) {
 						if(tabledata[i].name == row.getData().name) {
@@ -886,13 +888,13 @@ let termsReset = {};
 
             }
 
-        if (typeof tableData.currentTerm == 'undefined') {
-          tableData.currentTerm = {};
+        if (typeof tableData.currentTermData == 'undefined') {
+          tableData.currentTermData = {};
         }
-            tableData.currentTerm = parseTableData(response.classes);
+            tableData.currentTermData = parseTableData(response.classes);
             
             if (response.quarter == 0) {
-              // tableData.terms = {current: tableData.currentTerm};
+              // tableData.terms = {current: tableData.currentTermData};
               tableData.terms.current = parseTableData(response.classes);
 
             } else if (response.quarter == 1) {
@@ -942,18 +944,18 @@ let termsReset = {};
 					try {
 						let assignmentName = activityArray[i].assignment;
 						let className = activityArray[i].classname;
-						let classIndex = tableData.currentTerm.classes.map(x => x.name).indexOf(className);
+						let classIndex = tableData.currentTermData.classes.map(x => x.name).indexOf(className);
 
-						let assignmentIndex = tableData.currentTerm.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
+						let assignmentIndex = tableData.currentTermData.classes[classIndex].assignments.map(x => x.name).indexOf(assignmentName);
 
 						tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
 						tableData.recent.recentActivityArray[i].className = className;
 						tableData.recent.recentActivityArray[i].classIndex = classIndex;
 						tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
 
-						tableData.recent.recentActivityArray[i].max_score = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].max_score;
-						tableData.recent.recentActivityArray[i].percentage = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].percentage;
-						tableData.recent.recentActivityArray[i].color = tableData.currentTerm.classes[classIndex].assignments[assignmentIndex].color;
+						tableData.recent.recentActivityArray[i].max_score = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].max_score;
+						tableData.recent.recentActivityArray[i].percentage = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].percentage;
+						tableData.recent.recentActivityArray[i].color = tableData.currentTermData.classes[classIndex].assignments[assignmentIndex].color;
 						} catch(err) {
 							console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
             }
@@ -983,10 +985,10 @@ let termsReset = {};
           initialize_quarter_dropdown();
 					termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
-					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-          $("#current").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-          document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
-          document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
+					$(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
+          $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
+          document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
+          document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
 
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
@@ -1025,8 +1027,8 @@ let termsReset = {};
 				
         $("#loader").hide();
 
-            // tableData.currentTerm = {classes: tableData.classes};
-            tableData.currentTerm = parseTableData(response.classes);
+            // tableData.currentTermData = {classes: tableData.classes};
+            tableData.currentTermData = parseTableData(response.classes);
             
             if (response.quarter == 0) {
               tableData.terms.current = parseTableData(response.classes);
@@ -1047,18 +1049,18 @@ let termsReset = {};
 
             termsReset = JSON.parse(JSON.stringify(tableData.terms));
 
-            console.log(tableData.currentTerm);
+            console.log(tableData.currentTermData);
 
             if (response.quarter == 0) {
-              $(".select-selected").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-              $("#current").html("Current Quarter GPA: " + tableData.currentTerm.GPA);
-              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
-              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTerm.GPA;
+              $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
+              $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
 
             } else {
-              $(".select-selected").html("Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA);
-              $("#q" + response.quarter).html("Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA);
-              document.getElementById('gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.currentTerm.GPA; 
+              $(".select-selected").html("Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA);
+              $("#q" + response.quarter).html("Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA);
+              document.getElementById('gpa_select').options[response.quarter + 1].innerHTML ="Q" + response.quarter + " GPA: " + tableData.currentTermData.GPA; 
             }
 
 
@@ -1094,8 +1096,8 @@ let termsReset = {};
 					} else {
 						times[i] = "";
 
-        //   //console.log(typeof(tableData.currentTerm.classes));
-				// 	return response.currentTerm.classes; //return the tableData property of a response json object
+        //   //console.log(typeof(tableData.currentTermData.classes));
+				// 	return response.currentTermData.classes; //return the tableData property of a response json object
 
 				// ,
 				// //ajaxParams:{key1:"value1", key2:"value2"},

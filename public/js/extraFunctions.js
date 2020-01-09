@@ -655,12 +655,12 @@ let initialize_quarter_dropdown = function() {
                 }
 
                   if (i == 0) {
-                    tableData.currentTerm = tableData.terms.current;
+                    tableData.currentTermData = tableData.terms.current;
                   } else {
-                    tableData.currentTerm = tableData.terms["q" + (i - 1)];
+                    tableData.currentTermData = tableData.terms["q" + (i - 1)];
                   }
 
-                  classesTable.setData(tableData.currentTerm.classes);
+                  classesTable.setData(tableData.currentTermData.classes);
                   //classesReset = JSON.parse(JSON.stringify(tableData.classes));
 
                   $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
@@ -822,7 +822,7 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
-  tableData.currentTerm.classes = classes;
+  tableData.currentTermData.classes = classes;
   let GPA = computeGPA();
   let calcGPA = computeGPA();
   return {

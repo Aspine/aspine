@@ -1,13 +1,13 @@
 let newAssignment = function() {
 
   console.log("new assignment clicked");
-	tableData.currentTerm.classes[selected_class_i].edited = true;
+	tableData.currentTermData.classes[selected_class_i].edited = true;
 
 	if (!isNaN(selected_class_i)) {
 
-		tableData.currentTerm.classes[selected_class_i].assignments.unshift({
+		tableData.currentTermData.classes[selected_class_i].assignments.unshift({
 			"name": "Assignment",
-			"category": Object.keys(tableData.currentTerm.classes[selected_class_i].categories)[0],
+			"category": Object.keys(tableData.currentTermData.classes[selected_class_i].categories)[0],
 			"score": 10,
 			"max_score": 10,
 			"percentage": 100,
@@ -22,27 +22,27 @@ let newAssignment = function() {
 
 let editAssignment = function(data) {
 	
-	tableData.currentTerm.classes[selected_class_i].edited = true;
+	tableData.currentTermData.classes[selected_class_i].edited = true;
 
-	tableData.currentTerm.classes[selected_class_i].assignments = data.slice();
+	tableData.currentTermData.classes[selected_class_i].assignments = data.slice();
 
 
-	for (let j = 0; j < tableData.currentTerm.classes[selected_class_i].assignments.length; j++) {
-		tableData.currentTerm.classes[selected_class_i].assignments[j].percentage = Math.round(tableData.currentTerm.classes[selected_class_i].assignments[j].score / tableData.currentTerm.classes[selected_class_i].assignments[j].max_score * 1000) / 10;
-		tableData.currentTerm.classes[selected_class_i].assignments[j].color = getColor(tableData.currentTerm.classes[selected_class_i].assignments[j].percentage);
+	for (let j = 0; j < tableData.currentTermData.classes[selected_class_i].assignments.length; j++) {
+		tableData.currentTermData.classes[selected_class_i].assignments[j].percentage = Math.round(tableData.currentTermData.classes[selected_class_i].assignments[j].score / tableData.currentTermData.classes[selected_class_i].assignments[j].max_score * 1000) / 10;
+		tableData.currentTermData.classes[selected_class_i].assignments[j].color = getColor(tableData.currentTermData.classes[selected_class_i].assignments[j].percentage);
 
-		if (tableData.currentTerm.classes[selected_class_i].assignments[j].category.includes("(")) {
-			tableData.currentTerm.classes[selected_class_i].assignments[j].category = tableData.currentTerm.classes[selected_class_i].assignments[j].category.substring(0, tableData.currentTerm.classes[selected_class_i].assignments[j].category.indexOf("(") - 1); 
+		if (tableData.currentTermData.classes[selected_class_i].assignments[j].category.includes("(")) {
+			tableData.currentTermData.classes[selected_class_i].assignments[j].category = tableData.currentTermData.classes[selected_class_i].assignments[j].category.substring(0, tableData.currentTermData.classes[selected_class_i].assignments[j].category.indexOf("(") - 1); 
 		}
 
 
-		if (isNaN(tableData.currentTerm.classes[selected_class_i].assignments[j].score) || tableData.currentTerm.classes[selected_class_i].assignments[j].score === "") {
-			tableData.currentTerm.classes[selected_class_i].assignments[j].score = "None";
+		if (isNaN(tableData.currentTermData.classes[selected_class_i].assignments[j].score) || tableData.currentTermData.classes[selected_class_i].assignments[j].score === "") {
+			tableData.currentTermData.classes[selected_class_i].assignments[j].score = "None";
 		}
 
 
-		if (isNaN(tableData.currentTerm.classes[selected_class_i].assignments[j].max_score) || tableData.currentTerm.classes[selected_class_i].assignments[j].max_score === "") {
-			tableData.currentTerm.classes[selected_class_i].assignments[j].max_score = "None";
+		if (isNaN(tableData.currentTermData.classes[selected_class_i].assignments[j].max_score) || tableData.currentTermData.classes[selected_class_i].assignments[j].max_score === "") {
+			tableData.currentTermData.classes[selected_class_i].assignments[j].max_score = "None";
 		}
 	}
 
@@ -53,17 +53,17 @@ let editAssignment = function(data) {
 
 let resetTableData = function() {
 
-  //tableData.currentTerm.classes[selected_class_i].edited = false;
+  //tableData.currentTermData.classes[selected_class_i].edited = false;
   tableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
-  tableData.currentTerm = tableData.terms[currentTerm];
-  console.log(tableData.currentTerm);
+  tableData.currentTermData = tableData.terms[currentTerm];
+  console.log(tableData.currentTermData);
   if (selected_class_i) {
-    assignmentsTable.setData(tableData.currentTerm.classes[selected_class_i].assignments);
-    categoriesTable.setData(tableData.currentTerm.classes[selected_class_i].categoryDisplay);
+    assignmentsTable.setData(tableData.currentTermData.classes[selected_class_i].assignments);
+    categoriesTable.setData(tableData.currentTermData.classes[selected_class_i].categoryDisplay);
   }
-  classesTable.setData(tableData.currentTerm.classes);
+  classesTable.setData(tableData.currentTermData.classes);
 
-  tableData.currentTerm.calcGPA = computeGPA();
+  tableData.currentTermData.calcGPA = computeGPA();
 
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
@@ -74,9 +74,9 @@ let resetTableData = function() {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
       $(".select-selected").html("Current Quarter GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
 
     } else {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
@@ -93,9 +93,9 @@ let resetTableData = function() {
       $(".select-selected").html("Current Quarter GPA: " + GPA);
 
       $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA:"  + GPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA:"  + GPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA:"  + GPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA;
 
     } else {
       $(".select-selected").css("padding", "13px 16px 13px 16px");
@@ -115,20 +115,20 @@ let hideCategoriesTable = function() {
 }
 
 let updateGradePage = function() {
-	let computingClassData = tableData.currentTerm.classes[selected_class_i];
+	let computingClassData = tableData.currentTermDataclasses[selected_class_i];
 
 	let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade));
 
-	tableData.currentTerm.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+	tableData.currentTermDataclasses[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
 
-	tableData.currentTerm.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+	tableData.currentTermDataclasses[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
 
-	classesTable.replaceData(tableData.currentTerm.classes);
-	categoriesTable.setData(tableData.currentTerm.classes[selected_class_i].categoryDisplay);
+	classesTable.replaceData(tableData.currentTermDataclasses);
+	categoriesTable.setData(tableData.currentTermDataclasses[selected_class_i].categoryDisplay);
 
-	assignmentsTable.replaceData(tableData.currentTerm.classes[selected_class_i].assignments);
+	assignmentsTable.replaceData(tableData.currentTermDataclasses[selected_class_i].assignments);
 
-	tableData.currentTerm.calcGPA = computeGPA();
+	tableData.currentTermDatacalcGPA = computeGPA();
   console.log(computeGPA());
 
   let GPA = tableData.terms[currentTerm].GPA;
@@ -140,9 +140,9 @@ let updateGradePage = function() {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
       $(".select-selected").html("Current Quarter GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA:"  + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
 
     } else {
       $(".select-selected").css('padding', "5px 16px 5px 16px");

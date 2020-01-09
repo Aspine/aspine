@@ -134,7 +134,6 @@ app.post('/data', async (req, res) => {
         //
         // Get data from scraper:
     //
-    console.log(req.body.quarter);
         response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
 		res.send(response)
 
