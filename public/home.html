@@ -758,9 +758,9 @@
 			// Callback for response from /data
 			function responseCallback(response) {
             console.log(response);
-				if (response.recent.login_fail) {
-					location.href='/logout';
-				}
+            if (response.recent.login_fail) {
+              location.href='/logout';
+            }
 
 				if (response.classes.length == 0) {
 					response.classes = [{
