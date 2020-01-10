@@ -591,13 +591,9 @@ let initialize_quarter_dropdown = function() {
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1];
-      console.log(j);
-      console.log(!isNaN(tableData.terms[termConverter[j - 1]].GPA));
-      console.log(tableData.terms[termConverter[j - 1]].GPA);
       // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("None")) {
-        console.log("Click on box");
         /* When an item is clicked, update the original select box,
         and the selected item: */
 
@@ -615,7 +611,6 @@ let initialize_quarter_dropdown = function() {
 
 
 
-                console.log(currentTerm);
 
                 if (typeof tableData.terms[currentTerm].classes == 'undefined') {
                   // if (anyEdited()) {
@@ -624,7 +619,6 @@ let initialize_quarter_dropdown = function() {
                     $(".select-selected").css("padding", "13px 16px 13px 16px");
                   // }
 
-                  console.log("Undefined term");
 
                   term_dropdown_active = false;
 
@@ -655,7 +649,6 @@ let initialize_quarter_dropdown = function() {
 
                 } else {
 
-                  console.log("Not undefined");
                 if (anyEdited()) {
                   $(".select-selected").css('padding', "5px 16px 5px 16px");
                 } else {
@@ -715,7 +708,7 @@ let initialize_quarter_dropdown = function() {
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports'); 
 
-  console.log("attempting fullscreen");
+  console.log("Fullscreen Activate");
 if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();

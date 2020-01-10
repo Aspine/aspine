@@ -743,7 +743,7 @@
 					document.getElementById("categoriesTable").style.display = "block";
 					document.getElementById("assignmentsTable").style.display = "block";
 					selected_class_i = row.getPosition();
-            console.log("set " + row.getPosition() + "as selected class");
+          // console.log("set " + row.getPosition() + "as selected class");
 					tabledata = classesTable.getData();
 					for (let i in tabledata) {
 						if(tabledata[i].name == row.getData().name) {
@@ -757,7 +757,7 @@
 			
 			// Callback for response from /data
 			function responseCallback(response) {
-            console.log(response);
+            // console.log(response);
             if (response.recent.login_fail) {
               location.href='/logout';
             }
@@ -833,7 +833,6 @@
             tableData.terms[currentTerm] = parseTableData(response.classes);
 
 
-          console.log(tableData);
 
 
 				//populates the event for each row in the recentAttendance table
@@ -891,8 +890,6 @@
                 count++;
               }
           }
-            // console.log(sum);
-            // console.log(count);
             tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
         }
 
@@ -911,7 +908,6 @@
 
           $(".select-items").children().each(function(i, elem) {
             if (i == 0) {
-              console.log("Current Quarter GPA: " + tableData.terms["current"].GPA);
               $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
               document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
               document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
@@ -941,7 +937,6 @@
 			}
 
       function responseCallbackPartial(response) {
-            console.log(response);
 				
         $("#loader").hide();
 
@@ -949,7 +944,6 @@
             
             tableData.terms[currentTerm] = parseTableData(response.classes);
 
-            console.log(tableData.currentTermData);
 
             if (currentTerm == 'current') {
               $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);

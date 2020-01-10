@@ -1,6 +1,5 @@
 let newAssignment = function() {
 
-  console.log("new assignment clicked");
 	tableData.currentTermData.classes[selected_class_i].edited = true;
 
 	if (!isNaN(selected_class_i)) {
@@ -56,7 +55,6 @@ let resetTableData = function() {
   //tableData.currentTermData.classes[selected_class_i].edited = false;
   tableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
   tableData.currentTermData = tableData.terms[currentTerm];
-  console.log(tableData.currentTermData);
   if (selected_class_i) {
     assignmentsTable.setData(tableData.currentTermData.classes[selected_class_i].assignments);
     categoriesTable.setData(tableData.currentTermData.classes[selected_class_i].categoryDisplay);
@@ -87,7 +85,6 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA;
     }
   } else {
-    console.log("trying");
     if (currentTerm == "current") {
       $(".select-selected").css("padding", "13px 16px 13px 16px");
       $(".select-selected").html("Current Quarter GPA: " + GPA);
@@ -130,7 +127,6 @@ let updateGradePage = function() {
 
 	tableData.currentTermData.calcGPA = computeGPA();
 	tableData.terms[currentTerm].calcGPA = computeGPA();
-  console.log(computeGPA());
 
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
