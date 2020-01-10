@@ -883,13 +883,17 @@
             let count = 0;
           for (let j = 0; j < tableData.overview.length; j++) {
               if (tableData.overview[j]["q" + i] != "") {
-                sum += parseFloat(tableData.overview[j]["q" + i]);
+              if (parseFloat(tableData.overview[j]["q" + i]) > 100 ) {
+                  sum += 100;
+                } else {
+                  sum += parseFloat(tableData.overview[j]["q" + i]);
+                }
                 count++;
               }
           }
             // console.log(sum);
             // console.log(count);
-            tableData.terms["q" + i].GPA = sum / count;
+            tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
         }
 
 				//Stuff to do now that tableData is initialized
