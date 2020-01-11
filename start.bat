@@ -1,2 +1,3 @@
 @echo off
-start cmd /k redis-server redis.conf && node ./serve.js insecure
+rem start cmd /k redis-server redis.conf && node ./serve.js insecure
+node ./serve.js insecure
