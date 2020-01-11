@@ -52,14 +52,15 @@ If you would like to directly contribute to Aspine, you can fork this repository
 
 If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
 
-If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.
+<!--If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.-->
 
-* Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
-  * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
-  * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively. You can run the script `install.sh` to install these dependencies.
-  * Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
-* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.
-* In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
+* Make sure that you have installed [node.js](https://nodejs.org/), including npm.<!--, and [redis](https://redis.io/).-->
+  * On GNU+Linux, you should be able to find node.js<!--both of these--> in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`); npm may be in a separate package<!-- from node.js-->.
+  * On macOS, node.js (including npm)<!-- and redis are--> is available on [Homebrew](https://brew.sh/) as [`node`](https://formulae.brew.sh/formula/node)<!-- and [`redis`](https://formulae.brew.sh/formula/redis) respectively-->. You can run the script `install.sh` to install Homebrew and node.
+  * On Windows, the node.js installer can be downloaded from [the website](https://nodejs.org/). Run the installer and follow the on-screen instructions.
+* Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies. On Windows, you can double-click on the script `npminstall.bat` instead. The ".bat" file extension may be invisible depending on your system configuration.
+<!--* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.-->
+* Open another terminal or command prompt and run `node ./serve.js insecure`<!--, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing)-->. On Windows, you can double-click on the script `start.bat` instead. The ".bat" file extension may be invisible depending on your system configuration.
 
 ## Authors
 
