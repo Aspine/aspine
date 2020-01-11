@@ -610,6 +610,8 @@ let initialize_quarter_dropdown = function() {
                 }
 
 
+                if (i === 0) $("#mostRecentDiv").show();
+                else $("#mostRecentDiv").hide();
 
 
                 if (typeof tableData.terms[currentTerm].classes == 'undefined') {
@@ -634,7 +636,6 @@ let initialize_quarter_dropdown = function() {
                   $("#classesTable").hide();
                   $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
                   $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-                  $("#mostRecentDiv").hide();
 
                   s.selectedIndex = i;
                   h.innerHTML = this.innerHTML;
