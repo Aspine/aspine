@@ -20,7 +20,7 @@ const fetch = require('node-fetch');
 // -------------------------------------------
 
 if (args.hasOwnProperty("help") || args._.includes("help")) {
-	console.log(`Usage: ./serve.js [insecure] [fake] [OPTION]...
+    console.log(`Usage: ./serve.js [insecure] [fake] [OPTION]...
 Starts the Aspine web server.
 
 Options:
@@ -30,7 +30,7 @@ Options:
   --out=FILE     scrape Aspen as usual but dump JSON to file FILE
   --help   display this help and exit
 `);
-	process.exit();
+    process.exit();
 }
 
 // ------------ Web Server -------------------
@@ -99,7 +99,7 @@ app.use(session({
 }));
 
 app.post('/stats', async (req, res) => {
-	console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
+    console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
 
     if(!(args.hasOwnProperty("fake") || args._.includes("fake"))) {
         // USE REAL DATA:
@@ -107,44 +107,44 @@ app.post('/stats', async (req, res) => {
     } else {
         //USE FAKE DATA:
         res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
-	//res.send("Hello World");
+    //res.send("Hello World");
         //res.sendFile('sample.json', {root:"public"});
     }
 });
 
 app.post('/data', async (req, res) => {
-	// console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
+    // console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-	// fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
-	// 	  if (err) throw err;
-	// });
+    // fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
+    // 	  if (err) throw err;
+    // });
   
   if (args.hasOwnProperty("json")) {
-	  // Check if "--json" command-line argument was provided, e.g.
-		// node serve.js --json=./public/sample.json
-		
+      // Check if "--json" command-line argument was provided, e.g.
+        // node serve.js --json=./public/sample.json
+        
         // Use json file provided at command line
         res.sendFile(args.json, {root: "."});
   } else if (args._.includes("fake")) {
-		// For backwards compatibility
-		
-		res.sendFile('sample2.json', {root: "public"});
-	} else {
+        // For backwards compatibility
+        
+        res.sendFile('sample2.json', {root: "public"});
+    } else {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
         // Get data from scraper:
     //
         response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
-		res.send(response)
+        res.send(response)
 
-		// If "out" command-line argument provided, save JSON at the given path
-		if (args.hasOwnProperty("out")) {
-			fs.writeFile(
-				args.out, JSON.stringify(response),
-				(err) => { if (err) throw err; }
-			);
-		}
-		
+        // If "out" command-line argument provided, save JSON at the given path
+        if (args.hasOwnProperty("out")) {
+            fs.writeFile(
+                args.out, JSON.stringify(response),
+                (err) => { if (err) throw err; }
+            );
+        }
+        
         //if (response.classes.length == 0) {
         //  res.sendFile('invalid.json', {root:"public"});
 
@@ -197,14 +197,14 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-	req.session.username = req.body.username;
-	req.session.password = req.body.password;
+    req.session.username = req.body.username;
+    req.session.password = req.body.password;
   res.redirect('/home.html');
 });
 
 app.get('/logout', async (req, res) => {
   req.session.destroy();
-	res.redirect('/login.html');
+    res.redirect('/login.html');
 });
 
 // app.post('/set-settings', async (req, res) => {
@@ -274,7 +274,7 @@ app.get('/logout', async (req, res) => {
 // });
 
 io.on('connection', function(socket){
-	console.log('a user connected');
+    console.log('a user connected');
 });
 
 //app.listen(port, () => console.log(`Example app listening on port ${port}!`));
