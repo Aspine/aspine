@@ -62,6 +62,9 @@ let getAttendanceEvent = function(value, data, cell, row, options) {
 let hideCategoriesFormatter = function(value, data, cell, row, options) {
 	return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
 };
+let refreshClassFormatter = function(value, data, cell, row, options) {
+	return "<i class=\"fa fa-refresh\"aria-hidden=\"true\"></i>";
+};
 function getLetterGrade(gradeToBeLettered) {
 
 	let parsed = parseFloat(gradeToBeLettered);
@@ -182,8 +185,9 @@ let classColors = [
 ]
 
 let classIndex = function(classname) {
-  classesArray = tableData.classes.map(x => x.name);
-  return (classesArray.indexOf(classname)) % 8;
+  classesArray = tableData.currentTermData.classes.map(x => x.name);
+  return (classesArray.indexOf(classname));
+  // why the mod 8?
 
 }
 
@@ -434,7 +438,28 @@ let zoom_out_pdf = function() {
 }
 
 
+function pdf_closeAllSelect(elmnt) {
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  var x, y, i, arrNo = [];
+  x = document.getElementsByClassName("pdf_select-items");
+  y = document.getElementsByClassName("pdf_select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt == y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("pdf_select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("pdf_select-hide");
+    }
+  }
+}
 function closeAllSelect(elmnt) {
+//  $('.select-selected').removeClass("activated-selected-item");
+  $('.select-items div').removeClass("activated-select-items");
   /* A function that will close all select boxes in the document,
   except the current select box: */
   var x, y, i, arrNo = [];
@@ -452,10 +477,15 @@ function closeAllSelect(elmnt) {
       x[i].classList.add("select-hide");
     }
   }
+  if (!$(".select-selected").hasClass("select-arrow-active")) {
+    $('.select-selected').removeClass("activated-selected-item");
+    $('.select-items div').removeClass("activated-select-items");
+  }
+
 }
 
 //pdf dropdown stuff
-let initialize_dropdown = function() {      
+let initialize_pdf_dropdown = function() { 
 
     //let o = new Option(tableData.pdf_files[i].title, i);
     ///// jquerify the DOM object 'o' so we can use the html method
@@ -467,29 +497,29 @@ let initialize_dropdown = function() {
       let o = new Option(tableData.pdf_files[i - 1].title, 0);
       /// jquerify the DOM object 'o' so we can use the html method
       $(o).html(tableData.pdf_files[i - 1].title);
-      $("#pdf-select").append(o);
+      $("#pdf_select").append(o);
     }
 
     let o = new Option(tableData.pdf_files[i - 1].title, i);
     /// jquerify the DOM object 'o' so we can use the html method
     $(o).html(tableData.pdf_files[i - 1].title);
-    $("#pdf-select").append(o);
+    $("#pdf_select").append(o);
 
   }
   
   let x, i, j, selElmnt, a, b, c;
   /* Look for any elements with the class "custom-select": */
-  x = document.getElementsByClassName("custom-select");
+  x = document.getElementsByClassName("pdf_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
     /* For each element, create a new DIV that will act as the selected item: */
     a = document.createElement("DIV");
-    a.setAttribute("class", "select-selected");
+    a.setAttribute("class", "pdf_select-selected");
     a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
     x[i].appendChild(a);
     /* For each element, create a new DIV that will contain the option list: */
     b = document.createElement("DIV");
-    b.setAttribute("class", "select-items select-hide");
+    b.setAttribute("class", "pdf_select-items pdf_select-hide");
     for (j = 1; j < selElmnt.length; j++) {
       /* For each option in the original select element,
         create a new DIV that will act as an option item: */
@@ -513,11 +543,11 @@ let initialize_dropdown = function() {
             }
             s.selectedIndex = i;
             h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
+            y = this.parentNode.getElementsByClassName("pdf_same-as-selected");
             for (k = 0; k < y.length; k++) {
               y[k].removeAttribute("class");
             }
-            this.setAttribute("class", "same-as-selected");
+            this.setAttribute("class", "pdf_same-as-selected");
             break;
           }
         }
@@ -530,9 +560,148 @@ let initialize_dropdown = function() {
       /* When the select box is clicked, close any other select boxes,
         and open/close the current select box: */
       e.stopPropagation();
+      pdf_closeAllSelect(this);
+      this.nextSibling.classList.toggle("pdf_select-hide");
+      this.classList.toggle("pdf_select-arrow-active");
+    });
+  }
+
+
+}
+
+let initialize_quarter_dropdown = function() {
+
+  let x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "custom-select": */
+  x = document.getElementsByClassName("custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "select-items select-hide");
+    b.setAttribute("id", "view_gpa_select");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.id = termConverter[j - 1];
+      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA)) {
+      c.addEventListener("click", function(e) {
+        if (!this.innerHTML.includes("None")) {
+        /* When an item is clicked, update the original select box,
+        and the selected item: */
+
+        if (term_dropdown_active) {
+          var y, i, k, s, h;
+          s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+          h = this.parentNode.previousSibling;
+          for (i = 0; i < s.length; i++) {
+              if (s.options[i].innerHTML == this.innerHTML) {
+                if (i == 0) {
+                  currentTerm = termConverter[i];
+                } else {
+                  currentTerm = termConverter[i - 1];
+                }
+
+
+                if (i === 0) $("#mostRecentDiv").show();
+                else $("#mostRecentDiv").hide();
+
+
+                if (typeof tableData.terms[currentTerm].classes == 'undefined') {
+                  // if (anyEdited()) {
+                    // $(".select-selected").css('padding', "5px 16px 5px 16px");
+                  // } else {
+                    $(".select-selected").css("padding", "13px 16px 13px 16px");
+                  // }
+
+
+                  term_dropdown_active = false;
+
+                  $.ajax({
+                    url: "/data",
+                    method: "POST",
+                    data: { quarter: (i - 1) },
+                    dataType: "json json",
+                    success: responseCallbackPartial
+                  });
+
+                  $("#loader").show();
+                  $("#classesTable").hide();
+                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+
+                  s.selectedIndex = i;
+                  h.innerHTML = this.innerHTML;
+                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  for (k = 0; k < y.length; k++) {
+                    y[k].removeAttribute("class");
+                  }
+                  this.setAttribute("class", "same-as-selected");
+                  break;
+
+
+
+                } else {
+
+                if (anyEdited()) {
+                  $(".select-selected").css('padding', "5px 16px 5px 16px");
+                } else {
+                  $(".select-selected").css("padding", "13px 16px 13px 16px");
+                }
+
+                  if (i == 0) {
+                    tableData.currentTermData = tableData.terms.current;
+                  } else {
+                    tableData.currentTermData = tableData.terms["q" + (i - 1)];
+                  }
+
+                  classesTable.setData(tableData.currentTermData.classes);
+
+                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+                  selected_class_i = undefined;
+                  //categoriesTable.setData(tableData[i].categoryDisplay);
+
+                  s.selectedIndex = i;
+                  h.innerHTML = this.innerHTML;
+                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  for (k = 0; k < y.length; k++) {
+                    y[k].removeAttribute("class");
+                  }
+                  this.setAttribute("class", "same-as-selected");
+                  break;
+                }
+              }
+          }
+          h.click();
+        } else {
+          console.log("Term dropdown not active");
+        }
+        }
+      });
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      //$('.select-selected').addClass("activated-select-items");
+      //$('.select-items div').addClass("activated-select-items");
+      /* When the select box is clicked, close any other select boxes,
+    and open/close the current select box: */
+
+      e.stopPropagation();
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
+      $('.select-selected').toggleClass("activated-selected-item");
+      $('.select-items div').toggleClass("activated-select-items");
+      //resetTableData();
     });
   }
 };
@@ -540,7 +709,7 @@ let initialize_dropdown = function() {
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports'); 
 
-  console.log("attempting fullscreen");
+  console.log("Fullscreen Activate");
 if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -581,3 +750,98 @@ if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFul
     }
   }
 }
+
+
+function parseTableData(classes) {
+  for(let i = 0; i < classes.length; i++) {
+
+    //initialize every the edited key for every class and set it to false
+    classes[i].edited = false;
+
+    //initialize category grades which will be used for the categoryGrades table
+    classes[i].categoryGrades = {};
+
+    //determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
+    if (!isNaN(parseFloat(classes[i].grade))) {
+      classes[i].decimals = parseFloat(classes[i].grade).countDecimals();
+    }
+
+
+    //cycle through each assignment of every class for further parsing
+    for (let j = 0; j < classes[i].assignments.length; j++) {
+      //initialize the percentage of the assignment.
+      classes[i].assignments[j].percentage = Math.round(classes[i].assignments[j].score / classes[i].assignments[j].max_score * 1000) / 10;
+      //initialize how the assignment should be colored in the table; based on percentage
+      classes[i].assignments[j].color = getColor(classes[i].assignments[j].percentage);
+
+      //an if statement to handle assignments without a score
+      if (isNaN(classes[i].assignments[j].score)) {
+        //an if statement to handle assignments with a special characteristic
+        if (classes[i].assignments[j].special) {
+
+          //an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
+          if (("" + classes[i].assignments[j].special).includes("(") && ("" + classes[i].assignments[j].special).includes(")")) {
+            // a reg expression to extract only the information from between the parenthesis.
+            var regExp = /\(([^)]+)\)/;
+
+            classes[i].assignments[j].score = (regExp.exec(classes[i].assignments[j].special))[1];
+            classes[i].assignments[j].max_score = (regExp.exec(classes[i].assignments[j].special))[1];
+          } else {
+            // if no parenthesis, set it equal to special in its entirety
+            classes[i].assignments[j].score = classes[i].assignments[j].special;
+            classes[i].assignments[j].max_score = classes[i].assignments[j].special;
+
+          }
+        } else {
+          // if no special and no grade, set score and max_score to ungraded
+          classes[i].assignments[j].score = "Ungraded";
+          classes[i].assignments[j].max_score = "Ungraded";
+
+        }
+      }
+    }
+
+    //initializing a calculated_grade for classes with a grade
+    if (classes[i].grade != "") {
+
+      let computingClassData = classes[i];
+
+      //getting calculated values related to classes
+      let gradeInfo = determineGradeType(computingClassData.assignments, computingClassData.categories, computingClassData.grade);
+      //populating categoryDisplay which is the object used to display the category grading information
+      classes[i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+
+      //setting grading type. Total vs. category
+      classes[i].type = gradeInfo.type;
+
+      //setting calculated_grade and initcalcGrade
+      classes[i].init_calculated_grade = gradeInfo.categoryPercent;
+
+      classes[i].calculated_grade = computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade).categoryPercent;
+
+      //setting how the class should be colored in the classes table.
+      classes[i].color = getColor(classes[i].calculated_grade);
+    }
+  }
+  tableData.currentTermData.classes = classes;
+  let GPA = computeGPA();
+  let calcGPA = computeGPA();
+  return {
+    classes,
+    GPA,
+    calcGPA
+  };
+}
+let anyEdited = function() {
+  let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
+    return currentValue.edited
+  });
+  finalDecision = false;
+  termsEdited.forEach(function(editedMaybe) {
+    if (editedMaybe == true) {
+      finalDecision = true;
+    }
+  });
+  return finalDecision;
+}
+
