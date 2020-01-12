@@ -2,6 +2,7 @@
 let pdf_index = 0;
 let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdfrendering = false;
+let curQ = 0;
       let statsModal = document.getElementById('stats_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
@@ -619,17 +620,101 @@ let termsReset = {};
   for (let i = 1; i <= 4; i++) {
       let sum = 0;
       let count = 0;
+	  let fourSum = 0;
+	  let fiveSum = 0;
     for (let j = 0; j < tableData.overview.length; j++) {
         if (tableData.overview[j]["q" + i] != "") {
-        if (parseFloat(tableData.overview[j]["q" + i]) > 100 ) {
+       
+		if (parseFloat(tableData.overview[j]["q" + i]) > 100 ) {
             sum += 100;
           } else {
             sum += parseFloat(tableData.overview[j]["q" + i]);
           }
           count++;
-        }
+        
+		//--------GPA OUT OF 4.0
+		  let curG = 0;
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 63) {
+		
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 66) {
+			  curG = 1.0;
+			  
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 67) {
+			  curG = 1.3;
+			 
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 70) {
+			  curG = 1.7;
+			
+		  }
+		  
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 73) {
+			  curG = 2.0;
+			  
+		  }
+		  
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 77) {
+			  curG = 2.3;
+			
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 80) {
+			  curG = 2.7;
+			  
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 83) {
+			  curG = 3.0;
+			  
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 87) {
+			  curG = 3.3;
+			
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 90) {
+			  curG = 3.7;
+			 
+		  }
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 93) {
+			  curG = 4.0;
+			} 
+
+		  if(parseFloat(tableData.overview[j]["q" + i]) >= 97) {
+			  curG = 4.0;
+		  }
+		 	 fourSum += curG;
+			 fiveSum += curG;
+			  
+			  
+			  if(tableData.overview[j].class.includes("AP")) {
+			  fiveSum += 1;
+		  	}
+  			  if(tableData.overview[j].class.includes("HN")) {
+  			  fiveSum += .5
+  		  	}		  		
+				
+						//----WEIGHTED GPA (OUT OF 5.0)-------
+		  
+		  
+		}
+		console.log(fiveSum + "" + tableData.overview[j].class);
     }
+		console.log(fiveSum);
+		console.log(count);
       tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
+      tableData.terms["q" + i].outOfFourGPA = fourSum / count;
+      tableData.terms["q" + i].outOfFiveGPA = fiveSum / count;
+	  
+	  
+	  if(i == 2) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
+	  	tableData.currentTermData.outOfFourGPA =  fourSum / count;
+	  	tableData.currentTermData.outOfFiveGPA =  fiveSum / count;
+		
+	  }
+	  
+	  
+	  
+	  
   }
 
           //Stuff to do now that tableData is initialized
@@ -640,16 +725,16 @@ let termsReset = {};
     initialize_quarter_dropdown();
               termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
 
-              $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
+              $(".select-selected").html("Current Quarter GPA Percent: " + tableData.currentTermData.GPA);
     $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA);
-    document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
-    document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA;
+    document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA Percent: " + tableData.currentTermData.GPA;
+    document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA Percent: " + tableData.currentTermData.GPA;
 
     $(".select-items").children().each(function(i, elem) {
       if (i == 0) {
         $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA);
-        document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
-        document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA;
+        document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA Percent: " + tableData.terms["current"].GPA;
+        document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA Percent: " + tableData.terms["current"].GPA;
       } else {
         if (!isNaN(tableData.terms["q" + i].GPA)) {
           $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA);
@@ -674,6 +759,31 @@ let termsReset = {};
               success: scheduleCallback
           });
       }
+	  
+	  
+	  function GPAType() {
+		 var e = document.getElementById("gpa_select");
+		 var i = e.options[e.selectedIndex].value;
+		 
+		 if(i == 0) {//NEEDS TO BE CHANGED ON NEXT QUARTER
+		 	
+			 i = 2;
+		 }
+		  
+		  if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Percent")) {
+	          $(".select-selected").html("Current Quarter GPA Unweighted: " + tableData.terms["q" + i].outOfFourGPA);
+		  }
+		 else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Unweighted")) {
+	          $(".select-selected").html("Current Quarter GPA Weighted: " + tableData.terms["q" + i].outOfFiveGPA);
+			
+		  }
+		 
+		 else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Weighted")) {
+	          $(".select-selected").html("Current Quarter GPA Percent: " +  tableData.terms["q" + i].GPA);
+			
+		  }
+
+	  }
 
 function responseCallbackPartial(response) {
           
@@ -723,6 +833,7 @@ function responseCallbackPartial(response) {
           let timesCounter = 0;
           let times = []
 
+		  
           for (let i = 0; i < periods.length; i++) {
 
               if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
@@ -740,6 +851,7 @@ function responseCallbackPartial(response) {
           let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
   
   for (let i = 0; i < periods.length;  i++) {
+	 
                   if (tableData.schedule.black[i]) {
                       tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
                       tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
@@ -869,3 +981,7 @@ if (tab_name == "reports") {
       recentAttendance.redraw();
   }
   document.getElementById("default_open").click();
+  
+  
+  
+ 
