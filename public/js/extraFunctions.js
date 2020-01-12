@@ -312,7 +312,10 @@ let currentPdfIndex = null;
 let render_page_pdf = function(pageNumber) {
   pdf.getPage(pageNumber).then(function(page) {
 
-    scale = 1
+    // Update page indicator text
+    $("#page-indicator").text(`PAGE ${pageNumber} OF ${pdf.numPages}`);
+
+    scale = 1;
 
     let viewport = page.getViewport({scale});
 
