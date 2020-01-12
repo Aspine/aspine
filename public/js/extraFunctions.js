@@ -304,6 +304,53 @@ let gradeFormatter = function(cell, formatterParams) {
 let scale = 1;
 let adjustedScale = 1;
 let controlAdjustedScale = adjustedScale;
+let pdfObj = null;
+let pendingPageNum = null;
+
+let render_page_pdf = function(pageNumber) {
+  pdfObj.pdf.getPage(pageNumber).then(function(page) {
+
+    scale = 1
+
+    let viewport = page.getViewport({scale});
+
+
+    let modifier = $('#pdf-container').width();
+
+    if ($(window).width() >= 900) {
+      modifier = 900;
+    }
+
+    adjustedScale = (modifier / viewport.width) * 0.97;
+    controlAdjustedScale = (modifier / viewport.width) * 0.97;
+
+
+    viewport = page.getViewport({"scale": adjustedScale});
+
+
+    let canvas = document.getElementById('pdf-canvas');
+    let context = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    var renderContext = {
+      canvasContext: context,
+      viewport: viewport
+    };
+
+    var renderTask = page.render(renderContext);
+    renderTask.promise.then(function () {
+      pdfrendering = false;
+      // Another page rendering is pending
+      if (pendingPageNum !== null) {
+        render_page_pdf(pendingPageNum);
+        pendingPageNum = null;
+      }
+    });
+
+  });
+}
+
 let generate_pdf = function(index) {
   if (!pdfrendering) {
     pdfrendering = true;
@@ -315,48 +362,13 @@ let generate_pdf = function(index) {
 
     let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content}; let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
-      let pageNumber = 1;
-
-      pdf.getPage(pageNumber).then(function(page) {
-
-        scale = 1
-
-        let viewport = page.getViewport({scale});
-
-
-        let modifier = $('#pdf-container').width();
-
-        if ($(window).width() >= 900) {
-          modifier = 900;
-        }
-
-        adjustedScale = (modifier / viewport.width) * 0.97;
-        controlAdjustedScale = (modifier / viewport.width) * 0.97;
-
-
-        viewport = page.getViewport({"scale": adjustedScale});
-
-
-        let canvas = document.getElementById('pdf-canvas');
-        let context = canvas.getContext('2d');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-
-        var renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-
-        var renderTask = page.render(renderContext);
-        renderTask.promise.then(function () {
-          pdfrendering = false;
-        });
-
-      });
-
+      pdfObj = {"pdf": pdf, "pageNumber": 1};
+      render_page_pdf(1);
     }, function (reason) {
       console.error(reason);
     });
+
+    
   }
 }
 
@@ -398,6 +410,7 @@ let zoom_in_pdf = function() {
     });
   }
 }
+
 let zoom_out_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
@@ -434,6 +447,33 @@ let zoom_out_pdf = function() {
     }, function (reason) {
       console.error(reason);
     });
+  }
+}
+
+let queue_render_page_pdf = function(pageNumber) {
+  if (pdfObj.pdf) {
+    if (pdfrendering) {
+      pendingPageNum = pageNumber;
+    }
+    else {
+      render_page_pdf(pageNumber);
+    }
+  }
+}
+
+let prev_page_pdf = function() {
+  if (!pdfObj || !(pdfObj.pageNumber) || pdfObj.pageNumber <= 1) return;
+  else {
+    pdfObj.pageNumber--;
+    queue_render_page_pdf(pdfObj.pageNumber);
+  }
+}
+
+let next_page_pdf = function() {
+  if (!pdfObj || !(pdfObj.pageNumber) || pdfObj.pageNumber >= pdfObj.pdf.numPages) return;
+  else {
+    pdfObj.pageNumber++;
+    queue_render_page_pdf(pdfObj.pageNumber);
   }
 }
 
