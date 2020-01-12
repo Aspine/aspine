@@ -52,14 +52,26 @@ If you would like to directly contribute to Aspine, you can fork this repository
 
 If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
 
+<!--
 If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.
-
 * Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
   * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
   * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively. You can run the script `install.sh` to install these dependencies.
   * Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
 * Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.
 * In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
+-->
+
+* Make sure that you have installed [node.js](https://nodejs.org/), including npm.
+  * On Linux-based operating systems, you should be able to find node.js in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`, or a GUI such as Ubuntu Software Center or GNOME Software); npm may be in a separate package.
+  * On macOS, node.js (including npm) is available on [Homebrew](https://brew.sh/) as [`node`](https://formulae.brew.sh/formula/node). To install Homebrew and node, you can run the script `install.sh` by opening a terminal, using `cd` to navigate to the directory where you cloned or downloaded Aspine, then typing `./install.sh`.
+  * On Windows, the node.js installer can be downloaded from [the website](https://nodejs.org/). Run the installer and follow the on-screen instructions.
+* Install additional dependencies through node.js (this must be done each time you clone or download Aspine). If you used the macOS install script, you can skip this step.
+  * On Unix-like operating systems (includes Linux-based and macOS), open a terminal, use `cd` to navigate to the directory where you cloned or downloaded Aspine, and run `npm install`.
+  * On Windows, double-click on the script `npminstall.bat`. The `.bat` file extension may be invisible depending on your system configuration.
+* Run the Aspine server.
+  * On Unix-like operating systems, run `node ./serve.js insecure` or `./start.sh` in a terminal from the directory where you cloned or downloaded Aspine.
+  * On Windows, double-click on the script `start.bat`. The `.bat` file extension may be invisible depending on your system configuration.
 
 ## Authors
 
