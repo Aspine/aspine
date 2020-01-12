@@ -304,11 +304,13 @@ let gradeFormatter = function(cell, formatterParams) {
 let scale = 1;
 let adjustedScale = 1;
 let controlAdjustedScale = adjustedScale;
-let pdfObj = null;
+let pdf = null;
+let currentPageNum = null;
 let pendingPageNum = null;
+let currentPdfIndex = null;
 
 let render_page_pdf = function(pageNumber) {
-  pdfObj.pdf.getPage(pageNumber).then(function(page) {
+  pdf.getPage(pageNumber).then(function(page) {
 
     scale = 1
 
@@ -360,27 +362,28 @@ let generate_pdf = function(index) {
       $('#pdf-container').css('height', $(window).height() + 'px');
     }
 
-    let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content}; let loadingTask = pdfjsLib.getDocument(pdfInitParams);
-    loadingTask.promise.then(function(pdf) {
-      pdfObj = {"pdf": pdf, "pageNumber": 1};
+    let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content};
+    // Store the index of the current PDF in `currentPdfIndex`
+    currentPdfIndex = index;
+    let loadingTask = pdfjsLib.getDocument(pdfInitParams);
+    loadingTask.promise.then(function(pdf_) {
+      pdf = pdf_;
+      currentPageNum = 1;
       render_page_pdf(1);
     }, function (reason) {
       console.error(reason);
     });
-
-    
   }
 }
 
 let zoom_in_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[0].content};
+    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
-      let pageNumber = 1;
 
-      pdf.getPage(pageNumber).then(function(page) {
+      pdf.getPage(currentPageNum).then(function(page) {
 
         adjustedScale += 0.1;
 
@@ -414,12 +417,11 @@ let zoom_in_pdf = function() {
 let zoom_out_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[0].content};
+    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
-      let pageNumber = 1;
 
-      pdf.getPage(pageNumber).then(function(page) {
+      pdf.getPage(currentPageNum).then(function(page) {
 
         adjustedScale -= 0.1;
 
@@ -450,8 +452,9 @@ let zoom_out_pdf = function() {
   }
 }
 
+// Render a certain page of the PDF or queue it to be rendered
 let queue_render_page_pdf = function(pageNumber) {
-  if (pdfObj.pdf) {
+  if (pdf) {
     if (pdfrendering) {
       pendingPageNum = pageNumber;
     }
@@ -461,19 +464,21 @@ let queue_render_page_pdf = function(pageNumber) {
   }
 }
 
+// Go one page back in the PDF
 let prev_page_pdf = function() {
-  if (!pdfObj || !(pdfObj.pageNumber) || pdfObj.pageNumber <= 1) return;
+  if (!currentPageNum || currentPageNum <= 1) return;
   else {
-    pdfObj.pageNumber--;
-    queue_render_page_pdf(pdfObj.pageNumber);
+    currentPageNum--;
+    queue_render_page_pdf(currentPageNum);
   }
 }
 
+// Go one page forward in the PDF
 let next_page_pdf = function() {
-  if (!pdfObj || !(pdfObj.pageNumber) || pdfObj.pageNumber >= pdfObj.pdf.numPages) return;
+  if (!currentPageNum || currentPageNum >= pdf.numPages) return;
   else {
-    pdfObj.pageNumber++;
-    queue_render_page_pdf(pdfObj.pageNumber);
+    currentPageNum++;
+    queue_render_page_pdf(currentPageNum);
   }
 }
 
