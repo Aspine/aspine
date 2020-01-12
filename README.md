@@ -70,7 +70,7 @@ If you use Windows, you can just right-click on the file "install1.bat" and clic
   * On Unix-like operating systems (includes Linux-based and macOS), open a terminal, use `cd` to navigate to the directory where you cloned or downloaded Aspine, and run `npm install`.
   * On Windows, double-click on the script `npminstall.bat`. The `.bat` file extension may be invisible depending on your system configuration.
 * Run the Aspine server.
-  * On Unix-like operating systems, run `node ./serve.js insecure` in a terminal from the directory where you cloned or downloaded Aspine. On Mac you can instead run start.sh by using `cd` to navigate to the directory where you cloned or downloaded Aspine, and running `./start.sh`
+  * On Unix-like operating systems, run `node ./serve.js insecure` or `./start.sh` in a terminal from the directory where you cloned or downloaded Aspine.
   * On Windows, double-click on the script `start.bat`. The `.bat` file extension may be invisible depending on your system configuration.
 
 ## Authors
