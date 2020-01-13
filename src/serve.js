@@ -1,6 +1,3 @@
-#!/usr/bin/node
-
-// --------------- Includes ------------------
 const express = require('express');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
@@ -9,14 +6,10 @@ const session = require('express-session');
 // const redis = require("redis"),
 //     client = redis.createClient(6310);
 const http = require('http');
-const socket = require('socket.io');
 const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
-const crypto = require('crypto');
-const validator = require('validator');
-const fetch = require('node-fetch');
 // -------------------------------------------
 
 if (args.hasOwnProperty("help") || args._.includes("help")) {
@@ -34,23 +27,19 @@ Options:
 }
 
 // ------------ Web Server -------------------
+const port = 8080;
+
 const app = express();
 app.use(compression());
-const port = 8080;
-const server = app.listen(port,
-    () => console.log(`Example app listening on port ${port}!`));
-const io = socket(server);
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // // redis setup
 // client.on("error", function (err) {
-//     console.log("Error " + err);
+//     console.error("Error " + err);
 // });
 
 if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
     // Certificate
-    // const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
-    // const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
-    // const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
     const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/privkey.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/cert.pem', 'utf8');
     const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/chain.pem', 'utf8');
@@ -63,7 +52,7 @@ if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
 
     app.all('*', ensureSecure); // at top of routing calls
 
-    http.createServer(app).listen(8090)
+    http.createServer(app).listen(8090);
     https.createServer(credentials, app).listen(4430, () => { //443
         console.log('HTTPS Server running on port 4430'); //443
     });
@@ -72,7 +61,7 @@ if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
         if(req.secure){
             // OK, continue
             return next();
-        };
+        }
         // handle port numbers if you need non defaults
         // res.redirect('https://' + req.host + req.url); // express 3.x
         res.redirect('https://' + req.hostname + req.url); // express 4.x
@@ -86,11 +75,7 @@ app.use(function(req, res, next) { // enable cors
 });
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
-app.use(bodyParser.json()) // json parser
-const options = {
-    host: 'localhost',
-    port: 6310
-}
+app.use(bodyParser.json()); // json parser
 app.use(session({
     // store: new RedisStore(options),
     secret: 'scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody',
@@ -125,58 +110,29 @@ app.post('/data', async (req, res) => {
         
         // Use json file provided at command line
         res.sendFile(args.json, {root: "."});
-  } else if (args._.includes("fake")) {
+  }
+    let response;
+    if (args._.includes("fake")) {
         // For backwards compatibility
-        
+
         res.sendFile('sample2.json', {root: "public"});
     } else {
         //res.send(await scraper.scrape_student(req.session.username, req.session.password));
         //
         // Get data from scraper:
-    //
+        //
         response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
-        res.send(response)
+        res.send(response);
 
         // If "out" command-line argument provided, save JSON at the given path
         if (args.hasOwnProperty("out")) {
             fs.writeFile(
                 args.out, JSON.stringify(response),
-                (err) => { if (err) throw err; }
+                (err) => {
+                    if (err) throw err;
+                }
             );
         }
-        
-        //if (response.classes.length == 0) {
-        //  res.sendFile('invalid.json', {root:"public"});
-
-        //} else {
-
-        //  res.send(response);
-        //}
- 
-          //if(tableData.classes.length == 0) {
-          //  tableData.classes.push({
-          //    "name": "You Have No Classes/Assignments This Marking Period", 
-          //    "grade": "You Have No Grades This Marking Period",
-          //    "categories": {"Nothing": "1.0"},
-          //    "assignments": [{
-          //      "name": "No assignments", 
-          //      "category": "Nothing", 
-          //      "assignment_id": "GCD000000Fx62l", 
-          //      "special": "Nothing Special", 
-          //      "score": 10,
-          //      "max_score": 10,
-          //      "percentage": 100,
-          //      "color": "#ff9900"
-          //    }],
-          //    "tokens":{"session_id":"263A6A78DE0F001DDDFC8A525D31A8F0","apache_token":"572aa56a8c407a6d9a25b0a50843fc32"},
-          //    "edited":false,
-          //    "categoryGrades":{},
-          //    "decimals":2,
-          //    "type":"categoryPercent",
-          //    "calculated_grade":"100 A+",
-          //    "color":"#1E8541"
-          //  });
-
     }
 });
 
@@ -272,11 +228,3 @@ app.get('/logout', async (req, res) => {
 //         res.send(reply);
 //     });
 // });
-
-io.on('connection', function(socket){
-    console.log('a user connected');
-});
-
-//app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-// -------------------------------------------
