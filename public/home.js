@@ -623,26 +623,26 @@ let termsReset = {};
       let count = 0;
 	  let fourSum = 0;
 	  let fiveSum = 0;
-    for (let j = 0; j < tableData.overview.length; j++) {
-        if (tableData.overview[j]["q" + i] != "") {
+    for (let classOverview of tableData.overview) {
+        if (classOverview["q" + i] != "") {
        
-		if (parseFloat(tableData.overview[j]["q" + i]) > 100 ) {
+		if (parseFloat(classOverview["q" + i]) > 100 ) {
             sum += 100;
           } else {
-            sum += parseFloat(tableData.overview[j]["q" + i]);
+            sum += parseFloat(classOverview["q" + i]);
           }
           count++;
         
 		//--------GPA OUT OF 4.0
-		  let curG = getGPA(tableData.overview[j]["q" + i]);
+		  let curG = getGPA(classOverview["q" + i]);
 		 	 fourSum += curG;
 			 fiveSum += curG;
 			  
 			  
-			  if(tableData.overview[j].class.includes("AP")) {
+			  if(classOverview.class.includes("AP")) {
 			  fiveSum += 1;
 		  	}
-  			  if(tableData.overview[j].class.includes("HN")) {
+  			  if(classOverview.class.includes("HN")) {
   			  fiveSum += .5
   		  	}		  		
 				
@@ -650,7 +650,7 @@ let termsReset = {};
 		  
 		  
 		}
-		console.log(fiveSum + "" + tableData.overview[j].class);
+		console.log(fiveSum + "" + classOverview.class);
     }
 		console.log(fiveSum);
 		console.log(count);
