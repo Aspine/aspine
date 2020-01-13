@@ -660,8 +660,8 @@ let termsReset = {};
 	  
 	  
 	  if(i == currentQuarterRightNow) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
-	  	tableData.currentTermData.outOfFourGPA =  fourSum / count;
-	  	tableData.currentTermData.outOfFiveGPA =  fiveSum / count;
+	  	tableData.terms.current.outOfFourGPA =  fourSum / count;
+	  	tableData.terms.current.outOfFiveGPA =  fiveSum / count;
 		
 	  }
 	  
