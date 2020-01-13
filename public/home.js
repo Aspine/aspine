@@ -634,55 +634,7 @@ let termsReset = {};
           count++;
         
 		//--------GPA OUT OF 4.0
-		  let curG = 0;
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 63) {
-		
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 66) {
-			  curG = 1.0;
-			  
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 67) {
-			  curG = 1.3;
-			 
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 70) {
-			  curG = 1.7;
-			
-		  }
-		  
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 73) {
-			  curG = 2.0;
-			  
-		  }
-		  
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 77) {
-			  curG = 2.3;
-			
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 80) {
-			  curG = 2.7;
-			  
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 83) {
-			  curG = 3.0;
-			  
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 87) {
-			  curG = 3.3;
-			
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 90) {
-			  curG = 3.7;
-			 
-		  }
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 93) {
-			  curG = 4.0;
-			} 
-
-		  if(parseFloat(tableData.overview[j]["q" + i]) >= 97) {
-			  curG = 4.0;
-		  }
+		  let curG = getGPA(tableData.overview[j]["q" + i]);
 		 	 fourSum += curG;
 			 fiveSum += curG;
 			  
