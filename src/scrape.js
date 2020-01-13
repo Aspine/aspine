@@ -1,6 +1,3 @@
-#!/usr/bin/node
-
-
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 12;
