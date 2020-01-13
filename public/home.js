@@ -619,36 +619,31 @@ let termsReset = {};
 
   tableData.overview = response.overview;
   for (let i = 1; i <= 4; i++) {
-      let sum = 0;
-      let count = 0;
-	  let fourSum = 0;
-	  let fiveSum = 0;
+    let sum = 0; // Sum of classes' grades
+    let count = 0; // Number of classes
+	let fourSum = 0; // Sum of classes' grades on 4.0 scale
+	let fiveSum = 0; // Sum of classes' grades on 5.0 scale
     for (let classOverview of tableData.overview) {
-        if (classOverview["q" + i] != "") {
-       
-		if (parseFloat(classOverview["q" + i]) > 100 ) {
-            sum += 100;
-          } else {
-            sum += parseFloat(classOverview["q" + i]);
-          }
-          count++;
-        
-		//--------GPA OUT OF 4.0
-		  let curG = getGPA(classOverview["q" + i]);
-		 	 fourSum += curG;
-			 fiveSum += curG;
-			  
-			  
-			  if(classOverview.class.includes("AP")) {
-			  fiveSum += 1;
-		  	}
-  			  if(classOverview.class.includes("HN")) {
-  			  fiveSum += .5
-  		  	}		  		
-				
-						//----WEIGHTED GPA (OUT OF 5.0)-------
-		  
-		  
+        if (classOverview["q" + i]) {
+            if (parseFloat(classOverview["q" + i]) > 100) {
+                sum += 100;
+            } else {
+                sum += parseFloat(classOverview["q" + i]);
+            }
+            count++;
+            
+            //--------GPA OUT OF 4.0
+            let curG = getGPA(classOverview["q" + i]);
+            fourSum += curG;
+            fiveSum += curG;
+            
+            //----WEIGHTED GPA (OUT OF 5.0)-------
+            if (classOverview.class.includes("AP")) {
+                fiveSum += 1;
+            }
+            if (classOverview.class.includes("HN")) {
+                fiveSum += .5
+            }
 		}
 		console.log(fiveSum + "" + classOverview.class);
     }
