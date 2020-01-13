@@ -12,7 +12,7 @@ const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 // -------------------------------------------
 
-if (args.hasOwnProperty("help") || args._.includes("help")) {
+if (args.hasOwnProperty('help') || args._.includes('help')) {
     console.log(`Usage: ./serve.js [insecure] [fake] [OPTION]...
 Starts the Aspine web server.
 
@@ -38,7 +38,7 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 //     console.error("Error " + err);
 // });
 
-if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
+if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
     // Certificate
     const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/privkey.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/cert.pem', 'utf8');
@@ -73,7 +73,7 @@ app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-app.use(express.static('public')); // Serve any files in public directory
+app.use(express.static('../public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
 app.use(session({
