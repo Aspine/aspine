@@ -1,5 +1,4 @@
 ////////////////////Global Variables///////
-let currentQuarterRightNow = 2; //REMOVE THIS!!!!!!!!!
 let pdf_index = 0;
 let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdfrendering = false;
@@ -703,32 +702,31 @@ let termsReset = {};
       
       
       function GPAType() {
-         var e = document.getElementById("gpa_select");
-         var i = e.options[e.selectedIndex].value;
-         
-         
-         var quarter = i;
-         if(i == 0) {//NEEDS TO BE CHANGED ON NEXT QUARTER
-             i = currentQuarterRightNow;//CURRENT QUARTER... WONT BE 2 FOR LONG
-             quarter = "Current Quarter";
-         }
-         else {
-             quarter = "Q" + i;
-         }
-          
-          if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("GPA")) {
-              $(".select-selected").html(quarter +" Unweighted: " + tableData.terms["q" + i].GPA.outOfFour);
-          }
-         else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Unweighted")) {
-              $(".select-selected").html(quarter +" Weighted: " + tableData.terms["q" + i].GPA.outOfFive);
-            
-          }
-         
-         else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Weighted")) {
-              $(".select-selected").html(quarter +" GPA: " +  tableData.terms["q" + i].GPA.percent);
-            
-          }
+        let selectElem = $("#gpa_select");
+        let selectedElem = $(".select-selected");
+        let selection = $("#gpa_select option")[selectElem.prop("selectedIndex")].value;
+        
+        let quarterName = "";
+        let quarterData;
 
+        if (selection === 0) {
+           quarterName = "Current Quarter";
+           quarterData = tableData.terms.current;
+        }
+        else {
+            quarterName = "Q" + selection;
+            quarterData = tableData.terms["q" + selection];
+        }
+         
+        if (selectedElem.html().includes("GPA")) {
+            selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour);
+        }
+        else if (selectedElem.html().includes("Unweighted")) {
+            selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive);
+        }
+        else if (selectedElem.html().includes("Weighted")) {
+            selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent);
+        }
       }
 
 function responseCallbackPartial(response) {
