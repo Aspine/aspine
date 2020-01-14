@@ -115,5 +115,6 @@ Secondary Colors:
 
 ## License
 
-Copyright [Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors).
+Copyright [Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors) 2020.
+
 This project is licensed under the GNU General Public License, version 3 - see the [LICENSE.md](LICENSE.md) file for details.
