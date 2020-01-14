@@ -61,7 +61,7 @@ let resetTableData = function() {
   }
   classesTable.setData(tableData.currentTermData.classes);
 
-  tableData.currentTermData.calcGPA = computeGPA();
+  tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
 
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
@@ -70,37 +70,37 @@ let resetTableData = function() {
     //fix the editing system in the if statement above to be true if any of the classes are edited
     if (currentTerm == "current") {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Current Quarter GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
+      $(".select-selected").html("Current Quarter GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
 
     } else {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
+      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
 
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
     }
   } else {
     if (currentTerm == "current") {
       $(".select-selected").css("padding", "13px 16px 13px 16px");
-      $(".select-selected").html("Current Quarter GPA: " + GPA);
+      $(".select-selected").html("Current Quarter GPA: " + GPA.percent);
 
       $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA.percent);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA.percent;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent;
 
     } else {
       $(".select-selected").css("padding", "13px 16px 13px 16px");
-      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA);
+      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent);
 
       $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
-      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA);
-      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA;
+      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent);
+      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent;
     }
   }
   $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
@@ -125,8 +125,8 @@ let updateGradePage = function() {
 
   assignmentsTable.replaceData(tableData.currentTermData.classes[selected_class_i].assignments);
 
-  tableData.currentTermData.calcGPA = computeGPA();
-  tableData.terms[currentTerm].calcGPA = computeGPA();
+  tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
+  tableData.terms[currentTerm].calcGPA = computeGPA(tableData.currentTermData.classes);
 
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
@@ -135,19 +135,19 @@ let updateGradePage = function() {
     //fix the editing system in the if statement above to be true if any of the classes are edited
     if (currentTerm == "current") {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Current Quarter GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
+      $(".select-selected").html("Current Quarter GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
-      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
+      document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
 
     } else {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
+      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
 
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
-      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA);
-      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA + "<br>Calculated GPA: " + calcGPA;
+      $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
     }
 
     //document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
@@ -157,7 +157,7 @@ let updateGradePage = function() {
     $(".select-selected").css("padding", "13px 16px 13px 16px");
     $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
 
-    $(".select-selected").html("Quarter GPA: " + GPA);
-    $("#" + currentTerm).html("Quarter GPA: " + GPA);
+    $(".select-selected").html("Quarter GPA: " + GPA.percent);
+    $("#" + currentTerm).html("Quarter GPA: " + GPA.percent);
   }
 }

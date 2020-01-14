@@ -591,7 +591,7 @@ let initialize_quarter_dropdown = function() {
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1];
-      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA)) {
+      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("None")) {
         /* When an item is clicked, update the original select box,
@@ -824,8 +824,8 @@ function parseTableData(classes) {
     }
   }
   tableData.currentTermData.classes = classes;
-  let GPA = computeGPA();
-  let calcGPA = computeGPA();
+  let GPA = computeGPA(tableData.currentTermData.classes);
+  let calcGPA = computeGPA(tableData.currentTermData.classes);
   return {
     classes,
     GPA,
