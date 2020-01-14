@@ -204,8 +204,8 @@ function computeGPA(classes) {
     }
     return {
         percent: Math.round(sum / count * 100) / 100,
-        outOfFour: fourSum / count,
-        outOfFive: fiveSum / count
+        outOfFour: Math.round(fourSum / count * 100) / 100,
+        outOfFive: Math.round(fiveSum / count * 100) / 100
     };
 }
 
