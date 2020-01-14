@@ -709,7 +709,7 @@ let termsReset = {};
         let quarterName = "";
         let quarterData;
 
-        if (selection === 0) {
+        if (selection == 0) {
            quarterName = "Current Quarter";
            quarterData = tableData.terms.current;
         }
