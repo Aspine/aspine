@@ -645,20 +645,19 @@ let termsReset = {};
                 fiveSum += 1;
             }
         }
-        console.log(fiveSum + "" + overviewClass.class);
+        // console.log(fiveSum + "" + overviewClass.class);
     }
-        console.log(fiveSum);
-        console.log(count);
-      tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
-      tableData.terms["q" + i].outOfFourGPA = fourSum / count;
-      tableData.terms["q" + i].outOfFiveGPA = fiveSum / count;
+    // console.log(fiveSum);
+    // console.log(count);
+    tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
+    tableData.terms["q" + i].outOfFourGPA = fourSum / count;
+    tableData.terms["q" + i].outOfFiveGPA = fiveSum / count;
       
       
-      if(i == currentQuarterRightNow) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
-          tableData.terms.current.outOfFourGPA =  fourSum / count;
-          tableData.terms.current.outOfFiveGPA =  fiveSum / count;
-        
-      }
+    if (i == currentQuarterRightNow) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
+        tableData.terms.current.outOfFourGPA =  fourSum / count;
+        tableData.terms.current.outOfFiveGPA =  fiveSum / count;
+    }
       
       
       
