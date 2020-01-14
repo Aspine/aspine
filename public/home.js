@@ -621,48 +621,48 @@ let termsReset = {};
   for (let i = 1; i <= 4; i++) {
     let sum = 0; // Sum of classes' grades
     let count = 0; // Number of classes
-	let fourSum = 0; // Sum of classes' grades on 4.0 scale
-	let fiveSum = 0; // Sum of classes' grades on 5.0 scale
-    for (let classOverview of tableData.overview) {
-        if (classOverview["q" + i]) {
-            if (parseFloat(classOverview["q" + i]) > 100) {
+    let fourSum = 0; // Sum of classes' grades on 4.0 scale
+    let fiveSum = 0; // Sum of classes' grades on 5.0 scale
+    for (let overviewClass of tableData.overview) {
+        if (overviewClass["q" + i]) {
+            if (parseFloat(overviewClass["q" + i]) > 100) {
                 sum += 100;
             } else {
-                sum += parseFloat(classOverview["q" + i]);
+                sum += parseFloat(overviewClass["q" + i]);
             }
             count++;
             
             //--------GPA OUT OF 4.0
-            let curG = getGPA(classOverview["q" + i]);
+            let curG = getGPA(overviewClass["q" + i]);
             fourSum += curG;
-            fiveSum += curG;
-            
+
             //----WEIGHTED GPA (OUT OF 5.0)-------
-            if (classOverview.class.includes("AP")) {
-                fiveSum += 1;
-            }
-            if (classOverview.class.includes("HN")) {
+            fiveSum += curG;
+            if (overviewClass.class.includes("HN")) {
                 fiveSum += .5
             }
-		}
-		console.log(fiveSum + "" + classOverview.class);
+            if (overviewClass.class.includes("AP")) {
+                fiveSum += 1;
+            }
+        }
+        console.log(fiveSum + "" + overviewClass.class);
     }
-		console.log(fiveSum);
-		console.log(count);
+        console.log(fiveSum);
+        console.log(count);
       tableData.terms["q" + i].GPA = Math.round(sum / count * 100) / 100;
       tableData.terms["q" + i].outOfFourGPA = fourSum / count;
       tableData.terms["q" + i].outOfFiveGPA = fiveSum / count;
-	  
-	  
-	  if(i == currentQuarterRightNow) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
-	  	tableData.terms.current.outOfFourGPA =  fourSum / count;
-	  	tableData.terms.current.outOfFiveGPA =  fiveSum / count;
-		
-	  }
-	  
-	  
-	  
-	  
+      
+      
+      if(i == currentQuarterRightNow) {//***THIS WILL NEED TO BE CHANGED NEXT QUARTER***
+          tableData.terms.current.outOfFourGPA =  fourSum / count;
+          tableData.terms.current.outOfFiveGPA =  fiveSum / count;
+        
+      }
+      
+      
+      
+      
   }
 
           //Stuff to do now that tableData is initialized
@@ -707,36 +707,36 @@ let termsReset = {};
               success: scheduleCallback
           });
       }
-	  
-	  
-	  function GPAType() {
-		 var e = document.getElementById("gpa_select");
-		 var i = e.options[e.selectedIndex].value;
-		 
-		 
-		 var quarter = i;
-		 if(i == 0) {//NEEDS TO BE CHANGED ON NEXT QUARTER
-			 i = currentQuarterRightNow;//CURRENT QUARTER... WONT BE 2 FOR LONG
-			 quarter = "Current Quarter";
-		 }
-		 else {
-			 quarter = "Q" + i;
-		 }
-		  
-		  if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("GPA")) {
-	          $(".select-selected").html(quarter +" Unweighted: " + tableData.terms["q" + i].outOfFourGPA);
-		  }
-		 else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Unweighted")) {
-	          $(".select-selected").html(quarter +" Weighted: " + tableData.terms["q" + i].outOfFiveGPA);
-			
-		  }
-		 
-		 else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Weighted")) {
-	          $(".select-selected").html(quarter +" GPA: " +  tableData.terms["q" + i].GPA);
-			
-		  }
+      
+      
+      function GPAType() {
+         var e = document.getElementById("gpa_select");
+         var i = e.options[e.selectedIndex].value;
+         
+         
+         var quarter = i;
+         if(i == 0) {//NEEDS TO BE CHANGED ON NEXT QUARTER
+             i = currentQuarterRightNow;//CURRENT QUARTER... WONT BE 2 FOR LONG
+             quarter = "Current Quarter";
+         }
+         else {
+             quarter = "Q" + i;
+         }
+          
+          if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("GPA")) {
+              $(".select-selected").html(quarter +" Unweighted: " + tableData.terms["q" + i].outOfFourGPA);
+          }
+         else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Unweighted")) {
+              $(".select-selected").html(quarter +" Weighted: " + tableData.terms["q" + i].outOfFiveGPA);
+            
+          }
+         
+         else if(document.getElementsByClassName('select-selected')[0].innerHTML.includes("Weighted")) {
+              $(".select-selected").html(quarter +" GPA: " +  tableData.terms["q" + i].GPA);
+            
+          }
 
-	  }
+      }
 
 function responseCallbackPartial(response) {
           
@@ -791,7 +791,7 @@ function responseCallbackPartial(response) {
           let timesCounter = 0;
           let times = []
 
-		  
+          
           for (let i = 0; i < periods.length; i++) {
 
               if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
@@ -809,7 +809,7 @@ function responseCallbackPartial(response) {
           let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
   
   for (let i = 0; i < periods.length;  i++) {
-	 
+     
                   if (tableData.schedule.black[i]) {
                       tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
                       tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
