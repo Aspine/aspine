@@ -698,7 +698,7 @@ async function scrape_login(username, password) {
 async function get_home(session_id) {
 
 
-    let page = await fetch_body(
+    let page_todo = await fetch_body(
         "https://aspen.cpsd.us/aspen/toDoWidget.do?groupPageWidgetOid=GPW0000004IwUo&widgetId=toDo_4&groupPageWidgetOid=GPW0000004IwUo",
         {
             "credentials": "include",
@@ -723,15 +723,39 @@ async function get_home(session_id) {
         }
     );
 
+    let student_oid = cheerio.load(page_todo)('#studentSelector').children().first().attr("value");
 
-  let $ = cheerio.load(page);
+    let page = await fetch_body(
+        "https://aspen.cpsd.us/aspen/home.do",
+        {
+            "credentials": "include",
+            "headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Upgrade-Insecure-Requests": "1",
+        'DNT': '1',
+                "Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis",
+                "Connection": "keep-alive", 
+                "Upgrade-Insecure-Requests": "1", 
+                "Content-Type": "application/x-www-form-urlencoded", 
+                "Cache-Control": "max-age=0", 
+                "Referer": "https://aspen.cpsd.us/aspen/logon.do", 
+                "User-Agent": HEADERS["User-Agent"], 
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+            }, 
+            "referrer": "https://aspen.cpsd.us/aspen/logon.do", 
+            "method": "GET", 
+            "mode": "cors",
+        }
+    );
 
-  let student_oid = ($('#studentSelector').children().first().attr("value"));
-
-    return {
+  return {
     success: page.includes("Invalid login."),
     apache_token: page.substr( page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32),
-    session_id: page.substr( page.indexOf("jsessionid=") + "jsessionid=".length, 32),
+    session_id: page.substr(
+            page.indexOf("sessionId='") + "sessionId='".length, 40
+        ) + ".aspen-app2",
     student_oid: student_oid
   }
 
