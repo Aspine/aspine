@@ -686,8 +686,8 @@ async function scrape_login(username, password) {
         }
     );
     const session_id = page.substr(
-        page.indexOf("jsessionid=") + "jsessionid=".length, 32
-    );
+        page.indexOf("sessionId='") + "sessionId='".length, 40
+    ) + ".aspen-app2";
     const apache_token = page.substr(
         page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32
     );
