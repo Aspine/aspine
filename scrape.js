@@ -869,7 +869,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
         }
     ));
     let data = {};
-    $("tr[class=listCell]", "#dataGrid").slice(3).each(function(i, elem) {
+    $("tr[class=listCell]", "#dataGridRight").each(function(i, elem) {
         if (i % 2 === 0) {
             let category = $(this).children().first().text();
             let weight = $(this).children().eq(2).text();
