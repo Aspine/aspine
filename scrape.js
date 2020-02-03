@@ -3,7 +3,7 @@
 
 // --------------- Parameters ----------------
 // Multi-Threads
-const CLASS_THREADS = 10;
+const CLASS_THREADS = 12;
 const PDF_THREADS = 5;
 
 // Solo-Threads
@@ -16,6 +16,14 @@ const HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en-US,en",
     "Accept-Encoding": "gzip, deflate, br"
+};
+
+const TERM_NAMES = {
+    0: ["FY", "S1", "S2", "Q1", "Q2", "Q3", "Q4"],
+    1: ["FY", "S1", "Q1"],
+    2: ["FY", "S1", "Q2"],
+    3: ["FY", "S2", "Q3"],
+    4: ["FY", "S2", "Q4"]
 };
 
 // -------------------------------------------
@@ -77,7 +85,7 @@ async function scrape_student(username, password, quarter) {
     // quarter = parseFloat(quarter) + 1;
     // Spawn class scrapers
     let class_scrapers = [];
-    for (let i = (quarter) * 10; i < CLASS_THREADS + (quarter ) * 10; i++) {
+    for (let i = quarter * CLASS_THREADS; i < CLASS_THREADS + quarter * CLASS_THREADS; i++) {
       class_scrapers[i] = scrape_quarter(username, password, i);
     }
 
@@ -278,7 +286,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 }
 
 // Changes the term
-async function change_term_classes(session_id, apache_token, student_oid, termFilter, i) {
+async function change_term_classes(session_id, apache_token, student_oid, termFilter, term) {
   let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
     {"credentials":"include",
     "headers":{
@@ -319,8 +327,7 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
 
   let data = {"classes": []};
     $("#dataGrid a").each(function(i, elem) {
-        if ($(this).parent().nextAll().eq(0).text().trim() == "FY"
-            || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+        if (TERM_NAMES[term].includes($(this).parent().nextAll().eq(0).text().trim())) {
             data.classes[i] = {};
             // data.classes[i].name = $(this).text();
             data.classes[i].name = $(this).parent()
@@ -572,17 +579,18 @@ function scrape_quarter(username, password, i) {
     }
         log(i, "session", session);
 
-        // Academics Page
-        let academics = await scrape_academics(session.session_id);
+    let term = Math.floor(i / CLASS_THREADS);
+    i = i % CLASS_THREADS;
+    
+    // Academics Page
+    let academics = await scrape_academics(session.session_id, term);
     log(i, "academics", academics);
 
-    let term = Math.floor(i / 10);
-    i = i % 10;
 
 
 
     if (term != 0) {
-      academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, i);
+      academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term);
     }
 
         // Check if thread is extra
@@ -633,7 +641,7 @@ function scrape_class(username, password, i) {
         log(i, "session", session);
 
         // Academics Page
-        let academics = await scrape_academics(session.session_id);
+        let academics = await scrape_academics(session.session_id, 0);
         log(i, "academics", academics);
     // Check if thread is extra
         if (academics.classes[i] == undefined) {
@@ -797,7 +805,7 @@ async function submit_login(username, password, apache_token, session_id) {
 
 // Returns object with classes (name, grade, id),
 // student oid, and apache_token
-async function scrape_academics(session_id) {
+async function scrape_academics(session_id, term) {
     let $ = cheerio.load(await fetch_body(
         "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
         {
@@ -821,8 +829,7 @@ async function scrape_academics(session_id) {
     ));
     let data = {"classes": []};
     $("#dataGrid a").each(function(i, elem) {
-        if ($(this).parent().nextAll().eq(0).text().trim() == "FY"
-            || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+        if (TERM_NAMES[term].includes($(this).parent().nextAll().eq(0).text().trim())) {
             data.classes[i] = {};
             // data.classes[i].name = $(this).text();
             data.classes[i].name = $(this).parent()
