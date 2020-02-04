@@ -19,12 +19,16 @@ const HEADERS = {
 };
 
 const TERM_NAMES = {
-    0: ["FY", "S1", "S2", "Q1", "Q2", "Q3", "Q4"],
+    // 0: ["FY", "S1", "S2", "Q1", "Q2", "Q3", "Q4"],
     1: ["FY", "S1", "Q1"],
     2: ["FY", "S1", "Q2"],
     3: ["FY", "S2", "Q3"],
     4: ["FY", "S2", "Q4"]
 };
+
+const CURRENT_QUARTER = 3;
+
+TERM_NAMES[0] = TERM_NAMES[CURRENT_QUARTER];
 
 // -------------------------------------------
 
