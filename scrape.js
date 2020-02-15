@@ -3,7 +3,7 @@
 
 // --------------- Parameters ----------------
 // Multi-Threads
-const CLASS_THREADS = 10;
+const CLASS_THREADS = 12;
 const PDF_THREADS = 5;
 
 // Solo-Threads
@@ -17,6 +17,18 @@ const HEADERS = {
     "Accept-Language": "en-US,en",
     "Accept-Encoding": "gzip, deflate, br"
 };
+
+const TERM_NAMES = {
+    // 0: ["FY", "S1", "S2", "Q1", "Q2", "Q3", "Q4"],
+    1: ["FY", "S1", "Q1"],
+    2: ["FY", "S1", "Q2"],
+    3: ["FY", "S2", "Q3"],
+    4: ["FY", "S2", "Q4"]
+};
+
+const CURRENT_QUARTER = 3;
+
+TERM_NAMES[0] = TERM_NAMES[CURRENT_QUARTER];
 
 // -------------------------------------------
 
@@ -77,7 +89,7 @@ async function scrape_student(username, password, quarter) {
     // quarter = parseFloat(quarter) + 1;
     // Spawn class scrapers
     let class_scrapers = [];
-    for (let i = (quarter) * 10; i < CLASS_THREADS + (quarter ) * 10; i++) {
+    for (let i = quarter * CLASS_THREADS; i < CLASS_THREADS + quarter * CLASS_THREADS; i++) {
       class_scrapers[i] = scrape_quarter(username, password, i);
     }
 
@@ -278,7 +290,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 }
 
 // Changes the term
-async function change_term_classes(session_id, apache_token, student_oid, termFilter, i) {
+async function change_term_classes(session_id, apache_token, student_oid, termFilter, term) {
   let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
     {"credentials":"include",
     "headers":{
@@ -319,8 +331,7 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
 
   let data = {"classes": []};
     $("#dataGrid a").each(function(i, elem) {
-        if ($(this).parent().nextAll().eq(0).text().trim() == "FY"
-            || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+        if (TERM_NAMES[term].includes($(this).parent().nextAll().eq(0).text().trim())) {
             data.classes[i] = {};
             // data.classes[i].name = $(this).text();
             data.classes[i].name = $(this).parent()
@@ -572,17 +583,18 @@ function scrape_quarter(username, password, i) {
     }
         log(i, "session", session);
 
-        // Academics Page
-        let academics = await scrape_academics(session.session_id);
+    let term = Math.floor(i / CLASS_THREADS);
+    i = i % CLASS_THREADS;
+    
+    // Academics Page
+    let academics = await scrape_academics(session.session_id, term);
     log(i, "academics", academics);
 
-    let term = Math.floor(i / 10);
-    i = i % 10;
 
 
 
     if (term != 0) {
-      academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, i);
+      academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term);
     }
 
         // Check if thread is extra
@@ -633,7 +645,7 @@ function scrape_class(username, password, i) {
         log(i, "session", session);
 
         // Academics Page
-        let academics = await scrape_academics(session.session_id);
+        let academics = await scrape_academics(session.session_id, 0);
         log(i, "academics", academics);
     // Check if thread is extra
         if (academics.classes[i] == undefined) {
@@ -686,8 +698,8 @@ async function scrape_login(username, password) {
         }
     );
     const session_id = page.substr(
-        page.indexOf("jsessionid=") + "jsessionid=".length, 32
-    );
+        page.indexOf("sessionId='") + "sessionId='".length, 40
+    ) + ".aspen-app2";
     const apache_token = page.substr(
         page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32
     );
@@ -698,7 +710,7 @@ async function scrape_login(username, password) {
 async function get_home(session_id) {
 
 
-    let page = await fetch_body(
+    let page_todo = await fetch_body(
         "https://aspen.cpsd.us/aspen/toDoWidget.do?groupPageWidgetOid=GPW0000004IwUo&widgetId=toDo_4&groupPageWidgetOid=GPW0000004IwUo",
         {
             "credentials": "include",
@@ -723,15 +735,39 @@ async function get_home(session_id) {
         }
     );
 
+    let student_oid = cheerio.load(page_todo)('#studentSelector').children().first().attr("value");
 
-  let $ = cheerio.load(page);
+    let page = await fetch_body(
+        "https://aspen.cpsd.us/aspen/home.do",
+        {
+            "credentials": "include",
+            "headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Upgrade-Insecure-Requests": "1",
+        'DNT': '1',
+                "Cookie": "JSESSIONID=" + session_id + "; deploymentId=x2sis",
+                "Connection": "keep-alive", 
+                "Upgrade-Insecure-Requests": "1", 
+                "Content-Type": "application/x-www-form-urlencoded", 
+                "Cache-Control": "max-age=0", 
+                "Referer": "https://aspen.cpsd.us/aspen/logon.do", 
+                "User-Agent": HEADERS["User-Agent"], 
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+            }, 
+            "referrer": "https://aspen.cpsd.us/aspen/logon.do", 
+            "method": "GET", 
+            "mode": "cors",
+        }
+    );
 
-  let student_oid = ($('#studentSelector').children().first().attr("value"));
-
-    return {
+  return {
     success: page.includes("Invalid login."),
     apache_token: page.substr( page.indexOf("TOKEN\" value=\"") + "TOKEN\" value=\"".length, 32),
-    session_id: page.substr( page.indexOf("jsessionid=") + "jsessionid=".length, 32),
+    session_id: page.substr(
+            page.indexOf("sessionId='") + "sessionId='".length, 40
+        ) + ".aspen-app2",
     student_oid: student_oid
   }
 
@@ -773,7 +809,7 @@ async function submit_login(username, password, apache_token, session_id) {
 
 // Returns object with classes (name, grade, id),
 // student oid, and apache_token
-async function scrape_academics(session_id) {
+async function scrape_academics(session_id, term) {
     let $ = cheerio.load(await fetch_body(
         "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
         {
@@ -797,8 +833,7 @@ async function scrape_academics(session_id) {
     ));
     let data = {"classes": []};
     $("#dataGrid a").each(function(i, elem) {
-        if ($(this).parent().nextAll().eq(0).text().trim() == "FY"
-            || $(this).parent().nextAll().eq(0).text().trim() == "S1") {
+        if (TERM_NAMES[term].includes($(this).parent().nextAll().eq(0).text().trim())) {
             data.classes[i] = {};
             // data.classes[i].name = $(this).text();
             data.classes[i].name = $(this).parent()
@@ -845,7 +880,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
         }
     ));
     let data = {};
-    $("tr[class=listCell]", "#dataGrid").slice(3).each(function(i, elem) {
+    $("tr[class=listCell]", "#dataGridRight").each(function(i, elem) {
         if (i % 2 === 0) {
             let category = $(this).children().first().text();
             let weight = $(this).children().eq(2).text();

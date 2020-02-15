@@ -51,9 +51,9 @@ if(!(args.hasOwnProperty("insecure") || args._.includes("insecure"))) {
     // const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us/privkey.pem', 'utf8');
     // const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us/cert.pem', 'utf8');
     // const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us/chain.pem', 'utf8');
-    const privateKey = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/privkey.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/cert.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/letsencrypt/live/aspine.us-0003/chain.pem', 'utf8');
+    const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8');
 
     const credentials = {
         key: privateKey,
