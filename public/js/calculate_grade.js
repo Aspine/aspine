@@ -209,6 +209,46 @@ function computeGPA(classes) {
     };
 }
 
+
+function computeGPAQuarter(classes, i) {
+  
+    let sum = 0; // Sum of classes' grades
+     let count = 0; // Number of classes
+     let fourSum = 0; // Sum of classes' grades on 4.0 scale
+     let fiveSum = 0; // Sum of classes' grades on 5.0 scale
+    for (let overviewClass of tableData.overview) {
+         if (overviewClass["q" + i]) {
+            if (parseFloat(overviewClass["q" + i]) > 100) {
+                 sum += 100;
+             } else {
+                 sum += parseFloat(overviewClass["q" + i]);
+             }
+             count++;
+            
+             //--------GPA OUT OF 4.0
+             let curG = getGPA(overviewClass["q" + i]);
+             fourSum += curG;
+
+             //----WEIGHTED GPA (OUT OF 5.0)-------
+             fiveSum += curG;
+             if (overviewClass.class.includes("HN")) {
+                 fiveSum += .5;
+             }
+             if (overviewClass.class.includes("AP")) {
+                 fiveSum += 1;
+             }
+         }
+     }
+
+     return {
+         percent: Math.round(sum / count * 100) / 100,
+         outOfFour: Math.round(fourSum / count * 100) / 100,
+         outOfFive: Math.round(fiveSum / count * 100) / 100
+     };
+
+}
+
+
 function doCalculations(assignments, categories) {
 
     let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};

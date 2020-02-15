@@ -620,15 +620,20 @@ let termsReset = {};
   tableData.terms.current.GPA = computeGPA(tableData.terms.current.classes);
 
   tableData.overview = response.overview;
+  
+document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>Percent: " + cumGPA(1) + "</p><p>Unweighted: " + cumGPA(2) + "</p><p>Weighted: " +  cumGPA(3) +"</p>";//SET CUM GPA FIELD TO PERCENT 
+  
   // Calculate GPA for each quarter
   for (let i = 1; i <= 4; i++) {
-    let sum = 0; // Sum of classes' grades
+  
+  
+  /* let sum = 0; // Sum of classes' grades
     let count = 0; // Number of classes
     let fourSum = 0; // Sum of classes' grades on 4.0 scale
     let fiveSum = 0; // Sum of classes' grades on 5.0 scale
-    for (let overviewClass of tableData.overview) {
+   for (let overviewClass of tableData.overview) {
         if (overviewClass["q" + i]) {
-            if (parseFloat(overviewClass["q" + i]) > 100) {
+           if (parseFloat(overviewClass["q" + i]) > 100) {
                 sum += 100;
             } else {
                 sum += parseFloat(overviewClass["q" + i]);
@@ -648,12 +653,17 @@ let termsReset = {};
                 fiveSum += 1;
             }
         }
-    }
-
+    }*/
+  
+  let GPAS = computeGPAQuarter(tableData.overview,i); 
+	 //  let GPAs = computeGPA(tableData.overview);
+	   //console.log(GPAs);
+  
+ 	
     tableData.terms["q" + i].GPA = {
-        percent: Math.round(sum / count * 100) / 100,
-        outOfFour: Math.round(fourSum / count * 100) / 100,
-        outOfFive: Math.round(fiveSum / count * 100) / 100
+        percent: GPAS.percent,
+        outOfFour: GPAS.outOfFour,
+        outOfFive: GPAS.outOfFive
     };
   }
 
@@ -671,7 +681,8 @@ let termsReset = {};
     document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
 
     $(".select-items").children().each(function(i, elem) {
-      if (i == 0) {
+		if(i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
+	  if (i == 0) {
         $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
         document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
@@ -684,6 +695,7 @@ let termsReset = {};
           document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
         }
       }
+  	}
     });
               // scheduleTable.setData(tableData.schedule.black);
               recentActivity.setData(tableData.recent.recentActivityArray);
@@ -701,6 +713,40 @@ let termsReset = {};
       }
       
       
+	  function cumGPA(type) {
+		  let sumGPA = 0;
+		  let sumOutOfFour = 0;
+		  let sumOutOfFive = 0;
+		  
+		  let count = 0;
+		  for(var i = 1; i <= 4; i ++) {
+			  
+			  if (!isNaN(computeGPAQuarter(tableData.overview,i).percent)) {
+		  sumGPA += computeGPAQuarter(tableData.overview,i).percent;   
+		  sumOutOfFour += computeGPAQuarter(tableData.overview,i).outOfFour;   
+		  sumOutOfFive += computeGPAQuarter(tableData.overview,i).outOfFive;   
+		  
+		  count ++;
+	  }
+		  
+	  }
+	  if(type == 1) {
+		  return sumGPA/count;
+	  }
+	  if(type == 2) {
+		  return sumOutOfFour/count;
+		  
+	  }
+	  if(type == 3) {
+		  return sumOutOfFive/count;
+		  
+	  } 		 
+	}
+		 
+	
+	
+	  
+	  
       function GPAType() {
         let selectElem = $("#gpa_select");
         let selectedElem = $(".select-selected");
@@ -719,35 +765,61 @@ let termsReset = {};
         }
          
         if (selectedElem.html().includes("GPA")) {
-            selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour);
+			
+			if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
+			
+            selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour + "\n Calculated: " +quarterData.calcGPA.outOfFour);
+			
+		}
+		
+		else {
+			selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour);
+			
+		}
+			
+			
         }
         else if (selectedElem.html().includes("Unweighted")) {
-            selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive);
+			
+			if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
+			
+            selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive + "\n Calculated: " + quarterData.calcGPA.outOfFive);
+			}
+			else {
+				selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive);
+				
+			}
+			
         }
         else if (selectedElem.html().includes("Weighted")) {
-            selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent);
+			
+			if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
+            selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent + "\n Calculated: " + quarterData.calcGPA.percent);
+			}
+			else {
+				selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent);
+			}
+			
         }
       }
 
 function responseCallbackPartial(response) {
-          
   $("#loader").hide();
 
       tableData.currentTermData = parseTableData(response.classes);
       
       let temp_term_data = parseTableData(response.classes);
       tableData.terms[currentTerm].classes = temp_term_data.classes;
-      tableData.terms[currentTerm].GPA = temp_term_data.calcGPA;
-      tableData.terms[currentTerm].calcGPA = parseTableData(response.classes).calcGPA;
-
-
+      tableData.terms[currentTerm].GPA = temp_term_data.calcGPA;      
+	  tableData.terms[currentTerm].calcGPA = parseTableData(response.classes).calcGPA;
+	  
 
       if (currentTerm == 'current') {
         $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-
+		
       } else {
         $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);

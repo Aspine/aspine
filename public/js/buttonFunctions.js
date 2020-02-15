@@ -62,7 +62,6 @@ let resetTableData = function() {
   classesTable.setData(tableData.currentTermData.classes);
 
   tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
-
   let GPA = tableData.terms[currentTerm].GPA;
   let calcGPA = tableData.terms[currentTerm].calcGPA;
 
@@ -77,6 +76,11 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
 
     } else {
+	    tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes,termConverter.indexOf(currentTerm));
+		
+		
+		
+		
       $(".select-selected").css('padding', "5px 16px 5px 16px");
       $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
 
