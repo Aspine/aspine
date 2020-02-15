@@ -731,14 +731,14 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
 		  
 	  }
 	  if(type == 1) {
-		  return sumGPA/count;
+		  return (sumGPA/count).toFixed(2);
 	  }
 	  if(type == 2) {
-		  return sumOutOfFour/count;
+		  return (sumOutOfFour/count).toFixed(2);
 		  
 	  }
 	  if(type == 3) {
-		  return sumOutOfFive/count;
+		  return (sumOutOfFive/count).toFixed(2);
 		  
 	  } 		 
 	}
