@@ -723,43 +723,45 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
             quarterName = "Q" + selection;
             quarterData = tableData.terms["q" + selection];
         }
-         
+        
         if (selectedElem.html().includes("GPA")) {
-			
 			if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
-			
-            selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour + "\n Calculated: " +quarterData.calcGPA.outOfFour);
-			
-		}
-		
-		else {
-			selectedElem.html(quarterName + " Unweighted: " + quarterData.GPA.outOfFour);
-			
-		}
-			
-			
+                selectedElem.html(
+                    quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
+                    "\n Calculated: " +quarterData.calcGPA.outOfFour
+                );
+			}
+		    else {
+			    selectedElem.html(
+                    quarterName + " Unweighted: " + quarterData.GPA.outOfFour
+                );
+			}
         }
         else if (selectedElem.html().includes("Unweighted")) {
-			
 			if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
-			
-            selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive + "\n Calculated: " + quarterData.calcGPA.outOfFive);
+                selectedElem.html(
+                    quarterName + " Weighted: " + quarterData.GPA.outOfFive +
+                    "\n Calculated: " + quarterData.calcGPA.outOfFive
+                );
 			}
 			else {
-				selectedElem.html(quarterName + " Weighted: " + quarterData.GPA.outOfFive);
-				
+				selectedElem.html(
+                    quarterName + " Weighted: " + quarterData.GPA.outOfFive
+                );
 			}
-			
         }
         else if (selectedElem.html().includes("Weighted")) {
-			
 			if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
-            selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent + "\n Calculated: " + quarterData.calcGPA.percent);
+                selectedElem.html(
+                    quarterName + " GPA: " +  quarterData.GPA.percent +
+                    "\n Calculated: " + quarterData.calcGPA.percent
+                );
 			}
 			else {
-				selectedElem.html(quarterName + " GPA: " +  quarterData.GPA.percent);
+				selectedElem.html(
+                    quarterName + " GPA: " +  quarterData.GPA.percent
+                );
 			}
-			
         }
       }
 
