@@ -2,7 +2,6 @@
 let pdf_index = 0;
 let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdfrendering = false;
-let curQ = 0;
       let statsModal = document.getElementById('stats_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
