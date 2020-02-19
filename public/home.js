@@ -721,12 +721,30 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
         
         if (selectedElem.html().includes("GPA")) {
 			if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour +
+                    "\n Calculated: " + tableData.terms.current.calcGPA.outOfFour
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour +
+                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
+                    );
+                }
                 selectedElem.html(
                     quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
                     "\n Calculated: " +quarterData.calcGPA.outOfFour
                 );
 			}
 		    else {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour
+                    );
+                }
 			    selectedElem.html(
                     quarterName + " Unweighted: " + quarterData.GPA.outOfFour
                 );
@@ -734,12 +752,30 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
         }
         else if (selectedElem.html().includes("Unweighted")) {
 			if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive +
+                    "\n Calculated: " + tableData.terms.current.calcGPA.outOfFive
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive +
+                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
+                    );
+                }
                 selectedElem.html(
                     quarterName + " Weighted: " + quarterData.GPA.outOfFive +
                     "\n Calculated: " + quarterData.calcGPA.outOfFive
                 );
 			}
 			else {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive
+                    );
+                }
 				selectedElem.html(
                     quarterName + " Weighted: " + quarterData.GPA.outOfFive
                 );
@@ -747,12 +783,30 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
         }
         else if (selectedElem.html().includes("Weighted")) {
 			if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter GPA: " + tableData.terms.current.GPA.percent +
+                    "\n Calculated: " + tableData.terms.current.calcGPA.percent
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent +
+                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.percent
+                    );
+                }
                 selectedElem.html(
                     quarterName + " GPA: " +  quarterData.GPA.percent +
                     "\n Calculated: " + quarterData.calcGPA.percent
                 );
 			}
 			else {
+                $("#current, #current_gpa, #init_gpa").html(
+                    "Current Quarter GPA: " + tableData.terms.current.GPA.percent
+                );
+                for (i = 1; i <= 4; i++) {
+                    $(`#q${i}, #q${i}_gpa`).html(
+                        "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent
+                    );
+                }
 				selectedElem.html(
                     quarterName + " GPA: " +  quarterData.GPA.percent
                 );
@@ -771,6 +825,7 @@ function responseCallbackPartial(response) {
 	  tableData.terms[currentTerm].calcGPA = parseTableData(response.classes).calcGPA;
 	  
 
+      /*
       if (currentTerm == 'current') {
         $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
@@ -782,6 +837,7 @@ function responseCallbackPartial(response) {
         $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent; 
       }
+      */
 
 
       scheduleTable.setData(tableData.schedule.black);
