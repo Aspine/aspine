@@ -625,7 +625,7 @@ let termsReset = {};
       outOfFour: cumGPA(2),
       outOfFive: cumGPA(3)
   };
-document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>Percent: " + tableData.cumGPA.percent + "</p><p>Unweighted: " + tableData.cumGPA.outOfFour + "</p><p>Weighted: " +  tableData.cumGPA.outOfFive +"</p>";//SET CUM GPA FIELD TO PERCENT 
+document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>Percent: " + tableData.cumGPA.percent.toFixed(2) + "</p><p>Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2) + "</p><p>Weighted: " +  tableData.cumGPA.outOfFive.toFixed(2) +"</p>";//SET CUM GPA FIELD TO PERCENT 
   
   // Calculate GPA for each quarter
   for (let i = 1; i <= 4; i++) {
@@ -696,14 +696,14 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
 		  
 	  }
 	  if(type == 1) {
-		  return (sumGPA/count).toFixed(2);
+		  return sumGPA/count;
 	  }
 	  if(type == 2) {
-		  return (sumOutOfFour/count).toFixed(2);
+		  return sumOutOfFour/count;
 		  
 	  }
 	  if(type == 3) {
-		  return (sumOutOfFive/count).toFixed(2);
+		  return sumOutOfFive/count;
 		  
 	  } 		 
 	}
