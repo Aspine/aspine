@@ -625,46 +625,7 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
   
   // Calculate GPA for each quarter
   for (let i = 1; i <= 4; i++) {
-  
-  
-  /* let sum = 0; // Sum of classes' grades
-    let count = 0; // Number of classes
-    let fourSum = 0; // Sum of classes' grades on 4.0 scale
-    let fiveSum = 0; // Sum of classes' grades on 5.0 scale
-   for (let overviewClass of tableData.overview) {
-        if (overviewClass["q" + i]) {
-           if (parseFloat(overviewClass["q" + i]) > 100) {
-                sum += 100;
-            } else {
-                sum += parseFloat(overviewClass["q" + i]);
-            }
-            count++;
-            
-            //--------GPA OUT OF 4.0
-            let curG = getGPA(overviewClass["q" + i]);
-            fourSum += curG;
-
-            //----WEIGHTED GPA (OUT OF 5.0)-------
-            fiveSum += curG;
-            if (overviewClass.class.includes("HN")) {
-                fiveSum += .5;
-            }
-            if (overviewClass.class.includes("AP")) {
-                fiveSum += 1;
-            }
-        }
-    }*/
-  
-  let GPAS = computeGPAQuarter(tableData.overview,i); 
-	 //  let GPAs = computeGPA(tableData.overview);
-	   //console.log(GPAs);
-  
- 	
-    tableData.terms["q" + i].GPA = {
-        percent: GPAS.percent,
-        outOfFour: GPAS.outOfFour,
-        outOfFive: GPAS.outOfFive
-    };
+    tableData.terms["q" + i].GPA = computeGPAQuarter(tableData.overview,i);
   }
 
           //Stuff to do now that tableData is initialized

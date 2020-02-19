@@ -210,13 +210,13 @@ function computeGPA(classes) {
 }
 
 
-function computeGPAQuarter(classes, i) {
+function computeGPAQuarter(overview, i) {
   
     let sum = 0; // Sum of classes' grades
      let count = 0; // Number of classes
      let fourSum = 0; // Sum of classes' grades on 4.0 scale
      let fiveSum = 0; // Sum of classes' grades on 5.0 scale
-    for (let overviewClass of tableData.overview) {
+    for (let overviewClass of overview) {
          if (overviewClass["q" + i]) {
             if (parseFloat(overviewClass["q" + i]) > 100) {
                  sum += 100;
