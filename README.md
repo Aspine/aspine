@@ -4,7 +4,7 @@ Who needs Aspen when you have Aspine. It serves as a one stop shop for everythin
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Aspen credentials.
+Using Aspine is as easy as 1, 2, 3. Just visit aspine.cpsd.us and login with your Aspen credentials.
 
 ## Features
 
@@ -29,7 +29,7 @@ Using Aspine is as easy as 1, 2, 3. Just visit aspine.us and login with your Asp
 
 Short answer: Aspine does not store any usernames or passwords.
 
-Long answer: Aspine works by simulating a login on Aspen and formatting the data received. In doing this, it must transmit your username and password to the Aspen server. However, your login information is transmitted completely over encrypted connections (HTTPS), and it is not retained by Aspine at all. This can be verified by anyone who can read code, as all of our code is out in the open on this repository. If you are particularly paranoid, you can run Aspine locally on your computer instead of using the <https://aspine.us> instance; instructions are below in the section "Contributing / Locally Running Aspine".
+Long answer: Aspine works by simulating a login on Aspen and formatting the data received. In doing this, it must transmit your username and password to the Aspen server. However, your login information is transmitted completely over encrypted connections (HTTPS), and it is not retained by Aspine at all. This can be verified by anyone who can read code, as all of our code is out in the open on this repository. If you are particularly paranoid, you can run Aspine locally on your computer instead of using the <https://aspine.cpsd.us> instance; instructions are below in the section "Contributing / Locally Running Aspine".
 
 ##### How are calculated grades computed?
 
