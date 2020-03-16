@@ -728,7 +728,9 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
                 for (i = 1; i <= 4; i++) {
                     $(`#q${i}, #q${i}_gpa`).html(
                         "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour +
-                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
+                        (tableData.terms["q" + i].calcGPA ? (
+                            "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
+                        ) : "")
                     );
                 }
                 selectedElem.html(
@@ -759,7 +761,9 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
                 for (i = 1; i <= 4; i++) {
                     $(`#q${i}, #q${i}_gpa`).html(
                         "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive +
-                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
+                        (tableData.terms["q" + i].calcGPA ? (
+                            "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
+                        ) : "")
                     );
                 }
                 selectedElem.html(
@@ -790,7 +794,9 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
                 for (i = 1; i <= 4; i++) {
                     $(`#q${i}, #q${i}_gpa`).html(
                         "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent +
-                        "\n Calculated: " + tableData.terms["q" + i].calcGPA.percent
+                        (tableData.terms["q" + i].calcGPA ? (
+                            "\n Calculated: " + tableData.terms["q" + i].calcGPA.percent
+                        ) : "")
                     );
                 }
                 selectedElem.html(
