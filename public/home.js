@@ -636,7 +636,7 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
     initialize_quarter_dropdown();
               termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
 
-              $(".select-selected").html("Current Quarter GPA Percent: " + tableData.currentTermData.GPA.percent);
+              $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
     $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
     document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
     document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
