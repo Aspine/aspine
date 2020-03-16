@@ -114,6 +114,9 @@ Secondary Colors:
 | 0    - 59.4   | F             |Red            |#eb4747          |
 
 
+## Privacy
+
+Our privacy policy can be viewed at <https://www.cpsd.us/privacy>.
 
 ## License
 
