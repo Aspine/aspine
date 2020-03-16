@@ -76,7 +76,7 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
 
     } else {
-	    tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes,termConverter.indexOf(currentTerm));
+	    tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
   
   
   
