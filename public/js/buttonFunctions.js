@@ -156,19 +156,19 @@ let updateGradePage = function() {
       if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter GPA: " + tableData.terms.current.GPA.percent +
-          "\n Calculated: " + tableData.terms.current.calcGPA.percent
+          "<br> Calculated: " + tableData.terms.current.calcGPA.percent
         );
         for (i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent +
             (tableData.terms["q" + i].calcGPA ? (
-              "\n Calculated: " + tableData.terms["q" + i].calcGPA.percent
+              "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent
             ) : "")
           );
         }
         selectedElem.html(
           quarterName + " GPA: " + quarterData.GPA.percent +
-          "\n Calculated: " + quarterData.calcGPA.percent
+          "<br> Calculated: " + quarterData.calcGPA.percent
         );
       }
       else {
@@ -189,19 +189,19 @@ let updateGradePage = function() {
       if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour +
-          "\n Calculated: " + tableData.terms.current.calcGPA.outOfFour
+          "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour
         );
         for (i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour +
               (tableData.terms["q" + i].calcGPA ? (
-                "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
+                "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
               ) : "")
           );
         }
         selectedElem.html(
           quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
-          "\n Calculated: " + quarterData.calcGPA.outOfFour
+          "<br> Calculated: " + quarterData.calcGPA.outOfFour
         );
       }
       else {
@@ -222,19 +222,19 @@ let updateGradePage = function() {
       if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive +
-          "\n Calculated: " + tableData.terms.current.calcGPA.outOfFive
+          "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive
         );
         for (i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive +
             (tableData.terms["q" + i].calcGPA ? (
-              "\n Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
+              "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
             ) : "")
           );
         }
         selectedElem.html(
           quarterName + " Weighted: " + quarterData.GPA.outOfFive +
-          "\n Calculated: " + quarterData.calcGPA.outOfFive
+          "<br> Calculated: " + quarterData.calcGPA.outOfFive
         );
       }
       else {
