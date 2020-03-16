@@ -816,13 +816,13 @@ document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>P
 
 function responseCallbackPartial(response) {
   $("#loader").hide();
-
-      tableData.currentTermData = parseTableData(response.classes);
       
+      tableData.currentTermData = tableData.terms[currentTerm];
+
       let temp_term_data = parseTableData(response.classes);
       tableData.terms[currentTerm].classes = temp_term_data.classes;
-      tableData.terms[currentTerm].GPA = temp_term_data.calcGPA;      
-	  tableData.terms[currentTerm].calcGPA = parseTableData(response.classes).calcGPA;
+      tableData.terms[currentTerm].GPA = temp_term_data.GPA;
+      tableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
 	  
 
       /*
