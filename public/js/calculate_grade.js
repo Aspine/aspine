@@ -248,7 +248,7 @@ function computeGPAQuarter(overview, i) {
 
 }
 
-function cumGPA() {
+function cumGPA(overview) {
     let sumGPA = 0;
     let sumOutOfFour = 0;
     let sumOutOfFive = 0;
@@ -256,10 +256,10 @@ function cumGPA() {
     let count = 0;
     for (var i = 1; i <= 4; i++) {
         
-        if (!isNaN(computeGPAQuarter(tableData.overview, i).percent)) {
-            sumGPA += computeGPAQuarter(tableData.overview, i).percent;
-            sumOutOfFour += computeGPAQuarter(tableData.overview, i).outOfFour;
-            sumOutOfFive += computeGPAQuarter(tableData.overview, i).outOfFive;
+        if (!isNaN(computeGPAQuarter(overview, i).percent)) {
+            sumGPA += computeGPAQuarter(overview, i).percent;
+            sumOutOfFour += computeGPAQuarter(overview, i).outOfFour;
+            sumOutOfFive += computeGPAQuarter(overview, i).outOfFive;
             
             count++;
         }
