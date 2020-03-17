@@ -59,9 +59,9 @@ function cumGPA() {
 
   }
   return {
-    percent: sumGPA / count,
-    outOfFour: sumOutOfFour / count,
-    outOfFive: sumOutOfFive / count
+    percent: Math.round(sumGPA / count * 100) / 100,
+    outOfFour: Math.round(sumOutOfFour / count * 100) / 100,
+    outOfFive: Math.round(sumOutOfFive / count * 100) / 100
   };
 }
 function GPAType() {
@@ -84,20 +84,20 @@ function GPAType() {
   if (selectedElem.html().includes("GPA")) {
     if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour
+        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour +
+          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
           ) : "")
         );
       }
       selectedElem.html(
-        quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
-        "<br> Calculated: " + quarterData.calcGPA.outOfFour
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
@@ -105,15 +105,15 @@ function GPAType() {
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour
+        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour
+          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
         );
       }
       selectedElem.html(
-        quarterName + " Unweighted: " + quarterData.GPA.outOfFour
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
@@ -123,20 +123,20 @@ function GPAType() {
   else if (selectedElem.html().includes("Unweighted")) {
     if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive
+        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive +
+          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
           ) : "")
         );
       }
       selectedElem.html(
-        quarterName + " Weighted: " + quarterData.GPA.outOfFive +
-        "<br> Calculated: " + quarterData.calcGPA.outOfFive
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
@@ -144,15 +144,15 @@ function GPAType() {
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive
+        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive
+          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
         );
       }
       selectedElem.html(
-        quarterName + " Weighted: " + quarterData.GPA.outOfFive
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
@@ -162,20 +162,20 @@ function GPAType() {
   else if (selectedElem.html().includes("Weighted")) {
     if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.percent
+        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent +
+          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent.toFixed(2)
           ) : "")
         );
       }
       selectedElem.html(
-        quarterName + " GPA: " + quarterData.GPA.percent +
-        "<br> Calculated: " + quarterData.calcGPA.percent
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
@@ -183,15 +183,15 @@ function GPAType() {
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent
+        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
       );
       for (i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent
+          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
         );
       }
       selectedElem.html(
-        quarterName + " GPA: " + quarterData.GPA.percent
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
         "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
