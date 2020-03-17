@@ -248,6 +248,29 @@ function computeGPAQuarter(overview, i) {
 
 }
 
+function cumGPA() {
+    let sumGPA = 0;
+    let sumOutOfFour = 0;
+    let sumOutOfFive = 0;
+    
+    let count = 0;
+    for (var i = 1; i <= 4; i++) {
+        
+        if (!isNaN(computeGPAQuarter(tableData.overview, i).percent)) {
+            sumGPA += computeGPAQuarter(tableData.overview, i).percent;
+            sumOutOfFour += computeGPAQuarter(tableData.overview, i).outOfFour;
+            sumOutOfFive += computeGPAQuarter(tableData.overview, i).outOfFive;
+            
+            count++;
+        }
+        
+    }
+    return {
+        percent: Math.round(sumGPA / count * 100) / 100,
+        outOfFour: Math.round(sumOutOfFour / count * 100) / 100,
+        outOfFive: Math.round(sumOutOfFive / count * 100) / 100
+    };
+}
 
 function doCalculations(assignments, categories) {
 
