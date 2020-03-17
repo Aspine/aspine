@@ -78,7 +78,7 @@ app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-app.use(express.static('../public')); // Serve any files in public directory
+app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
 app.use(session({
