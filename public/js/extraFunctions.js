@@ -99,6 +99,9 @@ function GPAType() {
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
         "<br> Calculated: " + quarterData.calcGPA.outOfFour
       );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+      );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
@@ -111,6 +114,9 @@ function GPAType() {
       }
       selectedElem.html(
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
       );
     }
   }
@@ -132,6 +138,9 @@ function GPAType() {
         quarterName + " Weighted: " + quarterData.GPA.outOfFive +
         "<br> Calculated: " + quarterData.calcGPA.outOfFive
       );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+      );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
@@ -144,6 +153,9 @@ function GPAType() {
       }
       selectedElem.html(
         quarterName + " Weighted: " + quarterData.GPA.outOfFive
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
       );
     }
   }
@@ -165,6 +177,9 @@ function GPAType() {
         quarterName + " GPA: " + quarterData.GPA.percent +
         "<br> Calculated: " + quarterData.calcGPA.percent
       );
+      $("#cum, #cum_gpa").html(
+        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+      );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
@@ -177,6 +192,9 @@ function GPAType() {
       }
       selectedElem.html(
         quarterName + " GPA: " + quarterData.GPA.percent
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
       );
     }
   }
@@ -731,7 +749,7 @@ let initialize_quarter_dropdown = function() {
     create a new DIV that will act as an option item: */
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
-      c.id = termConverter[j - 1];
+      c.id = termConverter[j - 1] || "cum";
       // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("None")) {

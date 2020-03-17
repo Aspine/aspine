@@ -621,7 +621,7 @@ let termsReset = {};
   tableData.overview = response.overview;
   
   tableData.cumGPA = cumGPA();
-document.getElementById("cumGPA").innerHTML = "<h3>Cumulative GPA:</h3>" + "<p>Percent: " + tableData.cumGPA.percent.toFixed(2) + "</p><p>Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2) + "</p><p>Weighted: " +  tableData.cumGPA.outOfFive.toFixed(2) +"</p>";//SET CUM GPA FIELD TO PERCENT 
+  document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2);
   
   // Calculate GPA for each quarter
   for (let i = 1; i <= 4; i++) {

@@ -170,6 +170,9 @@ let updateGradePage = function() {
           quarterName + " GPA: " + quarterData.GPA.percent +
           "<br> Calculated: " + quarterData.calcGPA.percent
         );
+        $("#cum, #cum_gpa").html(
+          "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+        );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
@@ -182,6 +185,9 @@ let updateGradePage = function() {
         }
         selectedElem.html(
           quarterName + " GPA: " + quarterData.GPA.percent
+        );
+        $("#cum, #cum_gpa").html(
+          "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
         );
       }
     }
@@ -203,6 +209,9 @@ let updateGradePage = function() {
           quarterName + " Unweighted: " + quarterData.GPA.outOfFour +
           "<br> Calculated: " + quarterData.calcGPA.outOfFour
         );
+        $("#cum, #cum_gpa").html(
+          "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+        );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
@@ -215,6 +224,9 @@ let updateGradePage = function() {
         }
         selectedElem.html(
           quarterName + " Unweighted: " + quarterData.GPA.outOfFour
+        );
+        $("#cum, #cum_gpa").html(
+          "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
         );
       }
     }
@@ -236,6 +248,9 @@ let updateGradePage = function() {
           quarterName + " Weighted: " + quarterData.GPA.outOfFive +
           "<br> Calculated: " + quarterData.calcGPA.outOfFive
         );
+        $("#cum, #cum_gpa").html(
+          "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+        );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
@@ -248,6 +263,9 @@ let updateGradePage = function() {
         }
         selectedElem.html(
           quarterName + " Weighted: " + quarterData.GPA.outOfFive
+        );
+        $("#cum, #cum_gpa").html(
+          "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
         );
       }
     }
