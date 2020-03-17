@@ -1,3 +1,8 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+// https://unix.stackexchange.com/a/65295
+
+
 const express = require('express');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
