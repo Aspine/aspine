@@ -1,9 +1,12 @@
+const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
-let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdfrendering = false;
 let statsModal = document.getElementById('stats_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
+let tableData = {};
+let selected_class_i;
+let termsReset = {};
 
 // When the user clicks anywhere outside of the modal, close it
 window.addEventListener("click", function(event) {
@@ -48,10 +51,6 @@ let noStats = function() {
     //document.getElementById("stats_modal_content").style.margin = "300px auto";
     document.getElementById("stats_modal_content").style.top = "140px";
 }
-
-let tableData = {};
-let selected_class_i;
-let termsReset = {};
 
 let recentAttendance = new Tabulator("#recentAttendance", {
     //	height: 400,
