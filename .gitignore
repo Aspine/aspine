@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 db/*.rdb
 usage_log.txt
 .DS_Store
