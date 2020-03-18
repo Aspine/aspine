@@ -149,6 +149,7 @@ async function scrape_pdf(username, password, i) {
         let deliveryRecipients = [];
         let filenames = [];
         let titles = [];
+        let auths = [];
         $('.portletListCell').each(function(i, elem) {
             if ($(this).attr('id')) {
                 let raw = ($(this).children().first().children().first().html());
@@ -156,6 +157,7 @@ async function scrape_pdf(username, password, i) {
                 oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
 
                 deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
+                auths.push(raw.substr(raw.indexOf("Recipient") + 10 + 14 + 6 + 4, 28))
 
                 
                 let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
@@ -174,9 +176,10 @@ async function scrape_pdf(username, password, i) {
         let deliveryRecipient = deliveryRecipients[i];
         let filename = filenames[i];
         let title = titles[i];
+        let auth = auths[i];
 
-        (await fetch_body(
-            "https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&deploymentId=x2sis",
+        let temp_response = (await fetch(
+            "https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=" + oid + "&reportDeliveryRecipient=" + deliveryRecipient + "&auth=" + auth + "&deploymentId=x2sis",
             {
                 "credentials": "include",
                 "headers": {
@@ -190,15 +193,18 @@ async function scrape_pdf(username, password, i) {
                     "Accept-Encoding": HEADERS["Accept-Encoding"],
                     "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id
                 },
+                redirect: 'manual-dont-change',
                 "referrerPolicy": "strict-origin-when-cross-origin",
                 "body": null,
                 "method": "GET",
                 "mode": "cors"
             }
         ));
+      let location = temp_response.headers.get('location');
+      let auth2 = location.substr(location.indexOf('auth') + 5, 28);
 
         fileReturn = (await fetch_file(
-            "https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true",
+            "https://aspen.cpsd.us/aspen/toolResult.do?&fileName=" + filename + "&downLoad=true&auth=" + auth2,
             {
                 "credentials": "include",
                 "headers": {
@@ -207,17 +213,27 @@ async function scrape_pdf(username, password, i) {
                     "Cache-Control": "no-cache",
                     "Upgrade-Insecure-Requests": "1",
                     "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
+                    'Sec-Fetch-Dest': 'document',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    'Sec-Fetch-Site': 'same-origin',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-User': '?1',
                     "Accept-Language": HEADERS["Accept-Language"],
                     "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id
+                     "Cookie": "deploymentId=x2sis; JSESSIONID=" + session.session_id + "_ga=GA1.3.306437330.1583611357; _gid=GA1.3.124021902.1583611357"
                 },
-                "referrerPolicy": "strict-origin-when-cross-origin",
                 "body": null,
                 "method": "GET",
                 "mode": "cors"
             }
         ));
+
+      // For testing output
+      // fs.writeFile(i + 'out.pdf', fileReturn, "binary", (err) => {
+      //   if (err) {
+      //   console.log("Error on PDF Download: " + err)
+      //   };
+      // });
 
         log(i, "closing");
 
@@ -1091,7 +1107,6 @@ async function fetch_file(url, options) {
             resolve(pdf_out);
         });
     });
-
 }
 
 
@@ -1127,7 +1142,7 @@ if (require.main === module) {
         //});
 
         // Print Stringified scrape_student() - good for checking json return
-        console.log(JSON.stringify(await scrape_student(result.username, result.password, 0)));
+        (JSON.stringify(await scrape_pdf_files(result.username, result.password)));
         
         // Print scrape_student() - good for checking fetch html return
         //console.log((await scrape_student(result.username, result.password)));

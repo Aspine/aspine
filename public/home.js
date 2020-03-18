@@ -856,6 +856,22 @@ if (tab_name == "reports") {
           else if (typeof tableData.pdf_files !== 'undefined') {
               generate_pdf(pdf_index);
           }
+          // Redraw PDF to fit new viewport dimensions when transitioning
+          // in or out of fullscreen
+          let elem = document.getElementById("reports");
+          let handlefullscreenchange = function() {
+              console.log("fullscreen change");
+              window.setTimeout(generate_pdf(currentPdfIndex), 1000);
+            };
+          if (elem.onfullscreenchange !== undefined) {
+              elem.onfullscreenchange = handlefullscreenchange;
+          }
+          else if (elem.mozonfullscreenchange !== undefined) { // Firefox
+              elem.mozonfullscreenchange = handlefullscreenchange;
+          }
+          else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
+              elem.MSonfullscreenchange = handlefullscreenchange;
+          }
       }
       if (tab_name == "schedule" && !tableData.schedule) {
           $.ajax({
