@@ -1,4 +1,3 @@
-////////////////////Global Variables///////
 let pdf_index = 0;
 let termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdfrendering = false;
@@ -16,31 +15,31 @@ window.addEventListener("click", function(event) {
 });
 
 $('#stats_plot').width($(window).width() * 7 / 11);
+/*
 window.addEventListener('resize', function() { 
-    // console.log("Resizing");
-    // if ($('#stats_plot').is(":visible")) { 
+    console.log("Resizing");
+    if ($('#stats_plot').is(":visible")) {
     
-    //   Plotly.Plots.resize(document.getElementById('stats_plot')); 
-    //   let update_size = {
-    //     //width: 800,  // or any new width
-    //     width: $('#stats_modal_content').width(),
-    //     height: 120  // " "
-    //   };
+      Plotly.Plots.resize(document.getElementById('stats_plot')); 
+      let update_size = {
+        //width: 800,  // or any new width
+        width: $('#stats_modal_content').width(),
+        height: 120  // " "
+      };
     
-    //   Plotly.relayout('stats_plot', update_size);
-    // }
+      Plotly.relayout('stats_plot', update_size);
+    }
     
-    // if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') { 
-    //   generate_pdf(pdf_index);
-    // }
+    if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') { 
+      generate_pdf(pdf_index);
+    }
 });
+*/
 let hideModal = function() {
     document.getElementById('stats_modal').style.display = "none";
     noStats();
 }
 let noStats = function() {
-    //document.getElementById("there_are_stats").style.display = "none";
-    //document.getElementById("there_are_stats").style.display = "none";
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
     document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
@@ -50,10 +49,8 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.top = "140px";
 }
 
-//let request = require('request');
 let tableData = {};
 let selected_class_i;
-//let classesReset = {};
 let termsReset = {};
 
 let recentAttendance = new Tabulator("#recentAttendance", {
@@ -284,8 +281,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     let date_due = cell.getRow().getData().date_due;
                     let assignment_feedback = cell.getRow().getData().feedback;
                     if (assignment_feedback == "") {
-                        assignment_feedback = "None";   
-                        //"From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square. From this it follows that A is maximized when b = 0. b = 0 when $x = y$ which gives that A is maximized when the area takes the shape of a square.";
+                        assignment_feedback = "None";
                     }
                     
                     let stats = await window.getStats(session_id, apache_token, assignment_id);
