@@ -1,4 +1,6 @@
-#!/usr/bin/node
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+// https://unix.stackexchange.com/a/65295
 
 
 // --------------- Parameters ----------------

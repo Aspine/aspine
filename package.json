@@ -2,7 +2,17 @@
   "name": "aspine",
   "version": "2.0.0",
   "description": "Aspen Scraper and Alternate Frontend",
-  "main": "serve.js",
+  "homepage": "https://github.com/maxtkc/aspine#readme",
+  "bugs": {
+    "url": "https://github.com/maxtkc/aspine/issues"
+  },
+  "license": "GPL-3.0-only",
+  "contributors": ["Max Katz-Christy", "Cole Killian"],
+  "main": "src/serve.js",
+  "repository": "github:Aspine/aspine",
+  "scripts": {
+    "start": "node src/serve.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
@@ -27,23 +37,5 @@
     "selenium-webdriver": "^4.0.0-alpha.1",
     "socket.io": "^2.2.0",
     "validator": "^10.11.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "serve": "./serve.js",
-    "scrape": "./scrape.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/maxtkc/aspine.git"
-  },
-  "author": "Max Katz-Christy, Cole Killian",
-  "license": "GPL-3.0-only",
-  "bugs": {
-    "url": "https://github.com/maxtkc/aspine/issues"
-  },
-  "homepage": "https://github.com/maxtkc/aspine#readme",
-  "directories": {
-    "test": "test"
   }
 }
