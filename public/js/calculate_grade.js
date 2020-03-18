@@ -174,20 +174,102 @@ function getRGB(gradeToBeColored) {
     }
 }
 
-function computeGPA() {
-    let sum = 0;
-    let counter = 0.0;
-    for (let i = 0; i < tableData.currentTermData.classes.length; i++) {
-        if (!isNaN(parseFloat(tableData.currentTermData.classes[i].calculated_grade))) {
-            if (parseFloat(tableData.currentTermData.classes[i].calculated_grade) > 100) {
+function computeGPA(classes) {
+    let sum = 0; // Sum of classes' grades
+    let count = 0; // Number of classes
+    let fourSum = 0; // Sum of classes' grades on 4.0 scale
+    let fiveSum = 0; // Sum of classes' grades on 5.0 scale
+    for (let classInfo of classes) {
+        if (!isNaN(parseFloat(classInfo.calculated_grade))) {
+            if (parseFloat(classInfo.calculated_grade) > 100) {
                 sum += 100;
             } else {
-                sum += parseFloat(tableData.currentTermData.classes[i].calculated_grade);
+                sum += parseFloat(classInfo.calculated_grade);
             }
-            counter += 1.0;
+            count++;
+
+            //--------GPA OUT OF 4.0
+            let curG = getGPA(classInfo.calculated_grade);
+            fourSum += curG;
+
+            //----WEIGHTED GPA (OUT OF 5.0)-------
+            fiveSum += curG;
+            if (classInfo.name.includes("HN")) {
+                fiveSum += .5;
+            }
+            if (classInfo.name.includes("AP")) {
+                fiveSum += 1;
+            }
         }
     }
-    return Math.round(sum / counter * 100) / 100;
+    return {
+        percent: Math.round(sum / count * 100) / 100,
+        outOfFour: Math.round(fourSum / count * 100) / 100,
+        outOfFive: Math.round(fiveSum / count * 100) / 100
+    };
+}
+
+
+function computeGPAQuarter(overview, i) {
+  
+    let sum = 0; // Sum of classes' grades
+     let count = 0; // Number of classes
+     let fourSum = 0; // Sum of classes' grades on 4.0 scale
+     let fiveSum = 0; // Sum of classes' grades on 5.0 scale
+    for (let overviewClass of overview) {
+         if (overviewClass["q" + i]) {
+            if (parseFloat(overviewClass["q" + i]) > 100) {
+                 sum += 100;
+             } else {
+                 sum += parseFloat(overviewClass["q" + i]);
+             }
+             count++;
+            
+             //--------GPA OUT OF 4.0
+             let curG = getGPA(overviewClass["q" + i]);
+             fourSum += curG;
+
+             //----WEIGHTED GPA (OUT OF 5.0)-------
+             fiveSum += curG;
+             if (overviewClass.class.includes("HN")) {
+                 fiveSum += .5;
+             }
+             if (overviewClass.class.includes("AP")) {
+                 fiveSum += 1;
+             }
+         }
+     }
+
+     return {
+         percent: Math.round(sum / count * 100) / 100,
+         outOfFour: Math.round(fourSum / count * 100) / 100,
+         outOfFive: Math.round(fiveSum / count * 100) / 100
+     };
+
+}
+
+function cumGPA(overview) {
+    let sumGPA = 0;
+    let sumOutOfFour = 0;
+    let sumOutOfFive = 0;
+    
+    let count = 0;
+    for (var i = 1; i <= 4; i++) {
+        
+        if (!isNaN(computeGPAQuarter(overview, i).percent)) {
+            sumGPA += computeGPAQuarter(overview, i).percent;
+            sumOutOfFour += computeGPAQuarter(overview, i).outOfFour;
+            sumOutOfFive += computeGPAQuarter(overview, i).outOfFive;
+            
+            count++;
+        }
+        
+    }
+    return {
+        percent: Math.round(sumGPA / count * 100) / 100,
+        outOfFour: Math.round(sumOutOfFour / count * 100) / 100,
+        outOfFive: Math.round(sumOutOfFive / count * 100) / 100
+    };
 }
 
 function doCalculations(assignments, categories) {

@@ -195,7 +195,7 @@ button {
 }
 
 
-.tab button#logout {
+.tab .tablinks-right {
   float: right;
 }
 

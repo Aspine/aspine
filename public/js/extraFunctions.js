@@ -41,6 +41,142 @@ function getGPA(gradeToBeGPA) {
   }
 }
 
+function GPAType() {
+  let selectElem = $("#gpa_select");
+  let selectedElem = $(".select-selected");
+  let selection = $("#gpa_select option")[selectElem.prop("selectedIndex")].value;
+
+  let quarterName = "";
+  let quarterData;
+
+  if (selection == 0) {
+    quarterName = "Current Quarter";
+    quarterData = tableData.terms.current;
+  }
+  else {
+    quarterName = "Q" + selection;
+    quarterData = tableData.terms["q" + selection];
+  }
+
+  if (selectedElem.html().includes("GPA")) {
+    if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
+          (tableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.html(
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
+        );
+      }
+      selectedElem.html(
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+      );
+    }
+  }
+  else if (selectedElem.html().includes("Unweighted")) {
+    if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
+          (tableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.html(
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
+        );
+      }
+      selectedElem.html(
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+      );
+    }
+  }
+  else if (selectedElem.html().includes("Weighted")) {
+    if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
+          (tableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.html(
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").html(
+        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
+      );
+      for (i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).html(
+          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
+        );
+      }
+      selectedElem.html(
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
+      );
+      $("#cum, #cum_gpa").html(
+        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+      );
+    }
+  }
+}
+
 let addAssignmentFormatter = function(value, data, cell, row, options) {
   return "<i class=\"fa fa-plus grades\"aria-hidden=\"true\"></i>";
 };
@@ -638,8 +774,8 @@ let initialize_quarter_dropdown = function() {
     create a new DIV that will act as an option item: */
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
-      c.id = termConverter[j - 1];
-      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA)) {
+      c.id = termConverter[j - 1] || "cum";
+      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("None")) {
         /* When an item is clicked, update the original select box,
@@ -872,8 +1008,8 @@ function parseTableData(classes) {
     }
   }
   tableData.currentTermData.classes = classes;
-  let GPA = computeGPA();
-  let calcGPA = computeGPA();
+  let GPA = computeGPA(tableData.currentTermData.classes);
+  let calcGPA = computeGPA(tableData.currentTermData.classes);
   return {
     classes,
     GPA,
