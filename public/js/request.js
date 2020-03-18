@@ -7,11 +7,12 @@ window.getStats = async function (session_id, apache_token, assignment_id) {
                 url: window.location.origin + "/stats",
                 // https://stackoverflow.com/a/406208
                 form: {session_id: session_id, apache_token: apache_token,
-                       assignment_id: assignment_id}
-            },
-            (err, httpResponse, body) => resolve(body)
-        );
-    });
-}
-
-//module.exports.getStats = getStats;
+                    assignment_id: assignment_id}
+                },
+                (err, httpResponse, body) => resolve(body)
+                );
+            });
+        }
+        
+        //module.exports.getStats = getStats;
+        

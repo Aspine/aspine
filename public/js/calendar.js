@@ -46,28 +46,28 @@ $(function() {
             }
         }
     })
-
+    
     init_calendar();
-
+    
     $('#calendar-list').change(refresh_calendar);
-
+    
     $('#add-calendar').submit(add_calendar);
     
     $('#calendar-edit-toggle').click(() => {
         $('#calendar-list-container').slideToggle();
     });
-
+    
     // Get the modal
     var modal = document.getElementById('calendar-add-modal');
-
+    
     // Get the <span> element that closes the modal
     var span = document.getElementById("calendar-add-close");
-
+    
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     }
-
+    
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
@@ -92,55 +92,56 @@ function init_calendar() {
                 if(settings.calendars.includes(calendar_list[i].name)) {
                     $('#calendar-list').append(
                         `<li><input type="checkbox" id="calendar-list-${i}" checked><label style="background-color:#${calendar_list[i].color}" for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
-                } else {
-                    $('#calendar-list').append(
-                        `<li><input type="checkbox" id="calendar-list-${i}"><label style="background-color:#${calendar_list[i].color}" for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
-                }
-            }
-            refresh_calendar();
-        });
-    });
-}
-
-// Add calendar by appending it to the db and selecting it
-function add_calendar() {
-    // ajax request to server to add calendar
-    $.post("/add-calendar", $('#add-calendar').serialize(), function (data) {
-        $('#calendar-add-modal').css("display", "none");
-        $('#calendar-list').append(
-            `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
-        refresh_calendar();
-        init_calendar();
-    }).fail(() => {
-        $('p#add-calendar-error').html(`Failed to add calendar: ${$('#add-calendar input[name=name]').val()}`);
-    });
-    return false; // Don't reload the page
-}
-
-// Use the checkboxes to find what calendars to display
-function refresh_calendar(){
-    $("#calendar").fullCalendar('removeEvents');
-    for(let i in calendar_list) {
-        if($(`#calendar-list-${i}`).prop('checked')) {
-            $("#calendar").fullCalendar('addEventSource',
-                {
-                    googleCalendarId: calendar_list[i].id,
-                    color: "#" + calendar_list[i].color
+                    } else {
+                        $('#calendar-list').append(
+                            `<li><input type="checkbox" id="calendar-list-${i}"><label style="background-color:#${calendar_list[i].color}" for="calendar-list-${i}">${calendar_list[i].name}</label></li>`);
+                        }
+                    }
+                    refresh_calendar();
                 });
+            });
         }
-    }
-    // save settings
-    save_settings();
-}
-
-function save_settings() {
-    // get calendar settings
-    let settings = {calendars: []};
-    $("#calendar-list input:checked").each((index, value) => {
-        settings.calendars.push($(value).next().html());
-    });
-    
-    // Save calendar settings
-    $.post("/set-settings", settings, function (data) {
-    });
-}
+        
+        // Add calendar by appending it to the db and selecting it
+        function add_calendar() {
+            // ajax request to server to add calendar
+            $.post("/add-calendar", $('#add-calendar').serialize(), function (data) {
+                $('#calendar-add-modal').css("display", "none");
+                $('#calendar-list').append(
+                    `<li><input type="checkbox" id="calendar-list-${calendar_list.length}" checked><label for="calendar-list-${calendar_list.length}">${$('#add-calendar input[name=name]').val()}</label></li>`);
+                    refresh_calendar();
+                    init_calendar();
+                }).fail(() => {
+                    $('p#add-calendar-error').html(`Failed to add calendar: ${$('#add-calendar input[name=name]').val()}`);
+                });
+                return false; // Don't reload the page
+            }
+            
+            // Use the checkboxes to find what calendars to display
+            function refresh_calendar(){
+                $("#calendar").fullCalendar('removeEvents');
+                for(let i in calendar_list) {
+                    if($(`#calendar-list-${i}`).prop('checked')) {
+                        $("#calendar").fullCalendar('addEventSource',
+                        {
+                            googleCalendarId: calendar_list[i].id,
+                            color: "#" + calendar_list[i].color
+                        });
+                    }
+                }
+                // save settings
+                save_settings();
+            }
+            
+            function save_settings() {
+                // get calendar settings
+                let settings = {calendars: []};
+                $("#calendar-list input:checked").each((index, value) => {
+                    settings.calendars.push($(value).next().html());
+                });
+                
+                // Save calendar settings
+                $.post("/set-settings", settings, function (data) {
+                });
+            }
+            
