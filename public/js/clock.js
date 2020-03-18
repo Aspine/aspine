@@ -110,9 +110,9 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_schedule(p3room, p3id) {
-    var floor = Math.floor(p3room / 1000);
-    var zone = Math.floor((p3room % 1000) / 100);
-    var subject = p3id.charAt(0);
+    let floor = Math.floor(p3room / 1000);
+    let zone = Math.floor((p3room % 1000) / 100);
+    let subject = p3id.charAt(0);
     if((floor == 2 || floor == 2) && subject != 'S') {
         document.getElementById("lunch_range").value = 1;
         return "regular-b";

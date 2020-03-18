@@ -468,12 +468,12 @@ let render_page_pdf = function(pageNumber) {
     canvas.width = viewport.width;
     canvas.height = viewport.height;
     
-    var renderContext = {
+    let renderContext = {
       canvasContext: context,
       viewport: viewport
     };
     
-    var renderTask = page.render(renderContext);
+    let renderTask = page.render(renderContext);
     renderTask.promise.then(function () {
       pdfrendering = false;
       // Another page rendering is pending
@@ -528,12 +528,12 @@ let zoom_in_pdf = function() {
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         
-        var renderContext = {
+        let renderContext = {
           canvasContext: context,
           viewport: viewport
         };
         
-        var renderTask = page.render(renderContext);
+        let renderTask = page.render(renderContext);
         renderTask.promise.then(function () {
           pdfrendering = false;
         });
@@ -567,12 +567,12 @@ let zoom_out_pdf = function() {
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         
-        var renderContext = {
+        let renderContext = {
           canvasContext: context,
           viewport: viewport
         };
         
-        var renderTask = page.render(renderContext);
+        let renderTask = page.render(renderContext);
         renderTask.promise.then(function () {
           pdfrendering = false;
         });
@@ -619,7 +619,7 @@ let next_page_pdf = function() {
 function pdf_closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
   except the current select box: */
-  var x, y, i, arrNo = [];
+  let x, y, i, arrNo = [];
   x = document.getElementsByClassName("pdf_select-items");
   y = document.getElementsByClassName("pdf_select-selected");
   for (i = 0; i < y.length; i++) {
@@ -640,7 +640,7 @@ function closeAllSelect(elmnt) {
   $('.select-items div').removeClass("activated-select-items");
   /* A function that will close all select boxes in the document,
   except the current select box: */
-  var x, y, i, arrNo = [];
+  let x, y, i, arrNo = [];
   x = document.getElementsByClassName("select-items");
   y = document.getElementsByClassName("select-selected");
   for (i = 0; i < y.length; i++) {
@@ -706,7 +706,7 @@ let initialize_pdf_dropdown = function() {
       c.addEventListener("click", function(e) {
         /* When an item is clicked, update the original select box,
         and the selected item: */
-        var y, i, k, s, h;
+        let y, i, k, s, h;
         s = this.parentNode.parentNode.getElementsByTagName("select")[0];
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
@@ -776,7 +776,7 @@ let initialize_quarter_dropdown = function() {
           and the selected item: */
           
           if (term_dropdown_active) {
-            var y, i, k, s, h;
+            let y, i, k, s, h;
             s = this.parentNode.parentNode.getElementsByTagName("select")[0];
             h = this.parentNode.previousSibling;
             for (i = 0; i < s.length; i++) {
@@ -960,7 +960,7 @@ function parseTableData(classes) {
           //an if statement to handle assignments with a special characteristic that includes a left and right parenthesis.
           if (("" + classes[i].assignments[j].special).includes("(") && ("" + classes[i].assignments[j].special).includes(")")) {
             // a reg expression to extract only the information from between the parenthesis.
-            var regExp = /\(([^)]+)\)/;
+            let regExp = /\(([^)]+)\)/;
             
             classes[i].assignments[j].score = (regExp.exec(classes[i].assignments[j].special))[1];
             classes[i].assignments[j].max_score = (regExp.exec(classes[i].assignments[j].special))[1];

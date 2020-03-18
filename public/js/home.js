@@ -83,14 +83,14 @@ let recentActivity = new Tabulator("#recentActivity", {
         $("#mostRecentDiv").hide();
         classesTable.selectRow(1);
         
-        var elem = document.getElementById("default_open");
-        var evt = new MouseEvent('click', {
+        let elem = document.getElementById("default_open");
+        let evt = new MouseEvent('click', {
             bubbles: true,
             cancelable: true,
             view: window
         });
         // If cancelled, don't dispatch our event
-        var canceled = !elem.dispatchEvent(evt);
+        let canceled = !elem.dispatchEvent(evt);
         
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
@@ -154,14 +154,14 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         
         classesTable.selectRow(1);
         
-        var elem = document.getElementById("default_open");
-        var evt = new MouseEvent('click', {
+        let elem = document.getElementById("default_open");
+        let evt = new MouseEvent('click', {
             bubbles: true,
             cancelable: true,
             view: window
         });
         // If cancelled, don't dispatch our event
-        var canceled = !elem.dispatchEvent(evt);
+        let canceled = !elem.dispatchEvent(evt);
         
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
@@ -305,7 +305,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                         // console.log("Graph Stats: " + graph_stats);
                         // console.log("Mean: " + mean)
                         
-                        var statsTrace = {
+                        let statsTrace = {
                             x: graph_stats,
                             type: 'box',
                             name: " ",
@@ -314,7 +314,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                                 color: '#ff66ff'
                             }
                         };
-                        var data = [statsTrace];
+                        let data = [statsTrace];
                         
                         let layout = {
                             title: " ",
@@ -844,7 +844,7 @@ function schedule_toggle() {
 
 function openTab(evt, tab_name) {
     // Declare all variables
-    var i, tabcontent, tablinks;
+    let i, tabcontent, tablinks;
     
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");

@@ -222,7 +222,7 @@ function cumGPA(overview) {
     let sumOutOfFive = 0;
     
     let count = 0;
-    for (var i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 4; i++) {
         
         if (!isNaN(computeGPAQuarter(overview, i).percent)) {
             sumGPA += computeGPAQuarter(overview, i).percent;
