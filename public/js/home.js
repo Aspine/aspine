@@ -17,6 +17,21 @@ window.addEventListener("click", function(event) {
     closeAllSelect();
 });
 
+window.getStats = async function(session_id, apache_token, assignment_id) {
+    return new Promise(async function(resolve, reject) {
+        $.ajax({
+            url: "/stats",
+            method: "POST",
+            data: {
+                session_id: session_id,
+                apache_token: apache_token,
+                assignment_id: assignment_id
+            },
+            success: response => resolve(response)
+        });
+    });
+};
+
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
 window.addEventListener('resize', function() { 
@@ -284,15 +299,13 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     }
                     
                     let stats = await window.getStats(session_id, apache_token, assignment_id);
+                    console.log(stats);
                     //let stats = '["8","6","8","7.5"]';
                     //let stats = 'No Statistics Data for this assignment';
                     
-                    if (stats.indexOf("[") === 0) {
-                        stats = stats.substring(1, stats.length - 1);
-                        
-                        stats = stats.split(",");
-                        stats = stats.map(x => parseFloat(x.substring(1, x.length)));
-                        // console.log("Raw Stats: " + stats);
+                    if (Array.isArray(stats)) {
+                        stats = stats.map(x => parseFloat(x));
+                        console.log("Raw Stats: " + stats);
                         let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
                         let q1 = (low + median) / 2, q3 = (high + median) / 2;
                         
