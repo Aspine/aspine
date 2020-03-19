@@ -177,29 +177,6 @@ function GPAType() {
   }
 }
 
-let addAssignmentFormatter = function(value, data, cell, row, options) {
-  return "<i class=\"fa fa-plus grades\"aria-hidden=\"true\"></i>";
-};
-
-let statInfoFormatter = function(cell, formatterParams) {
-  if (!isNaN(cell.getRow().getData().score)) {
-    return "<i class=\"fa fa-info\"aria-hidden=\"true\"></i>";
-  }
-}
-
-let statInfoHeaderFormatter = function(value, data, cell, row, options) {
-  return "<i class=\"fa fa-info-circle\"aria-hidden=\"true\"></i>";
-}
-
-let getAttendanceEvent = function(value, data, cell, row, options) {
-  return "Absent";
-};
-let hideCategoriesFormatter = function(value, data, cell, row, options) {
-  return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
-};
-let refreshClassFormatter = function(value, data, cell, row, options) {
-  return "<i class=\"fa fa-sync-alt\"aria-hidden=\"true\"></i>";
-};
 function getLetterGrade(gradeToBeLettered) {
   let parsed = parseFloat(gradeToBeLettered);
   if (parsed >= 96.5) {
@@ -272,28 +249,8 @@ function getLightColor(gradeToBeColored) {
   }
 }
 
-let classesRowFormatter = function(cell, formatterParams) {
+let rowFormatter = function(cell) {
   let rowColor = cell.getRow().getData().color;
-  
-  let value = cell.getValue();
-  
-  if (vip_username_list.includes(tableData.username)) {
-    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-  }
-  
-  if (rowColor === "black") {
-    return value;
-  } else {
-    return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
-  }
-  
-  
-}
-
-let rowFormatter = function(cell, formatterParams) {
-  let numberGrade = parseFloat(cell.getValue());
-  let rowColor = cell.getRow().getData().color;
-  
   let value = cell.getValue();
   
   if (vip_username_list.includes(tableData.username)) {
