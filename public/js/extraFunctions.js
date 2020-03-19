@@ -198,7 +198,7 @@ let hideCategoriesFormatter = function(value, data, cell, row, options) {
   return "<i class=\"fa fa-eye-slash\"aria-hidden=\"true\"></i>";
 };
 let refreshClassFormatter = function(value, data, cell, row, options) {
-  return "<i class=\"fa fa-refresh\"aria-hidden=\"true\"></i>";
+  return "<i class=\"fa fa-sync-alt\"aria-hidden=\"true\"></i>";
 };
 function getLetterGrade(gradeToBeLettered) {
   let parsed = parseFloat(gradeToBeLettered);
@@ -892,39 +892,39 @@ let toggle_fullscreen_pdf = function() {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.mozRequestFullScreen) { /* Firefox */
       elem.mozRequestFullScreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
       let new_height = $(window).height();
       elem.webkitRequestFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.msRequestFullscreen) { /* IE/Edge */
       elem.msRequestFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     }
   } else { 
     
     if (document.exitFullscreen) {
       document.exitFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.mozCancelFullScreen) { /* Firefox */
       document.mozCancelFullScreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
       document.webkitExitFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
       
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand\" aria-hidden=\"true\"></i>");
+      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     }
   }
 }

@@ -271,7 +271,7 @@ let updateGradePage = function() {
                                                           }
                                                           
                                                           //document.getElementById("GPA").style.padding = "3.5px 16px 3.5px 16px";
-                                                          //+ " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>"
+                                                          //+ " <i class=\"fa fa-sync-alt\" aria-hidden=\"true\"></i>"
                                                           //document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
                                                         } else {
                                                           $(".select-selected").css("padding", "13px 16px 13px 16px");
