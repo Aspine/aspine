@@ -138,7 +138,13 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         {title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
         //filler column to match the assignments table
         //{title: "", width:1, align:"center", headerSort: false}, 
-        {title: "Hide", titleFormatter:hideCategoriesFormatter, headerClick: hideCategoriesTable, width:76, headerSort: false},
+        {
+            title: "Hide",
+            titleFormatter: () => '<i class="fa fa-eye-slash" aria-hidden="true"></i>',
+            headerClick: hideCategoriesTable,
+            width: 76,
+            headerSort: false
+        },
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         assignmentsTable.clearFilter();
@@ -268,8 +274,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: statInfoHeaderFormatter,
-            formatter: statInfoFormatter,
+            titleFormatter: () => '<i class="fa fa-info-circle" aria-hidden="true"></i>',
+            formatter: cell =>
+                (!isNaN(cell.getRow().getData().score)) ?
+                '<i class="fa fa-info" aria-hidden="true"></i>' : "",
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
@@ -463,7 +471,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Add",
-            titleFormatter: addAssignmentFormatter,
+            titleFormatter: () => '<i class="fa fa-plus grades" aria-hidden="true"></i>',
             headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
@@ -515,7 +523,19 @@ let classesTable = new Tabulator("#classesTable", {
         {
             title: "Class",
             field: "name",
-            formatter: classesRowFormatter,
+            formatter: cell => {
+                let rowColor = cell.getRow().getData().color;
+                let value = cell.getValue();
+
+                if (vip_username_list.includes(tableData.username)) {
+                    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
+                }
+                if (rowColor === "black") {
+                    return value;
+                } else {
+                    return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+                }
+            },
             headerSort: false,
         },
         {
@@ -527,7 +547,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Hide",
-            titleFormatter: refreshClassFormatter,
+            titleFormatter: () => '<i class="fa fa-sync-alt" aria-hidden="true"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
