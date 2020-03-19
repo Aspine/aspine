@@ -64,7 +64,7 @@ function GPAType() {
         "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
         "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
@@ -84,7 +84,7 @@ function GPAType() {
       $("#current, #current_gpa, #init_gpa").html(
         "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
         );
@@ -103,7 +103,7 @@ function GPAType() {
         "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
         "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
@@ -123,7 +123,7 @@ function GPAType() {
       $("#current, #current_gpa, #init_gpa").html(
         "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
         );
@@ -142,7 +142,7 @@ function GPAType() {
         "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
         "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
           (tableData.terms["q" + i].calcGPA ? (
@@ -162,7 +162,7 @@ function GPAType() {
       $("#current, #current_gpa, #init_gpa").html(
         "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
       );
-      for (i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
           "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
         );
@@ -276,14 +276,14 @@ let classColors = [
 ]
 
 let classIndex = function(classname) {
-  classesArray = tableData.currentTermData.classes.map(x => x.name);
+  let classesArray = tableData.currentTermData.classes.map(x => x.name);
   return (classesArray.indexOf(classname));
   // why the mod 8?
 }
 
 let classFormatter = function(cell, formatterParams) {
   let rowClass = cell.getRow().getData().classname;
-  classColor = classColors[classIndex(rowClass)];
+  let classColor = classColors[classIndex(rowClass)];
   let value = cell.getValue();
   
   if (vip_username_list.includes(tableData.username)) {
@@ -477,7 +477,7 @@ let zoom_in_pdf = function() {
         
         adjustedScale += 0.1;
         
-        viewport = page.getViewport({"scale": adjustedScale});
+        let viewport = page.getViewport({"scale": adjustedScale});
         
         let canvas = document.getElementById('pdf-canvas');
         let context = canvas.getContext('2d');
@@ -515,7 +515,7 @@ let zoom_out_pdf = function() {
         
         adjustedScale -= 0.1;
         
-        viewport = page.getViewport({"scale": adjustedScale});
+        let viewport = page.getViewport({"scale": adjustedScale});
         
         
         let canvas = document.getElementById('pdf-canvas');
@@ -971,7 +971,7 @@ let anyEdited = function() {
   let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
     return currentValue.edited
   });
-  finalDecision = false;
+  let finalDecision = false;
   termsEdited.forEach(function(editedMaybe) {
     if (editedMaybe == true) {
       finalDecision = true;

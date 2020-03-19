@@ -158,7 +158,7 @@ let updateGradePage = function() {
           "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
           "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
             (tableData.terms["q" + i].calcGPA ? (
@@ -178,7 +178,7 @@ let updateGradePage = function() {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
           );
@@ -197,7 +197,7 @@ let updateGradePage = function() {
           "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
           "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
             (tableData.terms["q" + i].calcGPA ? (
@@ -217,7 +217,7 @@ let updateGradePage = function() {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
             );
@@ -236,7 +236,7 @@ let updateGradePage = function() {
           "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
           "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
             (tableData.terms["q" + i].calcGPA ? (
@@ -256,7 +256,7 @@ let updateGradePage = function() {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
         );
-        for (i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
             "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
           );
