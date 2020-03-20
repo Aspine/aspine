@@ -49,7 +49,7 @@ function GPAType() {
   let quarterName = "";
   let quarterData;
 
-  if (selection == 0) {
+  if (selection === 0) {
     quarterName = "Current Quarter";
     quarterData = tableData.terms.current;
   }
@@ -580,7 +580,7 @@ function pdf_closeAllSelect(elmnt) {
   x = document.getElementsByClassName("pdf_select-items");
   y = document.getElementsByClassName("pdf_select-selected");
   for (i = 0; i < y.length; i++) {
-    if (elmnt == y[i]) {
+    if (elmnt === y[i]) {
       arrNo.push(i)
     } else {
       y[i].classList.remove("pdf_select-arrow-active");
@@ -601,7 +601,7 @@ function closeAllSelect(elmnt) {
   x = document.getElementsByClassName("select-items");
   y = document.getElementsByClassName("select-selected");
   for (i = 0; i < y.length; i++) {
-    if (elmnt == y[i]) {
+    if (elmnt === y[i]) {
       arrNo.push(i)
     } else {
       y[i].classList.remove("select-arrow-active");
@@ -628,7 +628,7 @@ let initialize_pdf_dropdown = function() {
   //$("#pdf-select").append(o);
   
   for (let i = 1; i < tableData.pdf_files.length + 1; i++) {
-    if (i == 1) {
+    if (i === 1) {
       let o = new Option(tableData.pdf_files[i - 1].title, 0);
       /// jquerify the DOM object 'o' so we can use the html method
       $(o).html(tableData.pdf_files[i - 1].title);
@@ -667,8 +667,8 @@ let initialize_pdf_dropdown = function() {
         s = this.parentNode.parentNode.getElementsByTagName("select")[0];
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            if (i == 0) {
+          if (s.options[i].innerHTML === this.innerHTML) {
+            if (i === 0) {
               pdf_index = i;
               generate_pdf(i);
               
@@ -737,8 +737,8 @@ let initialize_quarter_dropdown = function() {
             s = this.parentNode.parentNode.getElementsByTagName("select")[0];
             h = this.parentNode.previousSibling;
             for (i = 0; i < s.length; i++) {
-              if (s.options[i].innerHTML == this.innerHTML) {
-                if (i == 0) {
+              if (s.options[i].innerHTML === this.innerHTML) {
+                if (i === 0) {
                   currentTerm = termConverter[i];
                 } else {
                   currentTerm = termConverter[i - 1];
@@ -749,7 +749,7 @@ let initialize_quarter_dropdown = function() {
                 else $("#mostRecentDiv").hide();
                 
                 
-                if (typeof tableData.terms[currentTerm].classes == 'undefined') {
+                if (typeof tableData.terms[currentTerm].classes === 'undefined') {
                   // if (anyEdited()) {
                   // $(".select-selected").css('padding', "5px 16px 5px 16px");
                   // } else {
@@ -791,7 +791,7 @@ let initialize_quarter_dropdown = function() {
                     $(".select-selected").css("padding", "13px 16px 13px 16px");
                   }
                   
-                  if (i == 0) {
+                  if (i === 0) {
                     tableData.currentTermData = tableData.terms.current;
                   } else {
                     tableData.currentTermData = tableData.terms["q" + (i - 1)];
@@ -973,7 +973,7 @@ let anyEdited = function() {
   });
   let finalDecision = false;
   termsEdited.forEach(function(editedMaybe) {
-    if (editedMaybe == true) {
+    if (editedMaybe === true) {
       finalDecision = true;
     }
   });

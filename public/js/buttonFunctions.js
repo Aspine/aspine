@@ -67,7 +67,7 @@ let resetTableData = function() {
   
   if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
-    if (currentTerm == "current") {
+    if (currentTerm === "current") {
       $(".select-selected").css('padding', "5px 16px 5px 16px");
       $(".select-selected").html("Current Quarter GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
@@ -89,7 +89,7 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML = "Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
     }
   } else {
-    if (currentTerm == "current") {
+    if (currentTerm ==="current") {
       $(".select-selected").css("padding", "13px 16px 13px 16px");
       $(".select-selected").html("Current Quarter GPA: " + GPA.percent);
       
@@ -144,7 +144,7 @@ let updateGradePage = function() {
     let quarterData = tableData.terms[currentTerm];
     let quarterName;
     
-    if (currentTerm == "current") {
+    if (currentTerm === "current") {
       quarterName = "Current Quarter";
     }
     else {
@@ -153,7 +153,7 @@ let updateGradePage = function() {
     
     
     if (selectedElem.html().includes("GPA")) {
-      if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
+      if (quarterData.GPA.percent !== quarterData.calcGPA.percent) {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
           "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
@@ -192,7 +192,7 @@ let updateGradePage = function() {
       }
     }
     else if (selectedElem.html().includes("Unweighted")) {
-      if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
+      if (quarterData.GPA.outOfFour !== quarterData.calcGPA.outOfFour) {
         $("#current, #current_gpa, #init_gpa").html(
           "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
           "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)

@@ -10,7 +10,7 @@ let termsReset = {};
 
 // When the user clicks anywhere outside of the modal, close it
 window.addEventListener("click", function(event) {
-    if (event.target == statsModal) {
+    if (event.target === statsModal) {
         hideModal();
     }
     pdf_closeAllSelect();
@@ -111,11 +111,11 @@ let recentActivity = new Tabulator("#recentActivity", {
         classesTable.deselectRow();
         classesTable.selectRow(selected_class);
         //classesTable.getRows()
-        //    .filter(row => row.getData().name == selected_class)
+        //    .filter(row => row.getData().name === selected_class)
         //    .forEach(row => row.toggleSelect());
         
         for (let i in tabledata) {
-            if (tabledata[i].name == row.getData().classname) {
+            if (tabledata[i].name === row.getData().classname) {
                 assignmentsTable.setData(tabledata[i].assignments);
                 categoriesTable.setData(tabledata[i].categoryDisplay);
                 return;
@@ -188,11 +188,11 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         classesTable.deselectRow();
         classesTable.selectRow(selected_class);
         //classesTable.getRows()
-        //    .filter(row => row.getData().name == selected_class)
+        //    .filter(row => row.getData().name === selected_class)
         //    .forEach(row => row.toggleSelect());
         
         for (let i in tabledata) {
-            if (tabledata[i].name == row.getData().classname) {
+            if (tabledata[i].name === row.getData().classname) {
                 assignmentsTable.setData(tabledata[i].assignments);
                 categoriesTable.setData(tabledata[i].categoryDisplay);
                 return;
@@ -302,7 +302,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     let date_assigned = cell.getRow().getData().date_assigned;
                     let date_due = cell.getRow().getData().date_due;
                     let assignment_feedback = cell.getRow().getData().feedback;
-                    if (assignment_feedback == "") {
+                    if (assignment_feedback === "") {
                         assignment_feedback = "None";
                     }
                     
@@ -562,7 +562,7 @@ let classesTable = new Tabulator("#classesTable", {
         // console.log("set " + row.getPosition() + "as selected class");
         let tabledata = classesTable.getData();
         for (let i in tabledata) {
-            if (tabledata[i].name == row.getData().name) {
+            if (tabledata[i].name === row.getData().name) {
                 assignmentsTable.setData(tabledata[i].assignments);
                 categoriesTable.setData(tabledata[i].categoryDisplay);
                 return;
@@ -578,7 +578,7 @@ function responseCallback(response) {
         location.href='/logout';
     }
     
-    if (response.classes.length == 0) {
+    if (response.classes.length === 0) {
         response.classes = [{
             "name": "No Classes",
             "grade": "No Grades",
@@ -624,7 +624,7 @@ function responseCallback(response) {
     $("#loader").hide();
     
     //parsing the data extracted by the scrappers, and getting tableData ready for presentation
-    if (typeof tableData.terms == 'undefined') {
+    if (typeof tableData.terms === 'undefined') {
         tableData.terms = {
             current: {},
             q1: {},
@@ -634,7 +634,7 @@ function responseCallback(response) {
         };        
     }
     
-    if (typeof tableData.currentTermData == 'undefined') {
+    if (typeof tableData.currentTermData === 'undefined') {
         tableData.currentTermData = {};
     }
     tableData.currentTermData = parseTableData(response.classes);
@@ -711,7 +711,7 @@ function responseCallback(response) {
     
     $(".select-items").children().each(function(i, elem) {
         if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
-            if (i == 0) {
+            if (i === 0) {
                 $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA.percent);
                 document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
                 document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
@@ -753,7 +753,7 @@ function responseCallbackPartial(response) {
     tableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
     
     /*
-    if (currentTerm == 'current') {
+    if (currentTerm === 'current') {
         $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
@@ -889,7 +889,7 @@ function openTab(evt, tab_name) {
     document.getElementById(tab_name).style.display = "block";
     evt.currentTarget.className += " active";
     
-    if (tab_name == "clock") {
+    if (tab_name === "clock") {
         document.getElementById("small_clock").style.display = "none";
         document.getElementById("small_clock_period").style.display = "none";
     } else {
@@ -897,12 +897,12 @@ function openTab(evt, tab_name) {
         document.getElementById("small_clock_period").style.display = "block";
     }
     
-    if (tab_name == "grades") {
+    if (tab_name === "grades") {
         //$("#mostRecentDiv").show();
         mostRecentTable.redraw();
     }
     
-    if (tab_name == "reports") {
+    if (tab_name === "reports") {
         if (!tableData.pdf_files) {
             $("#loader").show();
             $.ajax({
@@ -933,7 +933,7 @@ function openTab(evt, tab_name) {
         }
     }
     
-    if (tab_name == "schedule" && !tableData.schedule) {
+    if (tab_name === "schedule" && !tableData.schedule) {
         $.ajax({
             url: "/schedule",
             method: "POST",
