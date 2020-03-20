@@ -1,8 +1,88 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+  font-family: Poppins-Regular;
+  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Poppins-Bold;
+  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Poppins-Medium;
+  src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Montserrat-Bold;
+  src: url('../fonts/montserrat/Montserrat-Bold.ttf'); 
+  font-display: swap;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+* {
+  margin: 0px; 
+  padding: 0px; 
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Poppins-Regular, sans-serif;
+}
+
+/*---------------------------------------------*/
+a {
+  font-family: Poppins-Regular;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #33752e;
+  margin: 0px;
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+}
+
+a:focus {
+  outline: none !important;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #57b846;
+}
+
+/*---------------------------------------------*/
+h1,h2,h3,h4,h5,h6 {
+  margin: 0px;
+}
+
+p {
+  font-family: Poppins-Regular;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666666;
+  margin: 0px;
+}
+
+ul, li {
+  margin: 0px;
+  list-style-type: none;
+}
+
 body {
   background-size: cover;
   background-color: #f7f7f7;
   text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 input {
@@ -25,15 +105,6 @@ h4#title {
   right: 0px;
   margin-left: 125px;
   margin-right: 125px;
-}
-
-.container-login100 {
-  background: #9053c7;
-  background: -webkit-linear-gradient(-135deg, #268A48, #003913);
-  background: -o-linear-gradient(-135deg, #268A48, #003913);
-  background: -moz-linear-gradient(-135deg, #268A48, #003913);
-  background: linear-gradient(-135deg, #268A48, #003913);
-
 }
 
 .tabulator-col {
@@ -247,22 +318,6 @@ div.tabcontent, div.tab {
   margin: auto;
   left: 0;
   right: 0;
-}
-
-.text-center.p-t-12.login100-form {
-  /* margin: auto; */
-  /* padding: 0; */
-  margin-top: 5px;
-  width: 100%;
-}
-
-.wrap-login100 {
-  padding: 5% 7.5% 5% 7.5%;
-}
-
-form.login100-form {
-  margin: auto 0 auto 0;
-  height: fit-content;
 }
 
 .logo {
