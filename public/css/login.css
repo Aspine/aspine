@@ -19,12 +19,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: Montserrat-Bold;
-  src: url('../fonts/montserrat/Montserrat-Bold.ttf'); 
-  font-display: swap;
-}
-
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 
@@ -329,7 +323,7 @@ iframe {
 }
 
 .login100-form-btn {
-  font-family: Montserrat-Bold;
+  font-family: Poppins-Medium;
   font-weight: bold;
   font-size: 15px;
   line-height: 1.5;
