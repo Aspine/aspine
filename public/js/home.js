@@ -18,7 +18,7 @@ window.addEventListener("click", function(event) {
 });
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         $.ajax({
             url: "/stats",
             method: "POST",
@@ -106,8 +106,8 @@ let recentActivity = new Tabulator("#recentActivity", {
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
-        selected_class = row.getData().classname;
-        tabledata = classesTable.getData();
+        let selected_class = row.getData().classname;
+        let tabledata = classesTable.getData();
         classesTable.deselectRow();
         classesTable.selectRow(selected_class);
         //classesTable.getRows()
@@ -183,8 +183,8 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
-        selected_class = row.getData().classname;
-        tabledata = classesTable.getData();
+        let selected_class = row.getData().classname;
+        let tabledata = classesTable.getData();
         classesTable.deselectRow();
         classesTable.selectRow(selected_class);
         //classesTable.getRows()
@@ -307,13 +307,12 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     }
                     
                     let stats = await window.getStats(session_id, apache_token, assignment_id);
-                    console.log(stats);
                     //let stats = '["8","6","8","7.5"]';
                     //let stats = 'No Statistics Data for this assignment';
                     
                     if (Array.isArray(stats)) {
                         stats = stats.map(x => parseFloat(x));
-                        console.log("Raw Stats: " + stats);
+                        //console.log("Raw Stats: " + stats);
                         let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
                         let q1 = (low + median) / 2, q3 = (high + median) / 2;
                         
@@ -561,7 +560,7 @@ let classesTable = new Tabulator("#classesTable", {
         document.getElementById("assignmentsTable").style.display = "block";
         selected_class_i = row.getPosition();
         // console.log("set " + row.getPosition() + "as selected class");
-        tabledata = classesTable.getData();
+        let tabledata = classesTable.getData();
         for (let i in tabledata) {
             if (tabledata[i].name == row.getData().name) {
                 assignmentsTable.setData(tabledata[i].assignments);

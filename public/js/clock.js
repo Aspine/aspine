@@ -16,7 +16,7 @@ large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
 
-xhttp = new XMLHttpRequest;
+let xhttp = new XMLHttpRequest;
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         schedules = JSON.parse(this.responseText);
@@ -160,10 +160,10 @@ function get_period_name(default_name) {
 
 function school_day() {
     let now = new Date();
-    if(now.getDay() % 6 == 0) { // If it's a weekend
-    return false;
-}
-return true;
+    if (now.getDay() % 6 == 0) { // If it's a weekend
+        return false;
+    }
+    return true;
 }
 
 function redraw_clock() {
@@ -175,44 +175,25 @@ function redraw_clock() {
     // let now = Date.now() - 5 * 60 * 60 * 1000;
     let now = Date.now() - 4 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
-    if(school_day()) {
+    let pos;
+    if (school_day()) {
         // let tod = 41399000; // Simulate time
         
         let current_period_i = 0;// Get current period from array
-        while(current_period_i < schedules[current_schedule].length - 1 &&
-            tod > schedules[current_schedule][current_period_i + 1].start) {
-                current_period_i++;
-            }
+        while (current_period_i < schedules[current_schedule].length - 1 &&
+                tod > schedules[current_schedule][current_period_i + 1].start) {
+            current_period_i++;
+        }
             
-            let current_period = schedules[current_schedule][current_period_i];
-            let next_period = schedules[current_schedule][current_period_i + 1];
-            
-            if(tod < current_period.start) { // Before school
-                period_name = "Before School";
-                pos = tod / current_period.start;
-                number = current_period.start - tod;
-            }
-            else if(!next_period && tod > current_period.end) { // After school
-                // Realtime
-                period_name = "";
-                pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
-                number = tod % (12 * 60 * 60 * 1000);
-                if(number < 1 * 60 * 60 * 1000) {
-                    number += 12 * 60 * 60 * 1000;
-                }
-            }
-            else if(tod > current_period.end) { // Between classes
-                period_name = get_period_name(current_period.name) +
-                " ➡ " + get_period_name(next_period.name);
-                pos = (tod - current_period.end) / (next_period.start - current_period.end);
-                number = next_period.start - tod;
-            }
-            else { // In class
-                period_name = get_period_name(current_period.name);
-                pos = (tod - current_period.start) / (current_period.end - current_period.start);
-                number = current_period.end - tod;
-            }
-        } else {
+        let current_period = schedules[current_schedule][current_period_i];
+        let next_period = schedules[current_schedule][current_period_i + 1];
+        
+        if(tod < current_period.start) { // Before school
+            period_name = "Before School";
+            pos = tod / current_period.start;
+            number = current_period.start - tod;
+        }
+        else if(!next_period && tod > current_period.end) { // After school
             // Realtime
             period_name = "";
             pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
@@ -221,18 +202,38 @@ function redraw_clock() {
                 number += 12 * 60 * 60 * 1000;
             }
         }
-        
-        // conver 0-1 to 0-2pi
-        pos = pos * 2 * Math.PI;
-        
-        drawFace(small_ctx, small_radius);
-        drawName(period_name);
-        drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
-        drawNumber(small_ctx, small_radius, pos, number);
-        
-        drawFace(large_ctx, large_radius);
-        drawName(period_name);
-        drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
-        drawNumber(large_ctx, large_radius, pos, number);
+        else if(tod > current_period.end) { // Between classes
+            period_name = get_period_name(current_period.name) +
+            " ➡ " + get_period_name(next_period.name);
+            pos = (tod - current_period.end) / (next_period.start - current_period.end);
+            number = next_period.start - tod;
+        }
+        else { // In class
+            period_name = get_period_name(current_period.name);
+            pos = (tod - current_period.start) / (current_period.end - current_period.start);
+            number = current_period.end - tod;
+        }
+    } else {
+        // Realtime
+        period_name = "";
+        pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
+        number = tod % (12 * 60 * 60 * 1000);
+        if(number < 1 * 60 * 60 * 1000) {
+            number += 12 * 60 * 60 * 1000;
+        }
     }
+    
+    // conver 0-1 to 0-2pi
+    pos = pos * 2 * Math.PI;
+    
+    drawFace(small_ctx, small_radius);
+    drawName(period_name);
+    drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
+    drawNumber(small_ctx, small_radius, pos, number);
+    
+    drawFace(large_ctx, large_radius);
+    drawName(period_name);
+    drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
+    drawNumber(large_ctx, large_radius, pos, number);
+}
     

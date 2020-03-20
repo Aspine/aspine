@@ -28,7 +28,7 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
         
         let categoryPercent = 0, counterWeight = 1;
         
-        for (category in categories) {
+        for (let category in categories) {
             if (categoryMaxScores[category] === 0) {
                 counterWeight -= parseFloat(categories[category]);
                 categoryGrades[category] = "N/A";
@@ -41,7 +41,7 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
         categoryPercent /= counterWeight;
         
         let totalPercent = totalScore / totalMaxScore;
-        output = (parseFloat(grade)/100) + categoryPercent - parseFloat(init_grade);
+        let output = (parseFloat(grade)/100) + categoryPercent - parseFloat(init_grade);
         
         return {
             categoryPercent: "" + (Math.round(output * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
@@ -83,7 +83,7 @@ function determineGradeType(assignments, categories, currentGrade) {
         }
         
         let categoryPercent = 0, counterWeight = 1;
-        for (category in categories) {
+        for (let category in categories) {
             if (categoryMaxScores[category] === 0) {
                 counterWeight -= parseFloat(categories[category]);
                 categoryGrades[category] = "N/A";
@@ -125,23 +125,6 @@ function getWeight(category, constCategories, constWeights) {
         }
     }
     return "Weight Not Found";
-}
-
-
-function getRGB(gradeToBeColored) {
-    if (parseFloat(gradeToBeColored) >= 90) {
-        return rgb[0];
-    } else if (parseFloat(gradeToBeColored) >= 80) {
-        return rgb[1];
-    } else if (parseFloat(gradeToBeColored) >= 70) {
-        return rgb[2];
-    } else if (parseFloat(gradeToBeColored) >= 60) {
-        return rgb[3];
-    } else if (parseFloat(gradeToBeColored) >= 0) {
-        return rgb[4];
-    } else {
-        return 'rgb(255,255,255)';
-    }
 }
 
 function computeGPA(classes) {
@@ -249,9 +232,6 @@ function doCalculations(assignments, categories) {
         categoryGrades[category] = 0;
     }
     
-    
-    
-    
     let totalScore = 0, totalMaxScore = 0;
     
     if (Object.keys(categories).length === 0) {
@@ -259,11 +239,8 @@ function doCalculations(assignments, categories) {
             totalScore += parseFloat(assignments[j].score);
             totalMaxScore += parseFloat(assignments[j].max_score);
         }
-        
         let totalPercent = totalScore / totalMaxScore;
-        
         return "" + (Math.round(totalPercent * 10000) / 100);
-        
     } else {
         for (let i = 0; i < assignments.length; i++) {
             if (!isNaN(assignments[i].score)) {
@@ -274,10 +251,8 @@ function doCalculations(assignments, categories) {
                 categoryMaxScores[assignments[i].category] += parseFloat(assignments[i].max_score);
             }
         }
-        
         let categoryPercent = 0, counterWeight = 1;
-        
-        for (category in categories) {
+        for (let category in categories) {
             if (categoryMaxScores[category] === 0) {
                 counterWeight -= parseFloat(categories[category]);
                 categoryGrades[category] = "N/A";
@@ -286,18 +261,16 @@ function doCalculations(assignments, categories) {
                 categoryPercent += ((0.0 + categoryScores[category]) / categoryMaxScores[category]) * parseFloat(categories[category]);
             }
         }
-        
         categoryPercent /= counterWeight;
         let totalPercent = totalScore / totalMaxScore;
+        return {
+            categoryScores,
+            categoryMaxScores,
+            categoryGrades,
+            categoryPercent,
+            totalPercent,
+        };
     }
-    
-    return {
-        categoryScores,
-        categoryMaxScores,
-        categoryGrades,
-        categoryPercent,
-        totalPercent,
-    };
 }
 
 let getCategoryDisplay = function (gradeInfo, computingClassData) {
