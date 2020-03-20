@@ -38,11 +38,6 @@ TERM_NAMES[0] = TERM_NAMES[CURRENT_QUARTER];
 // --------------- Includes ------------------
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const express = require('express');
-const util = require('util');
-const concat = require('concat-stream');
-const fs = require('fs');
-const streams = require('memory-streams');
 
 // Initialize with the string
 
