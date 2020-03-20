@@ -108,7 +108,7 @@ h4#title {
 }
 
 .tabulator-col {
-    height:  35px;
+  height: 35px;
 }
 
 button {
@@ -346,41 +346,41 @@ div.tabcontent, div.tab {
 }
 
 i.fa.fa-plus.grades {
-    color: #00551C;
-    padding-left: 31%;
-    padding-top: 25%;
-    font-size: large;
-    cursor: pointer;
+  color: #00551C;
+  padding-left: 31%;
+  padding-top: 25%;
+  font-size: large;
+  cursor: pointer;
 }
 
 i.fa.fa-info-circle {
-    color: #00551C;
-    padding-left: 31%;
-    padding-top: 25%;
-    font-size: large;
-    cursor: default;
+  color: #00551C;
+  padding-left: 31%;
+  padding-top: 25%;
+  font-size: large;
+  cursor: default;
 }
 
 i.fa.fa-eye-slash {
-    color: #00551C;
-    padding-left: 38%;
-    padding-top: 11%;
-    font-size: large;
-    cursor: pointer;
-
+  color: #00551C;
+  padding-left: 38%;
+  padding-top: 11%;
+  font-size: large;
+  cursor: pointer;
+  
 }
 
 i.fa.fa-sync-alt {
-    color: #00551C;
-    padding-left: 38%;
-    padding-top: 11%;
-    font-size: large;
-    cursor: pointer;
+  color: #00551C;
+  padding-left: 38%;
+  padding-top: 11%;
+  font-size: large;
+  cursor: pointer;
 }
 
 canvas#large_clock {
-    width: 100%;
-    max-width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .loader {
@@ -460,16 +460,8 @@ canvas#large_clock {
   color: white;
 }
 
-.modal-body {padding: 2px 16px;}
-
-/*.js-plotly-plot,
-.plot-container {
-          width: 80vh
-}*/
-
-#stats_modal {
-  /*padding: auto;*/
-  /*top: 40px !important;*/
+.modal-body {
+  padding: 2px 16px;
 }
 
 #stats_modal_content {
@@ -493,13 +485,13 @@ canvas#large_clock {
 
 
 p#small_clock_period {
-
-    position: absolute;
-    top: 110px;
-    left: 10px;
+  
+  position: absolute;
+  top: 110px;
+  left: 10px;
 }
 p#large_clock_period {
-    font-size: 50px;
+  font-size: 50px;
 }
 #lunch_range {
   -webkit-appearance: none;
@@ -539,97 +531,97 @@ p#large_clock_period {
 }
 
 #lunch_label {
-    color: white;
-    text-shadow:
-    -1px -1px 5px #000,  
-    1px -1px 5px #000,
-    -1px 1px 5px #000,
-    1px 1px 5px #000;
-    position: relative;
-    font-size: 25px;
-    top: -44px;
-    height: 0px;
-    pointer-events: none;
-    letter-spacing: 3.15em;
-    text-align: center;
-    left: 40px;
+  color: white;
+  text-shadow:
+  -1px -1px 5px #000,  
+  1px -1px 5px #000,
+  -1px 1px 5px #000,
+  1px 1px 5px #000;
+  position: relative;
+  font-size: 25px;
+  top: -44px;
+  height: 0px;
+  pointer-events: none;
+  letter-spacing: 3.15em;
+  text-align: center;
+  left: 40px;
 }
 
 .unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 
 #calendar {
-    width: 95%;
-    margin: auto;
+  width: 95%;
+  margin: auto;
 }
 
 #calendar-list-container {
-    margin: auto;
-    max-width: 80%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+  margin: auto;
+  max-width: 80%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
 }
 ul.ks-cboxtags {
-    list-style: none;
-    padding: 20px;
+  list-style: none;
+  padding: 20px;
 }
 ul.ks-cboxtags li{
   display: inline;
 }
 ul.ks-cboxtags li label{
-    display: inline-block;
-    background-color: rgba(255, 255, 255, .9);
-    border: 2px solid rgba(139, 139, 139, .3);
-    color: #adadad;
-    border-radius: 25px;
-    white-space: nowrap;
-    margin: 3px 0px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: all .2s;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, .9);
+  border: 2px solid rgba(139, 139, 139, .3);
+  color: #adadad;
+  border-radius: 25px;
+  white-space: nowrap;
+  margin: 3px 0px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .2s;
 }
 
 ul.ks-cboxtags li label {
-    padding: 8px 12px;
-    cursor: pointer;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
 ul.ks-cboxtags li label::before {
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 12px;
-    padding: 2px 6px 2px 2px;
-    content: "❌";
-    transition: transform .3s ease-in-out;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 12px;
+  padding: 2px 6px 2px 2px;
+  content: "❌";
+  transition: transform .3s ease-in-out;
 }
 
 ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
-    content: "✔";
-    transform: rotate(-360deg);
-    transition: transform .3s ease-in-out;
+  content: "✔";
+  transform: rotate(-360deg);
+  transition: transform .3s ease-in-out;
 }
 
 ul.ks-cboxtags li input[type="checkbox"]:checked + label {
-    border: 2px solid #1bdbf8;
-    background-color: #12bbd4;
-    color: #fff;
-    transition: all .2s;
+  border: 2px solid #1bdbf8;
+  background-color: #12bbd4;
+  color: #fff;
+  transition: all .2s;
 }
 
 ul.ks-cboxtags li input[type="checkbox"] {
@@ -644,33 +636,33 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
 }
 
 i#calendar-edit-toggle, i#calendar-add-toggle {
-    padding: 10px 15px 10px 0px;
-    float: left;
-    cursor: pointer;
-    color: black;
+  padding: 10px 15px 10px 0px;
+  float: left;
+  cursor: pointer;
+  color: black;
 }
 
 #add-calendar input {
-    border: 2px #00551D solid;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 3px;
-    width: 300px;
+  border: 2px #00551D solid;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 3px;
+  width: 300px;
 }
 
 input#calendar-add-submit {
-    background: #268A48;
-    padding: 5px 20px;
-    margin: 3px;
-    cursor: pointer;
+  background: #268A48;
+  padding: 5px 20px;
+  margin: 3px;
+  cursor: pointer;
 }
 
 input#calendar-add-submit:hover {
-    background: #107031;
+  background: #107031;
 }
 
 p#add-calendar-error {
-    color: red;
+  color: red;
 }
 
 
@@ -713,7 +705,7 @@ p#add-calendar-error {
 
 .pdf_select-selected {
   background-color: #248A48;
-
+  
 }
 
 /* Style the arrow inside the select element: */
@@ -808,7 +800,7 @@ p#add-calendar-error {
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
   /*border-width: 0px;*/
-
+  
   cursor: pointer;
 }
 

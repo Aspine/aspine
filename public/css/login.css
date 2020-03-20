@@ -183,7 +183,7 @@ iframe {
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
-
+  
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -219,7 +219,7 @@ iframe {
   color: #333333;
   line-height: 1.2;
   text-align: center;
-
+  
   width: 100%;
   display: block;
   padding-bottom: 54px;
@@ -240,7 +240,7 @@ iframe {
   font-size: 15px;
   line-height: 1.5;
   color: #666666;
-
+  
   display: block;
   width: 100%;
   background: #e6e6e6;
@@ -286,7 +286,7 @@ iframe {
 
 .symbol-input100 {
   font-size: 15px;
-
+  
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -302,7 +302,7 @@ iframe {
   padding-left: 35px;
   pointer-events: none;
   color: #666666;
-
+  
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -335,7 +335,7 @@ iframe {
   line-height: 1.5;
   color: #fff;
   text-transform: uppercase;
-
+  
   width: 100%;
   height: 50px;
   border-radius: 25px;
@@ -348,7 +348,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 0 25px;
-
+  
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -370,11 +370,11 @@ iframe {
   .wrap-login100 {
     padding: 177px 90px 33px 85px;
   }
-
+  
   .login100-pic {
     width: 35%;
   }
-
+  
   .login100-form {
     width: 50%;
   }
@@ -384,11 +384,11 @@ iframe {
   .wrap-login100 {
     padding: 100px 80px 33px 80px;
   }
-
+  
   .login100-pic {
     display: none;
   }
-
+  
   .login100-form {
     width: 100%;
   }
