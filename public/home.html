@@ -74,34 +74,31 @@
     </div>
   </div>
   -->
-  <div id="loader" style="z-index: 10; margin: auto; display: block; position: absolute; margin: auto; width: 100%; height: 150px; top: 45%;">
-    <div class="loader" style="position:relative; margin: auto;"></div>
+  <div id="loader">
+    <div class="loader"></div>
   </div>
         
   <div id="stats_modal" class="modal">
     <!-- Modal content -->
     <div id="stats_modal_content" class="modal-content">
-      <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
+      <span id="stats_modal_close" class="close" onclick="hideModal()">&times;</span>
       <div id="there_are_no_stats">
-        <p id="no_stats_caption" style="display:block;position:relative;top:7px;color:#0d0d0d;width:400px;margin:auto;">No Statistics information for this assignment.</p>
+        <p id="no_stats_caption">No Statistics information for this assignment.</p>
       </div>
       <div id="there_are_stats">
-        <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-        <div id="notgraph" style="position:relative;top:20px;">
-          <p align="left" style="color:black;position:relative;top:15px;border-bottom: 1px solid #00551D;"><strong>Graph:</strong></p>
-          <!--border-bottom: 1px solid #00551D;-->
+        <h3 id="stats_modal_title">Modal Title..</h3>
+        <div id="notgraph">
+          <p class="stats_modal_heading" style="top:15px"><strong>Graph:</strong></p>
           
-          <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-          <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
-          <p id="stats_modal_caption" style="display:none;position:relative;top:48px;color:#0d0d0d;">Modal Caption..</p>
+          <div id="stats_plot"> </div>
+          <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
+          <p id="stats_modal_caption">Modal Caption..</p>
           
-          <!--<p align="left" style="display:block;position:relative;top:40px;color:black;">Stats:</p>-->
-          
-          <div id="stats_info" style="top:5px;position:relative;">
-            <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;"><strong>Info:</strong></p>
-            <p id="stats_modal_info" style="display:block;position:relative;top:23px;color:#0d0d0d;">Modal Info..</p>
-            <div id="feedback_container" style="display:block;position:relative;top:36px;color:#0d0d0d;overflow:auto;width:100%;height:70px">
-              <p id="stats_modal_feedback" align="left" style="color:black;">Modal Feedback</p>
+          <div id="stats_info">
+            <p class="stats_modal_heading" style="top:55px"><strong>Info:</strong></p>
+            <p id="stats_modal_info">Modal Info..</p>
+            <div id="feedback_container">
+              <p id="stats_modal_feedback">Modal Feedback</p>
             </div>
           </div>
         </div>
@@ -176,12 +173,12 @@
   </div>
   <div id="reports" class="tabcontent">  
     <div class="pdf_topnav">
-      <div class="pdf_custom-select" style="display:inline-block;width:400px;">
+      <div class="pdf_custom-select">
         <select id="pdf_select">
         </select>
       </div>
       
-      <span id="expand-pdf-icon" class="right hover" onclick="toggle_fullscreen_pdf()" style="cursor:pointer">
+      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()">
         <i class="fa fa-expand-alt" aria-hidden="true"></i>
       </span>
       
@@ -189,13 +186,13 @@
         |
       </span>
       
-      <span class="right hover" onclick="zoom_in_pdf()" style="cursor:pointer" aria-label="Zoom in">
+      <span class="right hover pointer" onclick="zoom_in_pdf()" aria-label="Zoom in">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </span>
-      <span class="right hover" onclick="render_page_pdf(currentPageNum)" style="cursor:pointer">
+      <span class="right hover pointer" onclick="render_page_pdf(currentPageNum)">
         ZOOM
       </span>
-      <span class="right hover" onclick="zoom_out_pdf()" style="cursor:pointer" aria-label="Zoom out">
+      <span class="right hover pointer" onclick="zoom_out_pdf()" aria-label="Zoom out">
         <i class="fa fa-minus" aria-hidden="true"></i>
       </span>
       
@@ -203,19 +200,19 @@
         |
       </span>
       
-      <span class="right hover" onclick="next_page_pdf()" style="cursor:pointer" aria-label="Next page">
+      <span class="right hover pointer" onclick="next_page_pdf()" aria-label="Next page">
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </span>
       <span class="right" id="page-indicator" style="cursor:default">
         PAGE
       </span>
-      <span class="right hover" onclick="prev_page_pdf()" style="cursor:pointer" aria-label="Previous page">
+      <span class="right hover pointer" onclick="prev_page_pdf()" aria-label="Previous page">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </span>
     </div>   
-    <div id="pdf-container" style="background:#333;border: solid 3px;width:100%;height:60%;overflow-y:auto;overflow-x:auto;margin:auto;">
+    <div id="pdf-container">
       <h1 id="pdf_loading_text"> Loading... </h1>
-      <canvas id="pdf-canvas" width="400" height="400" style="margin:auto;border:1px solid black"></canvas>
+      <canvas id="pdf-canvas" width="400" height="400"></canvas>
     </div>
   </div>
   <script type="text/javascript" src="js/clock.js"></script>

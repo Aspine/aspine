@@ -312,7 +312,6 @@ div.tabcontent, div.tab {
   height: 100px;
   margin: 10px 10px 25px 10px;
   width: 100px;
-  display: inline;
   float: left;
 }
 
@@ -371,14 +370,26 @@ canvas#large_clock {
   max-width: 400px;
 }
 
+#loader {
+  z-index: 10;
+  margin: auto;
+  display: block;
+  position: absolute;
+  margin: auto;
+  width: 100%;
+  height: 150px;
+  top: 45%;
+}
+
 .loader {
-  /*border: 16px solid #f3f3f3; [> Light grey <]*/
   border: 16px solid white; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
   animation: spin 2s linear infinite;
+  position: relative;
+  margin: auto;
 }
 
 @keyframes spin {
@@ -442,6 +453,7 @@ canvas#large_clock {
   text-decoration: none;
   cursor: pointer;
 }
+
 .modal-header {
   padding: 2px 16px;
   background-color: #00551D;
@@ -450,6 +462,11 @@ canvas#large_clock {
 
 .modal-body {
   padding: 2px 16px;
+}
+
+#stats_modal_close {
+  display: inline-block;
+  color: black;
 }
 
 #stats_modal_content {
@@ -461,6 +478,83 @@ canvas#large_clock {
   animation-name: statsanimatetop !important;
   animation-duration: 0.4s
 }
+
+#no_stats_caption {
+  display: block;
+  position: relative;
+  top: 7px;
+  color: #0d0d0d;
+  width: 400px;
+  margin: auto;
+}
+
+#stats_modal_title {
+  display: inline-block;
+  position: relative;
+  left: 12px;
+}
+
+#notgraph {
+  position: relative;
+  top: 20px;
+}
+
+.stats_modal_heading {
+  color: black;
+  position: relative;
+  border-bottom: 1px solid #00551D;
+  text-align: left;
+}
+
+#stats_plot {
+  display: none;
+  position: relative;
+  top: 20px;
+  height: 100px;
+  width: 250px
+}
+
+#stats_modal_horizontal_axis {
+  display: block;
+  position: relative;
+  top: 12px;
+  color: #0d0d0d;
+}
+
+#stats_modal_caption {
+  display: none;
+  position: relative;
+  top: 48px;
+  color: #0d0d0d;
+}
+
+#stats_info {
+  top: 5px;
+  position: relative;
+}
+
+#stats_modal_info {
+  display: block;
+  position: relative;
+  top: 23px;
+  color: #0d0d0d;
+}
+
+#feedback_container {
+  display: block;
+  position: relative;
+  top: 36px;
+  color: #0d0d0d;
+  overflow: auto;
+  width: 100%;
+  height: 70px;
+}
+
+#stats_modal_feedback {
+  color: black;
+  text-align: left;
+}
+
 @-webkit-keyframes statsanimatetop {
   from {top:-300px; opacity:0} 
   to {top:140px; opacity:1}
@@ -685,6 +779,7 @@ p#add-calendar-error {
   position: relative;
   font-family: Arial;
   float: left;
+  width: 400px;
 }
 
 .pdf_custom-select select {
@@ -740,6 +835,25 @@ p#add-calendar-error {
 
 .pdf_select-items div:hover, .pdf_same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+#pdf-container {
+  background: #333;
+  border: solid 3px;
+  width: 100%;
+  height: 60%;
+  overflow-y: auto;
+  overflow-x: auto;
+  margin: auto;
+}
+
+#pdf-canvas {
+  margin: auto;
+  border: 1px solid black;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 /* The container must be positioned relative: */
