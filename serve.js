@@ -115,12 +115,19 @@ new Map([
     [
         '/vendor/pdf.js/pdf.worker.min.js',
         '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
+    ],
+    [
+        '/fonts/fontawesome/css/all.min.css',
+        '/node_modules/@fortawesome/fontawesome-free/css/all.min.css'
     ]
 ]).forEach((path, endpoint) => {
     app.get(endpoint, (req, res) => {
         res.sendFile(__dirname + path);
     });
 });
+app.use('/fonts/fontawesome/webfonts', express.static(
+    __dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts/'
+));
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
