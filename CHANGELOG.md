@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.1.0 - TBD
+## 2.2.0 - TBD
 - Clean up code ([#108], [#96])
   + Reorganize files
   + Remove unneeded dependencies
@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   + Reformat code
 - Create changelog
 
-## 2.0.0-2020-TBD
+## 2.1.0 - TBD
 - Update macOS install scripts ([#101], [#83])
 - Support unweighted (4.0 scale) and weighted (5.0 scale) GPA ([#101], [#71])
 - Fix PDF viewer (Reports tab) to work with the update to Aspen on 14 January 2020 ([#103])
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support viewing multiple pages of a PDF document in the PDF viewer ([#103], [#88])
 - Refactor `package.json` to align with `npm` documentation ([#106])
 
-## 2.0.0-2020-TBD
+## [2.0.1] - tagged 2020-03-24, production TBD
 - Update `README.md` to use new domain name
 - Promote new iOS app to iOS users
 - Make login form autofocus
@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix the scraper to work with the update to Aspen on 14 January 2020 ([#98])
 
 [2.0.0-2020-02-10]: https://github.com/Aspine/aspine/releases/tag/2020-02-10
+[2.0.1]: https://github.com/Aspine/aspine/releases/tag/v2.0.1
 
 [#71]: https://github.com/Aspine/aspine/issues/71
 [#83]: https://github.com/Aspine/aspine/issues/83
