@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   + Update dependencies
   + Remove unused files, functions, methods, etc.
   + Reformat code
-- Create changelog
+- Create `CHANGELOG.md`
 
 ## [2.1.0] - tagged 2020-03-24, production TBD
 - Update macOS install scripts ([#101], [#83])
