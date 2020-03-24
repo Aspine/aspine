@@ -48,11 +48,9 @@ Note:
 
 ## Contributing / Locally Running Aspine
 
-### Aspine is currently under a code freeze to focus on improving the formatting and readability of the code. Please refrain from implementing any new features or opening any non-essential pull requests until the code freeze is lifted (projected: before May 1, 2020).
-
 Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
-If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client.
+If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. Please use the `develop` branch as the base of your changes.
 
 If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
 
