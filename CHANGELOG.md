@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2.0.0-2020-TBD
 - Update `README.md` to use new domain name
 - Promote new iOS app to iOS users
+- Make login form autofocus
 - Add privacy policy and logo placeholder
 - Create `greetings.yml` to welcome new contributors ([#109])
 
