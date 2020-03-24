@@ -73,6 +73,62 @@ if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
     }
 }
 
+// Expose frontend dependencies from node-modules
+// https://stackoverflow.com/a/27464258
+new Map([
+    [
+        '/vendor/jquery/jquery.min.js',
+        '/node_modules/jquery/dist/jquery.min.js'
+    ],
+    [
+        '/vendor/tilt/tilt.jquery.min.js',
+        '/node_modules/tilt.js/dest/tilt.jquery.min.js'
+    ],
+    [
+        '/vendor/animate/animate.min.css',
+        '/node_modules/animate.css/animate.min.css'
+    ],
+    [
+        '/vendor/hamburgers/hamburgers.min.css',
+        '/node_modules/hamburgers/dist/hamburgers.min.css'
+    ],
+    [
+        '/vendor/bootstrap/bootstrap.min.css',
+        '/node_modules/bootstrap/dist/css/bootstrap.min.css'
+    ],
+    [
+        '/vendor/bootstrap/bootstrap.min.css.map',
+        '/node_modules/bootstrap/dist/css/bootstrap.min.css.map'
+    ],
+    [
+        '/vendor/plotly.js/plotly.js',
+        '/node_modules/plotly.js-dist/plotly.js'
+    ],
+    [
+        '/vendor/tabulator/tabulator.min.js',
+        '/node_modules/tabulator-tables/dist/js/tabulator.min.js'
+    ],
+    [
+        '/vendor/pdf.js/pdf.min.js',
+        '/node_modules/pdfjs-dist/build/pdf.min.js'
+    ],
+    [
+        '/vendor/pdf.js/pdf.worker.min.js',
+        '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
+    ],
+    [
+        '/fonts/fontawesome/css/all.min.css',
+        '/node_modules/@fortawesome/fontawesome-free/css/all.min.css'
+    ]
+]).forEach((path, endpoint) => {
+    app.get(endpoint, (req, res) => {
+        res.sendFile(__dirname + path);
+    });
+});
+app.use('/fonts/fontawesome/webfonts', express.static(
+    __dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts/'
+));
+
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

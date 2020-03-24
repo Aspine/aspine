@@ -16,9 +16,9 @@ large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
 
-xhttp = new XMLHttpRequest;
+let xhttp = new XMLHttpRequest;
 xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState === 4 && this.status === 200) {
         schedules = JSON.parse(this.responseText);
         redraw_clock();
         setInterval(function() {
@@ -55,14 +55,14 @@ function drawNumber(ctx, radius, pos, number) {
     // Get time in seconds
     let time = number / 1000;
     // Get first and second digit
-
+    
     // hours
     let d1 = Math.floor(time / 60 / 60);
     // minutes
     let d2 = Math.floor(time / 60 % 60);
     // seconds
     let d3 = Math.floor(time % 60);
-
+    
     if(d1 < 10) {
         d1 = `0${d1}`;
     }
@@ -72,7 +72,7 @@ function drawNumber(ctx, radius, pos, number) {
     if(d3 < 10) {
         d3 = `0${d3}`;
     }
-
+    
     ctx.fillText(`${d1}:${d2}:${d3}`, 0, 0);
 }
 
@@ -84,40 +84,40 @@ function drawName(name) {
 function fitText(ctx, text, fontface, width) {
     // start with a large font size
     let fontsize = 75;
-
+    
     // lower the font size until the text fits the canvas
     do {
         fontsize--;
         ctx.font = fontsize + "px " + fontface;
     } while (ctx.measureText(text).width > width)
-
+    
     return fontsize;
 }
 
 function update_lunch() {
     switch(Number(document.getElementById("lunch_range").value)) {
         case 0:
-            current_schedule = "regular-a";
-            break;
+        current_schedule = "regular-a";
+        break;
         case 1:
-            current_schedule = "regular-b";
-            break;
+        current_schedule = "regular-b";
+        break;
         case 2:
-            current_schedule = "regular-c";
+        current_schedule = "regular-c";
     }
     redraw_clock();
 }
 
 // Takes an object with "room" and "id"
 function get_schedule(p3room, p3id) {
-    var floor = Math.floor(p3room / 1000);
-    var zone = Math.floor((p3room % 1000) / 100);
-    var subject = p3id.charAt(0);
-    if((floor == 2 || floor == 2) && subject != 'S') {
+    let floor = Math.floor(p3room / 1000);
+    let zone = Math.floor((p3room % 1000) / 100);
+    let subject = p3id.charAt(0);
+    if((floor === 2 || floor === 2) && subject !== 'S') {
         document.getElementById("lunch_range").value = 1;
         return "regular-b";
     }
-    if((zone < 6 && (floor == 4 || floor == 5)) || (zone == 6 && (floor == 2 || floor == 3)) /* || Biology ): */) {
+    if((zone < 6 && (floor === 4 || floor === 5)) || (zone === 6 && (floor === 2 || floor === 3)) /* || Biology ): */) {
         document.getElementById("lunch_range").value = 2;
         return "regular-c";
     }
@@ -128,21 +128,21 @@ function get_schedule(p3room, p3id) {
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
 function get_period_name(default_name) {
-    if(typeof(tableData) == "undefined" || Object.keys(tableData).length == 0) {
+    if(typeof(tableData) === "undefined" || Object.keys(tableData).length === 0) {
         return default_name;
     }
-    if (typeof(tableData.schedule) == "undefined" || Object.keys(tableData.schedule).length == 0) {
+    if (typeof(tableData.schedule) === "undefined" || Object.keys(tableData.schedule).length === 0) {
         return default_name;
     }
-    if(period_names.black.length == 0) {
+    if(period_names.black.length === 0) {
         // set period_names -- should only be run once
         for(let i in tableData.schedule.black) {
-            if(tableData.schedule.black[i].name != "Community Meeting") {
+            if(tableData.schedule.black[i].name !== "Community Meeting") {
                 period_names.black.push(tableData.schedule.black[i]);
             }
         }
         for(let i in tableData.schedule.silver) {
-            if(tableData.schedule.silver[i].name != "Community Meeting") {
+            if(tableData.schedule.silver[i].name !== "Community Meeting") {
                 period_names.silver.push(tableData.schedule.silver[i]);
             }
         }
@@ -160,7 +160,7 @@ function get_period_name(default_name) {
 
 function school_day() {
     let now = new Date();
-    if(now.getDay() % 6 == 0) { // If it's a weekend
+    if (now.getDay() % 6 === 0) { // If it's a weekend
         return false;
     }
     return true;
@@ -175,18 +175,19 @@ function redraw_clock() {
     // let now = Date.now() - 5 * 60 * 60 * 1000;
     let now = Date.now() - 4 * 60 * 60 * 1000;
     let tod = now % (24 * 60 * 60 * 1000);
-    if(school_day()) {
+    let pos;
+    if (school_day()) {
         // let tod = 41399000; // Simulate time
-
+        
         let current_period_i = 0;// Get current period from array
-        while(current_period_i < schedules[current_schedule].length - 1 &&
-            tod > schedules[current_schedule][current_period_i + 1].start) {
+        while (current_period_i < schedules[current_schedule].length - 1 &&
+                tod > schedules[current_schedule][current_period_i + 1].start) {
             current_period_i++;
         }
-
+            
         let current_period = schedules[current_schedule][current_period_i];
         let next_period = schedules[current_schedule][current_period_i + 1];
-
+        
         if(tod < current_period.start) { // Before school
             period_name = "Before School";
             pos = tod / current_period.start;
@@ -203,7 +204,7 @@ function redraw_clock() {
         }
         else if(tod > current_period.end) { // Between classes
             period_name = get_period_name(current_period.name) +
-                " ➡ " + get_period_name(next_period.name);
+            " ➡ " + get_period_name(next_period.name);
             pos = (tod - current_period.end) / (next_period.start - current_period.end);
             number = next_period.start - tod;
         }
@@ -221,17 +222,18 @@ function redraw_clock() {
             number += 12 * 60 * 60 * 1000;
         }
     }
-
+    
     // conver 0-1 to 0-2pi
     pos = pos * 2 * Math.PI;
-
+    
     drawFace(small_ctx, small_radius);
     drawName(period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
     drawNumber(small_ctx, small_radius, pos, number);
-
+    
     drawFace(large_ctx, large_radius);
     drawName(period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
     drawNumber(large_ctx, large_radius, pos, number);
 }
+    

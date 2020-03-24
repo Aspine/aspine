@@ -1,280 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-<meta name="apple-itunes-app" content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8">
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-149290199-1');
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-138977655-1"></script>-->
-    <!--<script>-->
-      <!--window.dataLayer = window.dataLayer || [];-->
-      <!--function gtag(){dataLayer.push(arguments);}-->
-      <!--gtag('js', new Date());-->
-
-      <!--gtag('config', 'UA-138977655-1');-->
-    <!--</script>-->
-
-
-        <title>Aspine | CRLS Student Dashboard</title>
-
-        <meta name="Description" content="This CRLS Student Dashboard is perfect for keeping up with your Aspen grades, the CRLS Clock, and the CRLS calendar. Checking grades the cool way since 2019!">
-        <!--===============================================================================================-->
-        <meta charset="utf-8">
-        <!--===============================================================================================-->
-        <meta name="Aspine" content="Aspen Scraper and Beautifier">
-        <!--===============================================================================================-->
-        <meta name="viewport" content="width=device-width, initial-scale=.75">
-        <!--===============================================================================================-->
-        <meta name="theme-color" content="#00551C"/>
-        <!--===============================================================================================-->
-        <link href="tabulator.css" rel="stylesheet">
-        <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
-        <!--===============================================================================================-->
-        <script type="text/javascript" src="/tabulator/js/tabulator.min.js"></script>
-        <!--===============================================================================================-->
-        <script type="text/javascript" src="./js/extraFunctions.js"></script>
-        <!--===============================================================================================-->
-        <script type="text/javascript" src="./js/buttonFunctions.js"></script>
-        <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-        <!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">-->
-
-        <!--===============================================================================================-->
-    <!--<link rel="stylesheet" type="text/css" href="css/util.css">-->
-        <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">
-        <!--===============================================================================================-->
-        <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-        <!--===============================================================================================-->
-        <link rel="manifest" href="/manifest.json">
-        <!--===============================================================================================-->
-        <script src="js/plotly-latest.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <!--===============================================================================================-->
-        <!--<script src="pdf.js/src/pdf.js"></script>-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
-        <!--<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>-->
-        <!--===============================================================================================-->
-
-
-    </head>
-    <body>
-        <div id="header" onclick="openTab(event, 'clock')">
-            <div class="logo">
-                <canvas id="small_clock" width="400" height="400"></canvas>
-                <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
-            </div>
-            <p id="small_clock_period"></p>
-            <h4 id="title">
-                Aspine
-            </h4>
-        </div>
-        
-        <div class="tab">
-            <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-            <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
-            <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-            <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
-			
-            <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-            <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
-            <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
-            <div class="GPA custom-select" style="width:270px;">
-			        <select id="gpa_select">
-                <option id="init_gpa" value="0">Current Quarter GPA: </option>
-                <option id="current_gpa" value="0">Current Quarter GPA: </option>
-                <option id="q1_gpa" value="1">Q1 GPA:</option>
-                <option id="q2_gpa" value="2">Q2 GPA:</option>
-                <option id="q3_gpa" value="3">Q3 GPA:</option>
-                <option id="q4_gpa" value="4">Q4 GPA:</option>
-   				      <option id="cum_gpa"></option>
-              </select>
-            </div>
-            <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
-            
-        </div>
-
-        <!--<div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">-->
-
-          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">-->
-          <!--<div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;border: 2px solid black;background-color: white;">-->
-            <div id="loader" style="z-index: 10; margin: auto; display: block; position: absolute; margin: auto; width: 100%; height: 150px; top: 45%;">
-              <div class="loader" style="position:relative; margin: auto;"></div>
-            </div> 
-            <!--<h1 style="top: 25%; position: relative;"> Loading! </h1>-->
-          <!--</div>-->
-
-        <!--</div>-->
-
-        <div id="stats_modal" class="modal">
-
-          <!-- Modal content -->
-          <div id="stats_modal_content" class="modal-content">
-
-        <span class="close" style="display:inline-block;color:black" onclick="hideModal()">&times;</span>
-        <div id="there_are_no_stats">
-            <p id="no_stats_caption" style="display:block;position:relative;top:7px;color:#0d0d0d;width:400px;margin:auto;">No Statistics information for this assignment.</p>
-
-        </div>
-
-        <div id="there_are_stats">
-          <h3 id="stats_modal_title" style="display:inline-block;position:relative;left:12px;">Modal Title..</h3>
-          <div id="notgraph" style="position:relative;top:20px;">
-            <p align="left" style="color:black;position:relative;top:15px;border-bottom: 1px solid #00551D;"><strong>Graph:</strong></p>
-            <!--border-bottom: 1px solid #00551D;-->
-
-            <div id="stats_plot" style="display:none;position:relative;top:20px;height:100px;width:250px"> </div>
-            <p id="stats_modal_horizontal_axis" style="display:block;position:relative;top:12px;color:#0d0d0d;"><strong>Score</strong></p>
-            <p id="stats_modal_caption" style="display:none;position:relative;top:48px;color:#0d0d0d;">Modal Caption..</p>
-
-            <!--<p align="left" style="display:block;position:relative;top:40px;color:black;">Stats:</p>-->
-
-            <div id="stats_info" style="top:5px;position:relative;">
-              <p align="left" style="display:block;position:relative;top:55px;color:black;border-bottom: 1px solid #00551D;"><strong>Info:</strong></p>
-              <p id="stats_modal_info" style="display:block;position:relative;top:23px;color:#0d0d0d;">Modal Info..</p>
-              <div id="feedback_container" style="display:block;position:relative;top:36px;color:#0d0d0d;overflow:auto;width:100%;height:70px">
-                <p id="stats_modal_feedback" align="left" style="color:black;">Modal Feedback</p>
-              </div>
-            </div>
-          </div>
-        </div>
-          </div>
-
-        </div>
-        <div id="grades" class="tabcontent">
-            <div id="classesTable"></div>
-            <div id="mostRecentDiv" style="display:none">
-              <h3 align="left"> Most Recent Activity:</h3>
-              <div id="mostRecentTable"></div>
-            </div>
-            <div id="categoriesTable"></div>
-            <div id="assignmentsTable"></div>
-        </div>
-        <div id="schedule" class="tabcontent">
-            <!-- Rounded switch -->
-            <label class="switch">
-                <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
-                <span class="slider round"></span>
-                <p id="schedule_title" class="unselectable">Black</p>
-            </label>
-            <div id="scheduleTable"></div>
-        </div>
-        <div id="clock" class="tabcontent">
-            <p>Lunch:</p>
-            <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
-            <p id="lunch_label" class="unselectable">ABC</p>
-            <canvas id="large_clock" width="400" height="400"></canvas>
-            <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
-            <p id="large_clock_period"></p>
-        </div>
-        <div id="calendar-tab" class="tabcontent">
-            <div id="calendar-edit">
-                <div id="calendar-list-container" hidden>
-                    <ul id='calendar-list' class="ks-cboxtags">
-                    </ul>
-                </div>
-                <div id="calendar-add-modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <span class="close" id="calendar-add-close">&times;</span>
-                            <h3>Add Calendar</h3>
-                        </div>
-                        <div class="modal-body">
-                            <form id='add-calendar'>
-                                <p>*Calendar must be a public Google Calendar</p>
-                                <input type="text" name="name" placeholder="Calendar Name">
-                                <br>
-                                <input type="text" name="id" placeholder="Calendar ID (found in calendar settings)">
-                                <br>
-                                <input type="text" class="jscolor" name="color" value="268A48">
-                                <br>
-                                <input id="calendar-add-submit" type="submit" value="Add">
-                                <p id='add-calendar-error'></p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id='calendar'></div>
-        </div>
-    <div id="recent" class="tabcontent">
-        <label class="switch">
-            <input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
-            <span class="slider round"></span>
-            <p id="recent_title" class="unselectable">Assignments</p>
-        </label>
-            <div id="recentActivity"></div>
-            <div id="recentAttendance"></div>
-        
-        </div>
-    <div id="reports" class="tabcontent">
-
-
-      <div class="pdf_topnav">
-
-        <div class="pdf_custom-select" style="display:inline-block;width:400px;">
-          <select id="pdf_select">
-          </select>
-        </div>
-
-        <span id="expand-pdf-icon" class="right hover" onclick="toggle_fullscreen_pdf()" style="cursor:pointer">
-          <i class="fa fa-expand" aria-hidden="true"></i>
-        </span>
-
-        <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;">
-          |
-        </span>
-
-        <span class="right hover" onclick="zoom_in_pdf()" style="cursor:pointer" aria-label="Zoom in">
-          <i class="fa fa-plus" aria-hidden="true"></i>
-        </span>
-        <span class="right hover" onclick="render_page_pdf(currentPageNum)" style="cursor:pointer">
-          ZOOM
-        </span>
-        <span class="right hover" onclick="zoom_out_pdf()" style="cursor:pointer" aria-label="Zoom out">
-          <i class="fa fa-minus" aria-hidden="true"></i>
-        </span>
-
-        <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;" aria-hidden="true">
-          |
-        </span>
-
-        <span class="right hover" onclick="next_page_pdf()" style="cursor:pointer" aria-label="Next page">
-          <i class="fa fa-chevron-right" aria-hidden="true"></i>
-        </span>
-        <span class="right" id="page-indicator" style="cursor:default">
-          PAGE
-        </span>
-        <span class="right hover" onclick="prev_page_pdf()" style="cursor:pointer" aria-label="Previous page">
-          <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        </span>
+<head>
+  <meta name="apple-itunes-app" content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8">
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', 'UA-149290199-1');
+  </script>
+  
+  <title>Aspine | CRLS Student Dashboard</title>
+  
+  <meta name="Description" content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, the CRLS Clock, and your report cards. Checking grades the cool way since 2019!">
+  <meta charset="utf-8">
+  <meta name="Aspine" content="Aspen Scraper and Beautifier">
+  <meta name="viewport" content="width=device-width, initial-scale=.75">
+  <meta name="theme-color" content="#00551C"/>
+  <link href="css/tabulator.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/home.css">
+  <script type="text/javascript" src="vendor/tabulator/tabulator.min.js"></script>
+  <script type="text/javascript" src="js/extraFunctions.js"></script>
+  <script type="text/javascript" src="js/buttonFunctions.js"></script>
+  <link rel="stylesheet" type="text/css" href="fonts/fontawesome/css/all.min.css">
+  <!--<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">-->
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="manifest" href="manifest.json">
+  <script src="vendor/plotly.js/plotly.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/pdf.js/pdf.min.js"></script>
+</head>
+<body>
+  <div id="header" onclick="openTab(event, 'clock')">
+    <div class="logo">
+      <canvas id="small_clock" width="400" height="400"></canvas>
+      <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
+    </div>
+    <p id="small_clock_period"></p>
+    <h4 id="title">Aspine</h4>
+  </div>
+  
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
+    <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
+    <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
+    <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
+    <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
+    <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
+    <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
+    <div class="GPA custom-select" style="width:270px;">
+      <select id="gpa_select">
+        <option id="init_gpa" value="0">Current Quarter GPA: </option>
+        <option id="current_gpa" value="0">Current Quarter GPA: </option>
+        <option id="q1_gpa" value="1">Q1 GPA:</option>
+        <option id="q2_gpa" value="2">Q2 GPA:</option>
+        <option id="q3_gpa" value="3">Q3 GPA:</option>
+        <option id="q4_gpa" value="4">Q4 GPA:</option>
+        <option id="cum_gpa"></option>
+      </select>
+    </div>
+    <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
+  </div>
+  
+  <!--
+  <div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">
+    <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">
+      <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;border: 2px solid black;background-color: white;">
+        <h1 style="top: 25%; position: relative;"> Loading! </h1>
       </div>
-
-      <div id="pdf-container" style="background:#333;border: solid 3px;width:100%;height:60%;overflow-y:auto;overflow-x:auto;margin:auto;">
-        <h1 id="pdf_loading_text"> Loading... </h1>
-      <canvas id="pdf-canvas" width="400" height="400" style="margin:auto;border:1px solid black"></canvas>
     </div>
   </div>
-
-    <script type="text/javascript" src="/js/clock.js"></script>
-    <script type="text/javascript" src="/js/jscolor.js"></script>
-        <script type="text/javascript" src="/js/calculate_grade.js"></script>
-        <!--<script src="/js/request.js"></script>-->
-        <script src="/js/bundle.js"></script>
-        <script type="text/javascript" src="home.js"></script>
-        <script type="text/javascript" src="/js/app.js"></script>
-    </body>
+  -->
+  <div id="loader">
+    <div class="loader"></div>
+  </div>
+        
+  <div id="stats_modal" class="modal">
+    <!-- Modal content -->
+    <div id="stats_modal_content" class="modal-content">
+      <span id="stats_modal_close" class="close" onclick="hideModal()">&times;</span>
+      <div id="there_are_no_stats">
+        <p id="no_stats_caption">No Statistics information for this assignment.</p>
+      </div>
+      <div id="there_are_stats">
+        <h3 id="stats_modal_title">Modal Title..</h3>
+        <div id="notgraph">
+          <p class="stats_modal_heading" style="top:15px"><strong>Graph:</strong></p>
+          
+          <div id="stats_plot"> </div>
+          <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
+          <p id="stats_modal_caption">Modal Caption..</p>
+          
+          <div id="stats_info">
+            <p class="stats_modal_heading" style="top:55px"><strong>Info:</strong></p>
+            <p id="stats_modal_info">Modal Info..</p>
+            <div id="feedback_container">
+              <p id="stats_modal_feedback">Modal Feedback</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>        
+  </div>
+  <div id="grades" class="tabcontent">
+    <div id="classesTable"></div>
+    <div id="mostRecentDiv" style="display:none">
+      <h3 align="left">Most Recent Activity:</h3>
+      <div id="mostRecentTable"></div>
+    </div>
+    <div id="categoriesTable"></div>
+    <div id="assignmentsTable"></div>
+  </div>
+  <div id="schedule" class="tabcontent">
+    <!-- Rounded switch -->
+    <label class="switch">
+      <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
+      <span class="slider round"></span>
+      <p id="schedule_title" class="unselectable">Black</p>
+    </label>
+    <div id="scheduleTable"></div>
+  </div>
+  <div id="clock" class="tabcontent">
+    <p>Lunch:</p>
+    <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
+    <p id="lunch_label" class="unselectable">ABC</p>
+    <canvas id="large_clock" width="400" height="400"></canvas>
+    <p id="large_clock_period"></p>
+  </div>
+  <!--
+  <div id="calendar-tab" class="tabcontent">
+    <div id="calendar-edit">
+      <div id="calendar-list-container" hidden>
+        <ul id='calendar-list' class="ks-cboxtags">
+        </ul>
+      </div>
+      <div id="calendar-add-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="close" id="calendar-add-close">&times;</span>
+            <h3>Add Calendar</h3>
+          </div>
+          <div class="modal-body">
+            <form id='add-calendar'>
+              <p>*Calendar must be a public Google Calendar</p>
+              <input type="text" name="name" placeholder="Calendar Name">
+              <br>
+              <input type="text" name="id" placeholder="Calendar ID (found in calendar settings)">
+              <br>
+              <input type="text" class="jscolor" name="color" value="268A48">
+              <br>
+              <input id="calendar-add-submit" type="submit" value="Add">
+              <p id='add-calendar-error'></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id='calendar'></div>
+  </div>
+  -->
+  <div id="recent" class="tabcontent">
+    <label class="switch">
+      <input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
+      <span class="slider round"></span>
+      <p id="recent_title" class="unselectable">Assignments</p>
+    </label>
+    <div id="recentActivity"></div>
+    <div id="recentAttendance"></div>
+  </div>
+  <div id="reports" class="tabcontent">  
+    <div class="pdf_topnav">
+      <div class="pdf_custom-select">
+        <select id="pdf_select">
+        </select>
+      </div>
+      
+      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()">
+        <i class="fa fa-expand-alt" aria-hidden="true"></i>
+      </span>
+      
+      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;">
+        |
+      </span>
+      
+      <span class="right hover pointer" onclick="zoom_in_pdf()" aria-label="Zoom in">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </span>
+      <span class="right hover pointer" onclick="render_page_pdf(currentPageNum)">
+        ZOOM
+      </span>
+      <span class="right hover pointer" onclick="zoom_out_pdf()" aria-label="Zoom out">
+        <i class="fa fa-minus" aria-hidden="true"></i>
+      </span>
+      
+      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;" aria-hidden="true">
+        |
+      </span>
+      
+      <span class="right hover pointer" onclick="next_page_pdf()" aria-label="Next page">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </span>
+      <span class="right" id="page-indicator" style="cursor:default">
+        PAGE
+      </span>
+      <span class="right hover pointer" onclick="prev_page_pdf()" aria-label="Previous page">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </span>
+    </div>   
+    <div id="pdf-container">
+      <h1 id="pdf_loading_text"> Loading... </h1>
+      <canvas id="pdf-canvas" width="400" height="400"></canvas>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/clock.js"></script>
+  <!--<script type="text/javascript" src="/vendor/jscolor/jscolor.js"></script>-->
+  <script type="text/javascript" src="js/calculate_grade.js"></script>
+  <script type="text/javascript" src="js/home.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+</body>
 </html>
+      
