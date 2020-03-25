@@ -11,10 +11,10 @@
     "Max Katz-Christy",
     "Cole Killian"
   ],
-  "main": "src/serve.js",
+  "main": "serve.js",
   "repository": "github:Aspine/aspine",
   "scripts": {
-    "start": "node src/serve.js"
+    "start": "node serve.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
