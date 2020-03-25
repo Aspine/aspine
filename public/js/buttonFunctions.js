@@ -281,4 +281,28 @@ let updateGradePage = function() {
     $("#" + currentTerm).html("Quarter GPA: " + GPA.percent);
   }
 }
+
+let exportTableData = function(prefs) {
+  if (!prefs.calculated) resetTableData();
   
+  let obj = {};
+  obj.username = tableData.username;
+  obj.overview = tableData.overview;
+
+  if (prefs.recent) obj.recent = tableData.recent;
+  if (prefs.schedule) obj.schedule = tableData.schedule;
+  if (prefs.terms) {
+    obj.terms = {};
+    Object.keys(tableData.terms).forEach(key => {
+      if (prefs[key]) obj.terms[key] = tableData.terms[key];
+    });
+  }
+  if (prefs.cumGPA) obj.cumGPA = tableData.cumGPA;
+
+  let jsonString = JSON.stringify(obj);
+
+  saveAs(new Blob([jsonString], {
+    type: "application/json;charset=utf-8"
+  }), `aspine-export-${new Date().toISOString()}.json`);
+  return jsonString;
+};

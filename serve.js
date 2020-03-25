@@ -118,6 +118,14 @@ new Map([
         '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
     ],
     [
+        '/vendor/file-saver/FileSaver.min.js',
+        '/node_modules/file-saver/dist/FileSaver.min.js'
+    ],
+    [
+        '/vendor/file-saver/FileSaver.min.js.map',
+        '/node_modules/file-saver/dist/FileSaver.min.js.map'
+    ],
+    [
         '/fonts/fontawesome/css/all.min.css',
         '/node_modules/@fortawesome/fontawesome-free/css/all.min.css'
     ]
