@@ -557,6 +557,15 @@ let classesTable = new Tabulator("#classesTable", {
             title: "Export Table Data",
             titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
             headerClick: async () => {
+                // Disable checkboxes for terms whose data have not yet been downloaded
+                termConverter.forEach(term => {
+                    if (tableData.terms[term].classes) {
+                        $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
+                    }
+                    else {
+                        $(`#export_checkbox_terms_${term}`).attr("disabled", true);
+                    }
+                });
                 exportModal.style.display = "inline-block";
             },
             width: 76,
