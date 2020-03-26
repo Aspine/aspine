@@ -2,6 +2,7 @@ const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let pdfrendering = false;
 let statsModal = document.getElementById('stats_modal');
+let exportModal = document.getElementById('export_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
 let tableData = {};
@@ -11,7 +12,10 @@ let termsReset = {};
 // When the user clicks anywhere outside of the modal, close it
 window.addEventListener("click", function(event) {
     if (event.target === statsModal) {
-        hideModal();
+        hideStatsModal();
+    }
+    if (event.target === exportModal) {
+        hideExportModal();
     }
     pdf_closeAllSelect();
     closeAllSelect();
@@ -53,10 +57,10 @@ window.addEventListener('resize', function() {
     }
 });
 */
-let hideModal = function() {
-    document.getElementById('stats_modal').style.display = "none";
+let hideStatsModal = function() {
+    statsModal.style.display = "none";
     noStats();
-}
+};
 let noStats = function() {
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
@@ -65,7 +69,11 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.height = "80px";
     //document.getElementById("stats_modal_content").style.margin = "300px auto";
     document.getElementById("stats_modal_content").style.top = "140px";
-}
+};
+
+let hideExportModal = function() {
+    exportModal.style.display = "none";
+};
 
 let recentAttendance = new Tabulator("#recentAttendance", {
     //	height: 400,
@@ -140,7 +148,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false}, 
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon" aria-hidden="true"></i>',
             headerClick: hideCategoriesTable,
             width: 76,
             headerSort: false
@@ -546,8 +554,17 @@ let classesTable = new Tabulator("#classesTable", {
             headerSort: false,
         },
         {
-            title: "Hide",
-            titleFormatter: () => '<i class="fa fa-sync-alt" aria-hidden="true"></i>',
+            title: "Export Table Data",
+            titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
+            headerClick: async () => {
+                exportModal.style.display = "inline-block";
+            },
+            width: 76,
+            headerSort: false,
+        },
+        {
+            title: "Reset Table Data",
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon" aria-hidden="true"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
@@ -956,3 +973,26 @@ document.getElementById("default_open").click();
 // Pointfree style does not work here because jQuery's .text behaves both as
 // an attribute and as a function.
 $.ajax("/version").then(ver => $("#version").text(ver));
+
+$("#export_button").click(() => {
+    prefs = {};
+   
+    [
+        "recent", "schedule", "cumGPA"
+    ].forEach(pref => {
+        prefs[pref] = $(`#export_checkbox_${pref}`).prop("checked");
+    });
+
+    if ($("#export_checkbox_terms").prop("checked")) {
+        prefs.terms = {};
+        termConverter.forEach(term => {
+            if (
+                !$(`#export_checkbox_terms_${term}`).prop("disabled") &&
+                $(`#export_checkbox_terms_${term}`).prop("checked")
+            ) prefs.terms[term] = true;
+            else prefs.terms[term] = false;
+        });
+    }
+
+    exportTableData(prefs);
+});

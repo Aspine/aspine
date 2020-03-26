@@ -94,7 +94,7 @@
   <div id="stats_modal" class="modal">
     <!-- Modal content -->
     <div id="stats_modal_content" class="modal-content">
-      <span id="stats_modal_close" class="close" onclick="hideModal()">&times;</span>
+      <span class="close" onclick="hideStatsModal()">&times;</span>
       <div id="there_are_no_stats">
         <p id="no_stats_caption">No Statistics information for this assignment.</p>
       </div>
@@ -118,6 +118,74 @@
       </div>
     </div>        
   </div>
+
+  <div id="export_modal" class="modal">
+    <!-- Modal content -->
+    <div id="export_modal_content" class="modal-content">
+      <span class="close" onclick="hideExportModal()">&times;</span>
+      <h3 id="export_modal_title">Export Data</h3>
+      <ul>
+        <li>
+          <label for="export_checkbox_recent">
+            <input type="checkbox" id="export_checkbox_recent" checked>
+            Recent Activity
+          </label>
+        </li>
+        <li>
+          <label for="export_checkbox_schedule">
+            <input type="checkbox" id="export_checkbox_schedule" checked>
+            Schedule
+          </label>
+        </li>
+        <li>
+          <label for="export_checkbox_terms">
+            <input type="checkbox" id="export_checkbox_terms" checked>
+            Grades
+          </label>
+          <ul>
+            <li>
+              <label for="export_checkbox_terms_current">
+                <input type="checkbox" id="export_checkbox_terms_current" checked>
+                Current Quarter
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q1">
+                <input type="checkbox" id="export_checkbox_terms_q1">
+                Quarter 1
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q2">
+                <input type="checkbox" id="export_checkbox_terms_q2">
+                Quarter 2
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q3">
+                <input type="checkbox" id="export_checkbox_terms_q3">
+                Quarter 3
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q4">
+                <input type="checkbox" id="export_checkbox_terms_q4">
+                Quarter 4
+              </label>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <label for="export_checkbox_cumGPA">
+            <input type="checkbox" id="export_checkbox_cumGPA" checked>
+            Cumulative (year-to-date) GPA
+          </label>
+        </li>
+      </ul>
+      <button id="export_button">Export</button>
+    </div>        
+  </div>
+
   <div id="grades" class="tabcontent">
     <div id="classesTable"></div>
     <div id="mostRecentDiv" style="display:none">

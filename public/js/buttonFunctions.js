@@ -283,7 +283,7 @@ let updateGradePage = function() {
 }
 
 let exportTableData = async function(prefs) {
-  if (!prefs.calculated) resetTableData();
+  resetTableData();
   
   let obj = {};
   obj.version = await $.ajax("/version");
@@ -294,8 +294,8 @@ let exportTableData = async function(prefs) {
   if (prefs.schedule) obj.schedule = tableData.schedule;
   if (prefs.terms) {
     obj.terms = {};
-    Object.keys(tableData.terms).forEach(key => {
-      if (prefs[key]) obj.terms[key] = tableData.terms[key];
+    termConverter.forEach(term => {
+      if (prefs.terms[term]) obj.terms[term] = tableData.terms[term];
     });
   }
   if (prefs.cumGPA) obj.cumGPA = tableData.cumGPA;
