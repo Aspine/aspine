@@ -555,7 +555,7 @@ canvas#large_clock {
   to {top:140px; opacity:1}
 }
 
-#export_modal_content {
+#export_modal_content, #import_modal_content {
   width: 25em;
   text-align: left;
 }
@@ -568,9 +568,13 @@ canvas#large_clock {
   display: inline-block;
 }
 
-#export_button {
+#export_button, #import_button {
   padding: 14px 16px;
   cursor: pointer;
+}
+
+#import_modal_title {
+  margin-bottom: 1em;
 }
 
 

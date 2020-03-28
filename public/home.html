@@ -186,6 +186,16 @@
     </div>        
   </div>
 
+  <div id="import_modal" class="modal">
+    <!-- Modal content -->
+    <div id="import_modal_content" class="modal-content">
+      <span class="close" onclick="hideImportModal()">&times;</span>
+      <h3 id="import_modal_title">Import Data</h3>
+      <input type="file" id="import_filepicker">
+      <button id="import_button">Import</button>
+    </div>        
+  </div>
+
   <div id="grades" class="tabcontent">
     <div id="classesTable"></div>
     <div id="mostRecentDiv" style="display:none">
@@ -297,6 +307,7 @@
     </div>
   </div>
   <p>Aspine version: <span id="version">(loading&hellip;)</span></p>
+  <a href="#" onclick="importModal.style.display = 'inline-block'">Import Data</a>
   <script type="text/javascript" src="js/clock.js"></script>
   <!--<script type="text/javascript" src="/vendor/jscolor/jscolor.js"></script>-->
   <script type="text/javascript" src="js/calculate_grade.js"></script>

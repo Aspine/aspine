@@ -3,6 +3,7 @@ let pdf_index = 0;
 let pdfrendering = false;
 let statsModal = document.getElementById('stats_modal');
 let exportModal = document.getElementById('export_modal');
+let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
 let tableData = {};
@@ -16,6 +17,9 @@ window.addEventListener("click", function(event) {
     }
     if (event.target === exportModal) {
         hideExportModal();
+    }
+    if (event.target === importModal) {
+        hideImportModal();
     }
     pdf_closeAllSelect();
     closeAllSelect();
@@ -74,6 +78,10 @@ let noStats = function() {
 let hideExportModal = function() {
     exportModal.style.display = "none";
 };
+
+let hideImportModal = function() {
+    importModal.style.display = "none";
+}
 
 let recentAttendance = new Tabulator("#recentAttendance", {
     //	height: 400,
