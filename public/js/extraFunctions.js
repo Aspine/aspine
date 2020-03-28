@@ -49,7 +49,7 @@ function GPAType() {
   let quarterName = "";
   let quarterData;
 
-  if (selection === 0) {
+  if (selection == 0) {
     quarterName = "Current Quarter";
     quarterData = tableData.terms.current;
   }
@@ -728,7 +728,7 @@ let initialize_quarter_dropdown = function() {
       c.id = termConverter[j - 1] || "cum";
       // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
-        if (!this.innerHTML.includes("None")) {
+        if (!this.innerHTML.includes("N")) {
           /* When an item is clicked, update the original select box,
           and the selected item: */
           
