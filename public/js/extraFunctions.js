@@ -711,16 +711,23 @@ let initialize_quarter_dropdown = function() {
   x = document.getElementsByClassName("custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
+    if (a = document.getElementsByClassName("select-selected")[0]) {
+      a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+      continue;
+    }
     /* For each element, create a new DIV that will act as the selected item: */
     a = document.createElement("DIV");
     a.setAttribute("class", "select-selected");
     a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
     x[i].appendChild(a);
+
+    if (document.getElementById("view_gpa_select")) continue;
     /* For each element, create a new DIV that will contain the option list: */
     b = document.createElement("DIV");
     b.setAttribute("class", "select-items select-hide");
     b.setAttribute("id", "view_gpa_select");
     for (j = 1; j < selElmnt.length; j++) {
+      if (document.getElementById(termConverter[j - 1] || "cum")) continue;
       /* For each option in the original select element,
       create a new DIV that will act as an option item: */
       c = document.createElement("DIV");
@@ -729,6 +736,12 @@ let initialize_quarter_dropdown = function() {
       // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("N")) {
+          if (tableData.imported) {
+            let term = parseInt(this.innerHTML[1]) || 0;
+            if (term === 0 && !tableData.terms.current) return;
+            if (term !== 0 && !tableData.terms["q" + term].classes) return;
+          }
+          
           /* When an item is clicked, update the original select box,
           and the selected item: */
           

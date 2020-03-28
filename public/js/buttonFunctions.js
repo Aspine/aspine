@@ -307,3 +307,40 @@ let exportTableData = async function(prefs) {
   }), `aspine-export-${new Date().toISOString()}.json`);
   return jsonString;
 };
+
+let importTableData = async function(obj) {
+  let version = await $.ajax("/version");
+  if (obj.version.split(".")[0] !== version.split(".")[0]) {
+    return `JSON file is from Aspine version ${obj.version}, which is ` +
+    `incompatible with Aspine version ${version}.`;
+  }
+  
+  tableData.imported = true;
+
+  currentTerm = "";
+  termConverter.forEach(term => {
+    if (!currentTerm && obj.terms[term]) currentTerm = term;
+  });
+  if (currentTerm) responseCallback({
+    username: obj.username || "",
+    recent: obj.recent || {},
+    overview: obj.overview || {},
+    classes: obj.terms[currentTerm].classes || [],
+    GPA: obj.terms[currentTerm].GPA || undefined,
+    cumGPA: obj.cumGPA || undefined
+  });
+
+  scheduleCallback(obj.schedule || {});
+
+  let firstTerm = currentTerm;
+  
+  termConverter.forEach(term => {
+    if (term === firstTerm || !obj.terms[term]) return;
+    currentTerm = term;
+    responseCallbackPartial({
+      classes: obj.terms[currentTerm].classes || []
+    });
+  });
+
+  currentTerm = firstTerm;
+};

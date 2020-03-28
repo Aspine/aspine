@@ -723,11 +723,12 @@ function responseCallback(response) {
     }
     
     // Calculate GPA for current term
-    tableData.terms.current.GPA = computeGPA(tableData.terms.current.classes);
+    tableData.terms.current.GPA = response.GPA ||
+        computeGPA(tableData.terms.current.classes);
     
     tableData.overview = response.overview;
     
-    tableData.cumGPA = cumGPA(tableData.overview);
+    tableData.cumGPA = response.cumGPA || cumGPA(tableData.overview);
     document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2);
     
     // Calculate GPA for each quarter
@@ -1002,6 +1003,20 @@ $("#export_button").click(() => {
     }
 
     exportTableData(prefs);
+});
+
+$("#import_button").click(async () => {
+    const file = document.getElementById("import_filepicker").files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.addEventListener("load", async () => {
+        let response = await importTableData(JSON.parse(reader.result));
+        if (response) {
+            $("#import_error").text(response);
+        } else {
+            hideImportModal();
+        }
+    });
 });
 
 $.ajax({
