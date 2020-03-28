@@ -323,8 +323,11 @@ let importTableData = async function(obj) {
   });
   if (currentTerm) responseCallback({
     username: obj.username || "",
-    recent: obj.recent || {},
-    overview: obj.overview || {},
+    recent: {
+      recentActivityArray: obj.recent.recentActivityArray || [],
+      recentAttendanceArray: obj.recent.recentAttendanceArray || []
+    },
+    overview: obj.overview || [],
     classes: obj.terms[currentTerm].classes || [],
     GPA: obj.terms[currentTerm].GPA || undefined,
     cumGPA: obj.cumGPA || undefined

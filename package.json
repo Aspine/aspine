@@ -17,7 +17,8 @@
   "main": "serve.js",
   "repository": "github:Aspine/aspine",
   "scripts": {
-    "start": "node serve.js"
+    "start": "node serve.js",
+    "build-lite": "bash build-lite.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",

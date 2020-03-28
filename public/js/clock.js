@@ -16,18 +16,18 @@ large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
 
-let xhttp = new XMLHttpRequest;
-xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-        schedules = JSON.parse(this.responseText);
+let schedulesCallback = function(response) {
+    schedules = response;
+    redraw_clock();
+    setInterval(function() {
         redraw_clock();
-        setInterval(function() {
-            redraw_clock();
-        }, 1000);
-    }
+    }, 1000);
 };
-xhttp.open("GET", "schedule.json");
-xhttp.send();
+
+$.ajax({
+    url: "schedule.json",
+    method: "GET"
+}).then(schedulesCallback);
 
 function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'white';
