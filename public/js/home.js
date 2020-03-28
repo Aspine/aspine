@@ -859,14 +859,6 @@ function pdfCallback(response) {
     }
 }
 
-$.ajax({
-    url: "/data",
-    method: "POST",
-    data: { quarter: 0 },
-    dataType: "json json",
-    success: responseCallback
-});
-
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
         //recentActivity.setData(tableData.recent.recentActivityArray);
@@ -976,13 +968,6 @@ function openTab(evt, tab_name) {
     recentAttendance.redraw();
 }
 
-document.getElementById("default_open").click();
-
-// Populate the version number at the bottom of the page.
-// Pointfree style does not work here because jQuery's .text behaves both as
-// an attribute and as a function.
-$.ajax("/version").then(ver => $("#version").text(ver));
-
 $("#export_button").click(() => {
     prefs = {};
    
@@ -1005,3 +990,17 @@ $("#export_button").click(() => {
 
     exportTableData(prefs);
 });
+
+$.ajax({
+    url: "/data",
+    method: "POST",
+    data: { quarter: 0 },
+    dataType: "json json",
+}).then(responseCallback);
+
+document.getElementById("default_open").click();
+
+// Populate the version number at the bottom of the page.
+// Pointfree style does not work here because jQuery's .text behaves both as
+// an attribute and as a function.
+$.ajax("/version").then(ver => $("#version").text(ver));
