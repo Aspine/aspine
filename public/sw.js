@@ -1,98 +1,61 @@
-var cacheName = "v3";
-var cacheFiles = [
-	'./',
-	'/login.html',
-	//'/home.html',
-	//'/manifest.json',
-	//'/sw.js',
-	//'/tambulator.css',
-	//'/images/icons/favicon.ico',
-	//'/vendor/bootstrap/css/bootstrap.min.css',
-	//'/fonts/font-awesome-4.7.0/css/font-awesome.min.css',
-	//'/vendor/animate/animate.css',
-	//'/vendor/css-hamburgers/hamburgers.min.css',
-	//'/vendor/select2/select2.min.css',
-	//'/css/util.css',
-	//'/css/main.css',
-	//'/css/stylesheet.css',
-];
+const cacheVersion = 'v1';
 
-self.addEventListener('install', function(event) {
-  // Perform install steps
-  console.log("[ServiceWorker] Installed");
-  event.waitUntil(
-	  caches.open(cacheName).then(function(cache) {
-		  //console.log("[ServiceWorker] Caching cacheFiles");
-		  return cache.addAll(cacheFiles);
-	  })
-  );
+self.addEventListener('install', event => {
+    console.debug('Service worker installed');
+    event.waitUntil(
+        caches.open(cacheVersion).then(cache => {
+            return cache.addAll([
+                '/login.html',
+                '/home.html',
+                '/sw.js',
+                '/schedule.json',
+                '/manifest.json',
+                '/vendor/tabulator/tabulator.min.js',
+                '/vendor/jquery/jquery.min.js',
+                '/vendor/pdf.js/pdf.min.js',
+                '/vendor/plotly.js/plotly.js',
+                '/vendor/animate/animate.min.css',
+                '/vendor/bootstrap/bootstrap.min.css',
+                '/vendor/hamburgers/hamburgers.min.css',
+                '/vendor/tilt/tilt.jquery.min.js',
+                '/js/home.js',
+                '/js/extraFunctions.js',
+                '/js/buttonFunctions.js',
+                '/js/calculate_grade.js',
+                '/js/clock.js',
+                '/fonts/poppins/Poppins-Regular.ttf',
+                '/fonts/poppins/Poppins-Medium.ttf',
+                '/fonts/poppins/Poppins-Bold.ttf',
+                '/fonts/fontawesome/webfonts/fa-solid-900.woff2',
+                '/fonts/fontawesome/css/all.min.css',
+                '/css/tabulator.css',
+                '/css/home.css',
+                '/css/login.css',
+                '/images/logo-circle.png',
+                '/images/district-logo.png',
+                '/favicon.ico'
+            ])
+        })
+    );
 });
-
-self.addEventListener('activate', function(event) {
-  // Perform install steps
-  console.log("[ServiceWorker] Activated");
-
-	event.waitUntil(
-		caches.keys().then(function(cacheNames) {
-			return Promise.all(cacheNames.map(function(thisCacheName) {
-				if (thisCacheName !== cacheName) {
-					console.log("[ServiceWorker] Resolving Cached Files from ", thisCacheName);
-					return caches.delete(thisCacheName);
-				}
-			}))
-		})
-	);
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            cacheNames.map(cacheName => {
+                if (cacheName !== cacheVersion) {
+                    caches.delete(cacheName).then()
+                }
+            })
+        }))
 });
-
-self.addEventListener('fetch', function(event) {
-  // Perform install steps
-  //console.log("[ServiceWorker] Fetching", event.request.url);
-});
+// https://developers.google.com/web/ilt/pwa/caching-files-with-service-worker
 self.addEventListener('fetch', event => {
-  // Let the browser do its default thing
-  // for non-GET requests.
-  if (event.request.method != 'GET') return;
-
-  // Prevent the default, and handle the request ourselves.
-  event.respondWith(async function() {
-    // Try to get the response from a cache.
-    const cache = await caches.open('cacheFiles');
-    const cachedResponse = await cache.match(event.request);
-
-    if (cachedResponse) {
-      // If we found a match in the cache, return it, but also
-      // update the entry in the cache in the background.
-      event.waitUntil(cache.add(event.request));
-      return cachedResponse;
+    // If get request, i.e. a static resource get from cache, fallback on network
+    if (event.method === 'GET') {
+        event.respondWith(
+            caches.match(event.request).then(async response => {
+                return response || await fetch(event.request)
+            })
+        );
     }
-
-    // If we didn't find a match in the cache, use the network.
-    return fetch(event.request);
-  }());
 });
-
-//self.addEventListener('fetch', function (event) {
-//    //console.log('Handling fetch event for', event.request.url);
-//
-//    event.respondWith(
-//        caches.match(event.request).then(function (response) {
-//            if (response) {
-//                //console.log('Found response in cache:', response);
-//
-//                return response;
-//            }
-//
-//            console.log('No response found in cache. About to fetch from network...');
-//
-//            return fetch(event.request).then(function (response) {
-//                console.log('Response from network is:', response);
-//
-//                return response;
-//            }).catch(function (error) {
-//                console.error('Fetching failed:', error);
-//
-//                return caches.match(OFFLINE_URL);
-//            });
-//        })
-//    );
-//});
