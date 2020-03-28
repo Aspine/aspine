@@ -647,6 +647,11 @@ function responseCallback(response) {
         tableData.username = response.username;
     }
     
+    // Hide Reports tab if user entered without signing in
+    if (response.username === "") {
+        $("#reports_open").hide();
+    }
+
     $("#loader").hide();
     
     //parsing the data extracted by the scrappers, and getting tableData ready for presentation

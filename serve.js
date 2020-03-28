@@ -198,8 +198,23 @@ app.post('/data', async (req, res) => {
         //
         // Get data from scraper:
         //
-        response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
-        res.send(response);
+        if (!req.session.username || !req.session.password) {
+            res.send({
+                classes: [],
+                recent: {
+                    recentActivityArray: [],
+                    recentAttendanceArray: []
+                },
+                overview: [],
+                username: "",
+                quarter: "0"
+            });
+        }
+        else {
+            res.send(await scraper.scrape_student(
+                req.session.username, req.session.password, req.body.quarter
+            ));
+        }
 
         // If "out" command-line argument provided, save JSON at the given path
         if (args.hasOwnProperty("out")) {
