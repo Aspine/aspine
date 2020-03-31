@@ -51,24 +51,24 @@ function GPAType() {
 
   if (selection == 0) {
     quarterName = "Current Quarter";
-    quarterData = tableData.terms.current;
+    quarterData = currentTableData.terms.current;
   }
   else {
     quarterName = "Q" + selection;
-    quarterData = tableData.terms["q" + selection];
+    quarterData = currentTableData.terms["q" + selection];
   }
 
   if (selectedElem.html().includes("GPA")) {
     if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
           ) : "")
         );
       }
@@ -77,37 +77,37 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Unweighted")) {
     if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
           ) : "")
         );
       }
@@ -116,37 +116,37 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Weighted")) {
     if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent.toFixed(2)
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.percent.toFixed(2)
           ) : "")
         );
       }
@@ -155,23 +155,23 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
   }
@@ -209,7 +209,7 @@ function getLetterGrade(gradeToBeLettered) {
 }
 
 function getColor(gradeToBeColored) {
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "#1E8541";
   }
   
@@ -230,7 +230,7 @@ function getColor(gradeToBeColored) {
 
 let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
 function getLightColor(gradeToBeColored) {
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "#1E8541";
   }
   
@@ -253,7 +253,7 @@ let rowFormatter = function(cell) {
   let rowColor = cell.getRow().getData().color;
   let value = cell.getValue();
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
   }
   
@@ -276,7 +276,7 @@ let classColors = [
 ]
 
 let classIndex = function(classname) {
-  let classesArray = tableData.currentTermData.classes.map(x => x.name);
+  let classesArray = currentTableData.currentTermData.classes.map(x => x.name);
   return (classesArray.indexOf(classname));
   // why the mod 8?
 }
@@ -286,7 +286,7 @@ let classFormatter = function(cell, formatterParams) {
   let classColor = classColors[classIndex(rowClass)];
   let value = cell.getValue();
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
     
   }
@@ -306,7 +306,7 @@ let weightFormatter = function(cell, formatterParams) {
     value = value.substring(0, value.indexOf(".") + 2) + "%";
   }
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
   }
   
@@ -329,7 +329,7 @@ let rowGradeFormatter = function(cell, formatterParams) {
   } else {
     let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
     
-    if (vip_username_list.includes(tableData.username)) {
+    if (vip_username_list.includes(currentTableData.username)) {
       return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
     }	
     
@@ -376,7 +376,7 @@ let gradeFormatter = function(cell, formatterParams) {
       return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
       
     } else {
-      if (vip_username_list.includes(tableData.username)) {
+      if (vip_username_list.includes(currentTableData.username)) {
         return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
       }
       
@@ -452,7 +452,7 @@ let generate_pdf = function(index) {
     $('#pdf-container').css('height', $(window).height() + 'px');
   }
   
-  let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content};
+  let pdfInitParams = {"data": ((currentTableData.pdf_files)[index]).content};
   // Store the index of the current PDF in `currentPdfIndex`
   currentPdfIndex = index;
   let loadingTask = pdfjsLib.getDocument(pdfInitParams);
@@ -469,7 +469,7 @@ let generate_pdf = function(index) {
 let zoom_in_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
+    let pdfInitParams = {"data": (currentTableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
       
@@ -507,7 +507,7 @@ let zoom_in_pdf = function() {
 let zoom_out_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
+    let pdfInitParams = {"data": (currentTableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
       
@@ -627,17 +627,17 @@ let initialize_pdf_dropdown = function() {
   //$(o).html(tableData.pdf_files[i].title);
   //$("#pdf-select").append(o);
   
-  for (let i = 1; i < tableData.pdf_files.length + 1; i++) {
+  for (let i = 1; i < currentTableData.pdf_files.length + 1; i++) {
     if (i === 1) {
-      let o = new Option(tableData.pdf_files[i - 1].title, 0);
+      let o = new Option(currentTableData.pdf_files[i - 1].title, 0);
       /// jquerify the DOM object 'o' so we can use the html method
-      $(o).html(tableData.pdf_files[i - 1].title);
+      $(o).html(currentTableData.pdf_files[i - 1].title);
       $("#pdf_select").append(o);
     }
     
-    let o = new Option(tableData.pdf_files[i - 1].title, i);
+    let o = new Option(currentTableData.pdf_files[i - 1].title, i);
     /// jquerify the DOM object 'o' so we can use the html method
-    $(o).html(tableData.pdf_files[i - 1].title);
+    $(o).html(currentTableData.pdf_files[i - 1].title);
     $("#pdf_select").append(o);
     
   }
@@ -736,10 +736,10 @@ let initialize_quarter_dropdown = function() {
       // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
       c.addEventListener("click", function(e) {
         if (!this.innerHTML.includes("N")) {
-          if (tableData.imported) {
+          if (currentTableData.imported) {
             let term = parseInt(this.innerHTML[1]) || 0;
-            if (term === 0 && !tableData.terms.current) return;
-            if (term !== 0 && !tableData.terms["q" + term].classes) return;
+            if (term === 0 && !currentTableData.terms.current) return;
+            if (term !== 0 && !currentTableData.terms["q" + term].classes) return;
           }
           
           /* When an item is clicked, update the original select box,
@@ -762,7 +762,7 @@ let initialize_quarter_dropdown = function() {
                 else $("#mostRecentDiv").hide();
                 
                 
-                if (typeof tableData.terms[currentTerm].classes === 'undefined') {
+                if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
                   // if (anyEdited()) {
                   // $(".select-selected").css('padding', "5px 16px 5px 16px");
                   // } else {
@@ -805,12 +805,12 @@ let initialize_quarter_dropdown = function() {
                   }
                   
                   if (i === 0) {
-                    tableData.currentTermData = tableData.terms.current;
+                    currentTableData.currentTermData = currentTableData.terms.current;
                   } else {
-                    tableData.currentTermData = tableData.terms["q" + (i - 1)];
+                    currentTableData.currentTermData = currentTableData.terms["q" + (i - 1)];
                   }
                   
-                  classesTable.setData(tableData.currentTermData.classes);
+                  classesTable.setData(currentTableData.currentTermData.classes);
                   
                   $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
                   $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
@@ -971,9 +971,9 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
-  tableData.currentTermData.classes = classes;
-  let GPA = computeGPA(tableData.currentTermData.classes);
-  let calcGPA = computeGPA(tableData.currentTermData.classes);
+  currentTableData.currentTermData.classes = classes;
+  let GPA = computeGPA(currentTableData.currentTermData.classes);
+  let calcGPA = computeGPA(currentTableData.currentTermData.classes);
   return {
     classes,
     GPA,
@@ -981,7 +981,7 @@ function parseTableData(classes) {
   };
 }
 let anyEdited = function() {
-  let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
+  let termsEdited = (currentTableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
     return currentValue.edited
   });
   let finalDecision = false;

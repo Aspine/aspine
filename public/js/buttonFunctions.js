@@ -1,12 +1,12 @@
 let newAssignment = function() {
   
-  tableData.currentTermData.classes[selected_class_i].edited = true;
+  currentTableData.currentTermData.classes[selected_class_i].edited = true;
   
   if (!isNaN(selected_class_i)) {
     
-    tableData.currentTermData.classes[selected_class_i].assignments.unshift({
+    currentTableData.currentTermData.classes[selected_class_i].assignments.unshift({
       "name": "Assignment",
-      "category": Object.keys(tableData.currentTermData.classes[selected_class_i].categories)[0],
+      "category": Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories)[0],
       "score": 10,
       "max_score": 10,
       "percentage": 100,
@@ -21,27 +21,27 @@ let newAssignment = function() {
 
 let editAssignment = function(data) {
   
-  tableData.currentTermData.classes[selected_class_i].edited = true;
+  currentTableData.currentTermData.classes[selected_class_i].edited = true;
   
-  tableData.currentTermData.classes[selected_class_i].assignments = data.slice();
+  currentTableData.currentTermData.classes[selected_class_i].assignments = data.slice();
   
   
-  for (let j = 0; j < tableData.currentTermData.classes[selected_class_i].assignments.length; j++) {
-    tableData.currentTermData.classes[selected_class_i].assignments[j].percentage = Math.round(tableData.currentTermData.classes[selected_class_i].assignments[j].score / tableData.currentTermData.classes[selected_class_i].assignments[j].max_score * 1000) / 10;
-    tableData.currentTermData.classes[selected_class_i].assignments[j].color = getColor(tableData.currentTermData.classes[selected_class_i].assignments[j].percentage);
+  for (let j = 0; j < currentTableData.currentTermData.classes[selected_class_i].assignments.length; j++) {
+    currentTableData.currentTermData.classes[selected_class_i].assignments[j].percentage = Math.round(currentTableData.currentTermData.classes[selected_class_i].assignments[j].score / currentTableData.currentTermData.classes[selected_class_i].assignments[j].max_score * 1000) / 10;
+    currentTableData.currentTermData.classes[selected_class_i].assignments[j].color = getColor(currentTableData.currentTermData.classes[selected_class_i].assignments[j].percentage);
     
-    if (tableData.currentTermData.classes[selected_class_i].assignments[j].category.includes("(")) {
-      tableData.currentTermData.classes[selected_class_i].assignments[j].category = tableData.currentTermData.classes[selected_class_i].assignments[j].category.substring(0, tableData.currentTermData.classes[selected_class_i].assignments[j].category.indexOf("(") - 1); 
+    if (currentTableData.currentTermData.classes[selected_class_i].assignments[j].category.includes("(")) {
+      currentTableData.currentTermData.classes[selected_class_i].assignments[j].category = currentTableData.currentTermData.classes[selected_class_i].assignments[j].category.substring(0, currentTableData.currentTermData.classes[selected_class_i].assignments[j].category.indexOf("(") - 1); 
     }
     
     
-    if (isNaN(tableData.currentTermData.classes[selected_class_i].assignments[j].score) || tableData.currentTermData.classes[selected_class_i].assignments[j].score === "") {
-      tableData.currentTermData.classes[selected_class_i].assignments[j].score = "None";
+    if (isNaN(currentTableData.currentTermData.classes[selected_class_i].assignments[j].score) || currentTableData.currentTermData.classes[selected_class_i].assignments[j].score === "") {
+      currentTableData.currentTermData.classes[selected_class_i].assignments[j].score = "None";
     }
     
     
-    if (isNaN(tableData.currentTermData.classes[selected_class_i].assignments[j].max_score) || tableData.currentTermData.classes[selected_class_i].assignments[j].max_score === "") {
-      tableData.currentTermData.classes[selected_class_i].assignments[j].max_score = "None";
+    if (isNaN(currentTableData.currentTermData.classes[selected_class_i].assignments[j].max_score) || currentTableData.currentTermData.classes[selected_class_i].assignments[j].max_score === "") {
+      currentTableData.currentTermData.classes[selected_class_i].assignments[j].max_score = "None";
     }
   }
   
@@ -53,17 +53,17 @@ let editAssignment = function(data) {
 let resetTableData = function() {
   
   //tableData.currentTermData.classes[selected_class_i].edited = false;
-  tableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
-  tableData.currentTermData = tableData.terms[currentTerm];
+  currentTableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
+  currentTableData.currentTermData = currentTableData.terms[currentTerm];
   if (selected_class_i) {
-    assignmentsTable.setData(tableData.currentTermData.classes[selected_class_i].assignments);
-    categoriesTable.setData(tableData.currentTermData.classes[selected_class_i].categoryDisplay);
+    assignmentsTable.setData(currentTableData.currentTermData.classes[selected_class_i].assignments);
+    categoriesTable.setData(currentTableData.currentTermData.classes[selected_class_i].categoryDisplay);
   }
-  classesTable.setData(tableData.currentTermData.classes);
+  classesTable.setData(currentTableData.currentTermData.classes);
   
-  tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
-  let GPA = tableData.terms[currentTerm].GPA;
-  let calcGPA = tableData.terms[currentTerm].calcGPA;
+  currentTableData.currentTermData.calcGPA = computeGPA(currentTableData.currentTermData.classes);
+  let GPA = currentTableData.terms[currentTerm].GPA;
+  let calcGPA = currentTableData.terms[currentTerm].calcGPA;
   
   if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
@@ -76,7 +76,7 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
       
     } else {
-      tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
+      currentTableData.currentTermData.calcGPA = computeGPA(currentTableData.currentTermData.classes);
       
       
       
@@ -116,24 +116,24 @@ let hideCategoriesTable = function() {
 }
 
 let updateGradePage = function() {
-  let computingClassData = tableData.currentTermData.classes[selected_class_i];
+  let computingClassData = currentTableData.currentTermData.classes[selected_class_i];
   
   let gradeInfo = (computeGrade(computingClassData.assignments, computingClassData.categories, computingClassData.decimals, computingClassData.init_calculated_grade, computingClassData.grade));
   
-  tableData.currentTermData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
+  currentTableData.currentTermData.classes[selected_class_i].calculated_grade = gradeInfo[computingClassData.type];
   
-  tableData.currentTermData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
+  currentTableData.currentTermData.classes[selected_class_i].categoryDisplay = getCategoryDisplay(gradeInfo, computingClassData);
   
-  classesTable.replaceData(tableData.currentTermData.classes);
-  categoriesTable.setData(tableData.currentTermData.classes[selected_class_i].categoryDisplay);
+  classesTable.replaceData(currentTableData.currentTermData.classes);
+  categoriesTable.setData(currentTableData.currentTermData.classes[selected_class_i].categoryDisplay);
   
-  assignmentsTable.replaceData(tableData.currentTermData.classes[selected_class_i].assignments);
+  assignmentsTable.replaceData(currentTableData.currentTermData.classes[selected_class_i].assignments);
   
-  tableData.currentTermData.calcGPA = computeGPA(tableData.currentTermData.classes);
-  tableData.terms[currentTerm].calcGPA = computeGPA(tableData.currentTermData.classes);
+  currentTableData.currentTermData.calcGPA = computeGPA(currentTableData.currentTermData.classes);
+  currentTableData.terms[currentTerm].calcGPA = computeGPA(currentTableData.currentTermData.classes);
   
-  let GPA = tableData.terms[currentTerm].GPA;
-  let calcGPA = tableData.terms[currentTerm].calcGPA;
+  let GPA = currentTableData.terms[currentTerm].GPA;
+  let calcGPA = currentTableData.terms[currentTerm].calcGPA;
   
   if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
@@ -141,7 +141,7 @@ let updateGradePage = function() {
     
     let selectedElem = $(".select-selected");
     
-    let quarterData = tableData.terms[currentTerm];
+    let quarterData = currentTableData.terms[currentTerm];
     let quarterName;
     
     if (currentTerm === "current") {
@@ -155,14 +155,14 @@ let updateGradePage = function() {
     if (selectedElem.html().includes("GPA")) {
       if (quarterData.GPA.percent !== quarterData.calcGPA.percent) {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
-          "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
+          "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2) +
+          "<br> Calculated: " + currentTableData.terms.current.calcGPA.percent.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
-            (tableData.terms["q" + i].calcGPA ? (
-              "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent.toFixed(2)
+            "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2) +
+            (currentTableData.terms["q" + i].calcGPA ? (
+              "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.percent.toFixed(2)
             ) : "")
           );
         }
@@ -171,37 +171,37 @@ let updateGradePage = function() {
           "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
+          "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
+            "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2)
           );
         }
         selectedElem.html(
           quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
     }
     else if (selectedElem.html().includes("Unweighted")) {
       if (quarterData.GPA.outOfFour !== quarterData.calcGPA.outOfFour) {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
-          "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
+          "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2) +
+          "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFour.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
-            (tableData.terms["q" + i].calcGPA ? (
-              "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
+            "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
+            (currentTableData.terms["q" + i].calcGPA ? (
+              "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
               ) : "")
           );
         }
@@ -210,37 +210,37 @@ let updateGradePage = function() {
           "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+          "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
         );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
+          "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
+            "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2)
             );
         }
         selectedElem.html(
           quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+          "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
         );
       }
     }
     else if (selectedElem.html().includes("Weighted")) {
       if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
-          "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
+          "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2) +
+          "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFive.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
-            (tableData.terms["q" + i].calcGPA ? (
-              "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
+            "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
+            (currentTableData.terms["q" + i].calcGPA ? (
+              "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
               ) : "")
           );
         }
@@ -249,23 +249,23 @@ let updateGradePage = function() {
           "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+          "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
         );
       }
       else {
         $("#current, #current_gpa, #init_gpa").html(
-          "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
+          "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2)
         );
         for (let i = 1; i <= 4; i++) {
           $(`#q${i}, #q${i}_gpa`).html(
-            "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
+            "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2)
           );
         }
         selectedElem.html(
           quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+          "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
         );
       }
     }
@@ -299,18 +299,18 @@ let exportTableData = async function(prefs) {
 */
 //#endif
 
-  obj.username = tableData.username;
-  obj.overview = tableData.overview;
+  obj.username = currentTableData.username;
+  obj.overview = currentTableData.overview;
 
-  if (prefs.recent) obj.recent = tableData.recent;
-  if (prefs.schedule) obj.schedule = tableData.schedule;
+  if (prefs.recent) obj.recent = currentTableData.recent;
+  if (prefs.schedule) obj.schedule = currentTableData.schedule;
   if (prefs.terms) {
     obj.terms = {};
     termConverter.forEach(term => {
-      if (prefs.terms[term]) obj.terms[term] = tableData.terms[term];
+      if (prefs.terms[term]) obj.terms[term] = currentTableData.terms[term];
     });
   }
-  if (prefs.cumGPA) obj.cumGPA = tableData.cumGPA;
+  if (prefs.cumGPA) obj.cumGPA = currentTableData.cumGPA;
 
   let jsonString = JSON.stringify(obj);
 
@@ -339,7 +339,7 @@ let importTableData = async function(obj) {
     `incompatible with Aspine version ${version}.`;
   }
   
-  tableData.imported = true;
+  currentTableData.imported = true;
 
   currentTerm = "";
   termConverter.forEach(term => {
