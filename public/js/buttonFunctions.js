@@ -339,6 +339,9 @@ let importTableData = async function(obj) {
     `incompatible with Aspine version ${version}.`;
   }
   
+  currentTableDataIndex++;
+  tableData[currentTableDataIndex] = {};
+  currentTableData = tableData[currentTableDataIndex];
   currentTableData.imported = true;
 
   currentTerm = "";
