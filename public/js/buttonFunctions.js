@@ -68,8 +68,8 @@ let resetTableData = function() {
   if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
     if (currentTerm === "current") {
-      $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Current Quarter GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+      $(".gpa_select-selected").html("Current Quarter GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
       $("#" + currentTerm).html("Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: "  + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent;
@@ -81,8 +81,8 @@ let resetTableData = function() {
       
       
       
-      $(".select-selected").css('padding', "5px 16px 5px 16px");
-      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
+      $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+      $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
       
       $("#" + currentTerm).css('padding', "5px 16px 5px 16px");
       $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent + "<br>Calculated GPA: " + calcGPA.percent);
@@ -90,8 +90,8 @@ let resetTableData = function() {
     }
   } else {
     if (currentTerm ==="current") {
-      $(".select-selected").css("padding", "13px 16px 13px 16px");
-      $(".select-selected").html("Current Quarter GPA: " + GPA.percent);
+      $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+      $(".gpa_select-selected").html("Current Quarter GPA: " + GPA.percent);
       
       $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
       $("#" + currentTerm).html("Current Quarter GPA: "  + GPA.percent);
@@ -99,8 +99,8 @@ let resetTableData = function() {
       document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: "  + GPA.percent;
       
     } else {
-      $(".select-selected").css("padding", "13px 16px 13px 16px");
-      $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent);
+      $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+      $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent);
       
       $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
       $("#" + currentTerm).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + GPA.percent);
@@ -137,9 +137,9 @@ let updateGradePage = function() {
   
   if (anyEdited()) {
     //fix the editing system in the if statement above to be true if any of the classes are edited
-    $(".select-selected").css('padding', "5px 16px 5px 16px");
+    $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
     
-    let selectedElem = $(".select-selected");
+    let selectedElem = $(".gpa_select-selected");
     
     let quarterData = currentTableData.terms[currentTerm];
     let quarterName;
@@ -274,10 +274,10 @@ let updateGradePage = function() {
     //+ " <i class=\"fa fa-sync-alt\" aria-hidden=\"true\"></i>"
     //document.getElementById("GPA").innerHTML = "Quarter GPA: " + tableData.GPA + "<br>Calculated GPA: " + tableData.calcGPA + " <i class=\"fa fa-refresh\" aria-hidden=\"true\"></i>";
   } else {
-    $(".select-selected").css("padding", "13px 16px 13px 16px");
+    $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
     $("#" + currentTerm).css("padding", "13px 16px 13px 16px");
     
-    $(".select-selected").html("Quarter GPA: " + GPA.percent);
+    $(".gpa_select-selected").html("Quarter GPA: " + GPA.percent);
     $("#" + currentTerm).html("Quarter GPA: " + GPA.percent);
   }
 }

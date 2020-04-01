@@ -747,12 +747,12 @@ function responseCallback(response) {
     initialize_quarter_dropdown();
     termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
     
-    $(".select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
+    $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
     $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
     document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
     document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
     
-    $(".select-items").children().each(function(i, elem) {
+    $(".gpa_select-items").children().each(function(i, elem) {
         if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
             if (i === 0) {
                 $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
@@ -797,13 +797,13 @@ function responseCallbackPartial(response) {
     
     /*
     if (currentTerm === 'current') {
-        $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
+        $(".gpa_select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         
     } else {
-        $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
+        $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent; 
     }

@@ -43,7 +43,7 @@ function getGPA(gradeToBeGPA) {
 
 function GPAType() {
   let selectElem = $("#gpa_select");
-  let selectedElem = $(".select-selected");
+  let selectedElem = $(".gpa_select-selected");
   let selection = $("#gpa_select option")[selectElem.prop("selectedIndex")].value;
 
   let quarterName = "";
@@ -598,8 +598,8 @@ function closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
   except the current select box: */
   let x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
+  x = document.getElementsByClassName("gpa_select-items");
+  y = document.getElementsByClassName("gpa_select-selected");
   for (i = 0; i < y.length; i++) {
     if (elmnt === y[i]) {
       arrNo.push(i)
@@ -612,7 +612,7 @@ function closeAllSelect(elmnt) {
       x[i].classList.add("select-hide");
     }
   }
-  if (!$(".select-selected").hasClass("select-arrow-active")) {
+  if (!$(".gpa_select-selected").hasClass("select-arrow-active")) {
     $('.select-selected').removeClass("activated-selected-item");
     $('.select-items div').removeClass("activated-select-items");
   }
@@ -643,7 +643,7 @@ let initialize_pdf_dropdown = function() {
   }
   
   let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "custom-select": */
+  /* Look for any elements with the class "pdf_custom-select": */
   x = document.getElementsByClassName("pdf_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
@@ -707,24 +707,24 @@ let initialize_pdf_dropdown = function() {
 let initialize_quarter_dropdown = function() {
   
   let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "custom-select": */
-  x = document.getElementsByClassName("custom-select");
+  /* Look for any elements with the class "gpa_custom-select": */
+  x = document.getElementsByClassName("gpa_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
-    if (a = document.getElementsByClassName("select-selected")[0]) {
+    if (a = document.getElementsByClassName("gpa_select-selected")[0]) {
       a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
       continue;
     }
     /* For each element, create a new DIV that will act as the selected item: */
     a = document.createElement("DIV");
-    a.setAttribute("class", "select-selected");
+    a.setAttribute("class", "gpa_select-selected select-selected");
     a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
     x[i].appendChild(a);
 
     if (document.getElementById("view_gpa_select")) continue;
     /* For each element, create a new DIV that will contain the option list: */
     b = document.createElement("DIV");
-    b.setAttribute("class", "select-items select-hide");
+    b.setAttribute("class", "gpa_select-items select-items select-hide");
     b.setAttribute("id", "view_gpa_select");
     for (j = 1; j < selElmnt.length; j++) {
       if (document.getElementById(termConverter[j - 1] || "cum")) continue;
@@ -764,9 +764,9 @@ let initialize_quarter_dropdown = function() {
                 
                 if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
                   // if (anyEdited()) {
-                  // $(".select-selected").css('padding', "5px 16px 5px 16px");
+                  // $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
                   // } else {
-                  $(".select-selected").css("padding", "13px 16px 13px 16px");
+                  $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
                   // }
                   
                   
@@ -799,9 +799,9 @@ let initialize_quarter_dropdown = function() {
                 } else {
                   
                   if (anyEdited()) {
-                    $(".select-selected").css('padding', "5px 16px 5px 16px");
+                    $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
                   } else {
-                    $(".select-selected").css("padding", "13px 16px 13px 16px");
+                    $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
                   }
                   
                   if (i === 0) {
