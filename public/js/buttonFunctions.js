@@ -343,6 +343,7 @@ let importTableData = async function(obj) {
   tableData[currentTableDataIndex] = {};
   currentTableData = tableData[currentTableDataIndex];
   currentTableData.imported = true;
+  currentTableData.name = obj.name;
 
   currentTerm = "";
   termConverter.forEach(term => {
@@ -373,4 +374,25 @@ let importTableData = async function(obj) {
   });
 
   currentTerm = firstTerm;
+
+  for (let i in tableData) {
+    if (!$(`#tableData_select option[value='${i}']`)[0]) {
+      let option = document.createElement("option");
+      option.value = `${i}`;
+      option.textContent = tableData[i].name;
+      $("#tableData_select")[0].insertBefore(
+        option, $("#tableData_select option[value='import']")[0]
+      );
+
+      let div = document.createElement("div");
+      div.id = `tableData_select-items-${i}`;
+      div.textContent = tableData[i].name;
+      div.addEventListener("click", tableData_option_onclick);
+      $(".tableData_select-items")[0].insertBefore(
+        div, $("#tableData_select-items-import")[0]
+      );
+    }
+  }
+
+  $(`#tableData_select-items-${currentTableDataIndex}`).click();
 };

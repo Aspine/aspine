@@ -6,7 +6,7 @@ let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
-let tableData = [{}];
+let tableData = [{ name: "Current Year" }];
 let currentTableDataIndex = 0;
 let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
@@ -1018,7 +1018,9 @@ $("#import_button").click(async () => {
     const reader = new FileReader();
     reader.readAsText(file);
     reader.addEventListener("load", async () => {
-        let response = await importTableData(JSON.parse(reader.result));
+        let obj = JSON.parse(reader.result);
+        obj.name = file.name;
+        let response = await importTableData(obj);
         if (response) {
             $("#import_error").text(response);
         } else {

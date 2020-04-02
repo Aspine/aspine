@@ -880,6 +880,39 @@ let initialize_quarter_dropdown = function() {
   }
 };
 
+let tableData_option_onclick = function() {
+  if (this.id === "tableData_select-items-import") {
+    importModal.style.display = 'inline-block';
+    return;
+  }
+
+  let index_temp = parseInt(this.id.substring("tableData_select-items-".length))
+  currentTableDataIndex =
+    isNaN(index_temp) ? currentTableDataIndex : index_temp;
+  currentTableData = tableData[currentTableDataIndex];
+  
+  /* When an item is clicked, update the original select box,
+  and the selected item: */
+  let y, i, k, s, h;
+  s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+  h = this.parentNode.previousSibling;
+  for (i = 0; i < s.length; i++) {
+    if (s.options[i].innerHTML === this.innerHTML) {
+      s.selectedIndex = i;
+      h.innerHTML = this.innerHTML;
+      y = this.parentNode.getElementsByClassName("tableData_same-as-selected");
+      for (k = 0; k < y.length; k++) {
+        y[k].removeAttribute("class");
+      }
+      this.setAttribute("class", "tableData_same-as-selected");
+      
+      classesTable.setData(currentTableData.currentTermData.classes);
+      break;
+    }
+  }
+  h.click();
+}
+
 let initialize_tableData_dropdown = function() { 
   let x, i, j, selElmnt, a, b, c;
   /* Look for any elements with the class "pdf_custom-select": */
@@ -898,31 +931,9 @@ let initialize_tableData_dropdown = function() {
       /* For each option in the original select element,
       create a new DIV that will act as an option item: */
       c = document.createElement("DIV");
+      c.id = `tableData_select-items-${selElmnt.options[j].value}`;
       c.innerHTML = selElmnt.options[j].innerHTML;
-      c.addEventListener("click", function(e) {
-        if (this.innerHTML === "Import Data...") {
-          importModal.style.display = 'inline-block';
-          return;
-        }
-        /* When an item is clicked, update the original select box,
-        and the selected item: */
-        let y, i, k, s, h;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML === this.innerHTML) {
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("tableData_same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute("class");
-            }
-            this.setAttribute("class", "tableData_same-as-selected");
-            break;
-          }
-        }
-        h.click();
-      });
+      c.addEventListener("click", tableData_option_onclick);
       b.appendChild(c);
     }
     x[i].appendChild(b);
