@@ -613,8 +613,34 @@ function closeAllSelect(elmnt) {
     }
   }
   if (!$(".gpa_select-selected").hasClass("select-arrow-active")) {
-    $('.select-selected').removeClass("activated-selected-item");
-    $('.select-items div').removeClass("activated-select-items");
+    $('.gpa_select-selected').removeClass("activated-selected-item");
+    $('.gpa_select-items div').removeClass("activated-select-items");
+  }
+  
+}
+function tableData_closeAllSelect(elmnt) {
+  //  $('.select-selected').removeClass("activated-selected-item");
+  $('.tableData_select-items div').removeClass("activated-select-items");
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  let x, y, i, arrNo = [];
+  x = document.getElementsByClassName("tableData_select-items");
+  y = document.getElementsByClassName("tableData_select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt === y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
+    }
+  }
+  if (!$(".tableData_select-selected").hasClass("select-arrow-active")) {
+    $('.tableData_select-selected').removeClass("activated-selected-item");
+    $('.tableData_select-items div').removeClass("activated-select-items");
   }
   
 }
@@ -838,8 +864,8 @@ let initialize_quarter_dropdown = function() {
     }
     x[i].appendChild(b);
     a.addEventListener("click", function(e) {
-      //$('.select-selected').addClass("activated-select-items");
-      //$('.select-items div').addClass("activated-select-items");
+      //$('.gpa_select-selected').addClass("activated-select-items");
+      //$('.gpa_select-items div').addClass("activated-select-items");
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
       
@@ -847,12 +873,67 @@ let initialize_quarter_dropdown = function() {
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
-      $('.select-selected').toggleClass("activated-selected-item");
-      $('.select-items div').toggleClass("activated-select-items");
+      $('.gpa_select-selected').toggleClass("activated-selected-item");
+      $('.gpa_select-items div').toggleClass("activated-select-items");
       //resetTableData();
     });
   }
 };
+
+let initialize_tableData_dropdown = function() { 
+  let x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "pdf_custom-select": */
+  x = document.getElementsByClassName("tableData_custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "tableData_select-selected select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "tableData_select-items select-items select-hide");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+      create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.addEventListener("click", function(e) {
+        /* When an item is clicked, update the original select box,
+        and the selected item: */
+        let y, i, k, s, h;
+        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+        h = this.parentNode.previousSibling;
+        for (i = 0; i < s.length; i++) {
+          if (s.options[i].innerHTML === this.innerHTML) {
+            s.selectedIndex = i;
+            h.innerHTML = this.innerHTML;
+            y = this.parentNode.getElementsByClassName("tableData_same-as-selected");
+            for (k = 0; k < y.length; k++) {
+              y[k].removeAttribute("class");
+            }
+            this.setAttribute("class", "tableData_same-as-selected");
+            break;
+          }
+        }
+        h.click();
+      });
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      /* When the select box is clicked, close any other select boxes,
+      and open/close the current select box: */
+      e.stopPropagation();
+      //pdf_closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+      $('.tableData_select-selected').toggleClass("activated-selected-item");
+      $('.tableData_select-items div').toggleClass("activated-select-items");
+    });
+  }
+}
 
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports'); 

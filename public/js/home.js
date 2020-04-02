@@ -23,8 +23,9 @@ window.addEventListener("click", function(event) {
     if (event.target === importModal) {
         hideImportModal();
     }
-    pdf_closeAllSelect();
     closeAllSelect();
+    pdf_closeAllSelect();
+    tableData_closeAllSelect();
 });
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
@@ -747,6 +748,10 @@ function responseCallback(response) {
     initialize_quarter_dropdown();
     termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
     
+    if (!$(".tableData_select-selected")[0]) {
+        initialize_tableData_dropdown();
+    }
+
     $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
     $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
     document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
