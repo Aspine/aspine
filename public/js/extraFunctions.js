@@ -882,7 +882,7 @@ let initialize_quarter_dropdown = function() {
 
 let tableData_option_onclick = function() {
   if (this.id === "tableData_select-items-import") {
-    importModal.style.display = 'inline-block';
+    showModal("import");
     return;
   }
 

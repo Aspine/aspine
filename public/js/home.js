@@ -1,6 +1,11 @@
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let pdfrendering = false;
+let modals = {
+    "stats": document.getElementById('stats_modal'),
+    "export": document.getElementById('export_modal'),
+    "import": document.getElementById('import_modal')
+};
 let statsModal = document.getElementById('stats_modal');
 let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
@@ -14,15 +19,11 @@ let termsReset = {};
 
 // When the user clicks anywhere outside of the modal, close it
 window.addEventListener("click", function(event) {
-    if (event.target === statsModal) {
-        hideStatsModal();
-    }
-    if (event.target === exportModal) {
-        hideExportModal();
-    }
-    if (event.target === importModal) {
-        hideImportModal();
-    }
+    Object.keys(modals).forEach(key => {
+        if (event.target === modals[key]) {
+            hideModal(key);
+        }
+    });
     closeAllSelect();
     pdf_closeAllSelect();
     tableData_closeAllSelect();
@@ -64,10 +65,6 @@ window.addEventListener('resize', function() {
     }
 });
 */
-let hideStatsModal = function() {
-    statsModal.style.display = "none";
-    noStats();
-};
 let noStats = function() {
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
@@ -78,12 +75,13 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.top = "140px";
 };
 
-let hideExportModal = function() {
-    exportModal.style.display = "none";
-};
+let hideModal = function(key) {
+    modals[key].style.display = "none";
+    if (key === "stats") noStats();
+}
 
-let hideImportModal = function() {
-    importModal.style.display = "none";
+let showModal = function(key) {
+    modals[key].style.display = "inline-block";
 }
 
 let recentAttendance = new Tabulator("#recentAttendance", {
@@ -304,7 +302,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     noStats();
                     document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                     //document.getElementById("stats_modal_title").innerHTML = "";
-                    document.getElementById('stats_modal').style.display = "inline-block";
+                    showModal("stats");
                     //$("#there_are_stats").hide();
                     //$("#there_are_no_stats").show();
                     //document.getElementById("stats_modal_caption").style.top = "7px";
@@ -1024,7 +1022,7 @@ $("#import_button").click(async () => {
         if (response) {
             $("#import_error").text(response);
         } else {
-            hideImportModal();
+            hideModal("import");
         }
     });
 });

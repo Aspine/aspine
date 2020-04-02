@@ -103,7 +103,7 @@
   <div id="stats_modal" class="modal">
     <!-- Modal content -->
     <div id="stats_modal_content" class="modal-content">
-      <span class="close" onclick="hideStatsModal()">&times;</span>
+      <span class="close" onclick="hideModal('stats')">&times;</span>
       <div id="there_are_no_stats">
         <p id="no_stats_caption">No Statistics information for this assignment.</p>
       </div>
@@ -131,7 +131,7 @@
   <div id="export_modal" class="modal">
     <!-- Modal content -->
     <div id="export_modal_content" class="modal-content">
-      <span class="close" onclick="hideExportModal()">&times;</span>
+      <span class="close" onclick="hideModal('export')">&times;</span>
       <h3 id="export_modal_title">Export Data</h3>
       <ul>
         <li>
@@ -198,7 +198,7 @@
   <div id="import_modal" class="modal">
     <!-- Modal content -->
     <div id="import_modal_content" class="modal-content">
-      <span class="close" onclick="hideImportModal()">&times;</span>
+      <span class="close" onclick="hideModal('import')">&times;</span>
       <h3 id="import_modal_title">Import Data</h3>
       <input type="file" id="import_filepicker">
       <button id="import_button">Import</button>
