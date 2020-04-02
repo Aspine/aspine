@@ -900,6 +900,10 @@ let initialize_tableData_dropdown = function() {
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.addEventListener("click", function(e) {
+        if (this.innerHTML === "Import Data...") {
+          importModal.style.display = 'inline-block';
+          return;
+        }
         /* When an item is clicked, update the original select box,
         and the selected item: */
         let y, i, k, s, h;
