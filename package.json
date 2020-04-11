@@ -9,7 +9,10 @@
   "license": "GPL-3.0-only",
   "contributors": [
     "Max Katz-Christy",
-    "Cole Killian"
+    "Cole Killian",
+    "psvenk",
+    "kdk1616",
+    "notrodes"
   ],
   "main": "serve.js",
   "repository": "github:Aspine/aspine",

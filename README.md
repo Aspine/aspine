@@ -78,8 +78,10 @@ If you use Windows, you can just right-click on the file "install1.bat" and clic
 ## Authors
 
 * [**Max Katz-Christy**](https://github.com/maxtkc)
-* [**Cole Killian**](https://github.com/ruborcalor)
+* [**Cole Killian**](https://github.com/Ruborcalor)
 * [**psvenk**](https://github.com/psvenk)
+* [**kdk1616**](https://github.com/kdk1616)
+* [**notrodes**](https://github.com/notrodes)
 
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
