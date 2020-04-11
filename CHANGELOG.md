@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - tagged 2020-04-11, production TBD
+- Bug fixes
+  + Fix a file path in package.json
+  + Fix some issues relating to switching between types of GPA (percent, unweighted, and weighted)
+- Improve offline functionality ([#115])
+- Update Aspine for quarter 4
+
 ## [2.2.0] - tagged 2020-03-24, production TBD
 - Clean up code ([#108], [#96])
   + Reorganize files
@@ -50,3 +57,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#106]: https://github.com/Aspine/aspine/pull/106
 [#108]: https://github.com/Aspine/aspine/pull/108
 [#109]: https://github.com/Aspine/aspine/pull/109
+[#115]: https://github.com/Aspine/aspine/pull/115
