@@ -951,3 +951,8 @@ function openTab(evt, tab_name) {
 }
 
 document.getElementById("default_open").click();
+
+// Populate the version number at the bottom of the page.
+// Pointfree style does not work here because jQuery's .text behaves both as
+// an attribute and as a function.
+$.ajax("/version").then(ver => $("#version").text(ver));
