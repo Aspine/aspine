@@ -282,10 +282,11 @@ let updateGradePage = function() {
   }
 }
 
-let exportTableData = function(prefs) {
+let exportTableData = async function(prefs) {
   if (!prefs.calculated) resetTableData();
   
   let obj = {};
+  obj.version = await $.ajax("/version");
   obj.username = tableData.username;
   obj.overview = tableData.overview;
 
