@@ -15,7 +15,7 @@ const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
-const pjson = require('./package.json');
+const child_process = require('child_process');
 // -------------------------------------------
 
 if (args.hasOwnProperty('help') || args._.includes('help')) {
@@ -131,8 +131,10 @@ app.use('/fonts/fontawesome/webfonts', express.static(
 ));
 
 // Endpoint to expose version number to client
-app.get('/version', (req, res) => {
-    res.send(pjson.version);
+app.get('/version', async (req, res) => {
+    child_process.exec('git describe',
+      (error, stdout, stderr) => res.send(stdout)
+    );
 });
 
 app.use(function(req, res, next) { // enable cors
