@@ -15,6 +15,7 @@ const fs = require('fs');
 const https = require('https');
 const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
+const pjson = require('./package.json');
 // -------------------------------------------
 
 if (args.hasOwnProperty('help') || args._.includes('help')) {
@@ -128,6 +129,11 @@ new Map([
 app.use('/fonts/fontawesome/webfonts', express.static(
     __dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts/'
 ));
+
+// Endpoint to expose version number to client
+app.get('/version', (req, res) => {
+    res.send(pjson.version);
+});
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
