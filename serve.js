@@ -147,6 +147,10 @@ app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.get('/home.html', (req, res) => res.redirect('/'));
+app.get('/login.html', (req, res) => res.redirect('/login'));
+
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
@@ -175,7 +179,7 @@ app.post('/data', async (req, res) => {
     //
     // Get data from scraper:
     //
-    if (!req.session.username || !req.session.password) {
+    if (req.session.nologin) {
         res.send({ nologin: true });
     }
     else {
@@ -194,17 +198,24 @@ app.post('/pdf', async (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    if(typeof(req.session) != "undefined") {
-        res.redirect('/home.html');
+    if (req.session.username || req.session.nologin) {
+        res.sendFile(__dirname + '/public/home.html');
     } else {
         res.redirect('/login.html');
     }
 });
 
+app.get('/login', (req, res) => res.sendFile(__dirname + '/public/login.html'));
+
 app.post('/login', async (req, res) => {
-    req.session.username = req.body.username;
-    req.session.password = req.body.password;
-  res.redirect('/home.html');
+    if (req.body.username && req.body.password) {
+        req.session.username = req.body.username;
+        req.session.password = req.body.password;
+    }
+    else {
+        req.session.nologin = true;
+    }
+    res.redirect('/home.html');
 });
 
 app.get('/logout', async (req, res) => {
