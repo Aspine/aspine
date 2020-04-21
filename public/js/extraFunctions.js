@@ -880,6 +880,31 @@ let initialize_quarter_dropdown = function() {
   }
 };
 
+let setup_quarter_dropdown = function() {
+  $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
+  $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
+  document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  
+  $(".gpa_select-items").children().each(function(i, elem) {
+      if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
+          if (i === 0) {
+              $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
+          } else {
+              if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
+                  $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
+                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent; 
+              } else {
+                  $(this).html("Q" + i + " GPA: None");
+                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
+              }
+          }
+      }
+  });
+};
+
 let tableData_option_onclick = function() {
   if (this.id === "tableData_select-items-import") {
     showModal("import");
@@ -908,6 +933,11 @@ let tableData_option_onclick = function() {
       break;
     }
   }
+
+  // Re-initialize the quarter dropdown with the data from
+  // currentTableData
+  initialize_quarter_dropdown();
+  setup_quarter_dropdown();
 
   classesTable.setData(currentTableData.currentTermData.classes);
   scheduleTable.setData(currentTableData.schedule.black);

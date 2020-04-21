@@ -784,28 +784,7 @@ function responseCallback(response) {
         initialize_tableData_dropdown();
     }
 
-    $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-    $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-    document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
-    document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
-    
-    $(".gpa_select-items").children().each(function(i, elem) {
-        if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
-            if (i === 0) {
-                $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
-                document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-                document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-            } else {
-                if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
-                    $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
-                    document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent; 
-                } else {
-                    $(this).html("Q" + i + " GPA: None");
-                    document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
-                }
-            }
-        }
-    });
+    setup_quarter_dropdown();
 
     // scheduleTable.setData(tableData.schedule.black);
     recentActivity.setData(currentTableData.recent.recentActivityArray);
