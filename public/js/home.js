@@ -566,9 +566,25 @@ let classesTable = new Tabulator("#classesTable", {
             title: "Export Table Data",
             titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
             headerClick: async () => {
-                // Disable checkboxes for terms whose data have not yet been downloaded
+                // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
-                    if (currentTableData.terms[term].classes) {
+                    // Boolean storing whether or not this term is 'accessible'
+                    let accessible = true;
+                    // If no GPA is available for the term, it is inaccessible
+                    // (the term was not included in Aspen's overview)
+                    if (!currentTableData.terms[term].GPA.percent) {
+                        accessible = false;
+                    }
+                    // If currentTableData is imported, we cannot scrape Aspen
+                    // for more data, so any terms not included in the import
+                    // are inaccessible
+                    if (
+                        currentTableData.imported &&
+                        !currentTableData.terms[term].classes
+                    ) accessible = false;
+                    
+                    // Disable the checkboxes
+                    if (accessible) {
                         $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
                     }
                     else {

@@ -305,19 +305,65 @@ let exportTableData = async function(prefs) {
   if (prefs.recent) obj.recent = currentTableData.recent;
   if (prefs.schedule) obj.schedule = currentTableData.schedule;
   if (prefs.terms) {
-    obj.terms = {};
-    termConverter.forEach(term => {
-      if (prefs.terms[term]) obj.terms[term] = currentTableData.terms[term];
-    });
+    const origCurrentTerm = currentTerm;
+    try {
+      terms = await Promise.all(termConverter.map(async term => {
+        // Term is selected by user and its data are already downloaded
+        if (prefs.terms[term] && currentTableData.terms[term].classes) {
+          return currentTableData.terms[term];
+        } 
+        // Term is selected by user and its data have not been downloaded
+        else if (prefs.terms[term] && !currentTableData.imported) {
+          try {
+            $("#export_status").html(
+              `Downloading quarter "${term}" from Aspen&hellip;`
+            );
+            const response = await $.ajax({
+              url: "/data",
+              method: "POST",
+              data: { quarter: parseInt(term.match(/\d+/)[0]) },
+              dataType: "json json"
+            });
+            currentTerm = term;
+            responseCallbackPartial(response);
+            $("#export_status").html("");
+            return currentTableData.terms[term];
+          }
+          catch (err) {
+            throw `Error while downloading quarter "${term}".`;
+          }
+        }
+      }));
+      obj.terms = {};
+      // Add the term data to obj.terms
+      termConverter.forEach((term, i) => {
+        if (terms[i]) {
+          obj.terms[term] = terms[i];
+        }
+      });
+    }
+    catch (err) {
+      $("#export_status").html(err);
+      return;
+    }
+    finally {
+      currentTerm = origCurrentTerm;
+      currentTableData.currentTermData = currentTableData.terms[currentTerm];
+      classesTable.setData(currentTableData.currentTermData.classes);
+      classesTable.redraw();
+    }
   }
   if (prefs.cumGPA) obj.cumGPA = currentTableData.cumGPA;
 
   let jsonString = JSON.stringify(obj);
 
+  const filename = `aspine-export-${new Date().toISOString()}.json`;
+
+  $("#export_status").html(`Generated file "${filename}".`);
+
   saveAs(new Blob([jsonString], {
     type: "application/json;charset=utf-8"
-  }), `aspine-export-${new Date().toISOString()}.json`);
-  return jsonString;
+  }), filename);
 };
 
 let importTableData = async function(obj) {
