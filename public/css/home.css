@@ -573,6 +573,11 @@ canvas#large_clock {
   cursor: pointer;
 }
 
+.hastooltip {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
 #import_modal_title {
   margin-bottom: 1em;
 }

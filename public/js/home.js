@@ -570,10 +570,13 @@ let classesTable = new Tabulator("#classesTable", {
                 termConverter.forEach(term => {
                     // Boolean storing whether or not this term is 'accessible'
                     let accessible = true;
+                    // Reason for term being inaccessible
+                    let reason = "";
                     // If no GPA is available for the term, it is inaccessible
                     // (the term was not included in Aspen's overview)
                     if (!currentTableData.terms[term].GPA.percent) {
                         accessible = false;
+                        reason = "This term is not available on Aspen.";
                     }
                     // If currentTableData is imported, we cannot scrape Aspen
                     // for more data, so any terms not included in the import
@@ -581,14 +584,23 @@ let classesTable = new Tabulator("#classesTable", {
                     if (
                         currentTableData.imported &&
                         !currentTableData.terms[term].classes
-                    ) accessible = false;
+                    ) {
+                        accessible = false;
+                        reason = "This term is not included in the imported data.";
+                    }
                     
                     // Disable the checkboxes
                     if (accessible) {
                         $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
+                        $(`#export_checkbox_terms_${term} ~ span`)
+                            .removeAttr("title")
+                            .removeClass("hastooltip");
                     }
                     else {
-                        $(`#export_checkbox_terms_${term}`).attr("disabled", true);
+                        $(`#export_checkbox_terms_${term}`) .attr("disabled", true);
+                        $(`#export_checkbox_terms_${term} ~ span`)
+                            .attr("title", reason)
+                            .addClass("hastooltip");
                     }
                 });
                 exportModal.style.display = "inline-block";
