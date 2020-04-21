@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.2] - tagged 2020-04-21, production TBD
+- Display version number on Aspine ([#118])
+- Add message for users who have JavaScript disabled ([#118])
+- Create `MAINTENANCE.md` with information about tagging new releases
+- Add `.editorconfig` file to make it easier for contributors to have consistent code style
+
 ## [2.2.1] - tagged 2020-04-11, production TBD
 - Bug fixes
   + Fix a file path in package.json
@@ -46,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.1.0]: https://github.com/Aspine/aspine/releases/tag/v2.1.0
 [2.2.0]: https://github.com/Aspine/aspine/releases/tag/v2.2.0
 [2.2.1]: https://github.com/Aspine/aspine/releases/tag/v2.2.1
+[2.2.2]: https://github.com/Aspine/aspine/releases/tag/v2.2.2
 
 [#71]: https://github.com/Aspine/aspine/issues/71
 [#83]: https://github.com/Aspine/aspine/issues/83
@@ -59,3 +66,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#108]: https://github.com/Aspine/aspine/pull/108
 [#109]: https://github.com/Aspine/aspine/pull/109
 [#115]: https://github.com/Aspine/aspine/pull/115
+[#118]: https://github.com/Aspine/aspine/pull/118
