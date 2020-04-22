@@ -568,29 +568,9 @@ let classesTable = new Tabulator("#classesTable", {
             headerClick: async () => {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
-                    // Boolean storing whether or not this term is 'accessible'
-                    let accessible = true;
-                    // Reason for term being inaccessible
-                    let reason = "";
-                    // If no GPA is available for the term, it is inaccessible
-                    // (the term was not included in Aspen's overview)
-                    if (!currentTableData.terms[term].GPA.percent) {
-                        accessible = false;
-                        reason = "This term is not available on Aspen.";
-                    }
-                    // If currentTableData is imported, we cannot scrape Aspen
-                    // for more data, so any terms not included in the import
-                    // are inaccessible
-                    if (
-                        currentTableData.imported &&
-                        !currentTableData.terms[term].classes
-                    ) {
-                        accessible = false;
-                        reason = "This term is not included in the imported data.";
-                    }
+                    let isAccessibleObj = isAccessible(term);
                     
-                    // Disable the checkboxes
-                    if (accessible) {
+                    if (isAccessibleObj.accessible) {
                         $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
                         $(`#export_checkbox_terms_${term} ~ span`)
                             .removeAttr("title")
@@ -599,7 +579,7 @@ let classesTable = new Tabulator("#classesTable", {
                     else {
                         $(`#export_checkbox_terms_${term}`) .attr("disabled", true);
                         $(`#export_checkbox_terms_${term} ~ span`)
-                            .attr("title", reason)
+                            .attr("title", isAccessibleObj.reason)
                             .addClass("hastooltip");
                     }
                 });
@@ -634,8 +614,14 @@ let classesTable = new Tabulator("#classesTable", {
     },
 });
 
-// Callback for response from /data
-function responseCallback(response) {
+/*
+ * Callback for response from /data
+ * 
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+function responseCallback(response, includedTerms) {
     // console.log(response);
     if (response.nologin) {
         tableData = [];
@@ -777,14 +763,14 @@ function responseCallback(response) {
     $("#mostRecentDiv").show();
     mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
     
-    initialize_quarter_dropdown();
+    initialize_quarter_dropdown(includedTerms);
+    setup_quarter_dropdown();
+    
     termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
     
     if (!$(".tableData_select-selected")[0]) {
         initialize_tableData_dropdown();
     }
-
-    setup_quarter_dropdown();
 
     // scheduleTable.setData(tableData.schedule.black);
     recentActivity.setData(currentTableData.recent.recentActivityArray);

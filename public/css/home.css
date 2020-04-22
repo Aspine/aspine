@@ -258,6 +258,14 @@ button {
   font-family: Arial, Helvetica, sans-serif !important;
 }
 
+.inaccessible {
+  color: #666 !important;
+  background-color: #ccc;
+}
+
+.inaccessible:hover {
+  background-color: #ccc !important;
+}
 
 .tab .tablinks-right {
   float: right;
@@ -955,7 +963,7 @@ p#add-calendar-error {
 }
 
 .select-items div:hover, .same-as-selected {
-  background-color: #ddd;
+  background-color: #f9f9f9;
 }
 
 

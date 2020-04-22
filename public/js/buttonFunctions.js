@@ -393,6 +393,16 @@ let importTableData = async function(obj) {
   currentTableData.imported = true;
   currentTableData.name = obj.name;
 
+  let includedTerms = {};
+  termConverter.forEach(term => {
+    if (obj.terms[term]) {
+      includedTerms[term] = true;
+    }
+    else {
+      includedTerms[term] = false;
+    }
+  });
+
   currentTerm = "";
   termConverter.forEach(term => {
     if (!currentTerm && obj.terms[term]) currentTerm = term;
@@ -407,7 +417,7 @@ let importTableData = async function(obj) {
     classes: obj.terms[currentTerm].classes || [],
     GPA: obj.terms[currentTerm].GPA || undefined,
     cumGPA: obj.cumGPA || undefined
-  });
+  }, includedTerms);
 
   scheduleCallback(obj.schedule || {});
 

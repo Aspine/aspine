@@ -730,145 +730,113 @@ let initialize_pdf_dropdown = function() {
   
 }
 
-let initialize_quarter_dropdown = function() {
+let listener = function(event) {
+  let _this = event.target;
+  /* When an item is clicked, update the original select box,
+  and the selected item: */
   
-  let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "gpa_custom-select": */
-  x = document.getElementsByClassName("gpa_custom-select");
-  for (i = 0; i < x.length; i++) {
-    selElmnt = x[i].getElementsByTagName("select")[0];
-    if (a = document.getElementsByClassName("gpa_select-selected")[0]) {
-      a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-      continue;
+  if (term_dropdown_active) {
+    let y, i, k, s, h;
+    s = _this.parentNode.parentNode.getElementsByTagName("select")[0];
+    h = _this.parentNode.previousSibling;
+    for (i = 0; i < s.length; i++) {
+      if (s.options[i].innerHTML === _this.innerHTML) {
+        if (i === 0) {
+          currentTerm = termConverter[i];
+        } else {
+          currentTerm = termConverter[i - 1];
+        }
+        
+        if (i === 0) $("#mostRecentDiv").show();
+        else $("#mostRecentDiv").hide();
+        
+        if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
+          // if (anyEdited()) {
+          // $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+          // } else {
+          $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+          // }
+          
+          term_dropdown_active = false;
+          
+          $.ajax({
+            url: "/data",
+            method: "POST",
+            data: { quarter: (i - 1) },
+            dataType: "json json",
+            success: responseCallbackPartial
+          });
+          
+          $("#loader").show();
+          $("#classesTable").hide();
+          $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+          $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+          
+          s.selectedIndex = i;
+          h.innerHTML = this.innerHTML;
+          y = this.parentNode.getElementsByClassName("same-as-selected");
+          for (k = 0; k < y.length; k++) {
+            y[k].removeAttribute("class");
+          }
+          this.setAttribute("class", "same-as-selected");
+          break;
+
+        } else {
+          if (anyEdited()) {
+            $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+          } else {
+            $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+          }
+          
+          if (i === 0) {
+            currentTableData.currentTermData = currentTableData.terms.current;
+          } else {
+            currentTableData.currentTermData = currentTableData.terms["q" + (i - 1)];
+          }
+          
+          classesTable.setData(currentTableData.currentTermData.classes);
+          
+          $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+          $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+          selected_class_i = undefined;
+          //categoriesTable.setData(tableData[i].categoryDisplay);
+          
+          s.selectedIndex = i;
+          h.innerHTML = this.innerHTML;
+          y = this.parentNode.getElementsByClassName("same-as-selected");
+          for (k = 0; k < y.length; k++) {
+            y[k].removeAttribute("class");
+          }
+          this.setAttribute("class", "same-as-selected");
+          break;
+        }
+      }
     }
-    /* For each element, create a new DIV that will act as the selected item: */
+    h.click();
+  } else {
+    console.log("Term dropdown not active");
+  }
+};
+
+/*
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+let initialize_quarter_dropdown = function(includedTerms) {
+  /* Look for any elements with the class "gpa_custom-select": */
+  let x = document.getElementsByClassName("gpa_custom-select")[0];
+  let selElmnt = x.getElementsByTagName("select")[0];
+  
+  /* For each element, create a new DIV that will act as the selected item: */
+  let a;
+  if (!(a = document.getElementsByClassName("gpa_select-selected")[0])) {
     a = document.createElement("DIV");
     a.setAttribute("class", "gpa_select-selected select-selected");
-    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-    x[i].appendChild(a);
-
-    if (document.getElementById("view_gpa_select")) continue;
-    /* For each element, create a new DIV that will contain the option list: */
-    b = document.createElement("DIV");
-    b.setAttribute("class", "gpa_select-items select-items select-hide");
-    b.setAttribute("id", "view_gpa_select");
-    for (j = 1; j < selElmnt.length; j++) {
-      if (document.getElementById(termConverter[j - 1] || "cum")) continue;
-      /* For each option in the original select element,
-      create a new DIV that will act as an option item: */
-      c = document.createElement("DIV");
-      c.innerHTML = selElmnt.options[j].innerHTML;
-      c.id = termConverter[j - 1] || "cum";
-      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
-      c.addEventListener("click", function(e) {
-        if (!this.innerHTML.includes("N")) {
-          if (currentTableData.imported) {
-            let term = parseInt(this.innerHTML[1]) || 0;
-            if (term === 0 && !currentTableData.terms.current) return;
-            if (term !== 0 && !currentTableData.terms["q" + term].classes) return;
-          }
-          
-          /* When an item is clicked, update the original select box,
-          and the selected item: */
-          
-          if (term_dropdown_active) {
-            let y, i, k, s, h;
-            s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-            h = this.parentNode.previousSibling;
-            for (i = 0; i < s.length; i++) {
-              if (s.options[i].innerHTML === this.innerHTML) {
-                if (i === 0) {
-                  currentTerm = termConverter[i];
-                } else {
-                  currentTerm = termConverter[i - 1];
-                }
-                
-                
-                if (i === 0) $("#mostRecentDiv").show();
-                else $("#mostRecentDiv").hide();
-                
-                
-                if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
-                  // if (anyEdited()) {
-                  // $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
-                  // } else {
-                  $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
-                  // }
-                  
-                  
-                  term_dropdown_active = false;
-                  
-                  $.ajax({
-                    url: "/data",
-                    method: "POST",
-                    data: { quarter: (i - 1) },
-                    dataType: "json json",
-                    success: responseCallbackPartial
-                  });
-                  
-                  $("#loader").show();
-                  $("#classesTable").hide();
-                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-                  
-                  s.selectedIndex = i;
-                  h.innerHTML = this.innerHTML;
-                  y = this.parentNode.getElementsByClassName("same-as-selected");
-                  for (k = 0; k < y.length; k++) {
-                    y[k].removeAttribute("class");
-                  }
-                  this.setAttribute("class", "same-as-selected");
-                  break;
-                  
-                  
-                  
-                } else {
-                  
-                  if (anyEdited()) {
-                    $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
-                  } else {
-                    $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
-                  }
-                  
-                  if (i === 0) {
-                    currentTableData.currentTermData = currentTableData.terms.current;
-                  } else {
-                    currentTableData.currentTermData = currentTableData.terms["q" + (i - 1)];
-                  }
-                  
-                  classesTable.setData(currentTableData.currentTermData.classes);
-                  
-                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-                  selected_class_i = undefined;
-                  //categoriesTable.setData(tableData[i].categoryDisplay);
-                  
-                  s.selectedIndex = i;
-                  h.innerHTML = this.innerHTML;
-                  y = this.parentNode.getElementsByClassName("same-as-selected");
-                  for (k = 0; k < y.length; k++) {
-                    y[k].removeAttribute("class");
-                  }
-                  this.setAttribute("class", "same-as-selected");
-                  break;
-                }
-              }
-            }
-            h.click();
-          } else {
-            console.log("Term dropdown not active");
-          }
-        }
-      });
-      b.appendChild(c);
-    }
-    x[i].appendChild(b);
+    x.appendChild(a);
     a.addEventListener("click", function(e) {
-      //$('.gpa_select-selected').addClass("activated-select-items");
-      //$('.gpa_select-items div').addClass("activated-select-items");
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
-      
       e.stopPropagation();
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
@@ -877,6 +845,44 @@ let initialize_quarter_dropdown = function() {
       $('.gpa_select-items div').toggleClass("activated-select-items");
       //resetTableData();
     });
+  }
+  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+  
+  /* For each element, create a new DIV that will contain the option list: */
+  let b;
+  if (!(b = document.getElementById("view_gpa_select"))) {
+    b = document.createElement("DIV");
+    b.setAttribute("class", "gpa_select-items select-items select-hide");
+    b.setAttribute("id", "view_gpa_select");
+    x.appendChild(b);
+  }
+  
+  for (let j = 1; j < selElmnt.length; j++) {
+    /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+    let c;
+    if (!(c = document.getElementById(termConverter[j - 1] || "cum"))) {
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.id = termConverter[j - 1] || "cum";
+    }
+    const term = termConverter[parseInt(c.innerHTML[1]) || 0];
+    const isAccessibleObj = isAccessible(term, includedTerms);
+    $(c)
+      .removeClass("inaccessible")
+      .removeAttr("title");
+    c.removeEventListener("click", listener);
+    
+    if (isAccessibleObj.accessible) {
+      c.addEventListener("click", listener);
+    }
+    else {
+      $(c)
+        .addClass("inaccessible")
+        .attr("title", isAccessibleObj.reason);
+    }
+
+    b.appendChild(c);
   }
 };
 
@@ -936,7 +942,7 @@ let tableData_option_onclick = function() {
 
   // Re-initialize the quarter dropdown with the data from
   // currentTableData
-  initialize_quarter_dropdown();
+  initialize_quarter_dropdown()
   setup_quarter_dropdown();
 
   classesTable.setData(currentTableData.currentTermData.classes);
@@ -1131,3 +1137,43 @@ let anyEdited = function() {
   return finalDecision;
 }
 
+/*
+ * Returns an object containing whether or not a term is 'accessible',
+ * and if not, a reason for inaccessibility.
+ * A term is accessible if its data are available in currentTableData
+ * or can be retrieved from Aspen.
+ * 
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+let isAccessible = function(term, includedTerms) {
+  // Boolean storing whether or not this term is 'accessible'
+  let accessible = true;
+  // Reason for term being inaccessible
+  let reason = "";
+  // If no GPA is available for the term, it is inaccessible
+  // (the term was not included in Aspen's overview)
+  if (!currentTableData.terms[term].GPA.percent) {
+      accessible = false;
+      reason = "This term is not available on Aspen.";
+  }
+  // If currentTableData is imported, we cannot scrape Aspen
+  // for more data, so any terms not included in the import
+  // are inaccessible
+  if (
+      currentTableData.imported &&
+      (
+        (includedTerms && !includedTerms[term]) ||
+        !currentTableData.terms[term].classes
+      )
+  ) {
+      accessible = false;
+      reason = "This term is not included in the imported data.";
+  }
+
+  return {
+    accessible: accessible,
+    reason: reason
+  };
+}
