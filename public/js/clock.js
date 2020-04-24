@@ -24,10 +24,19 @@ let schedulesCallback = function(response) {
     }, 1000);
 };
 
+//#ifndef lite
 $.ajax({
     url: "schedule.json",
     method: "GET"
 }).then(schedulesCallback);
+//#endif
+//#ifdef lite
+/*
+schedulesCallback(
+//#include dist-lite/schedule.json
+);
+*/
+//#endif
 
 function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'white';

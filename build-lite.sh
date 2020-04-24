@@ -4,7 +4,7 @@
 # Note: This script has only been tested with Bash in a GNU environment
 # (on Linux); your mileage may vary on BSD, macOS, Cygwin/MSYS (Windows), etc.
 
-rm -r dist-lite/
+rm -rf dist-lite/
 mkdir -p dist-lite/
 
 cp -r public/* dist-lite/
@@ -34,46 +34,34 @@ do
 done
 # https://stackoverflow.com/a/21256704
 
-cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ dist-lite/fonts/fontawesome/webfonts
+cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ \
+dist-lite/fonts/fontawesome/webfonts
 # Copy Font Awesome files
 
 rm dist-lite/login.html
 # Remove login page
 
-sed '/Logout/d' -i dist-lite/home.html
-# Remove "Logout" button
+perl -0777 -pi -e 's[<!--#ifdef lite>\n((.|\n)*?)\n<#endif-->][\1]g' \
+dist-lite/home.html
 
-sed -e '1h;2,$H;$!d;g' -e 's/\
-\$\.ajax({\
-\ \ \ \ url:\ "\/data.*then(responseCallback);/\
-responseCallback({\
-    classes: [],\
-    recent: {\
-        recentActivityArray: [],\
-        recentAttendanceArray: []\
-    },\
-    overview: [],\
-    username: "",\
-    quarter: "0"\
-});/' \
--i dist-lite/js/home.js
+perl -0777 -pi -e 's[<!--#ifndef lite-->\n((.|\n)*?)\n<!--#endif-->][]g' \
+dist-lite/home.html
 
-sed -e '1h;2,$H;$!d;g' -e 's/\
-\$\.ajax({\
-\ \ \ \ url:\ "schedule.json.*then(schedulesCallback);/\
-schedulesCallback(\
-);/' \
--i dist-lite/js/clock.js
+perl -0777 -pi -e 's[//#ifdef lite\n/\*\n((.|\n)*?)\n\*/\n//#endif][\1]g' \
+dist-lite/js/*.js
 
-sed -e '/schedulesCallback(/r dist-lite/schedule.json' \
--i dist-lite/js/clock.js
+perl -0777 -pi -e 's[//#ifndef lite\n((.|\n)*?)\n//#endif][]g' \
+dist-lite/js/*.js
 
-# Replace AJAX calls with initialization using blank data
-# https://unix.stackexchange.com/a/235016
+# Preprocess HTML and JS files to make lite-specific changes as needed
+# https://stackoverflow.com/a/1103177
+# https://stackoverflow.com/a/5869735
+
+sed -i -e '/#include dist-lite\/schedule.json/r dist-lite/schedule.json' \
+dist-lite/js/clock.js
+# Include contents of schedule.json
 # https://unix.stackexchange.com/a/32912
 
-version="$(grep version package.json | sed 's/.*: "//' | sed 's/",//')"
-# Get version number from package.json
-
-sed -i 's/await \$\.ajax("\/version")/"'$version'"/g' dist-lite/js/*
+version="$(git describe)"
+sed -i 's/\/\/#include $version/"'$version'"/g' dist-lite/js/*
 # Hard-code version number

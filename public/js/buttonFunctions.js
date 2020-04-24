@@ -286,7 +286,19 @@ let exportTableData = async function(prefs) {
   resetTableData();
   
   let obj = {};
+  
+//#ifndef lite
   obj.version = await $.ajax("/version");
+//#endif
+
+//#ifdef lite
+/*
+  obj.version = (
+//#include $version
+  );
+*/
+//#endif
+
   obj.username = tableData.username;
   obj.overview = tableData.overview;
 
@@ -309,7 +321,19 @@ let exportTableData = async function(prefs) {
 };
 
 let importTableData = async function(obj) {
+
+//#ifndef lite
   let version = await $.ajax("/version");
+//#endif
+
+//#ifdef lite
+/*
+  let version = (
+//#include $version
+  );
+*/
+//#endif
+
   if (obj.version.split(".")[0] !== version.split(".")[0]) {
     return `JSON file is from Aspine version ${obj.version}, which is ` +
     `incompatible with Aspine version ${version}.`;

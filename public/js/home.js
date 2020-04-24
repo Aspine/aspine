@@ -1019,16 +1019,44 @@ $("#import_button").click(async () => {
     });
 });
 
+//#ifndef lite
 $.ajax({
     url: "/data",
     method: "POST",
     data: { quarter: 0 },
     dataType: "json json",
 }).then(responseCallback);
+//#endif
+
+//#ifdef lite
+/*
+responseCallback({
+    classes: [],
+    recent: {
+        recentActivityArray: [],
+        recentAttendanceArray: []
+    },
+    overview: [],
+    username: "",
+    quarter: "0"
+});
+*/
+//#endif
 
 document.getElementById("default_open").click();
 
 // Populate the version number at the bottom of the page.
 // Pointfree style does not work here because jQuery's .text behaves both as
 // an attribute and as a function.
+
+//#ifndef lite
 $.ajax("/version").then(ver => $("#version").text(ver));
+//#endif
+
+//#ifdef lite
+/*
+$("#version").text(
+//#include $version
+);
+*/
+//#endif

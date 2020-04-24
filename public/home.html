@@ -63,7 +63,9 @@
     <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
     <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
+<!--#ifndef lite-->
     <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
+<!--#endif-->
     <div class="GPA custom-select" style="width:270px;">
       <select id="gpa_select">
         <option id="init_gpa" value="0">Current Quarter GPA: </option>
