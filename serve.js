@@ -176,16 +176,7 @@ app.post('/data', async (req, res) => {
     // Get data from scraper:
     //
     if (!req.session.username || !req.session.password) {
-        res.send({
-            classes: [],
-            recent: {
-                recentActivityArray: [],
-                recentAttendanceArray: []
-            },
-            overview: [],
-            username: "",
-            quarter: "0"
-        });
+        res.send({ nologin: true });
     }
     else {
         res.send(await scraper.scrape_student(

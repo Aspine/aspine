@@ -609,6 +609,17 @@ let classesTable = new Tabulator("#classesTable", {
 // Callback for response from /data
 function responseCallback(response) {
     // console.log(response);
+    if (response.nologin) {
+        tableData = [];
+        currentTableData = undefined;
+        currentTableDataIndex = -1;
+
+        $("#reports_open").hide();
+        $("#loader").hide();
+    
+        showModal("import");
+        return;
+    }
     if (response.recent.login_fail) {
         location.href='/logout';
     }
@@ -657,11 +668,6 @@ function responseCallback(response) {
         currentTableData.username = response.username;
     }
     
-    // Hide Reports tab if user entered without signing in
-    if (response.username === "") {
-        $("#reports_open").hide();
-    }
-
     $("#loader").hide();
     
     //parsing the data extracted by the scrappers, and getting tableData ready for presentation
@@ -1038,16 +1044,7 @@ $.ajax({
 
 //#ifdef lite
 /*
-responseCallback({
-    classes: [],
-    recent: {
-        recentActivityArray: [],
-        recentAttendanceArray: []
-    },
-    overview: [],
-    username: "",
-    quarter: "0"
-});
+responseCallback({ nologin: true });
 */
 //#endif
 

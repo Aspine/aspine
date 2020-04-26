@@ -334,7 +334,9 @@ let importTableData = async function(obj) {
 */
 //#endif
 
-  if (obj.version.split(".")[0] !== version.split(".")[0]) {
+  if (
+      obj.version.match(/^v?(\d+)/)[1] !== version.match(/^v?(\d+)/)[1]
+  ) {
     return `JSON file is from Aspine version ${obj.version}, which is ` +
     `incompatible with Aspine version ${version}.`;
   }
@@ -375,8 +377,9 @@ let importTableData = async function(obj) {
 
   currentTerm = firstTerm;
 
-  for (let i in tableData) {
+  for (const i in tableData) {
     if (!$(`#tableData_select option[value='${i}']`)[0]) {
+      // Add new option to list
       let option = document.createElement("option");
       option.value = `${i}`;
       option.textContent = tableData[i].name;
@@ -392,6 +395,15 @@ let importTableData = async function(obj) {
         div, $("#tableData_select-items-import")[0]
       );
     }
+  }
+
+  if (currentTableDataIndex === 0) {
+    // currentTableData is the initial object uploaded by user,
+    // modify the text of the existing "Current Year" option
+    $("#tableData_select option[value='0']")[0].textContent =
+      tableData[0].name;
+    $("#tableData_select-items-0")[0].textContent =
+      tableData[0].name;
   }
 
   $(`#tableData_select-items-${currentTableDataIndex}`).click();

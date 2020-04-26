@@ -905,10 +905,22 @@ let tableData_option_onclick = function() {
         y[k].removeAttribute("class");
       }
       this.setAttribute("class", "tableData_same-as-selected");
-      
-      classesTable.setData(currentTableData.currentTermData.classes);
       break;
     }
+  }
+
+  classesTable.setData(currentTableData.currentTermData.classes);
+  scheduleTable.setData(currentTableData.schedule.black);
+
+  // Reset clock
+  period_names = {black:[], silver:[]};
+
+  // Hide Reports tab for imported data
+  if (currentTableData.imported) {
+    $("#reports_open").hide();
+  }
+  else {
+    $("#reports_open").show();
   }
   h.click();
 }
