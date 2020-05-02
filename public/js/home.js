@@ -1017,10 +1017,9 @@ $("#import_button").click(async () => {
     reader.addEventListener("load", async () => {
         let obj = JSON.parse(reader.result);
         obj.name = file.name;
-        let response = await importTableData(obj);
-        if (response) {
-            $("#import_error").text(response);
-        } else {
+        let response = await importTableData(obj) || "";
+        $("#import_error").html(response);
+        if (!response) {
             hideModal("import");
         }
     });

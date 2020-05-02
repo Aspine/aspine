@@ -380,11 +380,24 @@ let importTableData = async function(obj) {
 */
 //#endif
 
+  let _ov, _v;
   if (
-      obj.version.match(/^v?(\d+)/)[1] !== version.match(/^v?(\d+)/)[1]
+      (
+        // Check if major version differs
+        (_ov = parseInt(obj.version.match(/^v?(\d+)/)[1]))
+        !== (_v = parseInt(version.match(/^v?(\d+)/)[1]))
+      )
+      || (
+        // Check if minor version is newer
+        (_ov = parseInt(obj.version.match(/^v?\d+\.(\d+)/)[1]))
+        > (_v = parseInt(version.match(/^v?\d+\.(\d+)/)[1]))
+      )
   ) {
-    return `JSON file is from Aspine version ${obj.version}, which is ` +
-    `incompatible with Aspine version ${version}.`;
+    return `This JSON file is from Aspine version ${obj.version} and is `
+    + `incompatible with Aspine version ${version}. `
+    + `${_ov < _v ? "Older" : "Newer"} versions of Aspine can be downloaded `
+    + `at <a href="https://github.com/Aspine/aspine/releases">`
+    + `https://github.com/Aspine/aspine/releases</a>.`;
   }
   
   currentTableDataIndex++;
