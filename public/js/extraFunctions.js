@@ -869,8 +869,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
     const term = termConverter[parseInt(c.innerHTML[1]) || 0];
     const isAccessibleObj = isAccessible(term, includedTerms);
     $(c)
-      .removeClass("inaccessible")
-      .removeAttr("title");
+      .removeClass(["inaccessible", "hastooltip"])
+      .removeAttr("aria-label")
+      .removeAttr("tabindex");
     c.removeEventListener("click", listener);
     
     if (isAccessibleObj.accessible) {
@@ -878,8 +879,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
     }
     else {
       $(c)
-        .addClass("inaccessible")
-        .attr("title", isAccessibleObj.reason);
+        .addClass(["inaccessible", "hastooltip"])
+        .attr("aria-label", isAccessibleObj.reason)
+        .attr("tabindex", 0);
     }
 
     b.appendChild(c);

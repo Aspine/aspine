@@ -17,16 +17,20 @@ let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
     Object.keys(modals).forEach(key => {
         if (event.target === modals[key]) {
             hideModal(key);
         }
     });
-    closeAllSelect();
-    pdf_closeAllSelect();
-    tableData_closeAllSelect();
+    // Do not close a dropdown if the user clicked to view a tooltip
+    // (e.g. on a mobile device)
+    if (!event.target.classList.contains("hastooltip")) {
+        closeAllSelect();
+        pdf_closeAllSelect();
+        tableData_closeAllSelect();
+    }
 });
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
@@ -573,13 +577,15 @@ let classesTable = new Tabulator("#classesTable", {
                     if (isAccessibleObj.accessible) {
                         $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
                         $(`#export_checkbox_terms_${term} ~ span`)
-                            .removeAttr("title")
+                            .removeAttr("aria-label")
+                            .removeAttr("tabindex")
                             .removeClass("hastooltip");
                     }
                     else {
                         $(`#export_checkbox_terms_${term}`) .attr("disabled", true);
                         $(`#export_checkbox_terms_${term} ~ span`)
-                            .attr("title", isAccessibleObj.reason)
+                            .attr("aria-label", isAccessibleObj.reason)
+                            .attr("tabindex", 0)
                             .addClass("hastooltip");
                     }
                 });

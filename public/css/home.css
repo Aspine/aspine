@@ -582,8 +582,29 @@ canvas#large_clock {
 }
 
 .hastooltip {
-  text-decoration: underline dotted;
-  cursor: help;
+  border-bottom: 1px dotted black;
+}
+
+.hastooltip::before {
+  display: block;
+  content: attr(aria-label);
+  width: 15rem;
+  background-color: #000;
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  padding: 1em;
+  position: absolute;
+  visibility: hidden;
+}
+
+.select-items .hastooltip::before {
+  margin-top: 2em;
+  right: 0;
+}
+
+.hastooltip:focus::before, .hastooltip:hover::before {
+  visibility: visible;
 }
 
 #import_modal_title {
