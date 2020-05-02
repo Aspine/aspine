@@ -138,7 +138,10 @@ app.use('/fonts/fontawesome/webfonts', express.static(
 // Endpoint to expose version number to client
 app.get('/version', async (req, res) => {
     child_process.exec('git describe',
-      (error, stdout, stderr) => res.send(stdout.trim())
+        (error, stdout, stderr) => res.send(
+            // Trim 'v' from version number
+            stdout.trim().match(/^v?(.*)/)[1]
+        )
     );
 });
 

@@ -62,6 +62,6 @@ dist-lite/js/clock.js
 # Include contents of schedule.json
 # https://unix.stackexchange.com/a/32912
 
-version="$(git describe)"
+version="$(git describe | sed 's/^v\?\(.*\)/\1/')"
 sed -i 's/\/\/#include $version/"'$version'"/g' dist-lite/js/*
-# Hard-code version number
+# Hard-code version number (use sed to trim 'v')
