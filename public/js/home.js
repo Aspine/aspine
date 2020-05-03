@@ -1,20 +1,36 @@
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let pdfrendering = false;
+let modals = {
+    "stats": document.getElementById('stats_modal'),
+    "export": document.getElementById('export_modal'),
+    "import": document.getElementById('import_modal')
+};
 let statsModal = document.getElementById('stats_modal');
+let exportModal = document.getElementById('export_modal');
+let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
-let tableData = {};
+let tableData = [{ name: "Current Year" }];
+let currentTableDataIndex = 0;
+let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
-    if (event.target === statsModal) {
-        hideModal();
+    Object.keys(modals).forEach(key => {
+        if (event.target === modals[key]) {
+            hideModal(key);
+        }
+    });
+    // Do not close a dropdown if the user clicked to view a tooltip
+    // (e.g. on a mobile device)
+    if (!event.target.classList.contains("hastooltip")) {
+        closeAllSelect();
+        pdf_closeAllSelect();
+        tableData_closeAllSelect();
     }
-    pdf_closeAllSelect();
-    closeAllSelect();
 });
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
@@ -53,10 +69,6 @@ window.addEventListener('resize', function() {
     }
 });
 */
-let hideModal = function() {
-    document.getElementById('stats_modal').style.display = "none";
-    noStats();
-}
 let noStats = function() {
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
@@ -65,6 +77,15 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.height = "80px";
     //document.getElementById("stats_modal_content").style.margin = "300px auto";
     document.getElementById("stats_modal_content").style.top = "140px";
+};
+
+let hideModal = function(key) {
+    modals[key].style.display = "none";
+    if (key === "stats") noStats();
+}
+
+let showModal = function(key) {
+    modals[key].style.display = "inline-block";
 }
 
 let recentAttendance = new Tabulator("#recentAttendance", {
@@ -140,7 +161,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false}, 
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon" aria-hidden="true"></i>',
             headerClick: hideCategoriesTable,
             width: 76,
             headerSort: false
@@ -230,17 +251,17 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 for (
                     let k = 0;
                     k < Object.keys(
-                        tableData.currentTermData.classes[selected_class_i].categories
+                        currentTableData.currentTermData.classes[selected_class_i].categories
                     ).length;
                     k++
                 ) {
                     catCategories.push((
                         Object.keys(
-                            tableData.currentTermData.classes[selected_class_i].categories
+                            currentTableData.currentTermData.classes[selected_class_i].categories
                         )[k] + " (" +
                         (
                             Object.values(
-                                tableData.currentTermData.classes[selected_class_i].categories
+                                currentTableData.currentTermData.classes[selected_class_i].categories
                             )[k] * 100
                         ) + "%)"
                     ));
@@ -285,7 +306,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     noStats();
                     document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                     //document.getElementById("stats_modal_title").innerHTML = "";
-                    document.getElementById('stats_modal').style.display = "inline-block";
+                    showModal("stats");
                     //$("#there_are_stats").hide();
                     //$("#there_are_no_stats").show();
                     //document.getElementById("stats_modal_caption").style.top = "7px";
@@ -293,8 +314,8 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     //document.getElementById("stats_modal_content").style.margin = "300px auto";
                     //document.getElementById("stats_modal_content").style.top = "140px";
                     
-                    let session_id = tableData.currentTermData.classes[selected_class_i].tokens.session_id;
-                    let apache_token = tableData.currentTermData.classes[selected_class_i].tokens.apache_token;
+                    let session_id = currentTableData.currentTermData.classes[selected_class_i].tokens.session_id;
+                    let apache_token = currentTableData.currentTermData.classes[selected_class_i].tokens.apache_token;
                     let assignment_id = cell.getRow().getData().assignment_id;
                     let assignment = cell.getRow().getData().name;
                     let score = cell.getRow().getData().score;
@@ -527,7 +548,7 @@ let classesTable = new Tabulator("#classesTable", {
                 let rowColor = cell.getRow().getData().color;
                 let value = cell.getValue();
 
-                if (vip_username_list.includes(tableData.username)) {
+                if (vip_username_list.includes(currentTableData.username)) {
                     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
                 }
                 if (rowColor === "black") {
@@ -546,8 +567,36 @@ let classesTable = new Tabulator("#classesTable", {
             headerSort: false,
         },
         {
-            title: "Hide",
-            titleFormatter: () => '<i class="fa fa-sync-alt" aria-hidden="true"></i>',
+            title: "Export Table Data",
+            titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
+            headerClick: async () => {
+                // Disable checkboxes for inaccessible terms
+                termConverter.forEach(term => {
+                    let isAccessibleObj = isAccessible(term);
+                    
+                    if (isAccessibleObj.accessible) {
+                        $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
+                        $(`#export_checkbox_terms_${term} ~ span`)
+                            .removeAttr("aria-label")
+                            .removeAttr("tabindex")
+                            .removeClass("hastooltip");
+                    }
+                    else {
+                        $(`#export_checkbox_terms_${term}`) .attr("disabled", true);
+                        $(`#export_checkbox_terms_${term} ~ span`)
+                            .attr("aria-label", isAccessibleObj.reason)
+                            .attr("tabindex", 0)
+                            .addClass("hastooltip");
+                    }
+                });
+                exportModal.style.display = "inline-block";
+            },
+            width: 76,
+            headerSort: false,
+        },
+        {
+            title: "Reset Table Data",
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon" aria-hidden="true"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
@@ -571,9 +620,26 @@ let classesTable = new Tabulator("#classesTable", {
     },
 });
 
-// Callback for response from /data
-function responseCallback(response) {
+/*
+ * Callback for response from /data
+ * 
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+function responseCallback(response, includedTerms) {
     // console.log(response);
+    if (response.nologin) {
+        tableData = [];
+        currentTableData = undefined;
+        currentTableDataIndex = -1;
+
+        $("#reports_open").hide();
+        $("#loader").hide();
+    
+        showModal("import");
+        return;
+    }
     if (response.recent.login_fail) {
         location.href='/logout';
     }
@@ -610,22 +676,23 @@ function responseCallback(response) {
         }];
     }
     
-    if (typeof tableData !== 'undefined') {
-        tableData.recent = response.recent;
-        tableData.overview = response.overview;
-        tableData.username = response.username;
+    if (typeof tableData[currentTableDataIndex] !== 'undefined') {
+        currentTableData.recent = response.recent;
+        currentTableData.overview = response.overview;
+        currentTableData.username = response.username;
     } else {
-        tableData = {};
-        tableData.recent = response.recent;
-        tableData.overview = response.overview;
-        tableData.username = response.username;
+        tableData[currentTableDataIndex] = {};
+        currentTableData = tableData[currentTableDataIndex];
+        currentTableData.recent = response.recent;
+        currentTableData.overview = response.overview;
+        currentTableData.username = response.username;
     }
     
     $("#loader").hide();
     
     //parsing the data extracted by the scrappers, and getting tableData ready for presentation
-    if (typeof tableData.terms === 'undefined') {
-        tableData.terms = {
+    if (typeof currentTableData.terms === 'undefined') {
+        currentTableData.terms = {
             current: {},
             q1: {},
             q2: {},
@@ -634,49 +701,49 @@ function responseCallback(response) {
         };        
     }
     
-    if (typeof tableData.currentTermData === 'undefined') {
-        tableData.currentTermData = {};
+    if (typeof currentTableData.currentTermData === 'undefined') {
+        currentTableData.currentTermData = {};
     }
-    tableData.currentTermData = parseTableData(response.classes);
-    tableData.terms[currentTerm] = parseTableData(response.classes);
+    currentTableData.currentTermData = parseTableData(response.classes);
+    currentTableData.terms[currentTerm] = parseTableData(response.classes);
     
     //populates the event for each row in the recentAttendance table
-    for (let i = 0; i < tableData.recent.recentAttendanceArray.length; i++) {
-        tableData.recent.recentAttendanceArray[i].event = "";
-        if (tableData.recent.recentAttendanceArray[i].dismissed === "true") {
-            tableData.recent.recentAttendanceArray[i].event += "Dismissed ";
+    for (let i = 0; i < currentTableData.recent.recentAttendanceArray.length; i++) {
+        currentTableData.recent.recentAttendanceArray[i].event = "";
+        if (currentTableData.recent.recentAttendanceArray[i].dismissed === "true") {
+            currentTableData.recent.recentAttendanceArray[i].event += "Dismissed ";
         }
-        if (tableData.recent.recentAttendanceArray[i].excused === "true") {
-            tableData.recent.recentAttendanceArray[i].event += "Excused ";
+        if (currentTableData.recent.recentAttendanceArray[i].excused === "true") {
+            currentTableData.recent.recentAttendanceArray[i].event += "Excused ";
         }
-        if (tableData.recent.recentAttendanceArray[i].absent === "true") {
-            tableData.recent.recentAttendanceArray[i].event += "Absent ";
+        if (currentTableData.recent.recentAttendanceArray[i].absent === "true") {
+            currentTableData.recent.recentAttendanceArray[i].event += "Absent ";
         }
-        if (tableData.recent.recentAttendanceArray[i].tardy === "true") {
-            tableData.recent.recentAttendanceArray[i].event += "Tardy ";
+        if (currentTableData.recent.recentAttendanceArray[i].tardy === "true") {
+            currentTableData.recent.recentAttendanceArray[i].event += "Tardy ";
         }
     }
     
-    let activityArray = tableData.recent.recentActivityArray.slice();
+    let activityArray = currentTableData.recent.recentActivityArray.slice();
     for (let i = 0; i < activityArray.length; i++) {
         try {
             let assignmentName = activityArray[i].assignment;
             let className = activityArray[i].classname;
             let temp_classIndex = classIndex(className);
             
-            let assignmentIndex = tableData.currentTermData
+            let assignmentIndex = currentTableData.currentTermData
                 .classes[temp_classIndex].assignments.map(x => x.name)
                 .indexOf(assignmentName);
             console.log(assignmentIndex);
             
-            tableData.recent.recentActivityArray[i].assignmentName = assignmentName;
-            tableData.recent.recentActivityArray[i].className = className;
-            tableData.recent.recentActivityArray[i].temp_classIndex = temp_classIndex;
-            tableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
+            currentTableData.recent.recentActivityArray[i].assignmentName = assignmentName;
+            currentTableData.recent.recentActivityArray[i].className = className;
+            currentTableData.recent.recentActivityArray[i].temp_classIndex = temp_classIndex;
+            currentTableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
             
-            tableData.recent.recentActivityArray[i].max_score = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
-            tableData.recent.recentActivityArray[i].percentage = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
-            tableData.recent.recentActivityArray[i].color = tableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
+            currentTableData.recent.recentActivityArray[i].max_score = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
+            currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
+            currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
         }
         catch(err) {
             console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
@@ -684,52 +751,36 @@ function responseCallback(response) {
     }
     
     // Calculate GPA for current term
-    tableData.terms.current.GPA = computeGPA(tableData.terms.current.classes);
+    currentTableData.terms.current.GPA = response.GPA ||
+        computeGPA(currentTableData.terms.current.classes);
     
-    tableData.overview = response.overview;
+    currentTableData.overview = response.overview;
     
-    tableData.cumGPA = cumGPA(tableData.overview);
-    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2);
+    currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
+    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
     
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
-        tableData.terms["q" + i].GPA = computeGPAQuarter(tableData.overview,i);
+        currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview,i);
     }
     
     //Stuff to do now that tableData is initialized
     
     $("#mostRecentDiv").show();
-    mostRecentTable.setData(tableData.recent.recentActivityArray.slice(0, 5));
+    mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
     
-    initialize_quarter_dropdown();
-    termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
+    initialize_quarter_dropdown(includedTerms);
+    setup_quarter_dropdown();
     
-    $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-    $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-    document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-    document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
+    termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
     
-    $(".select-items").children().each(function(i, elem) {
-        if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
-            if (i === 0) {
-                $(this).html("Current Quarter GPA: " + tableData.terms["current"].GPA.percent);
-                document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
-                document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.terms["current"].GPA.percent;
-            } else {
-                if (!isNaN(tableData.terms["q" + i].GPA.percent)) {
-                    $(this).html("Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent);
-                    document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent; 
-                } else {
-                    $(this).html("Q" + i + " GPA: None");
-                    document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
-                }
-            }
-        }
-    });
+    if (!$(".tableData_select-selected")[0]) {
+        initialize_tableData_dropdown();
+    }
 
     // scheduleTable.setData(tableData.schedule.black);
-    recentActivity.setData(tableData.recent.recentActivityArray);
-    recentAttendance.setData(tableData.recent.recentAttendanceArray);
+    recentActivity.setData(currentTableData.recent.recentActivityArray);
+    recentAttendance.setData(currentTableData.recent.recentAttendanceArray);
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 
@@ -745,47 +796,47 @@ function responseCallback(response) {
 function responseCallbackPartial(response) {
     $("#loader").hide();
     
-    tableData.currentTermData = tableData.terms[currentTerm];
+    currentTableData.currentTermData = currentTableData.terms[currentTerm];
     
     let temp_term_data = parseTableData(response.classes);
-    tableData.terms[currentTerm].classes = temp_term_data.classes;
-    tableData.terms[currentTerm].GPA = temp_term_data.GPA;
-    tableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
+    currentTableData.terms[currentTerm].classes = temp_term_data.classes;
+    currentTableData.terms[currentTerm].GPA = temp_term_data.GPA;
+    currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
     
     /*
     if (currentTerm === 'current') {
-        $(".select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
+        $(".gpa_select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         
     } else {
-        $(".select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
+        $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent; 
     }
     */
     
-    scheduleTable.setData(tableData.schedule.black);
+    scheduleTable.setData(currentTableData.schedule.black);
     
     $("#classesTable").show();
     
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
     classesTable.redraw();
     
-    termsReset[currentTerm] = JSON.parse(JSON.stringify(tableData.terms[currentTerm]));
+    termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
     
     term_dropdown_active = true;
 }
 
 // Callback for response from /schedule
 function scheduleCallback(response) {
-    if (!tableData.schedule) tableData.schedule = response;
+    if (!currentTableData.schedule) currentTableData.schedule = response;
     
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
     //let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-    let periods = tableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+    let periods = currentTableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
     let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
     let timesCounter = 0;
     let times = [];
@@ -804,42 +855,34 @@ function scheduleCallback(response) {
     let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
     
     for (let i = 0; i < periods.length;  i++) {
-        if (tableData.schedule.black[i]) {
-            tableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-            tableData.schedule.black[i].class = tableData.schedule.black[i].name + "<br>" + tableData.schedule.black[i].teacher;
-            tableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+        if (currentTableData.schedule.black[i]) {
+            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
+            currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
         }
-        if (tableData.schedule.silver[i]) {
-            tableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-            tableData.schedule.silver[i].class = tableData.schedule.silver[i].name + "<br>" + tableData.schedule.silver[i].teacher;
-            tableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+        if (currentTableData.schedule.silver[i]) {
+            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
+            currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
     }
     
-    scheduleTable.setData(tableData.schedule.black);    
+    scheduleTable.setData(currentTableData.schedule.black);    
     redraw_clock();
 }
 
 function pdfCallback(response) {
     $("#loader").hide();
     // console.log(response);
-    tableData.pdf_files = response;
+    currentTableData.pdf_files = response;
     
     initialize_pdf_dropdown();
     $("#pdf_loading_text").hide();
     
-    if (typeof tableData.pdf_files !== 'undefined') {
+    if (typeof currentTableData.pdf_files !== 'undefined') {
         generate_pdf(pdf_index);
     }
 }
-
-$.ajax({
-    url: "/data",
-    method: "POST",
-    data: { quarter: 0 },
-    dataType: "json json",
-    success: responseCallback
-});
 
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
@@ -859,11 +902,11 @@ function recent_toggle() {
 
 function schedule_toggle() {
     if (document.getElementById("schedule_toggle").checked) {
-        scheduleTable.setData(tableData.schedule.silver);
+        scheduleTable.setData(currentTableData.schedule.silver);
         document.getElementById("schedule_title").innerHTML = "Silver";
         redraw_clock();
     } else {
-        scheduleTable.setData(tableData.schedule.black);
+        scheduleTable.setData(currentTableData.schedule.black);
         document.getElementById("schedule_title").innerHTML = "Black";
         redraw_clock();
     }
@@ -903,7 +946,7 @@ function openTab(evt, tab_name) {
     }
     
     if (tab_name === "reports") {
-        if (!tableData.pdf_files) {
+        if (!currentTableData.pdf_files) {
             $("#loader").show();
             $.ajax({
                 url: "/pdf",
@@ -912,7 +955,7 @@ function openTab(evt, tab_name) {
                 success: pdfCallback
             });
         }
-        else if (typeof tableData.pdf_files !== 'undefined') {
+        else if (typeof currentTableData.pdf_files !== 'undefined') {
             generate_pdf(pdf_index);
         }
         // Redraw PDF to fit new viewport dimensions when transitioning
@@ -933,7 +976,7 @@ function openTab(evt, tab_name) {
         }
     }
     
-    if (tab_name === "schedule" && !tableData.schedule) {
+    if (tab_name === "schedule" && !currentTableData.schedule) {
         $.ajax({
             url: "/schedule",
             method: "POST",
@@ -950,9 +993,73 @@ function openTab(evt, tab_name) {
     recentAttendance.redraw();
 }
 
+$("#export_button").click(() => {
+    prefs = {};
+   
+    [
+        "recent", "schedule", "cumGPA"
+    ].forEach(pref => {
+        prefs[pref] = $(`#export_checkbox_${pref}`).prop("checked");
+    });
+
+    if ($("#export_checkbox_terms").prop("checked")) {
+        prefs.terms = {};
+        termConverter.forEach(term => {
+            if (
+                !$(`#export_checkbox_terms_${term}`).prop("disabled") &&
+                $(`#export_checkbox_terms_${term}`).prop("checked")
+            ) prefs.terms[term] = true;
+            else prefs.terms[term] = false;
+        });
+    }
+
+    exportTableData(prefs);
+});
+
+$("#import_button").click(async () => {
+    const file = document.getElementById("import_filepicker").files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.addEventListener("load", async () => {
+        let obj = JSON.parse(reader.result);
+        obj.name = file.name;
+        let response = await importTableData(obj) || "";
+        $("#import_error").html(response);
+        if (!response) {
+            hideModal("import");
+        }
+    });
+});
+
+//#ifndef lite
+$.ajax({
+    url: "/data",
+    method: "POST",
+    data: { quarter: 0 },
+    dataType: "json json",
+}).then(responseCallback);
+//#endif
+
+//#ifdef lite
+/*
+responseCallback({ nologin: true });
+*/
+//#endif
+
 document.getElementById("default_open").click();
 
 // Populate the version number at the bottom of the page.
 // Pointfree style does not work here because jQuery's .text behaves both as
 // an attribute and as a function.
+
+//#ifndef lite
 $.ajax("/version").then(ver => $("#version").text(ver));
+//#endif
+
+//#ifdef lite
+/*
+$("#version").text(
+//#include $version
+);
+*/
+//#endif

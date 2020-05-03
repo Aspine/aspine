@@ -32,6 +32,7 @@
   <script src="vendor/plotly.js/plotly.js"></script>
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/pdf.js/pdf.min.js"></script>
+  <script src="vendor/file-saver/FileSaver.min.js" async="true"></script>
 </head>
 <body>
   <noscript>
@@ -61,9 +62,11 @@
     <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
     <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab(event, 'reports')">Reports</button>
+    <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
+<!--#ifndef lite-->
     <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
-    <div class="GPA custom-select" style="width:270px;">
+<!--#endif-->
+    <div class="GPA gpa_custom-select custom-select" style="width:270px;">
       <select id="gpa_select">
         <option id="init_gpa" value="0">Current Quarter GPA: </option>
         <option id="current_gpa" value="0">Current Quarter GPA: </option>
@@ -75,6 +78,13 @@
       </select>
     </div>
     <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
+    <div class="GPA tableData_custom-select custom-select" style="width:270px;">
+      <select id="tableData_select">
+        <option value="0">Current Year</option>
+        <option value="0">Current Year</option>
+        <option value="import">Import Data...</option>
+      </select>
+    </div>
   </div>
   
   <!--
@@ -93,7 +103,7 @@
   <div id="stats_modal" class="modal">
     <!-- Modal content -->
     <div id="stats_modal_content" class="modal-content">
-      <span id="stats_modal_close" class="close" onclick="hideModal()">&times;</span>
+      <span class="close" onclick="hideModal('stats')">&times;</span>
       <div id="there_are_no_stats">
         <p id="no_stats_caption">No Statistics information for this assignment.</p>
       </div>
@@ -117,6 +127,86 @@
       </div>
     </div>        
   </div>
+
+  <div id="export_modal" class="modal" tabindex="0">
+    <!-- Modal content -->
+    <div id="export_modal_content" class="modal-content">
+      <span class="close" onclick="hideModal('export')">&times;</span>
+      <h3 id="export_modal_title">Export Data</h3>
+      <ul>
+        <li>
+          <label for="export_checkbox_recent">
+            <input type="checkbox" id="export_checkbox_recent" checked>
+            <span>Recent Activity</span>
+          </label>
+        </li>
+        <li>
+          <label for="export_checkbox_schedule">
+            <input type="checkbox" id="export_checkbox_schedule" checked>
+            <span>Schedule</span>
+          </label>
+        </li>
+        <li>
+          <label for="export_checkbox_terms">
+            <input type="checkbox" id="export_checkbox_terms" checked>
+            <span>Grades</span>
+          </label>
+          <ul>
+            <li>
+              <label for="export_checkbox_terms_current">
+                <input type="checkbox" id="export_checkbox_terms_current" checked>
+                <span>Current Quarter</span>
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q1">
+                <input type="checkbox" id="export_checkbox_terms_q1">
+                <span>Quarter 1</span>
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q2">
+                <input type="checkbox" id="export_checkbox_terms_q2">
+                <span>Quarter 2</span>
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q3">
+                <input type="checkbox" id="export_checkbox_terms_q3">
+                <span>Quarter 3</span>
+              </label>
+            </li>
+            <li>
+              <label for="export_checkbox_terms_q4">
+                <input type="checkbox" id="export_checkbox_terms_q4">
+                <span>Quarter 4</span>
+              </label>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <label for="export_checkbox_cumGPA">
+            <input type="checkbox" id="export_checkbox_cumGPA" checked>
+            <span>Cumulative (year-to-date) GPA</span>
+          </label>
+        </li>
+      </ul>
+      <p>Status: <span id="export_status"></span></p>
+      <button id="export_button">Export</button>
+    </div>        
+  </div>
+
+  <div id="import_modal" class="modal">
+    <!-- Modal content -->
+    <div id="import_modal_content" class="modal-content">
+      <span class="close" onclick="hideModal('import')">&times;</span>
+      <h3 id="import_modal_title">Import Data</h3>
+      <input type="file" id="import_filepicker">
+      <button id="import_button">Import</button>
+      <p id="import_error"></p>
+    </div>        
+  </div>
+
   <div id="grades" class="tabcontent">
     <div id="classesTable"></div>
     <div id="mostRecentDiv" style="display:none">

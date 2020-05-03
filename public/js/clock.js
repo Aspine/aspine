@@ -16,18 +16,27 @@ large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
 
-let xhttp = new XMLHttpRequest;
-xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-        schedules = JSON.parse(this.responseText);
+let schedulesCallback = function(response) {
+    schedules = response;
+    redraw_clock();
+    setInterval(function() {
         redraw_clock();
-        setInterval(function() {
-            redraw_clock();
-        }, 1000);
-    }
+    }, 1000);
 };
-xhttp.open("GET", "schedule.json");
-xhttp.send();
+
+//#ifndef lite
+$.ajax({
+    url: "schedule.json",
+    method: "GET"
+}).then(schedulesCallback);
+//#endif
+//#ifdef lite
+/*
+schedulesCallback(
+//#include dist-lite/schedule.json
+);
+*/
+//#endif
 
 function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'white';
@@ -128,22 +137,25 @@ function get_schedule(p3room, p3id) {
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
 function get_period_name(default_name) {
-    if(typeof(tableData) === "undefined" || Object.keys(tableData).length === 0) {
-        return default_name;
-    }
-    if (typeof(tableData.schedule) === "undefined" || Object.keys(tableData.schedule).length === 0) {
+    if (typeof(currentTableData) === "undefined"
+    || Object.keys(currentTableData).length === 0
+    || typeof(currentTableData.schedule) === "undefined"
+    || Object.keys(currentTableData.schedule).length === 0
+    || typeof(currentTableData.schedule.black) === "undefined"
+    || currentTableData.schedule.black.length === 0
+    ) {
         return default_name;
     }
     if(period_names.black.length === 0) {
         // set period_names -- should only be run once
-        for(let i in tableData.schedule.black) {
-            if(tableData.schedule.black[i].name !== "Community Meeting") {
-                period_names.black.push(tableData.schedule.black[i]);
+        for(let i in currentTableData.schedule.black) {
+            if(currentTableData.schedule.black[i].name !== "Community Meeting") {
+                period_names.black.push(currentTableData.schedule.black[i]);
             }
         }
-        for(let i in tableData.schedule.silver) {
-            if(tableData.schedule.silver[i].name !== "Community Meeting") {
-                period_names.silver.push(tableData.schedule.silver[i]);
+        for(let i in currentTableData.schedule.silver) {
+            if(currentTableData.schedule.silver[i].name !== "Community Meeting") {
+                period_names.silver.push(currentTableData.schedule.silver[i]);
             }
         }
         // Guess lunch

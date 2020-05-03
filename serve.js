@@ -19,15 +19,12 @@ const child_process = require('child_process');
 // -------------------------------------------
 
 if (args.hasOwnProperty('help') || args._.includes('help')) {
-    console.log(`Usage: ./serve.js [insecure] [fake] [OPTION]...
+    console.log(`Usage: ./serve.js [OPTION]...
 Starts the Aspine web server.
 
 Options:
-  --fake         use file "public/sample2.json" instead of scraping Aspen
-  --insecure     do not use SSL/TLS (HTTPS)
-  --json=FILE    use JSON file FILE instead of scraping Aspen
-  --out=FILE     scrape Aspen as usual but dump JSON to file FILE
-  --help   display this help and exit
+  --insecure  do not secure connections with TLS (HTTPS)
+  --help      display this help and exit
 `);
     process.exit();
 }
@@ -118,6 +115,14 @@ new Map([
         '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
     ],
     [
+        '/vendor/file-saver/FileSaver.min.js',
+        '/node_modules/file-saver/dist/FileSaver.min.js'
+    ],
+    [
+        '/vendor/file-saver/FileSaver.min.js.map',
+        '/node_modules/file-saver/dist/FileSaver.min.js.map'
+    ],
+    [
         '/fonts/fontawesome/css/all.min.css',
         '/node_modules/@fortawesome/fontawesome-free/css/all.min.css'
     ]
@@ -133,7 +138,10 @@ app.use('/fonts/fontawesome/webfonts', express.static(
 // Endpoint to expose version number to client
 app.get('/version', async (req, res) => {
     child_process.exec('git describe',
-      (error, stdout, stderr) => res.send(stdout.trim())
+        (error, stdout, stderr) => res.send(
+            // Trim 'v' from version number
+            stdout.trim().match(/^v?(.*)/)[1]
+        )
     );
 });
 
@@ -142,6 +150,10 @@ app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.get('/home.html', (req, res) => res.redirect('/'));
+app.get('/login.html', (req, res) => res.redirect('/login'));
+
 app.use(express.static('public')); // Serve any files in public directory
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
@@ -155,15 +167,7 @@ app.use(session({
 app.post('/stats', async (req, res) => {
     console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
 
-    if(!(args.hasOwnProperty("fake") || args._.includes("fake"))) {
-        // USE REAL DATA:
-        res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
-    } else {
-        //USE FAKE DATA:
-        res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
-    //res.send("Hello World");
-        //res.sendFile('sample.json', {root:"public"});
-    }
+    res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
 });
 
 app.post('/data', async (req, res) => {
@@ -173,35 +177,18 @@ app.post('/data', async (req, res) => {
     // 	  if (err) throw err;
     // });
   
-  if (args.hasOwnProperty("json")) {
-      // Check if "--json" command-line argument was provided, e.g.
-        // node serve.js --json=./public/sample.json
-        
-        // Use json file provided at command line
-        res.sendFile(args.json, {root: "."});
-  }
     let response;
-    if (args._.includes("fake")) {
-        // For backwards compatibility
-
-        res.sendFile('sample2.json', {root: "public"});
-    } else {
-        //res.send(await scraper.scrape_student(req.session.username, req.session.password));
-        //
-        // Get data from scraper:
-        //
-        response = await scraper.scrape_student(req.session.username, req.session.password, req.body.quarter);
-        res.send(response);
-
-        // If "out" command-line argument provided, save JSON at the given path
-        if (args.hasOwnProperty("out")) {
-            fs.writeFile(
-                args.out, JSON.stringify(response),
-                (err) => {
-                    if (err) throw err;
-                }
-            );
-        }
+    //res.send(await scraper.scrape_student(req.session.username, req.session.password));
+    //
+    // Get data from scraper:
+    //
+    if (req.session.nologin) {
+        res.send({ nologin: true });
+    }
+    else {
+        res.send(await scraper.scrape_student(
+            req.session.username, req.session.password, req.body.quarter
+        ));
     }
 });
 
@@ -214,17 +201,24 @@ app.post('/pdf', async (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    if(typeof(req.session) != "undefined") {
-        res.redirect('/home.html');
+    if (req.session.username || req.session.nologin) {
+        res.sendFile(__dirname + '/public/home.html');
     } else {
         res.redirect('/login.html');
     }
 });
 
+app.get('/login', (req, res) => res.sendFile(__dirname + '/public/login.html'));
+
 app.post('/login', async (req, res) => {
-    req.session.username = req.body.username;
-    req.session.password = req.body.password;
-  res.redirect('/home.html');
+    if (req.body.username && req.body.password) {
+        req.session.username = req.body.username;
+        req.session.password = req.body.password;
+    }
+    else {
+        req.session.nologin = true;
+    }
+    res.redirect('/home.html');
 });
 
 app.get('/logout', async (req, res) => {

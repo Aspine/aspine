@@ -258,6 +258,14 @@ button {
   font-family: Arial, Helvetica, sans-serif !important;
 }
 
+.inaccessible {
+  color: #666 !important;
+  background-color: #ccc;
+}
+
+.inaccessible:hover {
+  background-color: #ccc !important;
+}
 
 .tab .tablinks-right {
   float: right;
@@ -353,16 +361,7 @@ i.fa.fa-info-circle {
   cursor: default;
 }
 
-i.fa.fa-eye-slash {
-  color: #00551C;
-  padding-left: 38%;
-  padding-top: 11%;
-  font-size: large;
-  cursor: pointer;
-  
-}
-
-i.fa.fa-sync-alt {
+.header-icon {
   color: #00551C;
   padding-left: 38%;
   padding-top: 11%;
@@ -422,7 +421,7 @@ canvas#large_clock {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  padding: 0;
+  padding: 20px;
   border: 1px solid #888;
   width: 80%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
@@ -446,7 +445,7 @@ canvas#large_clock {
 /* The Close Button */
 
 .close {
-  color: white;
+  color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -469,13 +468,7 @@ canvas#large_clock {
   padding: 2px 16px;
 }
 
-#stats_modal_close {
-  display: inline-block;
-  color: black;
-}
-
 #stats_modal_content {
-  padding: 20px;
   margin: auto !important;
   top: 40px;
   -webkit-animation-name: statsanimatetop !important;
@@ -568,6 +561,54 @@ canvas#large_clock {
 @keyframes statsanimatetop {
   from {top:-300px; opacity:0}
   to {top:140px; opacity:1}
+}
+
+#export_modal_content, #import_modal_content {
+  width: 25em;
+  text-align: left;
+}
+
+#export_modal_content ul {
+  margin-left: 1em;
+}
+
+#export_modal_content label {
+  display: inline-block;
+}
+
+#export_button, #import_button {
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.hastooltip {
+  border-bottom: 1px dotted black;
+}
+
+.hastooltip::before {
+  display: block;
+  content: attr(aria-label);
+  width: 15rem;
+  background-color: #000;
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  padding: 1em;
+  position: absolute;
+  visibility: hidden;
+}
+
+.select-items .hastooltip::before {
+  margin-top: 2em;
+  right: 0;
+}
+
+.hastooltip:focus::before, .hastooltip:hover::before {
+  visibility: visible;
+}
+
+#import_modal_title {
+  margin-bottom: 1em;
 }
 
 
@@ -943,7 +984,7 @@ p#add-calendar-error {
 }
 
 .select-items div:hover, .same-as-selected {
-  background-color: #ddd;
+  background-color: #f9f9f9;
 }
 
 

@@ -43,7 +43,7 @@ function getGPA(gradeToBeGPA) {
 
 function GPAType() {
   let selectElem = $("#gpa_select");
-  let selectedElem = $(".select-selected");
+  let selectedElem = $(".gpa_select-selected");
   let selection = $("#gpa_select option")[selectElem.prop("selectedIndex")].value;
 
   let quarterName = "";
@@ -51,24 +51,24 @@ function GPAType() {
 
   if (selection == 0) {
     quarterName = "Current Quarter";
-    quarterData = tableData.terms.current;
+    quarterData = currentTableData.terms.current;
   }
   else {
     quarterName = "Q" + selection;
-    quarterData = tableData.terms["q" + selection];
+    quarterData = currentTableData.terms["q" + selection];
   }
 
   if (selectedElem.html().includes("GPA")) {
     if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFour.toFixed(2)
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
           ) : "")
         );
       }
@@ -77,37 +77,37 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Unweighted: " + tableData.terms.current.GPA.outOfFour.toFixed(2)
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Unweighted: " + tableData.terms["q" + i].GPA.outOfFour.toFixed(2)
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Unweighted: " + tableData.cumGPA.outOfFour.toFixed(2)
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Unweighted")) {
     if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.outOfFive.toFixed(2)
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
           ) : "")
         );
       }
@@ -116,37 +116,37 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter Weighted: " + tableData.terms.current.GPA.outOfFive.toFixed(2)
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " Weighted: " + tableData.terms["q" + i].GPA.outOfFive.toFixed(2)
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative Weighted: " + tableData.cumGPA.outOfFive.toFixed(2)
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Weighted")) {
     if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2) +
-        "<br> Calculated: " + tableData.terms.current.calcGPA.percent.toFixed(2)
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2) +
-          (tableData.terms["q" + i].calcGPA ? (
-            "<br> Calculated: " + tableData.terms["q" + i].calcGPA.percent.toFixed(2)
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.percent.toFixed(2)
           ) : "")
         );
       }
@@ -155,23 +155,23 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
     else {
       $("#current, #current_gpa, #init_gpa").html(
-        "Current Quarter GPA: " + tableData.terms.current.GPA.percent.toFixed(2)
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
         $(`#q${i}, #q${i}_gpa`).html(
-          "Q" + i + " GPA: " + tableData.terms["q" + i].GPA.percent.toFixed(2)
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2)
         );
       }
       selectedElem.html(
         quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").html(
-        "Cumulative GPA: " + tableData.cumGPA.percent.toFixed(2)
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
   }
@@ -209,7 +209,7 @@ function getLetterGrade(gradeToBeLettered) {
 }
 
 function getColor(gradeToBeColored) {
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "#1E8541";
   }
   
@@ -230,7 +230,7 @@ function getColor(gradeToBeColored) {
 
 let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
 function getLightColor(gradeToBeColored) {
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "#1E8541";
   }
   
@@ -253,7 +253,7 @@ let rowFormatter = function(cell) {
   let rowColor = cell.getRow().getData().color;
   let value = cell.getValue();
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
   }
   
@@ -276,7 +276,7 @@ let classColors = [
 ]
 
 let classIndex = function(classname) {
-  let classesArray = tableData.currentTermData.classes.map(x => x.name);
+  let classesArray = currentTableData.currentTermData.classes.map(x => x.name);
   return (classesArray.indexOf(classname));
   // why the mod 8?
 }
@@ -286,7 +286,7 @@ let classFormatter = function(cell, formatterParams) {
   let classColor = classColors[classIndex(rowClass)];
   let value = cell.getValue();
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
     
   }
@@ -306,7 +306,7 @@ let weightFormatter = function(cell, formatterParams) {
     value = value.substring(0, value.indexOf(".") + 2) + "%";
   }
   
-  if (vip_username_list.includes(tableData.username)) {
+  if (vip_username_list.includes(currentTableData.username)) {
     return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
   }
   
@@ -329,7 +329,7 @@ let rowGradeFormatter = function(cell, formatterParams) {
   } else {
     let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
     
-    if (vip_username_list.includes(tableData.username)) {
+    if (vip_username_list.includes(currentTableData.username)) {
       return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
     }	
     
@@ -376,7 +376,7 @@ let gradeFormatter = function(cell, formatterParams) {
       return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
       
     } else {
-      if (vip_username_list.includes(tableData.username)) {
+      if (vip_username_list.includes(currentTableData.username)) {
         return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
       }
       
@@ -452,7 +452,7 @@ let generate_pdf = function(index) {
     $('#pdf-container').css('height', $(window).height() + 'px');
   }
   
-  let pdfInitParams = {"data": ((tableData.pdf_files)[index]).content};
+  let pdfInitParams = {"data": ((currentTableData.pdf_files)[index]).content};
   // Store the index of the current PDF in `currentPdfIndex`
   currentPdfIndex = index;
   let loadingTask = pdfjsLib.getDocument(pdfInitParams);
@@ -469,7 +469,7 @@ let generate_pdf = function(index) {
 let zoom_in_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
+    let pdfInitParams = {"data": (currentTableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
       
@@ -507,7 +507,7 @@ let zoom_in_pdf = function() {
 let zoom_out_pdf = function() {
   if (!pdfrendering) {
     pdfrendering = true;
-    let pdfInitParams = {"data": (tableData.pdf_files)[currentPdfIndex].content};
+    let pdfInitParams = {"data": (currentTableData.pdf_files)[currentPdfIndex].content};
     let loadingTask = pdfjsLib.getDocument(pdfInitParams);
     loadingTask.promise.then(function(pdf) {
       
@@ -598,8 +598,8 @@ function closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
   except the current select box: */
   let x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
+  x = document.getElementsByClassName("gpa_select-items");
+  y = document.getElementsByClassName("gpa_select-selected");
   for (i = 0; i < y.length; i++) {
     if (elmnt === y[i]) {
       arrNo.push(i)
@@ -612,9 +612,35 @@ function closeAllSelect(elmnt) {
       x[i].classList.add("select-hide");
     }
   }
-  if (!$(".select-selected").hasClass("select-arrow-active")) {
-    $('.select-selected').removeClass("activated-selected-item");
-    $('.select-items div').removeClass("activated-select-items");
+  if (!$(".gpa_select-selected").hasClass("select-arrow-active")) {
+    $('.gpa_select-selected').removeClass("activated-selected-item");
+    $('.gpa_select-items div').removeClass("activated-select-items");
+  }
+  
+}
+function tableData_closeAllSelect(elmnt) {
+  //  $('.select-selected').removeClass("activated-selected-item");
+  $('.tableData_select-items div').removeClass("activated-select-items");
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  let x, y, i, arrNo = [];
+  x = document.getElementsByClassName("tableData_select-items");
+  y = document.getElementsByClassName("tableData_select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt === y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
+    }
+  }
+  if (!$(".tableData_select-selected").hasClass("select-arrow-active")) {
+    $('.tableData_select-selected').removeClass("activated-selected-item");
+    $('.tableData_select-items div').removeClass("activated-select-items");
   }
   
 }
@@ -627,23 +653,23 @@ let initialize_pdf_dropdown = function() {
   //$(o).html(tableData.pdf_files[i].title);
   //$("#pdf-select").append(o);
   
-  for (let i = 1; i < tableData.pdf_files.length + 1; i++) {
+  for (let i = 1; i < currentTableData.pdf_files.length + 1; i++) {
     if (i === 1) {
-      let o = new Option(tableData.pdf_files[i - 1].title, 0);
+      let o = new Option(currentTableData.pdf_files[i - 1].title, 0);
       /// jquerify the DOM object 'o' so we can use the html method
-      $(o).html(tableData.pdf_files[i - 1].title);
+      $(o).html(currentTableData.pdf_files[i - 1].title);
       $("#pdf_select").append(o);
     }
     
-    let o = new Option(tableData.pdf_files[i - 1].title, i);
+    let o = new Option(currentTableData.pdf_files[i - 1].title, i);
     /// jquerify the DOM object 'o' so we can use the html method
-    $(o).html(tableData.pdf_files[i - 1].title);
+    $(o).html(currentTableData.pdf_files[i - 1].title);
     $("#pdf_select").append(o);
     
   }
   
   let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "custom-select": */
+  /* Look for any elements with the class "pdf_custom-select": */
   x = document.getElementsByClassName("pdf_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
@@ -704,142 +730,275 @@ let initialize_pdf_dropdown = function() {
   
 }
 
-let initialize_quarter_dropdown = function() {
+let listener = function(event) {
+  let _this = event.target;
+  /* When an item is clicked, update the original select box,
+  and the selected item: */
   
-  let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "custom-select": */
-  x = document.getElementsByClassName("custom-select");
-  for (i = 0; i < x.length; i++) {
-    selElmnt = x[i].getElementsByTagName("select")[0];
-    /* For each element, create a new DIV that will act as the selected item: */
-    a = document.createElement("DIV");
-    a.setAttribute("class", "select-selected");
-    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-    x[i].appendChild(a);
-    /* For each element, create a new DIV that will contain the option list: */
-    b = document.createElement("DIV");
-    b.setAttribute("class", "select-items select-hide");
-    b.setAttribute("id", "view_gpa_select");
-    for (j = 1; j < selElmnt.length; j++) {
-      /* For each option in the original select element,
-      create a new DIV that will act as an option item: */
-      c = document.createElement("DIV");
-      c.innerHTML = selElmnt.options[j].innerHTML;
-      c.id = termConverter[j - 1] || "cum";
-      // if (!isNaN(tableData.terms[termConverter[j - 1]].GPA.percent)) {
-      c.addEventListener("click", function(e) {
-        if (!this.innerHTML.includes("N")) {
-          /* When an item is clicked, update the original select box,
-          and the selected item: */
-          
-          if (term_dropdown_active) {
-            let y, i, k, s, h;
-            s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-            h = this.parentNode.previousSibling;
-            for (i = 0; i < s.length; i++) {
-              if (s.options[i].innerHTML === this.innerHTML) {
-                if (i === 0) {
-                  currentTerm = termConverter[i];
-                } else {
-                  currentTerm = termConverter[i - 1];
-                }
-                
-                
-                if (i === 0) $("#mostRecentDiv").show();
-                else $("#mostRecentDiv").hide();
-                
-                
-                if (typeof tableData.terms[currentTerm].classes === 'undefined') {
-                  // if (anyEdited()) {
-                  // $(".select-selected").css('padding', "5px 16px 5px 16px");
-                  // } else {
-                  $(".select-selected").css("padding", "13px 16px 13px 16px");
-                  // }
-                  
-                  
-                  term_dropdown_active = false;
-                  
-                  $.ajax({
-                    url: "/data",
-                    method: "POST",
-                    data: { quarter: (i - 1) },
-                    dataType: "json json",
-                    success: responseCallbackPartial
-                  });
-                  
-                  $("#loader").show();
-                  $("#classesTable").hide();
-                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-                  
-                  s.selectedIndex = i;
-                  h.innerHTML = this.innerHTML;
-                  y = this.parentNode.getElementsByClassName("same-as-selected");
-                  for (k = 0; k < y.length; k++) {
-                    y[k].removeAttribute("class");
-                  }
-                  this.setAttribute("class", "same-as-selected");
-                  break;
-                  
-                  
-                  
-                } else {
-                  
-                  if (anyEdited()) {
-                    $(".select-selected").css('padding', "5px 16px 5px 16px");
-                  } else {
-                    $(".select-selected").css("padding", "13px 16px 13px 16px");
-                  }
-                  
-                  if (i === 0) {
-                    tableData.currentTermData = tableData.terms.current;
-                  } else {
-                    tableData.currentTermData = tableData.terms["q" + (i - 1)];
-                  }
-                  
-                  classesTable.setData(tableData.currentTermData.classes);
-                  
-                  $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
-                  $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
-                  selected_class_i = undefined;
-                  //categoriesTable.setData(tableData[i].categoryDisplay);
-                  
-                  s.selectedIndex = i;
-                  h.innerHTML = this.innerHTML;
-                  y = this.parentNode.getElementsByClassName("same-as-selected");
-                  for (k = 0; k < y.length; k++) {
-                    y[k].removeAttribute("class");
-                  }
-                  this.setAttribute("class", "same-as-selected");
-                  break;
-                }
-              }
-            }
-            h.click();
-          } else {
-            console.log("Term dropdown not active");
-          }
+  if (term_dropdown_active) {
+    let y, i, k, s, h;
+    s = _this.parentNode.parentNode.getElementsByTagName("select")[0];
+    h = _this.parentNode.previousSibling;
+    for (i = 0; i < s.length; i++) {
+      if (s.options[i].innerHTML === _this.innerHTML) {
+        if (i === 0) {
+          currentTerm = termConverter[i];
+        } else {
+          currentTerm = termConverter[i - 1];
         }
-      });
-      b.appendChild(c);
+        
+        if (i === 0) $("#mostRecentDiv").show();
+        else $("#mostRecentDiv").hide();
+        
+        if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
+          // if (anyEdited()) {
+          // $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+          // } else {
+          $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+          // }
+          
+          term_dropdown_active = false;
+          
+          $.ajax({
+            url: "/data",
+            method: "POST",
+            data: { quarter: (i - 1) },
+            dataType: "json json",
+            success: responseCallbackPartial
+          });
+          
+          $("#loader").show();
+          $("#classesTable").hide();
+          $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+          $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+          
+          s.selectedIndex = i;
+          h.innerHTML = this.innerHTML;
+          y = this.parentNode.getElementsByClassName("same-as-selected");
+          for (k = 0; k < y.length; k++) {
+            y[k].removeAttribute("class");
+          }
+          this.setAttribute("class", "same-as-selected");
+          break;
+
+        } else {
+          if (anyEdited()) {
+            $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
+          } else {
+            $(".gpa_select-selected").css("padding", "13px 16px 13px 16px");
+          }
+          
+          if (i === 0) {
+            currentTableData.currentTermData = currentTableData.terms.current;
+          } else {
+            currentTableData.currentTermData = currentTableData.terms["q" + (i - 1)];
+          }
+          
+          classesTable.setData(currentTableData.currentTermData.classes);
+          
+          $("#assignmentsTable").hide(); //;.setData(tableData[i].assignments);
+          $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
+          selected_class_i = undefined;
+          //categoriesTable.setData(tableData[i].categoryDisplay);
+          
+          s.selectedIndex = i;
+          h.innerHTML = this.innerHTML;
+          y = this.parentNode.getElementsByClassName("same-as-selected");
+          for (k = 0; k < y.length; k++) {
+            y[k].removeAttribute("class");
+          }
+          this.setAttribute("class", "same-as-selected");
+          break;
+        }
+      }
     }
-    x[i].appendChild(b);
+    h.click();
+  } else {
+    console.log("Term dropdown not active");
+  }
+};
+
+/*
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+let initialize_quarter_dropdown = function(includedTerms) {
+  /* Look for any elements with the class "gpa_custom-select": */
+  let x = document.getElementsByClassName("gpa_custom-select")[0];
+  let selElmnt = x.getElementsByTagName("select")[0];
+  
+  /* For each element, create a new DIV that will act as the selected item: */
+  let a;
+  if (!(a = document.getElementsByClassName("gpa_select-selected")[0])) {
+    a = document.createElement("DIV");
+    a.setAttribute("class", "gpa_select-selected select-selected");
+    x.appendChild(a);
     a.addEventListener("click", function(e) {
-      //$('.select-selected').addClass("activated-select-items");
-      //$('.select-items div').addClass("activated-select-items");
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
-      
       e.stopPropagation();
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
-      $('.select-selected').toggleClass("activated-selected-item");
-      $('.select-items div').toggleClass("activated-select-items");
+      $('.gpa_select-selected').toggleClass("activated-selected-item");
+      $('.gpa_select-items div').toggleClass("activated-select-items");
       //resetTableData();
     });
   }
+  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+  
+  /* For each element, create a new DIV that will contain the option list: */
+  let b;
+  if (!(b = document.getElementById("view_gpa_select"))) {
+    b = document.createElement("DIV");
+    b.setAttribute("class", "gpa_select-items select-items select-hide");
+    b.setAttribute("id", "view_gpa_select");
+    x.appendChild(b);
+  }
+  
+  for (let j = 1; j < selElmnt.length; j++) {
+    /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+    let c;
+    if (!(c = document.getElementById(termConverter[j - 1] || "cum"))) {
+      c = document.createElement("DIV");
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.id = termConverter[j - 1] || "cum";
+    }
+    const term = termConverter[parseInt(c.innerHTML[1]) || 0];
+    const isAccessibleObj = isAccessible(term, includedTerms);
+    $(c)
+      .removeClass(["inaccessible", "hastooltip"])
+      .removeAttr("aria-label")
+      .removeAttr("tabindex");
+    c.removeEventListener("click", listener);
+    
+    if (isAccessibleObj.accessible) {
+      c.addEventListener("click", listener);
+    }
+    else {
+      $(c)
+        .addClass(["inaccessible", "hastooltip"])
+        .attr("aria-label", isAccessibleObj.reason)
+        .attr("tabindex", 0);
+    }
+
+    b.appendChild(c);
+  }
 };
+
+let setup_quarter_dropdown = function() {
+  $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
+  $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
+  document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  
+  $(".gpa_select-items").children().each(function(i, elem) {
+      if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
+          if (i === 0) {
+              $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
+              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
+              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
+          } else {
+              if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
+                  $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
+                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent; 
+              } else {
+                  $(this).html("Q" + i + " GPA: None");
+                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None"; 
+              }
+          }
+      }
+  });
+};
+
+let tableData_option_onclick = function() {
+  if (this.id === "tableData_select-items-import") {
+    showModal("import");
+    return;
+  }
+
+  let index_temp = parseInt(this.id.substring("tableData_select-items-".length))
+  currentTableDataIndex =
+    isNaN(index_temp) ? currentTableDataIndex : index_temp;
+  currentTableData = tableData[currentTableDataIndex];
+  
+  /* When an item is clicked, update the original select box,
+  and the selected item: */
+  let y, i, k, s, h;
+  s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+  h = this.parentNode.previousSibling;
+  for (i = 0; i < s.length; i++) {
+    if (s.options[i].innerHTML === this.innerHTML) {
+      s.selectedIndex = i;
+      h.innerHTML = this.innerHTML;
+      y = this.parentNode.getElementsByClassName("tableData_same-as-selected");
+      for (k = 0; k < y.length; k++) {
+        y[k].removeAttribute("class");
+      }
+      this.setAttribute("class", "tableData_same-as-selected");
+      break;
+    }
+  }
+
+  // Re-initialize the quarter dropdown with the data from
+  // currentTableData
+  initialize_quarter_dropdown()
+  setup_quarter_dropdown();
+
+  classesTable.setData(currentTableData.currentTermData.classes);
+  scheduleTable.setData(currentTableData.schedule.black);
+
+  // Reset clock
+  period_names = {black:[], silver:[]};
+
+  // Hide Reports tab for imported data
+  if (currentTableData.imported) {
+    $("#reports_open").hide();
+  }
+  else {
+    $("#reports_open").show();
+  }
+  h.click();
+}
+
+let initialize_tableData_dropdown = function() { 
+  let x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "pdf_custom-select": */
+  x = document.getElementsByClassName("tableData_custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "tableData_select-selected select-selected");
+    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "tableData_select-items select-items select-hide");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+      create a new DIV that will act as an option item: */
+      c = document.createElement("DIV");
+      c.id = `tableData_select-items-${selElmnt.options[j].value}`;
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.addEventListener("click", tableData_option_onclick);
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      /* When the select box is clicked, close any other select boxes,
+      and open/close the current select box: */
+      e.stopPropagation();
+      //pdf_closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+      $('.tableData_select-selected').toggleClass("activated-selected-item");
+      $('.tableData_select-items div').toggleClass("activated-select-items");
+    });
+  }
+}
 
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports'); 
@@ -958,9 +1117,9 @@ function parseTableData(classes) {
       classes[i].color = getColor(classes[i].calculated_grade);
     }
   }
-  tableData.currentTermData.classes = classes;
-  let GPA = computeGPA(tableData.currentTermData.classes);
-  let calcGPA = computeGPA(tableData.currentTermData.classes);
+  currentTableData.currentTermData.classes = classes;
+  let GPA = computeGPA(currentTableData.currentTermData.classes);
+  let calcGPA = computeGPA(currentTableData.currentTermData.classes);
   return {
     classes,
     GPA,
@@ -968,7 +1127,7 @@ function parseTableData(classes) {
   };
 }
 let anyEdited = function() {
-  let termsEdited = (tableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
+  let termsEdited = (currentTableData.terms[currentTerm].classes).map(function(currentValue, index, array) {
     return currentValue.edited
   });
   let finalDecision = false;
@@ -980,3 +1139,43 @@ let anyEdited = function() {
   return finalDecision;
 }
 
+/*
+ * Returns an object containing whether or not a term is 'accessible',
+ * and if not, a reason for inaccessibility.
+ * A term is accessible if its data are available in currentTableData
+ * or can be retrieved from Aspen.
+ * 
+ * includedTerms is an optional parameter which contains the terms
+ * included in an import (in the case that currentTableData is imported
+ * and not all of the terms' data have been put into currentTableData)
+ */
+let isAccessible = function(term, includedTerms) {
+  // Boolean storing whether or not this term is 'accessible'
+  let accessible = true;
+  // Reason for term being inaccessible
+  let reason = "";
+  // If no GPA is available for the term, it is inaccessible
+  // (the term was not included in Aspen's overview)
+  if (!currentTableData.terms[term].GPA.percent) {
+      accessible = false;
+      reason = "This term is not available on Aspen.";
+  }
+  // If currentTableData is imported, we cannot scrape Aspen
+  // for more data, so any terms not included in the import
+  // are inaccessible
+  if (
+      currentTableData.imported &&
+      (
+        (includedTerms && !includedTerms[term]) ||
+        !currentTableData.terms[term].classes
+      )
+  ) {
+      accessible = false;
+      reason = "This term is not included in the imported data.";
+  }
+
+  return {
+    accessible: accessible,
+    reason: reason
+  };
+}
