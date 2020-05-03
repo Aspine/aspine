@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - tagged 2020-05-03, production TBD
+- Client-side JSON import/export feature ([#119], [#74])
+  + Introduce a "lite" version of Aspine which can be used offline with
+    exported JSON files (does not support fetching new data from Aspine)
+- Update dependencies
+
 ## [2.2.2] - tagged 2020-04-21, production TBD
 - Display version number on Aspine ([#118])
 - Add message for users who have JavaScript disabled ([#118])
@@ -58,8 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.2.0]: https://github.com/Aspine/aspine/releases/tag/v2.2.0
 [2.2.1]: https://github.com/Aspine/aspine/releases/tag/v2.2.1
 [2.2.2]: https://github.com/Aspine/aspine/releases/tag/v2.2.2
+[2.3.0]: https://github.com/Aspine/aspine/releases/tag/v2.3.0
 
 [#71]: https://github.com/Aspine/aspine/issues/71
+[#74]: https://github.com/Aspine/aspine/issues/74
 [#83]: https://github.com/Aspine/aspine/issues/83
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
@@ -72,3 +80,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#109]: https://github.com/Aspine/aspine/pull/109
 [#115]: https://github.com/Aspine/aspine/pull/115
 [#118]: https://github.com/Aspine/aspine/pull/118
+[#119]: https://github.com/Aspine/aspine/pull/119
