@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display version number on Aspine ([#118])
 - Add message for users who have JavaScript disabled ([#118])
 - Create `MAINTENANCE.md` with information about tagging new releases
-- Add `.editorconfig` file to make it easier for contributors to have consistent code style
+- Add `.editorconfig` file to make it easier for contributors to have
+  consistent code style
 
 ## [2.2.1] - tagged 2020-04-11, production TBD
 - Bug fixes
   + Fix a file path in package.json
-  + Fix some issues relating to switching between types of GPA (percent, unweighted, and weighted)
+  + Fix some issues relating to switching between types of GPA
+    (percent, unweighted, and weighted)
 - Improve offline functionality ([#115])
 - Update Aspine for quarter 4
 
@@ -29,9 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.1.0] - tagged 2020-03-24, production TBD
 - Update macOS install scripts ([#101], [#83])
 - Support unweighted (4.0 scale) and weighted (5.0 scale) GPA ([#101], [#71])
-- Fix PDF viewer (Reports tab) to work with the update to Aspen on 14 January 2020 ([#103])
-- Support automatic resizing of PDF viewer upon entering/exiting fullscreen ([#103], [#89])
-- Support viewing multiple pages of a PDF document in the PDF viewer ([#103], [#88])
+- Fix PDF viewer (Reports tab) to work with the update to Aspen on
+  14 January 2020 ([#103])
+- Support automatic resizing of PDF viewer upon entering/exiting fullscreen
+  ([#103], [#89])
+- Support viewing multiple pages of a PDF document in the PDF viewer
+  ([#103], [#88])
 - Refactor `package.json` to align with `npm` documentation ([#106])
 
 ## [2.0.1] - tagged 2020-03-24, production TBD
