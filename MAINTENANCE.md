@@ -37,6 +37,8 @@ After tagging a release, click on "Draft a new release" under "Releases"
 and select the newly created tag. Use the version number (without `v`)
 as the release title and the tag description (with any mutable information
 as necessary) as the release description. Markdown syntax may be used here.
+Run `build-lite.sh` and attach a zip and a tarball of the lite version
+(in the directory `dist-lite`) to the release.
 
 [1]: https://semver.org/spec/v2.0.0.html
 
