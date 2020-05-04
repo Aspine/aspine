@@ -1,38 +1,36 @@
-#!/bin/bash
+#!/bin/sh
 # Build script for a "lite" (purely client-side) version of Aspine
 
-# Note: This script has only been tested with Bash in a GNU environment
-# (on Linux); your mileage may vary on BSD, macOS, Cygwin/MSYS (Windows), etc.
+# This script has been written in POSIX sh but has only been tested
+# in Bash in a GNU environment.
+
+# Dependencies: grep with support for context, sed, perl
 
 rm -rf dist-lite/
 mkdir -p dist-lite/
 
 cp -r public/* dist-lite/
 
-mappings="$(
 grep -A100 'new Map' serve.js \
 | grep -A3 '^    \[' \
-| grep -Ev '\[|\]' \
+| grep \' \
 | sed 's/        '\''//' \
-| sed 's/'\'',*//'
-)"
+| sed 's/'\'',*//' \
+| while read -r endpoint
+do
+	read -r path
+
+	mkdir -p "$(dirname "dist-lite/$endpoint")"
+	# Create the parent directory
+	cp "./$path" "dist-lite/$endpoint"
+	# Copy the node module to dist-lite
+done
+# grep and sed commands explanation:
 # Find the line in serve.js containing 'new Map' and get the next 100 lines
 # Limit the search to lines that contain '    [' and the next three lines
 # Remove lines with brackets
 # Remove leading whitespace and single quote character
 # Remove trailing single quote character and comma (if any)
-
-echo $mappings | \
-while read -d ' ' endpoint
-do
-    read -d ' ' path
-
-    mkdir -p "$(dirname dist-lite$endpoint)"
-    # Create the parent directory
-    cp ".$path" "dist-lite$endpoint"
-    # Copy the node module to dist-lite
-done
-# https://stackoverflow.com/a/21256704
 
 cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ \
 dist-lite/fonts/fontawesome/webfonts
@@ -62,6 +60,10 @@ dist-lite/js/clock.js
 # Include contents of schedule.json
 # https://unix.stackexchange.com/a/32912
 
-version="$(git describe | sed 's/^v\?\(.*\)/\1/')"
-sed -i 's/\/\/#include $version/"'$version'"/g' dist-lite/js/*
+version="$(git describe | sed 's/^v//')"
+
+for file in dist-lite/js/*
+do
+	sed -i '' -e 's/\/\/#include version/"'"$version"'"/g' "$file"
+done
 # Hard-code version number (use sed to trim 'v')
