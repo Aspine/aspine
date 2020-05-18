@@ -5,10 +5,10 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 
-[*.{js,html},package.json]
+[{*.{js,html},package.json}]
 indent_style = space
 indent_size = 2
 
-[public/js/home.js]
+[{serve.js,public/js/home.js}]
 indent_style = space
 indent_size = 4
