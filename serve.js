@@ -99,8 +99,42 @@ new Map([
         '/node_modules/bootstrap/dist/css/bootstrap.min.css.map'
     ],
     [
-        '/vendor/plotly.js/plotly.js',
-        '/node_modules/plotly.js-cartesian-dist-min/plotly-cartesian.min.js'
+        '/vendor/d3/d3-array.min.js',
+        '/node_modules/d3-array/dist/d3-array.min.js'
+    ],
+    [
+        '/vendor/d3/d3-axis.min.js',
+        '/node_modules/d3-axis/dist/d3-axis.min.js'
+    ],
+    [
+        '/vendor/d3/d3-scale.min.js',
+        '/node_modules/d3-scale/dist/d3-scale.min.js'
+    ],
+    // Begin dependencies of d3-scale
+    [
+        '/vendor/d3/d3-format.min.js',
+        '/node_modules/d3-format/dist/d3-format.min.js'
+    ],
+    [
+        '/vendor/d3/d3-interpolate.min.js',
+        '/node_modules/d3-interpolate/dist/d3-interpolate.min.js'
+    ],
+    [
+        '/vendor/d3/d3-time.min.js',
+        '/node_modules/d3-time/dist/d3-time.min.js'
+    ],
+    [
+        '/vendor/d3/d3-time-format.min.js',
+        '/node_modules/d3-time-format/dist/d3-time-format.min.js'
+    ],
+    // End dependencies of d3-scale
+    [
+        '/vendor/d3/d3-selection.min.js',
+        '/node_modules/d3-selection/dist/d3-selection.min.js'
+    ],
+    [
+        '/vendor/d3/d3-boxplot.min.js',
+        '/node_modules/d3-boxplot/build/d3-boxplot.min.js'
     ],
     [
         '/vendor/tabulator/tabulator.min.js',
