@@ -100,7 +100,7 @@ new Map([
     ],
     [
         '/vendor/plotly.js/plotly.js',
-        '/node_modules/plotly.js-dist/plotly.js'
+        '/node_modules/plotly.js-cartesian-dist-min/plotly-cartesian.min.js'
     ],
     [
         '/vendor/tabulator/tabulator.min.js',
