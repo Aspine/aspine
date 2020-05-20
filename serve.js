@@ -33,7 +33,7 @@ Options:
 const port = 8080;
 
 const app = express();
-app.use(compression());
+app.use(compression({ filter: (..._) => true }));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // // redis setup
@@ -154,7 +154,9 @@ app.use(function(req, res, next) { // enable cors
 app.get('/home.html', (req, res) => res.redirect('/'));
 app.get('/login.html', (req, res) => res.redirect('/login'));
 
-app.use(express.static('public')); // Serve any files in public directory
+app.use(express.static(__dirname + '/public'));
+// Serve any files in public directory
+
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
 app.use(session({

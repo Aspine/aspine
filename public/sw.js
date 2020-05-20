@@ -31,7 +31,7 @@ self.addEventListener('install', event => {
                 '/css/tabulator.css',
                 '/css/home.css',
                 '/css/login.css',
-                '/images/logo-circle.png',
+                '/images/logo-circle350x350.png',
                 '/images/district-logo.png',
                 '/favicon.ico'
             ])

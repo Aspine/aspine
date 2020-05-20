@@ -5,12 +5,7 @@
     {
       "src": "/images/logo-circle198x198.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/images/logo-circle512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "198x198"
     }
   ],
   "start_url": "./login.html",
