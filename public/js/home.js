@@ -1059,7 +1059,7 @@ $.ajax("/version").then(ver => $("#version").text(ver));
 //#ifdef lite
 /*
 $("#version").text(
-//#include $version
+//#include version
 );
 */
 //#endif
