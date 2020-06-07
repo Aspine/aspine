@@ -307,40 +307,29 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 }
                 noStats();
                 document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
-                //document.getElementById("stats_modal_title").innerHTML = "";
                 showModal("stats");
-                //$("#there_are_stats").hide();
-                //$("#there_are_no_stats").show();
-                //document.getElementById("stats_modal_caption").style.top = "7px";
-                //document.getElementById("stats_modal_content").style.height = "80px";
-                //document.getElementById("stats_modal_content").style.margin = "300px auto";
-                //document.getElementById("stats_modal_content").style.top = "140px";
                 
-                let session_id = currentTableData.currentTermData.classes[selected_class_i].tokens.session_id;
-                let apache_token = currentTableData.currentTermData.classes[selected_class_i].tokens.apache_token;
-                let assignment_id = cell.getRow().getData().assignment_id;
-                let assignment = cell.getRow().getData().name;
-                let score = cell.getRow().getData().score;
-                let max_score = cell.getRow().getData().max_score;
-                let date_assigned = cell.getRow().getData().date_assigned;
-                let date_due = cell.getRow().getData().date_due;
-                let assignment_feedback = cell.getRow().getData().feedback;
-                if (assignment_feedback === "") {
-                    assignment_feedback = "None";
-                }
+                const { session_id, apache_token } =
+                    currentTableData.currentTermData.classes[selected_class_i].tokens;
+                const {
+                    assignment_id,
+                    name: assignment,
+                    score,
+                    max_score,
+                    date_assigned,
+                    date_due,
+                    feedback: assignment_feedback
+                } = cell.getRow().getData();
                 
                 let stats = await window.getStats(session_id, apache_token, assignment_id);
-                //let stats = ["8","6","8","7.5"];
-                //let stats = 'No Statistics Data for this assignment';
-                
                 if (!Array.isArray(stats)) {
                     noStats();
                     return;
                 }
                 stats = stats.map(x => parseFloat(x));
-                //console.log("Raw Stats: " + stats);
-                let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
-                let q1 = (low + median) / 2, q3 = (high + median) / 2;
+                const [high, low, median, mean,] = stats;
+                const q1 = (low + median) / 2;
+                const q3 = (high + median) / 2;
                 
                 document.getElementById("stats_modal_title").innerHTML =
                     `Assignment: ${assignment.substring(0, 30)}`;
@@ -355,7 +344,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     "&nbsp;".repeat(16)
                     } Date Due: ${date_due}`;
                 $("#stats_modal_feedback").html(
-                    "Assignment Feedback: " + assignment_feedback
+                    `Assignment Feedback: ${assignment_feedback || "None"}`
                 );
                 
                 document.getElementById("stats_modal_content").style.height =
