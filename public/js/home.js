@@ -302,191 +302,203 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
-                if (!isNaN(cell.getRow().getData().score)) {
-                    noStats();
-                    document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
-                    //document.getElementById("stats_modal_title").innerHTML = "";
-                    showModal("stats");
-                    //$("#there_are_stats").hide();
-                    //$("#there_are_no_stats").show();
-                    //document.getElementById("stats_modal_caption").style.top = "7px";
-                    //document.getElementById("stats_modal_content").style.height = "80px";
-                    //document.getElementById("stats_modal_content").style.margin = "300px auto";
-                    //document.getElementById("stats_modal_content").style.top = "140px";
-                    
-                    let session_id = currentTableData.currentTermData.classes[selected_class_i].tokens.session_id;
-                    let apache_token = currentTableData.currentTermData.classes[selected_class_i].tokens.apache_token;
-                    let assignment_id = cell.getRow().getData().assignment_id;
-                    let assignment = cell.getRow().getData().name;
-                    let score = cell.getRow().getData().score;
-                    let max_score = cell.getRow().getData().max_score;
-                    let date_assigned = cell.getRow().getData().date_assigned;
-                    let date_due = cell.getRow().getData().date_due;
-                    let assignment_feedback = cell.getRow().getData().feedback;
-                    if (assignment_feedback === "") {
-                        assignment_feedback = "None";
-                    }
-                    
-                    let stats = await window.getStats(session_id, apache_token, assignment_id);
-                    //let stats = '["8","6","8","7.5"]';
-                    //let stats = 'No Statistics Data for this assignment';
-                    
-                    if (Array.isArray(stats)) {
-                        stats = stats.map(x => parseFloat(x));
-                        //console.log("Raw Stats: " + stats);
-                        let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
-                        let q1 = (low + median) / 2, q3 = (high + median) / 2;
-                        
-                        let graph_stats = [low, q1, median, q3, high];
-                        // console.log("Graph Stats: " + graph_stats);
-                        // console.log("Mean: " + mean)
-                        
-                        let statsTrace = {
-                            x: graph_stats,
-                            type: 'box',
-                            name: " ",
-                            marker:{
-                                //color: '#268A48'
-                                color: '#ff66ff'
-                            }
-                        };
-                        let data = [statsTrace];
-                        
-                        let layout = {
-                            title: " ",
-                            width: $('#stats_modal_content').width(),
-                            height: 120,
-                            xaxis: {
-                                title: " ",
-                                zeroline: true,
-                                range: [0, 15 * max_score / 14],
-                                tickfont: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: '#000',
-                                },
-                            },
-                            yaxis: {
-                                range: [-1.15, 0.7],
-                                tickfont: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: '#000',
-                                },
-                            },
-                            margin: {
-                                t: 20,
-                                l: 20,
-                                r: 20,
-                                b: 20,
-                            },
-                            shapes: [
-                                //your score line
-                                {
-                                    type: 'line',
-                                    x0:score  - (max_score / 1000),
-                                    y0:-0.50,
-                                    x1: score - (max_score / 1000),
-                                    y1: 0.50,
-                                    line: {
-                                        color: getColor(score / max_score * 100),
-                                        width: 3,
-                                    },
-                                },
-                                //mean line
-                                {
-                                    type: 'line',
-                                    x0:mean - (max_score / 1000),
-                                    y0:-0.5,
-                                    x1: mean - (max_score / 1000),
-                                    y1: 0.5,
-                                    line: {
-                                        color: getLightColor(mean / max_score * 100),
-                                        width: 3,
-                                    },
-                                },
-                            ],
-                            
-                            annotations: [
-                                {
-                                    x: mean - (max_score / 68),
-                                    y: -.65,
-                                    xref: 'x',
-                                    yref: 'y',
-                                    text: 'Mean',
-                                    showarrow: false,
-                                    font: {
-                                        family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                        size: 12,
-                                        color: getLightColor(mean / max_score * 100),
-                                    },
-                                },
-                                {
-                                    x: score - (max_score / 38),
-                                    y: .65,
-                                    xref: 'x',
-                                    yref: 'y',
-                                    text: 'Your Score',
-                                    showarrow: false,
-                                    font: {
-                                        family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                        size: 12,
-                                        color: getColor(score / max_score * 100),
-                                    },
-                                },
-                            ],
-                        };
-                        for (let i = 5; i <= 10; i++) {
-                            let shape = {
-                                type: 'line',
-                                x0: max_score * i / 10,
-                                y0: -0.90,
-                                x1: max_score * i / 10,
-                                y1: -1.15,
-                                line: {
-                                    color: getColor(i * 10),
-                                    width: 2,
-                                },
-                            };
-                            layout.shapes.push(shape);
-                        }
-                        for (let i = 5; i <= 9; i++) {
-                            let annotation = {
-                                x: max_score * i / 10 + max_score / 20,
-                                y: -1.05,
-                                xref: 'x',
-                                yref: 'y',
-                                text: getLetterGrade(((i + 0.5) / 10) * 100),
-                                showarrow: false,
-                                font: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: getColor(((i + 0.5) / 10) * 100),
-                                },
-                            }
-                            layout.annotations.push(annotation);
-                        }
-                        
-                        let TESTER = document.getElementById("stats_plot");
-                        TESTER.style.display = "inline";
-                        
-                        Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
-                        
-                        document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
-                        document.getElementById("stats_modal_caption").style.top = "48px";
-                        document.getElementById("stats_modal_caption").innerHTML = "Low: " + low + ", Median: " + median + ", High: " + high + "<br>" + "Mean: " + mean; 
-                        document.getElementById("stats_modal_info").innerHTML = "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due;
-                        $("#stats_modal_feedback").html("Assignment Feedback: " + assignment_feedback);
-                        
-                        document.getElementById("stats_modal_content").style.height = "465px";
-                        
-                        document.getElementById("stats_modal_content").style.margin = "15% auto";
-                        $("#there_are_stats").show();
-                        $("#there_are_no_stats").hide();
-                    } else {
-                        noStats();
-                    }
+                if (isNaN(cell.getRow().getData().score)) {
+                    return;
                 }
+                noStats();
+                document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
+                //document.getElementById("stats_modal_title").innerHTML = "";
+                showModal("stats");
+                //$("#there_are_stats").hide();
+                //$("#there_are_no_stats").show();
+                //document.getElementById("stats_modal_caption").style.top = "7px";
+                //document.getElementById("stats_modal_content").style.height = "80px";
+                //document.getElementById("stats_modal_content").style.margin = "300px auto";
+                //document.getElementById("stats_modal_content").style.top = "140px";
+                
+                let session_id = currentTableData.currentTermData.classes[selected_class_i].tokens.session_id;
+                let apache_token = currentTableData.currentTermData.classes[selected_class_i].tokens.apache_token;
+                let assignment_id = cell.getRow().getData().assignment_id;
+                let assignment = cell.getRow().getData().name;
+                let score = cell.getRow().getData().score;
+                let max_score = cell.getRow().getData().max_score;
+                let date_assigned = cell.getRow().getData().date_assigned;
+                let date_due = cell.getRow().getData().date_due;
+                let assignment_feedback = cell.getRow().getData().feedback;
+                if (assignment_feedback === "") {
+                    assignment_feedback = "None";
+                }
+                
+                let stats = await window.getStats(session_id, apache_token, assignment_id);
+                //let stats = '["8","6","8","7.5"]';
+                //let stats = 'No Statistics Data for this assignment';
+                
+                if (!Array.isArray(stats)) {
+                    noStats();
+                    return;
+                }
+                stats = stats.map(x => parseFloat(x));
+                //console.log("Raw Stats: " + stats);
+                let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
+                let q1 = (low + median) / 2, q3 = (high + median) / 2;
+                
+                let graph_stats = [low, q1, median, q3, high];
+                // console.log("Graph Stats: " + graph_stats);
+                // console.log("Mean: " + mean)
+                
+                let statsTrace = {
+                    x: graph_stats,
+                    type: 'box',
+                    name: " ",
+                    marker:{
+                        //color: '#268A48'
+                        color: '#ff66ff'
+                    }
+                };
+                let data = [statsTrace];
+                
+                let layout = {
+                    title: " ",
+                    width: $('#stats_modal_content').width(),
+                    height: 120,
+                    xaxis: {
+                        title: " ",
+                        zeroline: true,
+                        range: [0, 15 * max_score / 14],
+                        tickfont: {
+                            family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                            size: 12,
+                            color: '#000',
+                        },
+                    },
+                    yaxis: {
+                        range: [-1.15, 0.7],
+                        tickfont: {
+                            family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                            size: 12,
+                            color: '#000',
+                        },
+                    },
+                    margin: {
+                        t: 20,
+                        l: 20,
+                        r: 20,
+                        b: 20,
+                    },
+                    shapes: [
+                        //your score line
+                        {
+                            type: 'line',
+                            x0:score  - (max_score / 1000),
+                            y0:-0.50,
+                            x1: score - (max_score / 1000),
+                            y1: 0.50,
+                            line: {
+                                color: getColor(score / max_score * 100),
+                                width: 3,
+                            },
+                        },
+                        //mean line
+                        {
+                            type: 'line',
+                            x0:mean - (max_score / 1000),
+                            y0:-0.5,
+                            x1: mean - (max_score / 1000),
+                            y1: 0.5,
+                            line: {
+                                color: getLightColor(mean / max_score * 100),
+                                width: 3,
+                            },
+                        },
+                    ],
+                    
+                    annotations: [
+                        {
+                            x: mean - (max_score / 68),
+                            y: -.65,
+                            xref: 'x',
+                            yref: 'y',
+                            text: 'Mean',
+                            showarrow: false,
+                            font: {
+                                family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                                size: 12,
+                                color: getLightColor(mean / max_score * 100),
+                            },
+                        },
+                        {
+                            x: score - (max_score / 38),
+                            y: .65,
+                            xref: 'x',
+                            yref: 'y',
+                            text: 'Your Score',
+                            showarrow: false,
+                            font: {
+                                family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                                size: 12,
+                                color: getColor(score / max_score * 100),
+                            },
+                        },
+                    ],
+                };
+                for (let i = 5; i <= 10; i++) {
+                    let shape = {
+                        type: 'line',
+                        x0: max_score * i / 10,
+                        y0: -0.90,
+                        x1: max_score * i / 10,
+                        y1: -1.15,
+                        line: {
+                            color: getColor(i * 10),
+                            width: 2,
+                        },
+                    };
+                    layout.shapes.push(shape);
+                }
+                for (let i = 5; i <= 9; i++) {
+                    let annotation = {
+                        x: max_score * i / 10 + max_score / 20,
+                        y: -1.05,
+                        xref: 'x',
+                        yref: 'y',
+                        text: getLetterGrade(((i + 0.5) / 10) * 100),
+                        showarrow: false,
+                        font: {
+                            family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
+                            size: 12,
+                            color: getColor(((i + 0.5) / 10) * 100),
+                        },
+                    }
+                    layout.annotations.push(annotation);
+                }
+                
+                let TESTER = document.getElementById("stats_plot");
+                TESTER.style.display = "inline";
+                
+                Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
+                
+                document.getElementById("stats_modal_title").innerHTML =
+                    `Assignment: ${assignment.substring(0, 30)}`;
+                document.getElementById("stats_modal_caption").style.top =
+                    "48px";
+                document.getElementById("stats_modal_caption").innerHTML =
+                    `Low: ${low}, Median: ${median}, High: ${high}<br>
+                    Mean: ${mean}`; 
+                document.getElementById("stats_modal_info").innerHTML =
+                    `<br><br>Date Assigned: ${date_assigned} ${
+                    "&nbsp;".repeat(16)
+                    } Date Due: ${date_due}`;
+                $("#stats_modal_feedback").html(
+                    "Assignment Feedback: " + assignment_feedback
+                );
+                
+                document.getElementById("stats_modal_content").style.height =
+                    "465px";
+                
+                document.getElementById("stats_modal_content").style.margin =
+                    "15% auto";
+                $("#there_are_stats").show();
+                $("#there_are_no_stats").hide();
             },
             headerSort: false,
         },
