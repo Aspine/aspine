@@ -9,7 +9,7 @@ insert_final_newline = true
 indent_style = space
 indent_size = 2
 
-[{serve.js,public/js/home.js}]
+[{serve.js,scrape.js,public/js/home.js}]
 indent_style = space
 indent_size = 4
 
