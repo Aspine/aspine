@@ -76,7 +76,7 @@ let noStats = function() {
     document.getElementById("stats_modal_caption").style.top = "7px";
     document.getElementById("stats_modal_content").style.height = "80px";
     //document.getElementById("stats_modal_content").style.margin = "300px auto";
-    document.getElementById("stats_modal_content").style.top = "140px";
+    document.getElementById("stats_modal_content").style.top = "60px";
 };
 
 let hideModal = function(key) {
@@ -336,19 +336,47 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 document.getElementById("stats_modal_caption").style.top =
                     "48px";
                 document.getElementById("stats_modal_caption").innerHTML =
-                    `Your score: ${score} / ${max_score}<br>
-                    Low: ${low}, Median: ${median}, High: ${high}<br>
-                    Mean: ${mean}`; 
-                document.getElementById("stats_modal_info").innerHTML =
-                    `<br><br>Date Assigned: ${date_assigned} ${
-                    "&nbsp;".repeat(16)
-                    } Date Due: ${date_due}`;
-                $("#stats_modal_feedback").html(
-                    `Assignment Feedback: ${assignment_feedback || "None"}`
-                );
+                    `
+                    <table width="100%">
+                    <tr>
+                        <th width="50%">Your Score</th>
+                        <td>${score} / ${max_score}</td>
+                    </tr>
+                    <tr>
+                        <th>Low, Median, High</th>
+                        <td>${low}, ${median}, ${high}</td>
+                    </tr>
+                    <tr>
+                        <th>Mean</th>
+                        <td>${mean}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Assigned</th>
+                        <td>${date_assigned}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Due</th>
+                        <td>${date_due}</td>
+                    </tr>
+                    <tr>
+                        <th>Assignment Feedback</th>
+                        <td>${assignment_feedback || "None"}</td>
+                    </tr>
+                    </table>
+                    `;
+                    // `Your score: ${score} / ${max_score}<br>
+                    // Low: ${low}, Median: ${median}, High: ${high}<br>
+                    // Mean: ${mean}`; 
+                // document.getElementById("stats_modal_info").innerHTML =
+                //     `<br><br>Date Assigned: ${date_assigned} ${
+                //     "&nbsp;".repeat(16)
+                //     } Date Due: ${date_due}`;
+                // $("#stats_modal_feedback").html(
+                //     `Assignment Feedback: ${assignment_feedback || "None"}`
+                // );
                 
                 document.getElementById("stats_modal_content").style.height =
-                    "465px";
+                    "600px";
                 
                 document.getElementById("stats_modal_content").style.margin =
                     "15% auto";
