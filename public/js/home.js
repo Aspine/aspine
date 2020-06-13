@@ -440,7 +440,8 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                         0.75 * baseFontSize
                     })`)
                     .datum(plotStats)
-                    .attr("color", "#ff66ffaa")
+                    .attr("color", "#ff66ff")
+                    .attr("style", "color: #ff66ff;")
                     .call(plot);
                 // Horizontal axis
                 plotElem.append("g")
