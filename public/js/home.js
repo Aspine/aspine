@@ -337,9 +337,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     "48px";
                 document.getElementById("stats_modal_caption").innerHTML =
                     `
-                    <table width="100%">
+                    <table>
                     <tr>
-                        <th width="50%">Your Score</th>
+                        <th>Your Score</th>
                         <td>${score} / ${max_score}</td>
                     </tr>
                     <tr>

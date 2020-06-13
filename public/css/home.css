@@ -987,18 +987,20 @@ p#add-calendar-error {
 }
 
 
-table {
-    font-family: arial, sans-serif;
+#stats_modal_caption table {
+    font-family: sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
-td, th {
+#stats_modal_caption td,
+#stats_modal_caption th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+#stats_modal_caption th {
+  min-width: 30%;
+  max-width: 50%;
 }
