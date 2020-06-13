@@ -364,16 +364,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     </tr>
                     </table>
                     `;
-                    // `Your score: ${score} / ${max_score}<br>
-                    // Low: ${low}, Median: ${median}, High: ${high}<br>
-                    // Mean: ${mean}`; 
-                // document.getElementById("stats_modal_info").innerHTML =
-                //     `<br><br>Date Assigned: ${date_assigned} ${
-                //     "&nbsp;".repeat(16)
-                //     } Date Due: ${date_due}`;
-                // $("#stats_modal_feedback").html(
-                //     `Assignment Feedback: ${assignment_feedback || "None"}`
-                // );
                 
                 document.getElementById("stats_modal_content").style.height =
                     "600px";
