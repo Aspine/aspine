@@ -29,7 +29,15 @@
   <!--<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">-->
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="manifest" href="manifest.json">
-  <script src="vendor/plotly.js/plotly.js"></script>
+  <script src="vendor/d3/d3-array.min.js"></script>
+  <script src="vendor/d3/d3-axis.min.js"></script>
+  <script src="vendor/d3/d3-format.min.js"></script>
+  <script src="vendor/d3/d3-interpolate.min.js"></script>
+  <script src="vendor/d3/d3-time.min.js"></script>
+  <script src="vendor/d3/d3-time-format.min.js"></script>
+  <script src="vendor/d3/d3-scale.min.js"></script>
+  <script src="vendor/d3/d3-selection.min.js"></script>
+  <script src="vendor/d3/d3-boxplot.min.js"></script>
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/pdf.js/pdf.min.js"></script>
   <script src="vendor/file-saver/FileSaver.min.js" async="true"></script>
@@ -50,7 +58,7 @@
   <div id="header" onclick="openTab(event, 'clock')">
     <div class="logo">
       <canvas id="small_clock" width="400" height="400"></canvas>
-      <img id="logo" src="images/logo-circle.png" alt="logo" hidden>
+      <img id="logo" src="images/logo-circle198x198.png" alt="logo" hidden>
     </div>
     <p id="small_clock_period"></p>
     <h4 id="title">Aspine</h4>
@@ -110,22 +118,37 @@
       <div id="there_are_stats">
         <h3 id="stats_modal_title">Modal Title..</h3>
         <div id="notgraph">
-          <p class="stats_modal_heading" style="top:15px"><strong>Graph:</strong></p>
-          
-          <div id="stats_plot"> </div>
+          <svg id="stats_plot"></svg>
           <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
-          <p id="stats_modal_caption">Modal Caption..</p>
-          
-          <div id="stats_info">
-            <p class="stats_modal_heading" style="top:55px"><strong>Info:</strong></p>
-            <p id="stats_modal_info">Modal Info..</p>
-            <div id="feedback_container">
-              <p id="stats_modal_feedback">Modal Feedback</p>
-            </div>
-          </div>
+          <table id="stats_modal_table">
+            <tr>
+              <th>Your Score</th>
+              <td id="stats_modal_score"></td>
+            </tr>
+            <tr>
+              <th>Low, Median, High</th>
+              <td id="stats_modal_lmh"></td>
+            </tr>
+            <tr>
+              <th>Mean</th>
+              <td id="stats_modal_mean"></td>
+            </tr>
+            <tr>
+              <th>Date Assigned</th>
+              <td id="stats_modal_date_assigned"></td>
+            </tr>
+            <tr>
+              <th>Date Due</th>
+              <td id="stats_modal_date_due"></td>
+            </tr>
+            <tr>
+              <th>Assignment Feedback</th>
+              <td id="stats_modal_feedback"></td>
+            </tr>
+          </table>
         </div>
       </div>
-    </div>        
+    </div>
   </div>
 
   <div id="export_modal" class="modal" tabindex="0">

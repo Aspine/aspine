@@ -73,10 +73,7 @@ let noStats = function() {
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
     document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
-    document.getElementById("stats_modal_caption").style.top = "7px";
-    document.getElementById("stats_modal_content").style.height = "80px";
-    //document.getElementById("stats_modal_content").style.margin = "300px auto";
-    document.getElementById("stats_modal_content").style.top = "140px";
+    document.getElementById("stats_modal_content").style.height = "5rem";
 };
 
 let hideModal = function(key) {
@@ -302,191 +299,194 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
-                if (!isNaN(cell.getRow().getData().score)) {
-                    noStats();
-                    document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
-                    //document.getElementById("stats_modal_title").innerHTML = "";
-                    showModal("stats");
-                    //$("#there_are_stats").hide();
-                    //$("#there_are_no_stats").show();
-                    //document.getElementById("stats_modal_caption").style.top = "7px";
-                    //document.getElementById("stats_modal_content").style.height = "80px";
-                    //document.getElementById("stats_modal_content").style.margin = "300px auto";
-                    //document.getElementById("stats_modal_content").style.top = "140px";
-                    
-                    let session_id = currentTableData.currentTermData.classes[selected_class_i].tokens.session_id;
-                    let apache_token = currentTableData.currentTermData.classes[selected_class_i].tokens.apache_token;
-                    let assignment_id = cell.getRow().getData().assignment_id;
-                    let assignment = cell.getRow().getData().name;
-                    let score = cell.getRow().getData().score;
-                    let max_score = cell.getRow().getData().max_score;
-                    let date_assigned = cell.getRow().getData().date_assigned;
-                    let date_due = cell.getRow().getData().date_due;
-                    let assignment_feedback = cell.getRow().getData().feedback;
-                    if (assignment_feedback === "") {
-                        assignment_feedback = "None";
-                    }
-                    
-                    let stats = await window.getStats(session_id, apache_token, assignment_id);
-                    //let stats = '["8","6","8","7.5"]';
-                    //let stats = 'No Statistics Data for this assignment';
-                    
-                    if (Array.isArray(stats)) {
-                        stats = stats.map(x => parseFloat(x));
-                        //console.log("Raw Stats: " + stats);
-                        let high = stats[0], low = stats[1], median = stats[2], mean = stats[3];
-                        let q1 = (low + median) / 2, q3 = (high + median) / 2;
-                        
-                        let graph_stats = [low, q1, median, q3, high];
-                        // console.log("Graph Stats: " + graph_stats);
-                        // console.log("Mean: " + mean)
-                        
-                        let statsTrace = {
-                            x: graph_stats,
-                            type: 'box',
-                            name: " ",
-                            marker:{
-                                //color: '#268A48'
-                                color: '#ff66ff'
-                            }
-                        };
-                        let data = [statsTrace];
-                        
-                        let layout = {
-                            title: " ",
-                            width: $('#stats_modal_content').width(),
-                            height: 120,
-                            xaxis: {
-                                title: " ",
-                                zeroline: true,
-                                range: [0, 15 * max_score / 14],
-                                tickfont: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: '#000',
-                                },
-                            },
-                            yaxis: {
-                                range: [-1.15, 0.7],
-                                tickfont: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: '#000',
-                                },
-                            },
-                            margin: {
-                                t: 20,
-                                l: 20,
-                                r: 20,
-                                b: 20,
-                            },
-                            shapes: [
-                                //your score line
-                                {
-                                    type: 'line',
-                                    x0:score  - (max_score / 1000),
-                                    y0:-0.50,
-                                    x1: score - (max_score / 1000),
-                                    y1: 0.50,
-                                    line: {
-                                        color: getColor(score / max_score * 100),
-                                        width: 3,
-                                    },
-                                },
-                                //mean line
-                                {
-                                    type: 'line',
-                                    x0:mean - (max_score / 1000),
-                                    y0:-0.5,
-                                    x1: mean - (max_score / 1000),
-                                    y1: 0.5,
-                                    line: {
-                                        color: getLightColor(mean / max_score * 100),
-                                        width: 3,
-                                    },
-                                },
-                            ],
-                            
-                            annotations: [
-                                {
-                                    x: mean - (max_score / 68),
-                                    y: -.65,
-                                    xref: 'x',
-                                    yref: 'y',
-                                    text: 'Mean',
-                                    showarrow: false,
-                                    font: {
-                                        family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                        size: 12,
-                                        color: getLightColor(mean / max_score * 100),
-                                    },
-                                },
-                                {
-                                    x: score - (max_score / 38),
-                                    y: .65,
-                                    xref: 'x',
-                                    yref: 'y',
-                                    text: 'Your Score',
-                                    showarrow: false,
-                                    font: {
-                                        family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                        size: 12,
-                                        color: getColor(score / max_score * 100),
-                                    },
-                                },
-                            ],
-                        };
-                        for (let i = 5; i <= 10; i++) {
-                            let shape = {
-                                type: 'line',
-                                x0: max_score * i / 10,
-                                y0: -0.90,
-                                x1: max_score * i / 10,
-                                y1: -1.15,
-                                line: {
-                                    color: getColor(i * 10),
-                                    width: 2,
-                                },
-                            };
-                            layout.shapes.push(shape);
-                        }
-                        for (let i = 5; i <= 9; i++) {
-                            let annotation = {
-                                x: max_score * i / 10 + max_score / 20,
-                                y: -1.05,
-                                xref: 'x',
-                                yref: 'y',
-                                text: getLetterGrade(((i + 0.5) / 10) * 100),
-                                showarrow: false,
-                                font: {
-                                    family: 'Poppins-Bold, Arial, Helvetica, sans-serif',
-                                    size: 12,
-                                    color: getColor(((i + 0.5) / 10) * 100),
-                                },
-                            }
-                            layout.annotations.push(annotation);
-                        }
-                        
-                        let TESTER = document.getElementById("stats_plot");
-                        TESTER.style.display = "inline";
-                        
-                        Plotly.newPlot(TESTER, data, layout, {displayModeBar: false, responsive: true, });
-                        
-                        document.getElementById("stats_modal_title").innerHTML = "Assignment: " + assignment.substring(0, 30);
-                        document.getElementById("stats_modal_caption").style.top = "48px";
-                        document.getElementById("stats_modal_caption").innerHTML = "Low: " + low + ", Median: " + median + ", High: " + high + "<br>" + "Mean: " + mean; 
-                        document.getElementById("stats_modal_info").innerHTML = "<br><br>" + "Date Assigned: " + date_assigned + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" + "Date Due: " + date_due;
-                        $("#stats_modal_feedback").html("Assignment Feedback: " + assignment_feedback);
-                        
-                        document.getElementById("stats_modal_content").style.height = "465px";
-                        
-                        document.getElementById("stats_modal_content").style.margin = "15% auto";
-                        $("#there_are_stats").show();
-                        $("#there_are_no_stats").hide();
-                    } else {
-                        noStats();
-                    }
+                if (isNaN(cell.getRow().getData().score)) {
+                    return;
                 }
+                noStats();
+                document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
+                showModal("stats");
+                
+                const { session_id, apache_token } =
+                    currentTableData.currentTermData.classes[selected_class_i].tokens;
+                const {
+                    assignment_id,
+                    name: assignment,
+                    score,
+                    max_score,
+                    date_assigned,
+                    date_due,
+                    feedback: assignment_feedback
+                } = cell.getRow().getData();
+                
+                let stats = await window.getStats(session_id, apache_token, assignment_id);
+                if (!Array.isArray(stats)) {
+                    noStats();
+                    return;
+                }
+                stats = stats.map(x => parseFloat(x));
+                const [high, low, median, mean,] = stats;
+                const q1 = (low + median) / 2;
+                const q3 = (high + median) / 2;
+                
+                $("#stats_modal_title").text(`Assignment: ${assignment}`);
+                $("#stats_modal_score").text(`${score} / ${max_score}`);
+                $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
+                $("#stats_modal_mean").text(mean);
+                $("#stats_modal_date_assigned").text(date_assigned);
+                $("#stats_modal_date_due").text(date_due);
+                $("#stats_modal_feedback").text(assignment_feedback || "None");
+                
+                $("#stats_modal_content").css("height", "600px");
+                $("#there_are_stats").show();
+                $("#there_are_no_stats").hide();
+
+                let plotStats = {};
+                plotStats.fiveNums = [low, q1, median, q3, high];
+                plotStats.iqr = q3 - q1;
+                const step = plotStats.step = plotStats.iqr * 1.5;
+                plotStats.fences = [
+                    {
+                        start: q1 - step - step,
+                        end: q1 - step
+                    },
+                    {
+                        start: q1 - step,
+                        end: q1
+                    },
+                    {
+                        start: q1,
+                        end: q3
+                    },
+                    {
+                        start: q3,
+                        end: q3 + step
+                    },
+                    {
+                        start: q3 + step,
+                        end: q3 + step + step
+                    },
+                ];
+                plotStats.boxes = [
+                    { start: q1, end: median },
+                    { start: median, end: q3 },
+                ];
+                plotStats.whiskers = [
+                    { start: low, end: q1 },
+                    { start: high, end: q3 },
+                ];
+                plotStats.points = [];
+                 
+                const plotElem = d3.select("#stats_plot");
+                plotElem.style("display", "inline");
+                
+                $("#stats_plot").css("width", "100%");
+
+                // Get base font size in pixels (= 1rem)
+                // https://stackoverflow.com/a/42769683
+                const baseFontSize = parseFloat(
+                    window.getComputedStyle(document.documentElement)
+                        .fontSize
+                );
+
+                const plotWidth = $("#stats_plot").width() - baseFontSize;
+                const plotHeight = 1.5 * baseFontSize;
+
+                let x = d3.scaleLinear()
+                    .domain([low < 0 ? low : 0, high])
+                    .range([0, plotWidth]);
+
+                const plot = d3.boxplot()
+                    .scale(x)
+                    .bandwidth(plotHeight)
+                    .boxwidth(plotHeight)
+                    .jitter(false)
+                    .opacity(1.0)
+                    .showInnerDots(false);
+
+                plotElem.attr("viewBox", `${
+                    -(0.75 * baseFontSize)
+                } 0 ${
+                    plotWidth + 1.5 * baseFontSize
+                } ${
+                    0.75 * baseFontSize
+                    + plotHeight
+                    + 0.75 * baseFontSize
+                    + 20
+                    + baseFontSize
+                }`);
+
+                // Remove anything lingering from other assignments
+                plotElem.selectAll("*").remove();
+
+                // Box plot
+                plotElem.append("g")
+                    .attr("class", "plot")
+                    .attr("transform", `translate(0, ${
+                        0.75 * baseFontSize
+                    })`)
+                    .datum(plotStats)
+                    .attr("color", "#ff66ff")
+                    .attr("style", "color: #ff66ff;")
+                    .call(plot);
+                // Horizontal axis
+                plotElem.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", `translate(0, ${
+                        0.75 * baseFontSize
+                        + plotHeight
+                        + 0.75 * baseFontSize
+                    })`)
+                    .call(d3.axisBottom().scale(x));
+
+                plotElem.select(".axis").selectAll("line, path")
+                    .attr("stroke", "#888");
+                plotElem.select(".axis").selectAll("text")
+                    .attr("fill", "#888")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "0.75rem");
+
+                for (let i = 60; i <= 100; i += 10) {
+                    const xcoord = x(i / 100 * max_score);
+                    plotElem.append("line")
+                        .attr("y1", plotHeight + 1.5 * baseFontSize + 20)
+                        .attr("y2", plotHeight + 1.5 * baseFontSize + 20
+                            + baseFontSize)
+                        .attr("x1", xcoord)
+                        .attr("x2", xcoord)
+                        .attr("stroke", "#888")
+                        .attr("stroke-width", "0.2rem");
+                }
+                for (let i = 65; i < 100; i += 10) {
+                    const xcoord = x(i / 100 * max_score);
+                    plotElem.append("text")
+                        .attr("y", plotHeight + 1.5 * baseFontSize + 20
+                            + 0.75 * baseFontSize)
+                        .attr("x", xcoord)
+                        .attr("fill", getColor(i))
+                        .attr("font-size", "1rem")
+                        .attr("text-anchor", "middle")
+                        .text(getLetterGrade(i));
+                }
+                
+                // Add line at mean
+                plotElem.append("line")
+                    .attr("class", "mean-line")
+                    .attr("y1", 0)
+                    .attr("y2", plotHeight + 1.5 * baseFontSize)
+                    .attr("x1", x(mean))
+                    .attr("x2", x(mean))
+                    .attr("stroke", "#888")
+                    .attr("stroke-width", "0.2rem");
+                
+                // Add line at student's score
+                plotElem.append("line")
+                    .attr("class", "score-line")
+                    .attr("y1", 0)
+                    .attr("y2", plotHeight + 1.5 * baseFontSize)
+                    .attr("x1", x(score))
+                    .attr("x2", x(score))
+                    .attr("stroke", "#b300ff")
+                    .attr("stroke-width", "0.2rem");
             },
             headerSort: false,
         },
