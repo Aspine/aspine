@@ -73,10 +73,7 @@ let noStats = function() {
     $("#there_are_stats").hide();
     $("#there_are_no_stats").show();
     document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
-    document.getElementById("stats_modal_caption").style.top = "7px";
-    document.getElementById("stats_modal_content").style.height = "80px";
-    //document.getElementById("stats_modal_content").style.margin = "300px auto";
-    document.getElementById("stats_modal_content").style.top = "60px";
+    document.getElementById("stats_modal_content").style.height = "5rem";
 };
 
 let hideModal = function(key) {
@@ -331,45 +328,15 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const q1 = (low + median) / 2;
                 const q3 = (high + median) / 2;
                 
-                document.getElementById("stats_modal_title").innerHTML =
-                    `Assignment: ${assignment.substring(0, 30)}`;
-                document.getElementById("stats_modal_caption").style.top =
-                    "48px";
-                document.getElementById("stats_modal_caption").innerHTML =
-                    `
-                    <table>
-                    <tr>
-                        <th>Your Score</th>
-                        <td>${score} / ${max_score}</td>
-                    </tr>
-                    <tr>
-                        <th>Low, Median, High</th>
-                        <td>${low}, ${median}, ${high}</td>
-                    </tr>
-                    <tr>
-                        <th>Mean</th>
-                        <td>${mean}</td>
-                    </tr>
-                    <tr>
-                        <th>Date Assigned</th>
-                        <td>${date_assigned}</td>
-                    </tr>
-                    <tr>
-                        <th>Date Due</th>
-                        <td>${date_due}</td>
-                    </tr>
-                    <tr>
-                        <th>Assignment Feedback</th>
-                        <td>${assignment_feedback || "None"}</td>
-                    </tr>
-                    </table>
-                    `;
+                $("#stats_modal_title").text(`Assignment: ${assignment}`);
+                $("#stats_modal_score").text(`${score} / ${max_score}`);
+                $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
+                $("#stats_modal_mean").text(mean);
+                $("#stats_modal_date_assigned").text(date_assigned);
+                $("#stats_modal_date_due").text(date_due);
+                $("#stats_modal_feedback").text(assignment_feedback || "None");
                 
-                document.getElementById("stats_modal_content").style.height =
-                    "600px";
-                
-                document.getElementById("stats_modal_content").style.margin =
-                    "15% auto";
+                $("#stats_modal_content").css("height", "600px");
                 $("#there_are_stats").show();
                 $("#there_are_no_stats").hide();
 

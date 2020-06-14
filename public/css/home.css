@@ -469,7 +469,7 @@ canvas#large_clock {
 }
 
 #stats_modal_content {
-  margin: auto !important;
+  margin: auto;
   top: 40px;
   -webkit-animation-name: statsanimatetop !important;
   -webkit-animation-duration: 0.4s !important;
@@ -492,11 +492,6 @@ canvas#large_clock {
   left: 12px;
 }
 
-#notgraph {
-  position: relative;
-  top: 20px;
-}
-
 .stats_modal_heading {
   color: black;
   position: relative;
@@ -512,44 +507,23 @@ canvas#large_clock {
   width: 250px
 }
 
-#stats_modal_horizontal_axis {
-  display: block;
-  position: relative;
-  top: 12px;
-  color: #0d0d0d;
-}
-
-#stats_modal_caption {
-  position: relative;
-  top: 48px;
-  color: #0d0d0d;
-}
-
-#stats_info {
-  top: 5px;
-  position: relative;
-}
-
-#stats_modal_info {
-  display: block;
-  position: relative;
-  top: 23px;
-  color: #0d0d0d;
-}
-
-#feedback_container {
-  display: block;
-  position: relative;
-  top: 36px;
-  color: #0d0d0d;
-  overflow: auto;
+#stats_modal_table {
+  font-family: sans-serif;
+  border-collapse: collapse;
   width: 100%;
-  height: 70px;
+  margin-top: 1rem;
 }
 
-#stats_modal_feedback {
-  color: black;
+#stats_modal_table td,
+#stats_modal_table th {
+  border: 1px solid #dddddd;
   text-align: left;
+  padding: 8px;
+}
+
+#stats_modal_table th {
+  min-width: 30%;
+  max-width: 50%;
 }
 
 @-webkit-keyframes statsanimatetop {
@@ -984,23 +958,4 @@ p#add-calendar-error {
 
 .select-items div:hover, .same-as-selected {
   background-color: #f9f9f9;
-}
-
-
-#stats_modal_caption table {
-    font-family: sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#stats_modal_caption td,
-#stats_modal_caption th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-#stats_modal_caption th {
-  min-width: 30%;
-  max-width: 50%;
 }
