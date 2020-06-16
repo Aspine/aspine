@@ -53,7 +53,7 @@ module.exports = {
 
 // --------------- Scraping ------------------
 // Returns object of classes
-async function scrape_student(username, password, quarter) {
+async function scrape_student(username, password, quarter, yearFilter = "current") {
     if (quarter == 0) {
         // Spawn class scrapers
         let class_scrapers = [];
@@ -78,7 +78,7 @@ async function scrape_student(username, password, quarter) {
         // Spawn class scrapers
         let class_scrapers = [];
         for (let i = quarter * CLASS_THREADS; i < CLASS_THREADS + quarter * CLASS_THREADS; i++) {
-            class_scrapers[i] = scrape_quarter(username, password, i);
+            class_scrapers[i] = scrape_quarter(username, password, i, yearFilter);
         }
 
         // Spawn recent activity scraper
@@ -288,7 +288,7 @@ async function scrape_assignmentDetails(session_id, apache_token, assignment_id)
 }
 
 // Changes the term
-async function change_term_classes(session_id, apache_token, student_oid, termFilter, term) {
+async function change_term_classes(session_id, apache_token, student_oid, termFilter, term, yearFilter = "current") {
     let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalClassList.do",
         {
             "credentials": "include",
@@ -307,7 +307,7 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
             },
             "referrer": "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
             "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=950&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=termFilter&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=${student_oid}&jumpToSearch=&initialSearch=&yearFilter=current&termFilter=${termFilter}&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=`,
+            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=950&userParam=&operationId=&deploymentId=x2sis&scrollX=0&scrollY=0&formFocusField=termFilter&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=${student_oid}&jumpToSearch=&initialSearch=&yearFilter=${yearFilter}&termFilter=${termFilter}&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=`,
             "method": "POST",
             "mode": "cors"
         }));
@@ -563,7 +563,7 @@ async function change_term_assignments(session_id, apache_token, student_oid, te
 }
 
 // Returns promise that contains object of all class data
-async function scrape_quarter(username, password, i) {
+async function scrape_quarter(username, password, i, yearFilter = "current") {
     // Login
     let session = await scrape_login();
     let page = await submit_login(username, password,
@@ -581,7 +581,7 @@ async function scrape_quarter(username, password, i) {
     log(i, "academics", academics);
 
     if (term != 0) {
-        academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term);
+        academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term, yearFilter);
     }
 
     // Check if thread is extra
@@ -594,7 +594,7 @@ async function scrape_quarter(username, password, i) {
     // Get general class data
     let categories = await scrape_details(session.session_id,
         academics.apache_token, academics.classes[i].id,
-        academics.oid);
+        academics.oid, yearFilter);
     log(i, "categories", categories);
 
     // Get assignments data page by page
@@ -824,7 +824,7 @@ async function scrape_academics(session_id, term) {
 }
 
 // Returns object with categories (name, weight) as a dictionary
-async function scrape_details(session_id, apache_token, class_id, oid) {
+async function scrape_details(session_id, apache_token, class_id, oid, yearFilter = "current") {
     let $ = cheerio.load(await fetch_body(
         "https://aspen.cpsd.us/aspen/portalClassList.do",
         {
@@ -843,7 +843,7 @@ async function scrape_details(session_id, apache_token, class_id, oid) {
             },
             "referrer": "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list&maximized=false",
             "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=2100&userParam=${class_id}&operationId=&deploymentId=x2sis&scrollX=0&scrollY=87&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=${oid}&jumpToSearch=&initialSearch=&yearFilter=current&termFilter=current&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=`,
+            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=2100&userParam=${class_id}&operationId=&deploymentId=x2sis&scrollX=0&scrollY=87&formFocusField=&formContents=&formContentsDirty=&maximized=false&menuBarFindInputBox=&selectedStudentOid=${oid}&jumpToSearch=&initialSearch=&yearFilter=${yearFilter}&termFilter=current&allowMultipleSelection=true&scrollDirection=&fieldSetName=Default+Fields&fieldSetOid=fsnX2Cls&filterDefinitionId=%23%23%23all&basedOnFilterDefinitionId=&filterDefinitionName=filter.allRecords&sortDefinitionId=default&sortDefinitionName=Schedule+term&editColumn=&editEnabled=false&runningSelection=`,
             "method": "POST",
             "mode": "cors"
         }
