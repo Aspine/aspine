@@ -104,129 +104,127 @@ async function scrape_pdf_files(username, password) {
 }
 
 async function scrape_pdf(username, password, i) {
-    return new Promise(async function(resolve, reject) {
-        let session = await scrape_login();
-        let page = await submit_login(username, password, session.apache_token, session.session_id);
+    let session = await scrape_login();
+    let page = await submit_login(username, password, session.apache_token, session.session_id);
 
-        log(i, "session", session);
+    log(i, "session", session);
 
-        let $ = cheerio.load(await fetch_body(
-            "https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11", 
-            {
-                "credentials": "include",
-                "headers": {
-                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
-                    "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
-                    "Referer": "https://aspen.cpsd.us/aspen/home.do",
-                    "Connection": "keep-alive"
-                },
-                "referrer": "https://aspen.cpsd.us/aspen/home.do",
-                "referrerPolicy": "strict-origin-when-cross-origin",
-                "body": null,
-                "method": "GET",
-                "mode": "cors"
-            }
-        ));
+    let $ = cheerio.load(await fetch_body(
+        "https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11", 
+        {
+            "credentials": "include",
+            "headers": {
+                "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
+                "Accept-Language": HEADERS["Accept-Language"],
+                "User-Agent": HEADERS["User-Agent"],
+                "Accept": HEADERS["Accept"],
+                "Referer": "https://aspen.cpsd.us/aspen/home.do",
+                "Connection": "keep-alive"
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/home.do",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors"
+        }
+    ));
 
-        let oids = [];
-        let deliveryRecipients = [];
-        let filenames = [];
-        let titles = [];
-        let auths = [];
-        $('.portletListCell').each(function(i, elem) {
-            if ($(this).attr('id')) {
-                let raw = ($(this).children().first().children().first().html());
+    let oids = [];
+    let deliveryRecipients = [];
+    let filenames = [];
+    let titles = [];
+    let auths = [];
+    $('.portletListCell').each(function(i, elem) {
+        if ($(this).attr('id')) {
+            let raw = ($(this).children().first().children().first().html());
 
-                oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
+            oids.push(raw.substr(raw.indexOf("oid") + 4, 14));
 
-                deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
-                auths.push(raw.substr(raw.indexOf("Recipient") + 10 + 14 + 6 + 4, 28))
+            deliveryRecipients.push(raw.substr(raw.indexOf("Recipient") + 10, 14));
+            auths.push(raw.substr(raw.indexOf("Recipient") + 10 + 14 + 6 + 4, 28))
 
-                let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
-                filenames.push((raw_filename).replace(/ /g, "_") + ".pdf");
+            let raw_filename = raw.substr(raw.indexOf('class=\"fileIcon\"') + 17, raw.indexOf("<", raw.indexOf('class=\"fileIcon\"')) - raw.indexOf('class=\"fileIcon\"') - 17);
+            filenames.push((raw_filename).replace(/ /g, "_") + ".pdf");
 
-                let datetime = $(this).next().text().trim();
-                let date = datetime.substr(0, datetime.indexOf(" "));
+            let datetime = $(this).next().text().trim();
+            let date = datetime.substr(0, datetime.indexOf(" "));
 
-                let pretty_filename = raw_filename.split(' ').slice(0,2).join(' ');
+            let pretty_filename = raw_filename.split(' ').slice(0,2).join(' ');
 
-                titles.push(pretty_filename + " " + date);
-            }
-        });
-
-        let oid = oids[i];
-        let deliveryRecipient = deliveryRecipients[i];
-        let filename = filenames[i];
-        let title = titles[i];
-        let auth = auths[i];
-
-        let temp_response = (await fetch(
-            `https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=${oid}&reportDeliveryRecipient=${deliveryRecipient}&auth=${auth}&deploymentId=x2sis`,
-            {
-                "credentials": "include",
-                "headers": {
-                    "Connection": "keep-alive",
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache",
-                    "Upgrade-Insecure-Requests": "1",
-                    "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
-                },
-                redirect: "manual-dont-change",
-                "referrerPolicy": "strict-origin-when-cross-origin",
-                "body": null,
-                "method": "GET",
-                "mode": "cors"
-            }
-        ));
-        let location = temp_response.headers.get('location');
-        let auth2 = location.substr(location.indexOf('auth') + 5, 28);
-
-        fileReturn = (await fetch_file(
-            `https://aspen.cpsd.us/aspen/toolResult.do?&fileName=${filename}&downLoad=true&auth=${auth2}`,
-            {
-                "credentials": "include",
-                "headers": {
-                    "Connection": "keep-alive",
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache",
-                    "Upgrade-Insecure-Requests": "1",
-                    "User-Agent": HEADERS["User-Agent"],
-                    'Sec-Fetch-Dest': 'document',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                    'Sec-Fetch-Site': 'same-origin',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-User': '?1',
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`
-                },
-                "body": null,
-                "method": "GET",
-                "mode": "cors"
-            }
-        ));
-
-        // For testing output
-        // fs.writeFile(i + 'out.pdf', fileReturn, "binary", (err) => {
-        //   if (err) {
-        //   console.log("Error on PDF Download: " + err)
-        //   };
-        // });
-
-        log(i, "closing");
-
-        resolve({
-            "title": title,
-            "content": fileReturn
-        });
+            titles.push(pretty_filename + " " + date);
+        }
     });
+
+    let oid = oids[i];
+    let deliveryRecipient = deliveryRecipients[i];
+    let filename = filenames[i];
+    let title = titles[i];
+    let auth = auths[i];
+
+    let temp_response = (await fetch(
+        `https://aspen.cpsd.us/aspen/fileDownload.do?propertyAsString=filFile&oid=${oid}&reportDeliveryRecipient=${deliveryRecipient}&auth=${auth}&deploymentId=x2sis`,
+        {
+            "credentials": "include",
+            "headers": {
+                "Connection": "keep-alive",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache",
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": HEADERS["User-Agent"],
+                "Accept": HEADERS["Accept"],
+                "Accept-Language": HEADERS["Accept-Language"],
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
+                "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
+            },
+            redirect: "manual-dont-change",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors"
+        }
+    ));
+    let location = temp_response.headers.get('location');
+    let auth2 = location.substr(location.indexOf('auth') + 5, 28);
+
+    fileReturn = (await fetch_file(
+        `https://aspen.cpsd.us/aspen/toolResult.do?&fileName=${filename}&downLoad=true&auth=${auth2}`,
+        {
+            "credentials": "include",
+            "headers": {
+                "Connection": "keep-alive",
+                "Pragma": "no-cache",
+                "Cache-Control": "no-cache",
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": HEADERS["User-Agent"],
+                'Sec-Fetch-Dest': 'document',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-User': '?1',
+                "Accept-Language": HEADERS["Accept-Language"],
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
+                "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`
+            },
+            "body": null,
+            "method": "GET",
+            "mode": "cors"
+        }
+    ));
+
+    // For testing output
+    // fs.writeFile(i + 'out.pdf', fileReturn, "binary", (err) => {
+    //   if (err) {
+    //   console.log("Error on PDF Download: " + err)
+    //   };
+    // });
+
+    log(i, "closing");
+
+    return {
+        "title": title,
+        "content": fileReturn
+    };
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
@@ -351,124 +349,120 @@ async function change_term_classes(session_id, apache_token, student_oid, termFi
     return data;
 }
 
-let scrape_overview = function(username, password) {
-    return new Promise(async function(resolve, reject) {
-        let session = await scrape_login();
-        let page = await submit_login(username, password, session.apache_token, session.session_id);
-        if (page.fail) {
-            resolve({"login_fail": true});
-        }
-        let info = await get_home(session.session_id);
+async function scrape_overview(username, password) {
+    let session = await scrape_login();
+    let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page.fail) {
+        resolve({"login_fail": true});
+    }
+    let info = await get_home(session.session_id);
 
-        let $ = cheerio.load(await fetch_body(`https://aspen.cpsd.us/aspen/gradesWidget.do?org.apache.struts.taglib.html.TOKEN=${info.apache_token}&userEvent=950&userParam=&groupPageWidgetOid=gpwX2000000013&editMode=false&widgetId=grades_3&displayProperties=relSscMstOid.mstDescription%2CrelSscMstOid.mstStaffView%2CrelSscMstOid.mstTermView&studentOid=${info.student_oid}`,
-            {
-                "credentials": "include",
-                "headers": {
-                    "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis`
-                },
-                "referrer": "https://aspen.cpsd.us/aspen/home.do",
-                "method": "GET",
-                "mode": "cors"
-            }));
+    let $ = cheerio.load(await fetch_body(`https://aspen.cpsd.us/aspen/gradesWidget.do?org.apache.struts.taglib.html.TOKEN=${info.apache_token}&userEvent=950&userParam=&groupPageWidgetOid=gpwX2000000013&editMode=false&widgetId=grades_3&displayProperties=relSscMstOid.mstDescription%2CrelSscMstOid.mstStaffView%2CrelSscMstOid.mstTermView&studentOid=${info.student_oid}`,
+        {
+            "credentials": "include",
+            "headers": {
+                "User-Agent": HEADERS["User-Agent"],
+                "Accept": HEADERS["Accept"],
+                "Accept-Language": HEADERS["Accept-Language"],
+                "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis`
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/home.do",
+            "method": "GET",
+            "mode": "cors"
+        }));
 
-        let data = [];
-        $("tr.gradesCell").each(function(i, elem) {
-            // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
-            let row = {};
-            //row["name"] = $(this).find("a").first().text();
-            //row["category"] = $(this).children().eq(2).text().trim();
-            row["class"] = $(this).children().eq(0).text().trim();
-            row["teacher"] = $(this).children().eq(1).text().trim();
-            row["term"] = $(this).children().eq(2).text().trim();
-            row["q1"] = $(this).children().eq(3).text().trim();
-            row["q2"] = $(this).children().eq(4).text().trim();
-            row["q3"] = $(this).children().eq(5).text().trim();
-            row["q4"] = $(this).children().eq(6).text().trim();
-            row["ytd"] = $(this).children().eq(7).text().trim();
-            row["absent"] = $(this).children().eq(8).text().trim();
-            row["tardy"] = $(this).children().eq(9).text().trim();
-            row["dismissed"] = $(this).children().eq(10).text().trim();
-            data.push(row);
-        });
+    let data = [];
+    $("tr.gradesCell").each(function(i, elem) {
+        // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
+        let row = {};
+        //row["name"] = $(this).find("a").first().text();
+        //row["category"] = $(this).children().eq(2).text().trim();
+        row["class"] = $(this).children().eq(0).text().trim();
+        row["teacher"] = $(this).children().eq(1).text().trim();
+        row["term"] = $(this).children().eq(2).text().trim();
+        row["q1"] = $(this).children().eq(3).text().trim();
+        row["q2"] = $(this).children().eq(4).text().trim();
+        row["q3"] = $(this).children().eq(5).text().trim();
+        row["q4"] = $(this).children().eq(6).text().trim();
+        row["ytd"] = $(this).children().eq(7).text().trim();
+        row["absent"] = $(this).children().eq(8).text().trim();
+        row["tardy"] = $(this).children().eq(9).text().trim();
+        row["dismissed"] = $(this).children().eq(10).text().trim();
+        data.push(row);
+    });
 
-        log("closing");
-        resolve(data);
-    })
+    log("closing");
+    return data;
 }
 
 // Returns object of recent activity
 async function scrape_recent(username, password) {
-    return new Promise(async function(resolve, reject) {
-        let session = await scrape_login();
-        let page = await submit_login(username, password, session.apache_token, session.session_id);
-        if (page.fail) {
-            resolve({"login_fail": true});
-        }
+    let session = await scrape_login();
+    let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page.fail) {
+        return {"login_fail": true};
+    }
 
-        let $ = cheerio.load(await fetch_body(
-            "https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
-            {
-                "credentials": "include",
-                "headers": {
-                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
-                    "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
-                    "Referer": "https://aspen.cpsd.us/aspen/home.do",
-                    "Connection": "keep-alive",
-                },
-                "referrer": "https://aspen.cpsd.us/aspen/home.do",
-                "referrerPolicy": "strict-origin-when-cross-origin",
-                "body": null,
-                "method": "GET",
-                "mode": "cors"
-            }), {
-                xmlMode: true,
-                normalizeWhitespace: true,
-                decodeEntities: true
-            });
-
-        let studentName = $('recent-activity').attr('studentname');
-        let recentAttendanceArray = [];
-        let recentActivityArray = [];
-
-        $('recent-activity').children().filter('periodAttendance')
-            .each(function(i, elem) {
-                recentAttendanceArray.push({
-                    date: $(this).attr('date'),
-                    period: $(this).attr('period'),
-                    code: $(this).attr('code'),
-                    classname: $(this).attr('classname'),
-                    dismissed: $(this).attr('dismissed'),
-                    absent: $(this).attr('absent'),
-                    excused: $(this).attr('excused'),
-                    tardy: $(this).attr('tardy'),
-                });
-            });
-        log("recentAttendance", recentAttendanceArray);
-
-        $('recent-activity').children().filter('gradebookScore')
-            .each(function(i, elem) {
-                recentActivityArray.push({
-                    date: $(this).attr('date'),
-                    classname: $(this).attr('classname'),
-                    score: $(this).attr('grade'),
-                    assignment: $(this).attr('assignmentname'),
-                });
-            });
-        log("recentGrades", recentActivityArray);
-
-        log("closing");
-        resolve({
-            recentAttendanceArray,
-            recentActivityArray,
-            studentName,
+    let $ = cheerio.load(await fetch_body(
+        "https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
+        {
+            "credentials": "include",
+            "headers": {
+                "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`,
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
+                "Accept-Language": HEADERS["Accept-Language"],
+                "User-Agent": HEADERS["User-Agent"],
+                "Accept": HEADERS["Accept"],
+                "Referer": "https://aspen.cpsd.us/aspen/home.do",
+                "Connection": "keep-alive",
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/home.do",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors"
+        }), {
+            xmlMode: true,
+            normalizeWhitespace: true,
+            decodeEntities: true
         });
-    });
+
+    let studentName = $('recent-activity').attr('studentname');
+    let recentAttendanceArray = [];
+    let recentActivityArray = [];
+
+    $('recent-activity').children().filter('periodAttendance')
+        .each(function(i, elem) {
+            recentAttendanceArray.push({
+                date: $(this).attr('date'),
+                period: $(this).attr('period'),
+                code: $(this).attr('code'),
+                classname: $(this).attr('classname'),
+                dismissed: $(this).attr('dismissed'),
+                absent: $(this).attr('absent'),
+                excused: $(this).attr('excused'),
+                tardy: $(this).attr('tardy'),
+            });
+        });
+    log("recentAttendance", recentAttendanceArray);
+
+    $('recent-activity').children().filter('gradebookScore')
+        .each(function(i, elem) {
+            recentActivityArray.push({
+                date: $(this).attr('date'),
+                classname: $(this).attr('classname'),
+                score: $(this).attr('grade'),
+                assignment: $(this).attr('assignmentname'),
+            });
+        });
+    log("recentGrades", recentActivityArray);
+
+    log("closing");
+    return {
+        recentAttendanceArray,
+        recentActivityArray,
+        studentName,
+    };
 }
 
 async function change_term_assignments(session_id, apache_token, student_oid, termFilter) {
@@ -557,108 +551,108 @@ async function change_term_assignments(session_id, apache_token, student_oid, te
 }
 
 // Returns promise that contains object of all class data
-function scrape_quarter(username, password, i) {
-    return new Promise(async function(resolve, reject) {
-        // Login
-        let session = await scrape_login();
-        let page = await submit_login(username, password,
-            session.apache_token, session.session_id);
-        if (page.fail) {
-            resolve({"login_fail": true});
-        }
-        log(i, "session", session);
+async function scrape_quarter(username, password, i) {
+    // Login
+    let session = await scrape_login();
+    let page = await submit_login(username, password,
+        session.apache_token, session.session_id);
+    if (page.fail) {
+        return {"login_fail": true};
+    }
+    log(i, "session", session);
 
-        let term = Math.floor(i / CLASS_THREADS);
-        i = i % CLASS_THREADS;
+    let term = Math.floor(i / CLASS_THREADS);
+    i = i % CLASS_THREADS;
 
-        // Academics Page
-        let academics = await scrape_academics(session.session_id, term);
-        log(i, "academics", academics);
+    // Academics Page
+    let academics = await scrape_academics(session.session_id, term);
+    log(i, "academics", academics);
 
-        if (term != 0) {
-            academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term);
-        }
+    if (term != 0) {
+        academics = await change_term_classes(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code, term);
+    }
 
-        // Check if thread is extra
-        if (academics.classes[i] == undefined) {
-            resolve(undefined);
-            log(i, "closing");
-            return;
-        }
-
-        // Get general class data 
-        let categories = await scrape_details(session.session_id,
-            academics.apache_token, academics.classes[i].id,
-            academics.oid);
-        log(i, "categories", categories);
-
-        // Get assignments data page by page
-        let assignments = await scrape_assignments(session.session_id, academics.apache_token);
-
-        if (term != 0) {
-            assignments = await change_term_assignments(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code);
-        }
-
-        log(i, "assignments", assignments);
-
-        // Return promise
+    // Check if thread is extra
+    if (academics.classes[i] == undefined) {
+        return undefined;
         log(i, "closing");
-        resolve({"name": academics.classes[i].name,
-            "grade": academics.classes[i].grade,
-            "categories": categories,
-            "assignments": assignments,
-            "tokens": {"session_id": session.session_id, "apache_token": academics.apache_token},
-        });
-    });
+        return;
+    }
+
+    // Get general class data 
+    let categories = await scrape_details(session.session_id,
+        academics.apache_token, academics.classes[i].id,
+        academics.oid);
+    log(i, "categories", categories);
+
+    // Get assignments data page by page
+    let assignments = await scrape_assignments(session.session_id, academics.apache_token);
+
+    if (term != 0) {
+        assignments = await change_term_assignments(session.session_id, academics.apache_token, academics.oid, academics.termFilters[term + 1].code);
+    }
+
+    log(i, "assignments", assignments);
+
+    // Return promise
+    log(i, "closing");
+    return {
+        "name": academics.classes[i].name,
+        "grade": academics.classes[i].grade,
+        "categories": categories,
+        "assignments": assignments,
+        "tokens": {
+            "session_id": session.session_id,
+            "apache_token": academics.apache_token
+        },
+    };
 }
 
 // Returns promise that contains object of all class data
-function scrape_class(username, password, i) {
-    return new Promise(async function(resolve, reject) {
-        // Login
-        let session = await scrape_login();
-        let page = await submit_login(
-            username, password, session.apache_token, session.session_id
-        );
-        if (page.fail) {
-            resolve({"login_fail": true});
-        }
-        log(i, "session", session);
+async function scrape_class(username, password, i) {
+    // Login
+    let session = await scrape_login();
+    let page = await submit_login(
+        username, password, session.apache_token, session.session_id
+    );
+    if (page.fail) {
+        return {"login_fail": true};
+    }
+    log(i, "session", session);
 
-        // Academics Page
-        let academics = await scrape_academics(session.session_id, 0);
-        log(i, "academics", academics);
-        // Check if thread is extra
-        if (academics.classes[i] == undefined) {
-            resolve(undefined);
-            log(i, "closing");
-            return;
-        }
-
-        // Get general class data 
-        let categories = await scrape_details(
-            session.session_id, academics.apache_token, academics.classes[i].id,
-            academics.oid
-        );
-        log(i, "categories", categories);
-
-        // Get assignments data page by page
-        let assignments = await scrape_assignments(session.session_id, academics.apache_token);
-        log(i, "assignments", assignments);
-
-        // Return promise
+    // Academics Page
+    let academics = await scrape_academics(session.session_id, 0);
+    log(i, "academics", academics);
+    // Check if thread is extra
+    if (academics.classes[i] == undefined) {
+        return undefined;
         log(i, "closing");
-        resolve({
-            "name": academics.classes[i].name,
-            "grade": academics.classes[i].grade,
-            "categories": categories,
-            "assignments": assignments,
-            "tokens": {
-                "session_id": session.session_id,
-                "apache_token": academics.apache_token
-            },
-        });
-    });
+        return;
+    }
+
+    // Get general class data 
+    let categories = await scrape_details(
+        session.session_id, academics.apache_token, academics.classes[i].id,
+        academics.oid
+    );
+    log(i, "categories", categories);
+
+    // Get assignments data page by page
+    let assignments = await scrape_assignments(session.session_id, academics.apache_token);
+    log(i, "assignments", assignments);
+
+    // Return promise
+    log(i, "closing");
+    return {
+        "name": academics.classes[i].name,
+        "grade": academics.classes[i].grade,
+        "categories": categories,
+        "assignments": assignments,
+        "tokens": {
+            "session_id": session.session_id,
+            "apache_token": academics.apache_token
+        },
+    };
 }
 
 // Returns object with apache_token and session_id
@@ -795,7 +789,7 @@ async function scrape_academics(session_id, term) {
             "mode": "cors"
         }
     ));
-    let data = {"classes": []};
+    let data = { classes: [] };
     $("#dataGrid a").each(function(i, elem) {
         if (TERM_NAMES[term].includes($(this).parent().nextAll().eq(0).text().trim())) {
             data.classes[i] = {};
@@ -939,76 +933,74 @@ async function scrape_assignments(session_id, apache_token) {
 
 // Returns list of black/silver day pairs of class names and room numbers
 async function scrape_schedule(username, password) {
-    return new Promise(async function(resolve, reject) {
-        let session = await scrape_login();
-        let page = await submit_login(username, password, session.apache_token, session.session_id);
-        if (page.fail) {
-            resolve({"login_fail": true});
-        }
+    let session = await scrape_login();
+    let page = await submit_login(username, password, session.apache_token, session.session_id);
+    if (page.fail) {
+        return {"login_fail": true};
+    }
 
-        let schedule_page = (await fetch_body(
-            "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+    let schedule_page = (await fetch_body(
+        "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
+        {
+            "credentials": "include",
+            "headers": {
+                "Connection": "keep-alive",
+                "User-Agent": HEADERS["User-Agent"],
+                "Accept": HEADERS["Accept"],
+                "Accept-Language": HEADERS["Accept-Language"],
+                "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
+                "Cookie": `JSESSIONID=${session.session_id}`
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors"
+        }
+    ));
+
+    if (schedule_page.includes("Matrix view")) {
+        schedule_page = (await fetch_body(
+            "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
             {
                 "credentials": "include",
                 "headers": {
                     "Connection": "keep-alive",
+                    "Pragma": "no-cache",
+                    "Cache-Control": "no-cache",
                     "User-Agent": HEADERS["User-Agent"],
                     "Accept": HEADERS["Accept"],
                     "Accept-Language": HEADERS["Accept-Language"],
-                    "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                    "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
                     "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Cookie": `JSESSIONID=${session.session_id}`
+                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`
                 },
-                "referrer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
+                "referrer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
                 "referrerPolicy": "strict-origin-when-cross-origin",
                 "body": null,
                 "method": "GET",
                 "mode": "cors"
             }
         ));
+    } 
 
-        if (schedule_page.includes("Matrix view")) {
-            schedule_page = (await fetch_body(
-                "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
-                {
-                    "credentials": "include",
-                    "headers": {
-                        "Connection": "keep-alive",
-                        "Pragma": "no-cache",
-                        "Cache-Control": "no-cache",
-                        "User-Agent": HEADERS["User-Agent"],
-                        "Accept": HEADERS["Accept"],
-                        "Accept-Language": HEADERS["Accept-Language"],
-                        "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
-                        "Accept-Encoding": HEADERS["Accept-Encoding"],
-                        "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`
-                    },
-                    "referrer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
-                    "referrerPolicy": "strict-origin-when-cross-origin",
-                    "body": null,
-                    "method": "GET",
-                    "mode": "cors"
-                }
-            ));
-        } 
+    let $ = cheerio.load(schedule_page);
+    let data = { black:[], silver:[] };
 
-        let $ = cheerio.load(schedule_page);
-        let data = { black:[], silver:[] };
-
-        $('td[style="width: 125px"]').each(function(i, elem) {
-            const parts = $(this).html().trim().split('<br>').slice(0, 4);
-            const period = $(this).parentsUntil('td').prev().find('th').html().trim();
-            const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
-            if (i % 2 == 0) {
-                data.black[i/2] = block;
-            } else {
-                data.silver[Math.floor(i/2)] = block;
-            }
-        });
-
-        log("schedule", data);
-        resolve(data);
+    $('td[style="width: 125px"]').each(function(i, elem) {
+        const parts = $(this).html().trim().split('<br>').slice(0, 4);
+        const period = $(this).parentsUntil('td').prev().find('th').html().trim();
+        const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
+        if (i % 2 == 0) {
+            data.black[i/2] = block;
+        } else {
+            data.silver[Math.floor(i/2)] = block;
+        }
     });
+
+    log("schedule", data);
+    return data;
 }
 
 // Returns body of fetch
