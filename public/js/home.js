@@ -677,12 +677,22 @@ $("#corrections_modal_input").keypress(({ which }) => {
     }
 });
 
-/*
+/**
  * Callback for response from /data
  *
  * includedTerms is an optional parameter which contains the terms
  * included in an import (in the case that currentTableData is imported
  * and not all of the terms' data have been put into currentTableData)
+ *
+ * @typedef {Object} ResponseData
+ * @property {Object[]} classes
+ * @property {Object[]} overview
+ * @property {String} quarter
+ * @property {Object} recent
+ * @property {String} username
+ *
+ * @param {ResponseData} response
+ * @param [includedTerms] includedTerms
  */
 function responseCallback(response, includedTerms) {
     // console.log(response);

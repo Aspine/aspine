@@ -1,3 +1,13 @@
+/**
+ *
+ * @param {Object[]} assignments
+ * @param {Object} categories
+ * @param  decimals
+ * @param init_grade
+ * @param {string} grade
+ * @returns {string|{categoryScores: {}, categoryPercent: string, categoryGrades: {}, totalPercent: string, categoryMaxScores: {}}}
+ */
+
 function computeGrade(assignments, categories, decimals, init_grade, grade) {
     let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
     for (let category in categories) {
@@ -53,6 +63,13 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
     }
 }
 
+/**
+ *
+ * @param assignments
+ * @param categories
+ * @param currentGrade
+ * @returns {string|{categoryScores: {}, categoryGrades: {}, categoryPercent: number, type: string, categoryMaxScores: {}}}
+ */
 function determineGradeType(assignments, categories, currentGrade) {
     let categoryScores = {}, categoryMaxScores = {}, categoryGrades = {};
     for (let category in categories) {
