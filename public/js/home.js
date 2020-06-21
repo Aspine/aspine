@@ -13,8 +13,23 @@ let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
+/**
+ * All the data provided by Aspine API
+ *  @typedef TableDataObject
+ *	@property {GPA} [cumGPA]
+ *	@property {Term} [currentTermData]
+ *	@property {string} [name]
+ *	@property {OverviewItem[]} [overview]
+ *	@property {Recent} [recent]
+ *	@property {Schedule} [schedule]
+ *	@property {Terms} [terms]
+ *  @property {?string} [username]
+ *  @property {boolean} [imported=true]
+ */
+/** @type {TableDataObject[]}*/
 let tableData = [{ name: "Current Year" }];
 let currentTableDataIndex = 0;
+/**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
@@ -680,19 +695,9 @@ $("#corrections_modal_input").keypress(({ which }) => {
 /**
  * Callback for response from /data
  *
- * includedTerms is an optional parameter which contains the terms
- * included in an import (in the case that currentTableData is imported
- * and not all of the terms' data have been put into currentTableData)
- *
- * @typedef {Object} ResponseData
- * @property {Object[]} classes
- * @property {Object[]} overview
- * @property {String} quarter
- * @property {Object} recent
- * @property {String} username
- *
- * @param {ResponseData} response
- * @param [includedTerms] includedTerms
+ * @param {TableDataObject} response
+ * @param {?(string|object)} includedTerms - optional parameter which contains the terms included in an import (in the case that
+ * currentTableData is imported and not all of the terms' data have been put into currentTableData)
  */
 function responseCallback(response, includedTerms) {
     // console.log(response);

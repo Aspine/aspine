@@ -367,6 +367,10 @@ let exportTableData = async function(prefs) {
   }), filename);
 };
 
+/**
+ * @param {TableDataObject} obj
+ * @returns {Promise<string>}
+ */
 let importTableData = async function(obj) {
 
 //#ifndef lite
