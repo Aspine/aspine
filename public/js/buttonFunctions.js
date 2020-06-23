@@ -314,7 +314,10 @@ let exportTableData = async function(prefs) {
           return currentTableData.terms[term];
         }
         // Term is selected by user and its data have not been downloaded
-        else if (prefs.terms[term] && !currentTableData.imported) {
+        else if (
+          prefs.terms[term] && !currentTableData.imported /* backwards compat */
+          && currentTableData.type !== "imported"
+        ) {
           try {
             $("#export_status").html(
               `Downloading quarter "${term}" from Aspen&hellip;`
@@ -410,7 +413,7 @@ let importTableData = async function(obj) {
   currentTableDataIndex++;
   tableData[currentTableDataIndex] = {};
   currentTableData = tableData[currentTableDataIndex];
-  currentTableData.imported = true;
+  currentTableData.type = "imported";
   currentTableData.name = obj.name;
 
   let includedTerms = {};
