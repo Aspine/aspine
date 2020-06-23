@@ -26,10 +26,10 @@ let currentTerm = "current";
  *	@property {Schedule} [schedule]
  *	@property {Terms} [terms]
  *  @property {?string} [username]
- *  @property {boolean} [imported=true]
+ *  @property {"current" | "previous" | "imported"} [type]
  */
 /** @type {TableDataObject[]}*/
-let tableData = [{ name: "Current Year" }];
+let tableData = [{ name: "Current Year", type: "current" }];
 let currentTableDataIndex = 0;
 /**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];

@@ -1121,7 +1121,7 @@ let tableData_option_onclick = function() {
   period_names = {black:[], silver:[]};
 
   // Hide Reports tab for imported data
-  if (currentTableData.imported) {
+  if (currentTableData.imported || currentTableData.type === "imported") {
     $("#reports_open").hide();
   }
   else {
@@ -1467,7 +1467,10 @@ let isAccessible = function(term, includedTerms) {
   // for more data, so any terms not included in the import
   // are inaccessible
   if (
-    currentTableData.imported &&
+    (
+      currentTableData.imported || /* backwards compatibility */
+      currentTableData.type === "imported"
+    ) &&
     (
       (includedTerms && !includedTerms[term]) ||
       !currentTableData.terms[term].classes
