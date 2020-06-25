@@ -3,10 +3,12 @@ let pdf_index = 0;
 let pdfrendering = false;
 let modals = {
     "stats": document.getElementById('stats_modal'),
+    "corrections": document.getElementById('corrections_modal'),
     "export": document.getElementById('export_modal'),
     "import": document.getElementById('import_modal')
 };
 let statsModal = document.getElementById('stats_modal');
+let correctionsModal = document.getElementById('corrections_modal');
 let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
@@ -17,6 +19,7 @@ let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
+let tempCell;
 // When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
     Object.keys(modals).forEach(key => {
@@ -79,6 +82,10 @@ let noStats = function() {
 let hideModal = function(key) {
     modals[key].style.display = "none";
     if (key === "stats") noStats();
+
+    if (key === "corrections") {
+        document.getElementById("corrections_modal_input").value = "";
+    }
 }
 
 let showModal = function(key) {
@@ -288,6 +295,22 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             title: "Percentage",
             field: "percentage",
             formatter: rowGradeFormatter,
+            headerSort: false,
+        },
+        {
+            title: "Corrections",
+            titleFormatter: () => '<i class="fa fa-toolbox" aria-hidden="true"></i>',
+            formatter: cell =>
+                (!isNaN(cell.getRow().getData().score)) ?
+                '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
+            width: 40,
+            align: "center",
+            cellClick: function(e, cell) {
+                console.log(cell);
+                tempCell = cell;
+                showModal("corrections");
+                $("#corrections_modal_input").focus();
+            },
             headerSort: false,
         },
         {
@@ -618,6 +641,37 @@ let classesTable = new Tabulator("#classesTable", {
             }
         }
     },
+});
+
+function correct() {
+    const per = parseInt($("#corrections_modal_input").prop("value"));
+    if (per > 0 && per <= 100) {
+        const row = tempCell.getRow();
+        const { score, max_score } = row.getData();
+
+        const diff = max_score - score;
+        const pts_back = diff * per/100;
+        const newScore = score + pts_back;
+        const rowPos = row.getPosition();
+        currentTableData.currentTermData.classes[selected_class_i].assignments[rowPos].score = newScore;
+        row.update({ score: newScore });
+        assignmentsTable.setData(currentTableData.currentTermData.classes[selected_class_i].assignments);
+
+        editAssignment(currentTableData.currentTermData.classes[selected_class_i].assignments)
+
+        assignmentsTable.redraw();
+        categoriesTable.redraw();
+        classesTable.redraw();
+    }
+    hideModal("corrections");
+}
+
+// Bind Enter key to "Apply Corrections" button in corrections modal
+$("#corrections_modal_input").keypress(({ which }) => {
+    // 13 is the keycode for Enter
+    if (which === 13) {
+        correct();
+    }
 });
 
 /*

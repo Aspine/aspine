@@ -353,7 +353,8 @@ i.fa.fa-plus.grades {
   cursor: pointer;
 }
 
-i.fa.fa-info-circle {
+i.fa.fa-info-circle,
+i.fa.fa-toolbox {
   color: #00551C;
   padding-left: 31%;
   padding-top: 25%;

@@ -151,6 +151,19 @@
     </div>
   </div>
 
+  <div id="corrections_modal" class="modal">
+    <!-- Modal content -->
+    <div id="corrections_modal_content" class="modal-content">
+      <span class="close" onclick="hideModal('corrections')">&times;</span>
+      <h3>Test Corrections</h3>
+      <p style='margin-bottom: 20px;'>
+        Enter Test Corrections % possible for this assignment:
+      </p>
+      <input type="text" id="corrections_modal_input">
+      <input type="button" value="Apply Corrections" onclick="correct()">
+    </div>
+  </div>
+
   <div id="export_modal" class="modal" tabindex="0">
     <!-- Modal content -->
     <div id="export_modal_content" class="modal-content">
