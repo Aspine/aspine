@@ -29,7 +29,10 @@ let currentTerm = "current";
  *  @property {"current" | "previous" | "imported"} [type]
  */
 /** @type {TableDataObject[]}*/
-let tableData = [{ name: "Current Year", type: "current" }];
+let tableData = [
+    { name: "Current Year", type: "current" },
+    { name: "Previous Year", type: "previous" },
+];
 let currentTableDataIndex = 0;
 /**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];

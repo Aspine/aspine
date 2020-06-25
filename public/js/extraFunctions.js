@@ -782,12 +782,12 @@ let listener = function(event) {
           $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = _this.innerHTML;
+          y = _this.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          _this.setAttribute("class", "same-as-selected");
           break;
 
         } else {
@@ -811,12 +811,12 @@ let listener = function(event) {
           //categoriesTable.setData(tableData[i].categoryDisplay);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = _this.innerHTML;
+          y = _this.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          _this.setAttribute("class", "same-as-selected");
           break;
         }
       }
@@ -953,13 +953,19 @@ let tableData_option_onclick = function() {
 
   // Re-initialize the quarter dropdown with the data from
   // currentTableData
-  initialize_quarter_dropdown()
+  initialize_quarter_dropdown();
   setup_quarter_dropdown();
 
-
-
-  classesTable.setData(currentTableData.currentTermData.classes);
-  scheduleTable.setData(currentTableData.schedule.black);
+  if (currentTableData.type === "previous") {
+    // Switch to Q1
+    // (because there is no "current quarter" in the previous year)
+    listener({ target: document.getElementById("q1") });
+    document.getElementsByClassName("gpa_select-selected")[0].click();
+  }
+  else {
+    classesTable.setData(currentTableData.currentTermData.classes);
+    scheduleTable.setData(currentTableData.schedule.black);
+  }
 
   // Reset clock
   period_names = {black:[], silver:[]};
@@ -1161,15 +1167,26 @@ let anyEdited = function() {
  * and not all of the terms' data have been put into currentTableData)
  */
 let isAccessible = function(term, includedTerms) {
-  // Boolean storing whether or not this term is 'accessible'
-  let accessible = true;
-  // Reason for term being inaccessible
-  let reason = "";
+  // All four main quarters should be accessible for the previous year
+  if (currentTableData.type === "previous") {
+    if (term.startsWith("q")) {
+      return { accessible: true, reason: "" };
+    }
+    else {
+      return {
+        accessible: false,
+        reason: "There is no current term for the previous year."
+      };
+    }
+  }
+
   // If no GPA is available for the term, it is inaccessible
   // (the term was not included in Aspen's overview)
   if (!currentTableData.terms[term].GPA.percent) {
-      accessible = false;
-      reason = "This term is not available on Aspen.";
+      return {
+        accessible: false,
+        reason: "This term is not available on Aspen."
+      };
   }
   // If currentTableData is imported, we cannot scrape Aspen
   // for more data, so any terms not included in the import
@@ -1184,12 +1201,11 @@ let isAccessible = function(term, includedTerms) {
         !currentTableData.terms[term].classes
       )
   ) {
-      accessible = false;
-      reason = "This term is not included in the imported data.";
+    return {
+      accessible: false,
+      reason: "This term is not included in the imported data."
+    };
   }
 
-  return {
-    accessible: accessible,
-    reason: reason
-  };
+  return { accessible: true, reason: "" };
 }

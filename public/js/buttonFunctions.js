@@ -483,6 +483,10 @@ let importTableData = async function(obj) {
       tableData[0].name;
     $("#tableData_select-items-0")[0].textContent =
       tableData[0].name;
+
+    // Remove "Previous Year" option
+    $("#tableData_select option[value='1']").remove();
+    $("#tableData_select-items-1").remove();
   }
 
   $(`#tableData_select-items-${currentTableDataIndex}`).click();
