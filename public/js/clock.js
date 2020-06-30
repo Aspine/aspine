@@ -58,7 +58,7 @@ function drawHand(ctx, radius, pos, length, width) {
     ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.lineWidth = width;
-    ctx.arc(0, 0, length, -Math.PI/2, pos - Math.PI/2); 
+    ctx.arc(0, 0, length, -Math.PI/2, pos - Math.PI/2);
     ctx.stroke();
 }
 
@@ -80,14 +80,14 @@ function drawNumber(ctx, radius, pos, number) {
     // Get time in seconds
     let time = number / 1000;
     // Get first and second digit
-    
+
     // hours
     let d1 = Math.floor(time / 60 / 60);
     // minutes
     let d2 = Math.floor(time / 60 % 60);
     // seconds
     let d3 = Math.floor(time % 60);
-    
+
     if(d1 < 10) {
         d1 = `0${d1}`;
     }
@@ -97,7 +97,7 @@ function drawNumber(ctx, radius, pos, number) {
     if(d3 < 10) {
         d3 = `0${d3}`;
     }
-    
+
     ctx.fillText(`${d1}:${d2}:${d3}`, 0, 0);
 }
 
@@ -109,13 +109,13 @@ function drawName(name) {
 function fitText(ctx, text, fontface, width) {
     // start with a large font size
     let fontsize = 75;
-    
+
     // lower the font size until the text fits the canvas
     do {
         fontsize--;
         ctx.font = fontsize + "px " + fontface;
     } while (ctx.measureText(text).width > width)
-    
+
     return fontsize;
 }
 
@@ -213,10 +213,10 @@ function redraw_clock() {
                 tod > schedules[current_schedule][current_period_i + 1].start) {
             current_period_i++;
         }
-            
+
         const current_period = schedules[current_schedule][current_period_i];
         const next_period = schedules[current_schedule][current_period_i + 1];
-        
+
         if (tod < current_period.start) { // Before school
             period_name = "Before School";
             pos = tod / current_period.start;
@@ -251,15 +251,15 @@ function redraw_clock() {
             number += 12 * 60 * 60 * 1000;
         }
     }
-    
+
     // conver 0-1 to 0-2pi
     pos = pos * 2 * Math.PI;
-    
+
     drawFace(small_ctx, small_radius);
     drawName(period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
     drawNumber(small_ctx, small_radius, pos, number);
-    
+
     drawFace(large_ctx, large_radius);
     drawName(period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);

@@ -53,21 +53,21 @@ window.getStats = async function(session_id, apache_token, assignment_id) {
 
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
-window.addEventListener('resize', function() { 
+window.addEventListener('resize', function() {
     console.log("Resizing");
     if ($('#stats_plot').is(":visible")) {
-    
-      Plotly.Plots.resize(document.getElementById('stats_plot')); 
+
+      Plotly.Plots.resize(document.getElementById('stats_plot'));
       let update_size = {
         //width: 800,  // or any new width
         width: $('#stats_modal_content').width(),
         height: 120  // " "
       };
-    
+
       Plotly.relayout('stats_plot', update_size);
     }
-    
-    if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') { 
+
+    if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') {
       generate_pdf(pdf_index);
     }
 });
@@ -118,7 +118,7 @@ let recentActivity = new Tabulator("#recentActivity", {
         // questionable
         $("#mostRecentDiv").hide();
         classesTable.selectRow(1);
-        
+
         let elem = document.getElementById("default_open");
         let evt = new MouseEvent('click', {
             bubbles: true,
@@ -127,7 +127,7 @@ let recentActivity = new Tabulator("#recentActivity", {
         });
         // If cancelled, don't dispatch our event
         let canceled = !elem.dispatchEvent(evt);
-        
+
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
@@ -138,7 +138,7 @@ let recentActivity = new Tabulator("#recentActivity", {
         //classesTable.getRows()
         //    .filter(row => row.getData().name === selected_class)
         //    .forEach(row => row.toggleSelect());
-        
+
         for (let i in tabledata) {
             if (tabledata[i].name === row.getData().classname) {
                 assignmentsTable.setData(tabledata[i].assignments);
@@ -146,7 +146,7 @@ let recentActivity = new Tabulator("#recentActivity", {
                 return;
             }
         }
-        
+
         classesTable.selectRow(1);
     },
 });
@@ -166,7 +166,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         {title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
         {title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
         //filler column to match the assignments table
-        //{title: "", width:1, align:"center", headerSort: false}, 
+        //{title: "", width:1, align:"center", headerSort: false},
         {
             title: "Hide",
             titleFormatter: () => '<i class="fa fa-eye-slash header-icon" aria-hidden="true"></i>',
@@ -204,9 +204,9 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
-        
+
         classesTable.selectRow(1);
-        
+
         let elem = document.getElementById("default_open");
         let evt = new MouseEvent('click', {
             bubbles: true,
@@ -215,7 +215,7 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         });
         // If cancelled, don't dispatch our event
         let canceled = !elem.dispatchEvent(evt);
-        
+
         assignmentsTable.clearFilter();
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
@@ -226,7 +226,7 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         //classesTable.getRows()
         //    .filter(row => row.getData().name === selected_class)
         //    .forEach(row => row.toggleSelect());
-        
+
         for (let i in tabledata) {
             if (tabledata[i].name === row.getData().classname) {
                 assignmentsTable.setData(tabledata[i].assignments);
@@ -262,7 +262,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             editor:"select",
             editorParams: function(cell) {
                 let catCategories = [];
-                
+
                 for (
                     let k = 0;
                     k < Object.keys(
@@ -345,7 +345,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 noStats();
                 document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                 showModal("stats");
-                
+
                 const { session_id, apache_token } =
                     currentTableData.currentTermData.classes[selected_class_i].tokens;
                 const {
@@ -357,7 +357,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     date_due,
                     feedback: assignment_feedback
                 } = cell.getRow().getData();
-                
+
                 let stats = await window.getStats(session_id, apache_token, assignment_id);
                 if (!Array.isArray(stats)) {
                     noStats();
@@ -367,7 +367,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const [high, low, median, mean,] = stats;
                 const q1 = (low + median) / 2;
                 const q3 = (high + median) / 2;
-                
+
                 $("#stats_modal_title").text(`Assignment: ${assignment}`);
                 $("#stats_modal_score").text(`${score} / ${max_score}`);
                 $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
@@ -375,7 +375,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#stats_modal_date_assigned").text(date_assigned);
                 $("#stats_modal_date_due").text(date_due);
                 $("#stats_modal_feedback").text(assignment_feedback || "None");
-                
+
                 $("#stats_modal_content").css("height", "600px");
                 $("#there_are_stats").show();
                 $("#there_are_no_stats").hide();
@@ -415,10 +415,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     { start: high, end: q3 },
                 ];
                 plotStats.points = [];
-                 
+
                 const plotElem = d3.select("#stats_plot");
                 plotElem.style("display", "inline");
-                
+
                 $("#stats_plot").css("width", "100%");
 
                 // Get base font size in pixels (= 1rem)
@@ -507,7 +507,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                         .attr("text-anchor", "middle")
                         .text(getLetterGrade(i));
                 }
-                
+
                 // Add line at mean
                 plotElem.append("line")
                     .attr("class", "mean-line")
@@ -517,7 +517,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     .attr("x2", x(mean))
                     .attr("stroke", "#888")
                     .attr("stroke-width", "0.2rem");
-                
+
                 // Add line at student's score
                 plotElem.append("line")
                     .attr("class", "score-line")
@@ -613,7 +613,7 @@ let classesTable = new Tabulator("#classesTable", {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
                     let isAccessibleObj = isAccessible(term);
-                    
+
                     if (isAccessibleObj.accessible) {
                         $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
                         $(`#export_checkbox_terms_${term} ~ span`)
@@ -696,7 +696,7 @@ $("#corrections_modal_input").keypress(({ which }) => {
 
 /*
  * Callback for response from /data
- * 
+ *
  * includedTerms is an optional parameter which contains the terms
  * included in an import (in the case that currentTableData is imported
  * and not all of the terms' data have been put into currentTableData)
@@ -710,14 +710,14 @@ function responseCallback(response, includedTerms) {
 
         $("#reports_open").hide();
         $("#loader").hide();
-    
+
         showModal("import");
         return;
     }
     if (response.recent.login_fail) {
         location.href='/logout';
     }
-    
+
     if (response.classes.length === 0) {
         response.classes = [{
             "name": "No Classes",
@@ -749,7 +749,7 @@ function responseCallback(response, includedTerms) {
             "color": "#1E8541"
         }];
     }
-    
+
     if (typeof tableData[currentTableDataIndex] !== 'undefined') {
         currentTableData.recent = response.recent;
         currentTableData.overview = response.overview;
@@ -761,9 +761,9 @@ function responseCallback(response, includedTerms) {
         currentTableData.overview = response.overview;
         currentTableData.username = response.username;
     }
-    
+
     $("#loader").hide();
-    
+
     //parsing the data extracted by the scrappers, and getting tableData ready for presentation
     if (typeof currentTableData.terms === 'undefined') {
         currentTableData.terms = {
@@ -772,15 +772,15 @@ function responseCallback(response, includedTerms) {
             q2: {},
             q3: {},
             q4: {},
-        };        
+        };
     }
-    
+
     if (typeof currentTableData.currentTermData === 'undefined') {
         currentTableData.currentTermData = {};
     }
     currentTableData.currentTermData = parseTableData(response.classes);
     currentTableData.terms[currentTerm] = parseTableData(response.classes);
-    
+
     //populates the event for each row in the recentAttendance table
     for (let i = 0; i < currentTableData.recent.recentAttendanceArray.length; i++) {
         currentTableData.recent.recentAttendanceArray[i].event = "";
@@ -797,24 +797,24 @@ function responseCallback(response, includedTerms) {
             currentTableData.recent.recentAttendanceArray[i].event += "Tardy ";
         }
     }
-    
+
     let activityArray = currentTableData.recent.recentActivityArray.slice();
     for (let i = 0; i < activityArray.length; i++) {
         try {
             let assignmentName = activityArray[i].assignment;
             let className = activityArray[i].classname;
             let temp_classIndex = classIndex(className);
-            
+
             let assignmentIndex = currentTableData.currentTermData
                 .classes[temp_classIndex].assignments.map(x => x.name)
                 .indexOf(assignmentName);
             console.log(assignmentIndex);
-            
+
             currentTableData.recent.recentActivityArray[i].assignmentName = assignmentName;
             currentTableData.recent.recentActivityArray[i].className = className;
             currentTableData.recent.recentActivityArray[i].temp_classIndex = temp_classIndex;
             currentTableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
-            
+
             currentTableData.recent.recentActivityArray[i].max_score = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
             currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
             currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
@@ -823,7 +823,7 @@ function responseCallback(response, includedTerms) {
             console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
         }
     }
-    
+
     // Calculate GPA for current term
     currentTableData.terms.current.GPA = response.GPA ||
         computeGPA(currentTableData.terms.current.classes);
@@ -841,17 +841,17 @@ function responseCallback(response, includedTerms) {
     for (let i = 1; i <= 4; i++) {
         currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview,i);
     }
-    
+
     //Stuff to do now that tableData is initialized
-    
+
     $("#mostRecentDiv").show();
     mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
-    
+
     initialize_quarter_dropdown(includedTerms);
     setup_quarter_dropdown();
-    
+
     termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
-    
+
     if (!$(".tableData_select-selected")[0]) {
         initialize_tableData_dropdown();
     }
@@ -873,45 +873,44 @@ function responseCallback(response, includedTerms) {
 
 function responseCallbackPartial(response) {
     $("#loader").hide();
-    
+
     currentTableData.currentTermData = currentTableData.terms[currentTerm];
-    
+
     let temp_term_data = parseTableData(response.classes);
     currentTableData.terms[currentTerm].classes = temp_term_data.classes;
     currentTableData.terms[currentTerm].GPA = temp_term_data.GPA;
     currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
-    
+
     /*
     if (currentTerm === 'current') {
         $(".gpa_select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
         document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
         document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-        
+
     } else {
         $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
         $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
-        document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent; 
+        document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent;
     }
     */
-    
+
     scheduleTable.setData(currentTableData.schedule.black);
-    
+
     $("#classesTable").show();
-    
+
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
     classesTable.redraw();
-    
+
     termsReset[currentTerm] = JSON.parse(JSON.stringify(currentTableData.terms[currentTerm]));
-    
+
     term_dropdown_active = true;
 }
 
 // Callback for response from /schedule
 function scheduleCallback(response) {
     if (!currentTableData.schedule) currentTableData.schedule = response;
-    
-	
+
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
     //let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
@@ -919,7 +918,7 @@ function scheduleCallback(response) {
     let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
     let timesCounter = 0;
     let times = [];
-    
+
     for (let i = 0; i < periods.length; i++) {
         if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
             times[i] = placeTimes[timesCounter];
@@ -928,26 +927,27 @@ function scheduleCallback(response) {
             times[i] = "";
         }
     }
-    
+
     periods = periods.filter(Boolean).map(x => "Period: " + x);
-    
+
     let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-    
-	
-	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE ========
-    if(currentTableData.schedule.black.length > 10) {//prevent it from shaving the schedule too much
-	currentTableData.schedule.black.shift();
-     for (var w = 0; w < currentTableData.schedule.black.length; w ++) {
-       currentTableData.schedule.black.splice(w + 1, 1);
-     }
-	 
-     for (w = 0; w < currentTableData.schedule.silver.length; w ++) {
-       currentTableData.schedule.silver.splice(w + 1, 1);
-     }
- 	}
-	//==========================================================================
-	
-    for (let i = 0; i < periods.length;  i++) {
+
+
+	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE =======
+    if (currentTableData.schedule.black.length > 10) {
+        //prevent it from shaving the schedule too much
+        currentTableData.schedule.black.shift();
+        for (let w = 0; w < currentTableData.schedule.black.length; w++) {
+            currentTableData.schedule.black.splice(w + 1, 1);
+        }
+
+        for (let w = 0; w < currentTableData.schedule.silver.length; w++) {
+            currentTableData.schedule.silver.splice(w + 1, 1);
+        }
+    }
+	//=========================================================================
+
+    for (let i = 0; i < periods.length; i++) {
         if (currentTableData.schedule.black[i]) {
             currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
             currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
@@ -959,12 +959,8 @@ function scheduleCallback(response) {
             currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
     }
-    
 
-
-	
-	
-    scheduleTable.setData(currentTableData.schedule.black);    
+    scheduleTable.setData(currentTableData.schedule.black);
     redraw_clock();
 }
 
@@ -972,10 +968,10 @@ function pdfCallback(response) {
     $("#loader").hide();
     // console.log(response);
     currentTableData.pdf_files = response;
-    
+
     initialize_pdf_dropdown();
     $("#pdf_loading_text").hide();
-    
+
     if (typeof currentTableData.pdf_files !== 'undefined') {
         generate_pdf(pdf_index);
     }
@@ -1012,23 +1008,23 @@ function schedule_toggle() {
 function openTab(evt, tab_name) {
     // Declare all variables
     let i, tabcontent, tablinks;
-    
+
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-    
+
     // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-    
+
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tab_name).style.display = "block";
     evt.currentTarget.className += " active";
-    
+
     if (tab_name === "clock") {
         document.getElementById("small_clock").style.display = "none";
         document.getElementById("small_clock_period").style.display = "none";
@@ -1036,12 +1032,12 @@ function openTab(evt, tab_name) {
         document.getElementById("small_clock").style.display = "block";
         document.getElementById("small_clock_period").style.display = "block";
     }
-    
+
     if (tab_name === "grades") {
         //$("#mostRecentDiv").show();
         mostRecentTable.redraw();
     }
-    
+
     if (tab_name === "reports") {
         if (!currentTableData.pdf_files) {
             $("#loader").show();
@@ -1072,7 +1068,7 @@ function openTab(evt, tab_name) {
             elem.MSonfullscreenchange = handlefullscreenchange;
         }
     }
-    
+
     if (tab_name === "schedule" && !currentTableData.schedule) {
         $.ajax({
             url: "/schedule",
@@ -1081,7 +1077,7 @@ function openTab(evt, tab_name) {
             success: scheduleCallback
         });
     }
-    
+
     classesTable.redraw();
     assignmentsTable.redraw();
     scheduleTable.redraw();
@@ -1092,7 +1088,7 @@ function openTab(evt, tab_name) {
 
 $("#export_button").click(() => {
     prefs = {};
-   
+
     [
         "recent", "schedule", "cumGPA"
     ].forEach(pref => {
