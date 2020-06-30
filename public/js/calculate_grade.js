@@ -8,13 +8,13 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
 
     let totalScore = 0, totalMaxScore = 0;
     if (Object.keys(categories).length === 0) {
-        for (let j = 0; j < assignments.length; j++) {
-            totalScore += parseFloat(assignments[j].score);
-            totalMaxScore += parseFloat(assignments[j].max_score);
+        for (let assignment of assignments) {
+            totalScore += parseFloat(assignment.score);
+            totalMaxScore += parseFloat(assignment.max_score);
         }
 
         let totalPercent = totalScore / totalMaxScore;
-        return "" + (Math.round(totalPercent * 10000) / 100);
+        return (Math.round(totalPercent * 10000) / 100).toString();
     } else {
         for (let i = 0; i < assignments.length; i++) {
             if (!isNaN(assignments[i].score)) {
@@ -34,18 +34,18 @@ function computeGrade(assignments, categories, decimals, init_grade, grade) {
                 categoryGrades[category] = "N/A";
             } else {
                 categoryGrades[category] = (0.0 + categoryScores[category]) / categoryMaxScores[category];
-                categoryPercent += ((0.0 + categoryScores[category]) / categoryMaxScores[category]) * parseFloat(categories[category]);
+                categoryPercent += (0.0 + categoryScores[category]) / categoryMaxScores[category] * parseFloat(categories[category]);
             }
         }
 
         categoryPercent /= counterWeight;
 
         let totalPercent = totalScore / totalMaxScore;
-        let output = (parseFloat(grade)/100) + categoryPercent - parseFloat(init_grade);
+        let output = parseFloat(grade)/100 + categoryPercent - parseFloat(init_grade);
 
         return {
-            categoryPercent: "" + (Math.round(output * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
-            totalPercent: "" + (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)),
+            categoryPercent: (Math.round(output * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)).toString(),
+            totalPercent: (Math.round(totalPercent * Math.pow(10, decimals + 2)) / Math.pow(10, decimals)).toString(),
             categoryScores,
             categoryMaxScores,
             categoryGrades,
