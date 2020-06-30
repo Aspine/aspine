@@ -110,7 +110,7 @@ async function scrape_pdf(username, password, i) {
     log(i, "session", session);
 
     let $ = cheerio.load(await fetch_body(
-        "https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11", 
+        "https://aspen.cpsd.us/aspen/publishedReportsWidget.do?groupPageWidgetOid=GPW0000006UKen&widgetId=publishedReports_11",
         {
             "credentials": "include",
             "headers": {
@@ -228,7 +228,7 @@ async function scrape_pdf(username, password, i) {
 }
 
 async function scrape_assignmentDetails(session_id, apache_token, assignment_id) {
-    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do", 
+    let $ = cheerio.load(await fetch_body("https://aspen.cpsd.us/aspen/portalAssignmentList.do",
         {
             "credentials": "include",
             "headers": {
@@ -404,7 +404,7 @@ async function scrape_recent(username, password) {
     }
 
     let $ = cheerio.load(await fetch_body(
-        "https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793", 
+        "https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?preferences=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%3Cpreference-set%3E%0A++%3Cpref+id%3D%22dateRange%22+type%3D%22int%22%3E3%3C%2Fpref%3E%0A%3C%2Fpreference-set%3E&rand=1551041157793",
         {
             "credentials": "include",
             "headers": {
@@ -579,7 +579,7 @@ async function scrape_quarter(username, password, i) {
         return;
     }
 
-    // Get general class data 
+    // Get general class data
     let categories = await scrape_details(session.session_id,
         academics.apache_token, academics.classes[i].id,
         academics.oid);
@@ -630,7 +630,7 @@ async function scrape_class(username, password, i) {
         return;
     }
 
-    // Get general class data 
+    // Get general class data
     let categories = await scrape_details(
         session.session_id, academics.apache_token, academics.classes[i].id,
         academics.oid
@@ -689,14 +689,14 @@ async function get_home(session_id) {
                 "Accept": HEADERS["Accept"],
                 "Accept-Language": HEADERS["Accept-Language"],
                 "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis`,
-                "Connection": "keep-alive", 
-                "Content-Type": "application/x-www-form-urlencoded", 
-                "Cache-Control": "max-age=0", 
-                "Referer": "https://aspen.cpsd.us/aspen/logon.do", 
-                "User-Agent": HEADERS["User-Agent"], 
-            }, 
-            "referrer": "https://aspen.cpsd.us/aspen/logon.do", 
-            "method": "GET", 
+                "Connection": "keep-alive",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cache-Control": "max-age=0",
+                "Referer": "https://aspen.cpsd.us/aspen/logon.do",
+                "User-Agent": HEADERS["User-Agent"],
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/logon.do",
+            "method": "GET",
             "mode": "cors",
         }
     );
@@ -712,14 +712,14 @@ async function get_home(session_id) {
                 "Accept": HEADERS["Accept"],
                 "Accept-Language": HEADERS["Accept-Language"],
                 "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis`,
-                "Connection": "keep-alive", 
-                "Content-Type": "application/x-www-form-urlencoded", 
-                "Cache-Control": "max-age=0", 
-                "Referer": "https://aspen.cpsd.us/aspen/logon.do", 
-                "User-Agent": HEADERS["User-Agent"], 
-            }, 
-            "referrer": "https://aspen.cpsd.us/aspen/logon.do", 
-            "method": "GET", 
+                "Connection": "keep-alive",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cache-Control": "max-age=0",
+                "Referer": "https://aspen.cpsd.us/aspen/logon.do",
+                "User-Agent": HEADERS["User-Agent"],
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/logon.do",
+            "method": "GET",
             "mode": "cors",
         }
     );
@@ -743,20 +743,20 @@ async function submit_login(username, password, apache_token, session_id) {
             "credentials": "include",
             "headers": {
                 "Origin": "https://aspen.cpsd.us",
-                "Accept-Encoding": HEADERS["Accept-Encoding"], 
+                "Accept-Encoding": HEADERS["Accept-Encoding"],
                 "Accept-Language": HEADERS["Accept-Language"],
                 "Cookie": `deploymentId=x2sis; JSESSIONID=${session_id}`,
-                "Connection": "keep-alive", 
-                "User-Agent": HEADERS["User-Agent"], 
-                "Content-Type": "application/x-www-form-urlencoded", 
-                "Accept": HEADERS["Accept"], 
-                "Cache-Control": "max-age=0", 
-                "Referer": "https://aspen.cpsd.us/aspen/logon.do", 
-            }, 
-            "referrer": "https://aspen.cpsd.us/aspen/logon.do", 
-            "referrerPolicy": "strict-origin-when-cross-origin", 
-            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=930&deploymentId=x2sis&username=${username}&password=${password}`, 
-            "method": "POST", 
+                "Connection": "keep-alive",
+                "User-Agent": HEADERS["User-Agent"],
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": HEADERS["Accept"],
+                "Cache-Control": "max-age=0",
+                "Referer": "https://aspen.cpsd.us/aspen/logon.do",
+            },
+            "referrer": "https://aspen.cpsd.us/aspen/logon.do",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": `org.apache.struts.taglib.html.TOKEN=${apache_token}&userEvent=930&deploymentId=x2sis&username=${username}&password=${password}`,
+            "method": "POST",
             "mode": "cors"
         }
     );
@@ -983,7 +983,7 @@ async function scrape_schedule(username, password) {
                 "mode": "cors"
             }
         ));
-    } 
+    }
 
     let $ = cheerio.load(schedule_page);
     let data = { black:[], silver:[] };

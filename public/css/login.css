@@ -3,19 +3,19 @@
 
 @font-face {
   font-family: Poppins-Regular;
-  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  src: url('../fonts/poppins/Poppins-Regular.ttf');
   font-display: swap;
 }
 
 @font-face {
   font-family: Poppins-Bold;
-  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  src: url('../fonts/poppins/Poppins-Bold.ttf');
   font-display: swap;
 }
 
 @font-face {
   font-family: Poppins-Medium;
-  src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  src: url('../fonts/poppins/Poppins-Medium.ttf');
   font-display: swap;
 }
 
@@ -23,8 +23,8 @@
 [ RESTYLE TAG ]*/
 
 * {
-  margin: 0px; 
-  padding: 0px; 
+  margin: 0px;
+  padding: 0px;
   box-sizing: border-box;
 }
 
@@ -159,7 +159,7 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
+  width: 100%;
   min-height: 100vh;
   display: -webkit-box;
   display: -webkit-flex;
@@ -182,7 +182,7 @@ iframe {
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
-  
+
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -218,7 +218,7 @@ iframe {
   color: #333333;
   line-height: 1.2;
   text-align: center;
-  
+
   width: 100%;
   display: block;
   padding-bottom: 54px;
@@ -239,7 +239,7 @@ iframe {
   font-size: 15px;
   line-height: 1.5;
   color: #666666;
-  
+
   display: block;
   width: 100%;
   background: #e6e6e6;
@@ -285,7 +285,7 @@ iframe {
 
 .symbol-input100 {
   font-size: 15px;
-  
+
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -301,7 +301,7 @@ iframe {
   padding-left: 35px;
   pointer-events: none;
   color: #666666;
-  
+
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -334,7 +334,7 @@ iframe {
   line-height: 1.5;
   color: #fff;
   text-transform: uppercase;
-  
+
   width: 100%;
   height: 50px;
   border-radius: 25px;
@@ -347,7 +347,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 0 25px;
-  
+
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -373,7 +373,7 @@ iframe {
   .login100-pic {
     width: 35%;
   }
-  
+
   #login100-form {
     width: 50%;
   }
@@ -383,11 +383,11 @@ iframe {
   .wrap-login100 {
     padding: 100px 80px 33px 80px;
   }
-  
+
   .login100-pic {
     display: none;
   }
-  
+
   #login100-form {
     width: 100%;
   }

@@ -212,7 +212,7 @@ app.post('/data', async (req, res) => {
     // fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
     // 	  if (err) throw err;
     // });
-  
+
     let response;
     //res.send(await scraper.scrape_student(req.session.username, req.session.password));
     //
@@ -268,7 +268,7 @@ app.get('/logout', async (req, res) => {
 //     client.set(`settings:${key}`, JSON.stringify(req.body));
 //     res.status(200).send("set settings");
 // });
-// 
+//
 // app.get('/get-settings', async (req, res) => {
 //     if(typeof(req.session.username) == "undefined") {
 //         res.status(400).send("User not logged in");
@@ -284,7 +284,7 @@ app.get('/logout', async (req, res) => {
 //         }
 //     });
 // });
-// 
+//
 // app.post('/add-calendar', async (req, res) => {
 //     console.log(req.body.color);
 //     // Security: MUST SANITIZE URLS
@@ -294,31 +294,31 @@ app.get('/logout', async (req, res) => {
 //         res.status(400).send("Malformed ID, Name, or Color");
 //         return;
 //     }
-// 
+//
 //     // Check to see if it is public and working
 //     const calendar = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(req.body.id)}/events?key=AIzaSyDtbQCoHa4lC4kW4g4YXTyb8f5ayJct2Ao&timeMin=2019-02-23T00%3A00%3A00Z&timeMax=2019-04-08T00%3A00%3A00Z&singleEvents=true&maxResults=9999&_=1552838482460`);
 //     if(!calendar.ok) {
 //         res.status(400).send("Bad Calendar ID");
 //         return;
 //     }
-// 
+//
 //     let cal = JSON.stringify({
 //         name: req.body.name,
 //         id: req.body.id,
 //         color: req.body.color
 //     });
 //     client.lrem('calendars', 0, cal);
-// 
-//     client.rpush('calendars', 
+//
+//     client.rpush('calendars',
 //     JSON.stringify({
 //         name: req.body.name,
 //         id: req.body.id,
 //         color: req.body.color
 //     }));
-// 
+//
 //     res.status(200).send("added calendar");
 // });
-// 
+//
 // app.get('/get-calendars', async (req, res) => {
 //     client.lrange(`calendars`, 0, -1, function (err, reply) {
 //         for(i in reply) {

@@ -3,13 +3,13 @@
 
 @font-face {
   font-family: Poppins-Regular;
-  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  src: url('../fonts/poppins/Poppins-Regular.ttf');
   font-display: swap;
 }
 
 @font-face {
   font-family: Poppins-Bold;
-  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  src: url('../fonts/poppins/Poppins-Bold.ttf');
   font-display: swap;
 }
 
@@ -17,8 +17,8 @@
 [ RESTYLE TAG ]*/
 
 * {
-  margin: 0px; 
-  padding: 0px; 
+  margin: 0px;
+  padding: 0px;
   box-sizing: border-box;
 }
 
@@ -130,7 +130,7 @@ button {
 }
 
 .assignmentsButton {
-  text-transform: capitalize !important; 
+  text-transform: capitalize !important;
   color: white !important;
   background: #ffffff;
   padding: 10px 10px;
@@ -434,7 +434,7 @@ canvas#large_clock {
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0} 
+  from {top:-300px; opacity:0}
   to {top:0; opacity:1}
 }
 
@@ -528,7 +528,7 @@ canvas#large_clock {
 }
 
 @-webkit-keyframes statsanimatetop {
-  from {top:-300px; opacity:0} 
+  from {top:-300px; opacity:0}
   to {top:140px; opacity:1}
 }
 
@@ -587,7 +587,7 @@ canvas#large_clock {
 
 
 p#small_clock_period {
-  
+
   position: absolute;
   top: 110px;
   left: 10px;
@@ -635,7 +635,7 @@ p#large_clock_period {
 #lunch_label {
   color: white;
   text-shadow:
-  -1px -1px 5px #000,  
+  -1px -1px 5px #000,
   1px -1px 5px #000,
   -1px 1px 5px #000,
   1px 1px 5px #000;
@@ -808,7 +808,7 @@ p#add-calendar-error {
 
 .pdf_select-selected {
   background-color: #248A48;
-  
+
 }
 
 /* Style the arrow inside the select element: */
@@ -922,7 +922,7 @@ p#add-calendar-error {
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
   /*border-width: 0px;*/
-  
+
   cursor: pointer;
 }
 
