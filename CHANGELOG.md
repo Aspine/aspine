@@ -1,8 +1,19 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [2.4.0] - tagged 2020-08-18, production TBD
+- Add test corrections feature ([#127], [#72])
+- Reimplement stats plot in d3, along with other optimizations to make Aspine
+  lighter ([#123], [#125], [#122])
+- Change `build-lite.sh` to portable POSIX sh syntax ([#121])
+- Update dependencies
 
 ## [2.3.0] - tagged 2020-05-03, production TBD
 - Client-side JSON import/export feature ([#119], [#74])
@@ -65,13 +76,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.2.1]: https://github.com/Aspine/aspine/releases/tag/v2.2.1
 [2.2.2]: https://github.com/Aspine/aspine/releases/tag/v2.2.2
 [2.3.0]: https://github.com/Aspine/aspine/releases/tag/v2.3.0
+[2.4.0]: https://github.com/Aspine/aspine/releases/tag/v2.4.0
+[Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
+[#72]: https://github.com/Aspine/aspine/issues/72
 [#74]: https://github.com/Aspine/aspine/issues/74
 [#83]: https://github.com/Aspine/aspine/issues/83
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
 [#96]: https://github.com/Aspine/aspine/issues/96
+[#122]: https://github.com/Aspine/aspine/issues/122
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -81,3 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#115]: https://github.com/Aspine/aspine/pull/115
 [#118]: https://github.com/Aspine/aspine/pull/118
 [#119]: https://github.com/Aspine/aspine/pull/119
+[#121]: https://github.com/Aspine/aspine/pull/121
+[#123]: https://github.com/Aspine/aspine/pull/123
+[#125]: https://github.com/Aspine/aspine/pull/125
+[#127]: https://github.com/Aspine/aspine/pull/127
