@@ -64,6 +64,7 @@ version="$(git describe | sed 's/^v//')"
 
 for file in dist-lite/js/*
 do
-	sed -i '' -e 's/\/\/#include version/"'"$version"'"/g' "$file"
+	sed -e 's/\/\/#include version/"'"$version"'"/g' "$file" >"$file.new"
+	mv "$file.new" "$file"
 done
 # Hard-code version number (use sed to trim 'v')

@@ -8,6 +8,9 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.4.1] - tagged 2020-08-18, production TBD
+- Fix bug in `build-lite.sh`
+
 ## [2.4.0] - tagged 2020-08-18, production TBD
 - Add test corrections feature ([#127], [#72])
 - Reimplement stats plot in d3, along with other optimizations to make Aspine
