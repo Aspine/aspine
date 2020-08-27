@@ -1,3 +1,5 @@
+// State
+
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let pdfrendering = false;
