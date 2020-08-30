@@ -887,6 +887,7 @@ function responseCallbackPartial(response) {
 function scheduleCallback(response) {
     if (!currentTableData.schedule) currentTableData.schedule = response;
     
+	
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
     //let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
@@ -908,6 +909,20 @@ function scheduleCallback(response) {
     
     let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
     
+	
+	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE ========
+    if(currentTableData.schedule.black.length > 10) {//prevent it from shaving the schedule too much
+	currentTableData.schedule.black.shift();
+     for (var w = 0; w < currentTableData.schedule.black.length; w ++) {
+       currentTableData.schedule.black.splice(w + 1, 1);
+     }
+	 
+     for (w = 0; w < currentTableData.schedule.silver.length; w ++) {
+       currentTableData.schedule.silver.splice(w + 1, 1);
+     }
+ 	}
+	//==========================================================================
+	
     for (let i = 0; i < periods.length;  i++) {
         if (currentTableData.schedule.black[i]) {
             currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
@@ -921,6 +936,10 @@ function scheduleCallback(response) {
         }
     }
     
+
+
+	
+	
     scheduleTable.setData(currentTableData.schedule.black);    
     redraw_clock();
 }

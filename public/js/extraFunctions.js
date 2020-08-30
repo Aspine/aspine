@@ -947,6 +947,8 @@ let tableData_option_onclick = function() {
   initialize_quarter_dropdown()
   setup_quarter_dropdown();
 
+
+
   classesTable.setData(currentTableData.currentTermData.classes);
   scheduleTable.setData(currentTableData.schedule.black);
 
