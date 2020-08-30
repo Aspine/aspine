@@ -155,11 +155,24 @@ function computeGPA(classes) {
             }
         }
     }
+	
+	if(sum > 0 && count > 0) {//Not Null
+	
     return {
+		
         percent: Math.round(sum / count * 100) / 100,
         outOfFour: Math.round(fourSum / count * 100) / 100,
         outOfFive: Math.round(fiveSum / count * 100) / 100
     };
+	
+	}
+	else {
+		return {
+		percent: 0,
+		outOfFour: 0,
+		outOfFive: 0
+		};
+	}
 }
 
 

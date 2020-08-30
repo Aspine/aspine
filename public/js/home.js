@@ -810,10 +810,14 @@ function responseCallback(response, includedTerms) {
     
     currentTableData.overview = response.overview;
     
-    currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
-    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+	currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
     
-    // Calculate GPA for each quarter
+	if(currentTableData.cumGPA.percent == NaN) {
+		currentTableData.cumGPA.percent = "";
+	}
+	document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+    
+    // Calculate  for each quarter
     for (let i = 1; i <= 4; i++) {
         currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview,i);
     }
