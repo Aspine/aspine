@@ -21,8 +21,8 @@ let currentTerm = "current";
  *	@property {GPA} [cumGPA]
  *	@property {Term} [currentTermData]
  *	@property {string} [name]
- *	@property {OverviewItem[]} [overview]
- *	@property {Recent} [recent]
+ *	@property {Overview[]} [overview]
+ *	@property {RecentActivity} [recent]
  *	@property {Schedule} [schedule]
  *	@property {Terms} [terms]
  *  @property {?string} [username]
@@ -96,15 +96,29 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.height = "5rem";
 };
 
+/**
+ * Hide a modal window
+ * @param {string} key Name of modal window.
+ */
 let hideModal = function(key) {
     modals[key].style.display = "none";
-    if (key === "stats") noStats();
-
-    if (key === "corrections") {
-        document.getElementById("corrections_modal_input").value = "";
+    switch (key)
+    {
+        case 'stats':
+            noStats();
+            break;
+        case 'corrections':
+            document.getElementById("corrections_modal_input").value = "";
+            break;
+        default:
+            console.error(`${key} is not a valid modal name`)
     }
 }
 
+/**
+ * Un-hide a modal window
+ * @param {string} key Name of modal window.
+ */
 let showModal = function(key) {
     modals[key].style.display = "inline-block";
 }
@@ -693,18 +707,39 @@ $("#corrections_modal_input").keypress(({ which }) => {
         correct();
     }
 });
-
 /**
- * Callback for response from /data
+ * @typedef {object} Classes
+ * @param {string} name
+ * @param {string} grade
+ * @param {object} categories
+ * @param {object[]} assignments
+ * @param {object} tokens
  *
- * @param {TableDataObject} response
- * @param {?(string|object)} includedTerms - optional parameter which contains the terms included in an import (in the case that
+ * @typedef {object} RecentActivity
+ * @param {RecentAttendance[]} recentAttendanceArray
+ * @param {RecentAssignments[]} recentActivityArray
+ * @param {string} studentName
+ *
+ * @typedef {object} scrapedStudent
+ * @param {Classes[]} response.classes
+ * @param {RecentActivity} response.recent
+ * @param {Overview[]} response.overview
+ * @param {string} response.username
+ * @param {string} response.quarter
+ *
+ * @typedef {object} noLogin response object on no login
+ * @oaram {boolean} noLogin.nologin - parameter present on login fail
+ */
+ /** Callback for response from /data
+ *
+ * @param {noLogin|scrapedStudent} response
+ * @param {(scrapedStudent|string)} includedTerms - optional parameter which contains the terms included in an import (in the case that
  * currentTableData is imported and not all of the terms' data have been put into currentTableData)
  */
 function responseCallback(response, includedTerms) {
     // console.log(response);
     if (response.nologin) {
-        tableData = [];
+        tableData = []; // TODO: dont manipulate global state here, return values
         currentTableData = undefined;
         currentTableDataIndex = -1;
 
