@@ -1064,7 +1064,7 @@ function parseTableData(classes) {
     
     
     //cycle through each assignment of every class for further parsing
-    for (let j = 0; j < classes[i].assignments.length; j++) {
+    for (let j = 0; j < (classes[i].assignments || []).length; j++) {
       //initialize the percentage of the assignment.
       classes[i].assignments[j].percentage = Math.round(classes[i].assignments[j].score / classes[i].assignments[j].max_score * 1000) / 10;
       //initialize how the assignment should be colored in the table; based on percentage
