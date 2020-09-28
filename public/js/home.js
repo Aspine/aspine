@@ -807,16 +807,16 @@ function responseCallback(response, includedTerms) {
     // Calculate GPA for current term
     currentTableData.terms.current.GPA = response.GPA ||
         computeGPA(currentTableData.terms.current.classes);
-    
+
     currentTableData.overview = response.overview;
-    
-	currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
-    
-	if(currentTableData.cumGPA.percent == NaN) {
-		currentTableData.cumGPA.percent = "";
-	}
-	document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
-    
+
+    currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
+
+    if (currentTableData.cumGPA.percent == NaN) {
+        currentTableData.cumGPA.percent = "";
+    }
+    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+
     // Calculate  for each quarter
     for (let i = 1; i <= 4; i++) {
         currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview,i);

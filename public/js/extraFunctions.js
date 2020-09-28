@@ -331,7 +331,7 @@ let rowGradeFormatter = function(cell, formatterParams) {
     
     if (vip_username_list.includes(currentTableData.username)) {
       return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-    }	
+    }
     
     if (numberGrade > 100) {
       return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
