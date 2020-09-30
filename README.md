@@ -1,92 +1,142 @@
 # Aspine
 
-Who needs Aspen when you have Aspine. It serves as a one stop shop for everything Aspen related, and there are rainbows!
+Who needs Aspen when you have Aspine. It serves as a one stop shop for
+everything Aspen related, and there are rainbows!
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.cpsd.us and login with your Aspen credentials.
+Using Aspine is as easy as 1, 2, 3. Just visit aspine.cpsd.us and login with
+your Aspen credentials.
+
+If you have an iPhone and prefer to use an app instead of the website, Aspine is
+[on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
 
 ## Features
 
 * Aesthetic Grade Checking
+
 * CRLS Clock
 
-![CRLS Clock Image](images/crls_clock.png)
+![CRLS Clock Image](images/crls-clock.png)
 
 * Grade Comparison via boxplot
 
 ![Example Boxplot Image](images/boxplot.png)
 
-* Calendar
+* Export and import your grades
 
-![Example Calendar Image](images/calendar.png)
-
-* Chat with your classmates (coming soon...)
+!["Export Data" dialog box](images/export.png)
 
 ## FAQ
 
-##### How are usernames and passwords handled?
+### How are usernames and passwords handled?
 
-Short answer: Aspine does not store any usernames or passwords.
+Short answer: Aspine does not store any usernames, passwords, or student data.
+Moreover, <https://aspine.cpsd.us> is hosted on CPSD servers, so your data are
+safe in any case.
 
-Long answer: Aspine works by simulating a login on Aspen and formatting the data received. In doing this, it must transmit your username and password to the Aspen server. However, your login information is transmitted completely over encrypted connections (HTTPS), and it is not retained by Aspine at all. This can be verified by anyone who can read code, as all of our code is out in the open on this repository. If you are particularly paranoid, you can run Aspine locally on your computer instead of using the <https://aspine.cpsd.us> instance; instructions are below in the section "Contributing / Locally Running Aspine".
+Long answer: Aspine works by simulating a login on Aspen and formatting the
+data received. In doing this, it must transmit your username and password to
+the Aspen server. However, your login information is transmitted completely
+over encrypted connections (HTTPS), and it is not retained by Aspine at all.
+This can be verified by anyone who can read code, as all of our code is out in
+the open on this repository. If you are particularly paranoid, you can run
+Aspine locally on your computer instead of using the <https://aspine.cpsd.us>
+instance; instructions are below in the section "Contributing / Locally Running
+Aspine".
 
-##### How are calculated grades computed?
+### How are calculated grades computed?
 
-First, calculated category percentages are computed by dividing a student's total earned points within a category by the total available points for that category. Then, the category percentages are multiplied by their respective weights and summed in order to produce the calculated grade for a class.
+First, calculated category percentages are computed by dividing a student's
+total earned points within a category by the total available points for that
+category. Then, the category percentages are multiplied by their respective
+weights and summed in order to produce the calculated grade for a class.
 
 Note:
-* Assignments scored with free text (i.e. "Missing", "Exempt") are ignored during grade computation. (Improvements coming soon)
-* Due to the mysterious workings of Aspen, it is impossible to achieve 100% accuracy when making grade prediction calculations. That being said, Aspine's cutting edge grade calcuation algorithm is unmatched.
+* Assignments scored with free text (i.e. "Missing", "Exempt") are ignored
+  during grade computation. (Improvements coming soon)
+* Due to the mysterious workings of Aspen, it is impossible to achieve 100%
+  accuracy when making grade prediction calculations. That being said, Aspine's
+  cutting edge grade calcuation algorithm is unmatched.
 
+## Aspine Lite
 
-## Built With
-* [Tabulator](https://github.com/olifolkerd/tabulator)
-* [Plotly](https://plot.ly/javascript/)
-* [CRLS Clock](https://github.com/CRLSCSClub/CRLSTime)
-* [Full Calendar](https://fullcalendar.io/)
+If you have a grade export (as a JSON file) and want to view it using Aspine,
+you may run into the problem that the current version of Aspine is too new to
+view your JSON file (or you just want to view your grades offline). We have
+created a variant of Aspine called "Aspine Lite" which contains the complete
+Aspine user interface but without connecting to Aspine or Aspen servers over the
+Internet.
+
+Downloads for Aspine Lite can be found under "Assets" on [the Releases page on
+GitHub](https://github.com/Aspine/aspine/releases). To use Aspine Lite, simply
+download the zip file, extract it to a folder, and open `home.html` in a Web
+browser.
 
 ## Contributing / Locally Running Aspine
 
-Feel free to suggest an enhancement or post a bug issue either via github issues or this [google form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
+Feel free to suggest an enhancement or report a bug either via GitHub
+issues or this [form](https://goo.gl/forms/PYQDtzkp0vHJbFLz2)!
 
-If you would like to directly contribute to Aspine, you can fork this repository and clone your fork on your computer with a [git](https://git-scm.com/) client. Please use the `develop` branch as the base of your changes.
+If you would like to directly contribute to Aspine, you can fork this
+repository and clone your fork on your computer with a
+[git](https://git-scm.com/) client. Please use the `master` branch as the base
+of your changes.
 
-If you would just like to try out Aspine on your computer, you can click on "Clone or download" above the file list and download and extract a ZIP file with Aspine.
+If you would just like to try out Aspine on your computer, you can click on the
+green "Code" button above the file list and download and extract a ZIP file
+with Aspine.
 
-<!--
-If you use Windows, you can just right-click on the file "install1.bat" and click "Run as administrator" to begin the process. If you have already done this, double-click on the file "npminstall.bat". The ".bat" file extension may be invisible depending on your system configuration.
-* Make sure that you have installed [node.js](https://nodejs.org/), npm, and [redis](https://redis.io/).
-  * On GNU+Linux, you should be able to find both of these in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`). npm may be in a separate package from node.js.
-  * On macOS, node.js (including npm) and redis are available on [Homebrew](https://brew.sh/), as [`node`](https://formulae.brew.sh/formula/node) and [`redis`](https://formulae.brew.sh/formula/redis) respectively. You can run the script `install.sh` to install these dependencies.
-  * Open a new terminal or command prompt, navigate to the directory in which you cloned the Aspine git repository, and run `npm install` to install the remaining dependencies.
-* Open another terminal or command prompt, navigate to that same directory, and run `redis-server redis.conf`.
-* In the other terminal or command prompt, run `node ./serve.js insecure`, or `node ./serve.js insecure fake` to use the `sample.json` file instead of pulling from Aspen (for faster testing).
--->
+- Make sure that you have installed [node.js](https://nodejs.org/), including
+npm.
 
-* Make sure that you have installed [node.js](https://nodejs.org/), including npm.
-  * On Linux-based operating systems, you should be able to find node.js in your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`, or a GUI such as Ubuntu Software Center or GNOME Software); npm may be in a separate package.
-  * On macOS, node.js (including npm) is available on [Homebrew](https://brew.sh/) as [`node`](https://formulae.brew.sh/formula/node). To install Homebrew and node, you can run the script `install.sh` by opening a terminal, using `cd` to navigate to the directory where you cloned or downloaded Aspine, then typing `./install.sh`.
-  * On Windows, the node.js installer can be downloaded from [the website](https://nodejs.org/). Run the installer and follow the on-screen instructions.
-* Install additional dependencies through node.js (this must be done each time you clone or download Aspine). If you used the macOS install script, you can skip this step.
-  * On Unix-like operating systems (includes Linux-based and macOS), open a terminal, use `cd` to navigate to the directory where you cloned or downloaded Aspine, and run `npm install`.
-  * On Windows, double-click on the script `npminstall.bat`. The `.bat` file extension may be invisible depending on your system configuration.
-* Run the Aspine server.
-  * On Unix-like operating systems, run `node ./serve.js insecure` or `./start.sh` in a terminal from the directory where you cloned or downloaded Aspine.
-  * On Windows, double-click on the script `start.bat`. The `.bat` file extension may be invisible depending on your system configuration.
+  + On Linux-based operating systems, you should be able to find node.js in
+your package manager (e.g. `apt`/`dpkg`, `yum`/`dnf`, `zypper`, `pacman`,
+or a GUI such as Ubuntu Software Center or GNOME Software); npm may be in a
+separate package.
+
+  + On macOS, node.js (including npm) is available on
+[Homebrew](https://brew.sh/) as
+[`node`](https://formulae.brew.sh/formula/node). To install Homebrew and node,
+you can run the script `install.sh` by opening a terminal, using `cd` to
+navigate to the directory where you cloned or downloaded Aspine, then typing
+`./install.sh`.
+
+  + On Windows, the node.js installer can be downloaded from
+[the website](https://nodejs.org/). Run the installer and follow the on-screen
+instructions.
+
+- Install additional dependencies through node.js (this must be done each time
+you clone or download Aspine). If you used the macOS install script, you can
+skip this step.
+
+  + On Unix-like operating systems (includes Linux-based and macOS), open a
+terminal, use `cd` to navigate to the directory where you cloned or
+downloaded Aspine, and run `npm install`.
+
+  + On Windows, double-click on the script `npminstall.bat`. The `.bat` file
+extension may be invisible depending on your system configuration.
+
+- Run the Aspine server.
+
+  + On Unix-like operating systems, run `node . insecure` or `./start.sh` in a
+terminal from the directory where you cloned or downloaded Aspine.
+
+  + On Windows, double-click on the script `start.bat`. The `.bat` file
+extension may be invisible depending on your system configuration.
 
 ## Authors
 
-* [**Max Katz-Christy**](https://github.com/maxtkc)
-* [**Cole Killian**](https://github.com/Ruborcalor)
-* [**psvenk**](https://github.com/psvenk)
-* [**kdk1616**](https://github.com/kdk1616)
-* [**notrodes**](https://github.com/notrodes)
+- [**Max Katz-Christy**](https://github.com/maxtkc)
+- [**Cole Killian**](https://github.com/Ruborcalor)
+- [**psvenk**](https://github.com/psvenk)
+- [**Ken Kalin**](https://github.com/kdk1616)
+- [**notrodes**](https://github.com/notrodes)
 
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
 
-![Color Palette](images/color_palette.png)
+![Color Palette](images/color-palette.png)
 
 ```
 Primary Color: #00551D
@@ -100,7 +150,7 @@ Secondary Colors:
 #### Grade Lettering and Coloring
 
 | Grade Range   | Letter        | Primary Color | Secondary Color |
-| :-----------  |:--------------|:------        |:------          |
+| :-----------  |:--------------|:--------------|:----------------|
 | 96.5 - 100    | A+            |#1E8541        |#3d995c          |
 | 92.5 - 96.4   | A             |#1E8541        |#3d995c          |
 | 89.5 - 92.4   | A-            |#1E8541        |#3d995c          |
@@ -122,6 +172,9 @@ Our privacy policy can be viewed at <https://www.cpsd.us/privacy>.
 
 ## License
 
-Copyright [Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors) 2020.
+Copyright
+[Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors)
+2020.
 
-This project is licensed under the GNU General Public License, version 3 - see the [LICENSE.md](LICENSE.md) file for details.
+This software is licensed under the GNU General Public License, version 3
+&mdash; see the [LICENSE.md](LICENSE.md) file for details.
