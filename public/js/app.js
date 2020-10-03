@@ -9,40 +9,46 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
 // Remember me and autofill functions
 
 function rememberMe() {
-  if(localStorage.getItem("remember") == "yes"){
-  document.getElementById("check").setAttribute('checked', true)
+  if (localStorage.getItem("remember") === "yes") {
+    document.getElementById("remember-me").setAttribute('checked', true);
   }
   else {
-  document.getElementById("check").setAttribute('checked', false)
+    document.getElementById("remember-me").setAttribute('checked', false);
   }
 
   if (localStorage.getItem("username") === null) {
-  localStorage.removeItem("username")
+    localStorage.removeItem("username");
   }
   else {
-  document.getElementById("input-name").setAttribute('value',localStorage.getItem("username"))
-  document.getElementById("input-password").setAttribute('value',localStorage.getItem("password"))
+    document.getElementById("input-username").setAttribute(
+      'value', localStorage.getItem("username")
+    );
+    document.getElementById("input-password").setAttribute(
+      'value', localStorage.getItem("password")
+    );
   }
 
-  if (localStorage.getItem("password") === null){
-  localStorage.removeItem("password")
+  if (localStorage.getItem("password") === null) {
+    localStorage.removeItem("password");
   }
 }
-function autofill () {
-  let checkBox = document.getElementById("check");
-      if(checkBox.checked === true) {
-      let name = document.getElementById("input-name").value;
-      let password =  document.getElementById("input-password").value;
-      localStorage.setItem("username", name)
-      localStorage.setItem("password", password)
-      localStorage.setItem("remember", "yes")
+
+function autofill() {
+  const checkBox = document.getElementById("remember-me");
+  if (checkBox.checked === true) {
+    const username = document.getElementById("input-username").value;
+    const password =  document.getElementById("input-password").value;
+    localStorage.setItem("username", username);
+    localStorage.setItem("password", password);
+    localStorage.setItem("remember", "yes");
   }
-      if(checkBox.checked === false) {
-          localStorage.removeItem("username")
-          localStorage.removeItem("password")
-          localStorage.setItem("remember", "no")
-          }
+  if (checkBox.checked === false) {
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    localStorage.setItem("remember", "no");
+  }
 }
