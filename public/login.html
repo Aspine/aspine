@@ -61,23 +61,28 @@
                 Use Aspen credentials or leave blank to import data
               </span>
             </div>
-            
+            <!-- Username Input -->
             <div class="wrap-input100">
-              <input class="input100" type="text" name="username" placeholder="Student ID" aria-label="Aspen Student ID" autofocus>
+              <input class="input100" id="input-username" type="text" name="username" placeholder="Student ID" aria-label="Aspen Student ID" autofocus>
               <span class="focus-input100"></span>
               <span class="symbol-input100">
                 <i class="fa fa-id-card" aria-hidden="true"></i>
               </span>
             </div>
-            
+            <!-- Password Input -->
             <div class="wrap-input100">
-              <input class="input100" type="password" name="password" placeholder="Password" aria-label="Aspen Password">
+              <input class="input100" id="input-password" type="password" name="password" placeholder="Password" aria-label="Aspen Password">
               <span class="focus-input100"></span>
               <span class="symbol-input100">
                 <i class="fa fa-lock" aria-hidden="true"></i>
               </span>
             </div>
-            
+            <!-- Remember Me Checkbox -->
+            <div><label>
+                <input id="remember-me" type="checkbox">
+                Remember Me?
+            </label></div>
+            <!-- Login Button -->
             <div id="container-login100-form-btn">
               <button id="login100-form-btn" style="background:#3F8532">
                 Login
@@ -114,6 +119,7 @@
         scale: 1.1
       })
     </script>
+    <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
   </main>
   <footer></footer>
