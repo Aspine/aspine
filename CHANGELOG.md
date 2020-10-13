@@ -8,7 +8,10 @@ and this project adheres to
 
 ## Unreleased
 
-## [2.4.2] - tagged 2020-09-30, production TBD
+## [2.4.3] - tagged 2020-10-13, production TBD
+- Added client-side "remember me" feature ([#141], [#112])
+
+## [2.4.2] - tagged 2020-09-30
 - Changes to adapt to the covid-19 fall reopening
   + Roll over from quarter 4 to quarter 1
   + Adapt the schedule code to follow the new format for remote learning
@@ -103,6 +106,7 @@ and this project adheres to
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
 [#96]: https://github.com/Aspine/aspine/issues/96
+[#112]: https://github.com/Aspine/aspine/issues/112
 [#122]: https://github.com/Aspine/aspine/issues/122
 [#131]: https://github.com/Aspine/aspine/issues/131
 [#98]: https://github.com/Aspine/aspine/pull/98
@@ -120,3 +124,4 @@ and this project adheres to
 [#126]: https://github.com/Aspine/aspine/pull/126
 [#127]: https://github.com/Aspine/aspine/pull/127
 [#139]: https://github.com/Aspine/aspine/pull/139
+[#141]: https://github.com/Aspine/aspine/pull/141
