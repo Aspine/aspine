@@ -572,6 +572,15 @@ let next_page_pdf = function() {
   }
 }
 
+async function download_pdf() {
+  // Get current PDF file's raw data
+  const data = await pdf.getData();
+  // Use application/octet-stream MIME type to force a download (instead of
+  // having it open in a browser PDF viewer)
+  saveAs(new Blob([data], {
+    type: "application/octet-stream"
+  }), `${currentTableData.pdf_files[currentPdfIndex].title}.pdf`);
+}
 
 function pdf_closeAllSelect(elmnt) {
   /* A function that will close all select boxes in the document,
