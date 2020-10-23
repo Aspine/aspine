@@ -1,4 +1,3 @@
-let current_schedule = "regular";
 let schedules, logo;
 let period_names = {black:[], silver:[]};
 
@@ -15,6 +14,10 @@ large_radius = large_clock.height / 2;
 large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
+
+// Controls whether to use the covid-19 schedule or the regular schedule
+const covid_schedule = true;
+let current_schedule = covid_schedule ? "covid" : "regular";
 
 // For testing.
 // If this is set to a valid date/time string, that will be used instead of the
@@ -109,15 +112,20 @@ function fitText(ctx, text, fontface, width) {
 }
 
 function update_lunch() {
-    switch(Number(document.getElementById("lunch_range").value)) {
-        case 0:
-        current_schedule = "regular-a";
-        break;
-        case 1:
-        current_schedule = "regular-b";
-        break;
-        case 2:
-        current_schedule = "regular-c";
+    if (covid_schedule) {
+        current_schedule = "covid";
+    }
+    else {
+        switch(Number(document.getElementById("lunch_range").value)) {
+            case 0:
+            current_schedule = "regular-a";
+            break;
+            case 1:
+            current_schedule = "regular-b";
+            break;
+            case 2:
+            current_schedule = "regular-c";
+        }
     }
     redraw_clock();
 }
@@ -246,4 +254,3 @@ function redraw_clock() {
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
     drawNumber(large_ctx, large_radius, pos, number);
 }
-    
