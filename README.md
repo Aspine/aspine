@@ -178,3 +178,12 @@ Copyright
 
 This software is licensed under the GNU General Public License, version 3
 &mdash; see the [LICENSE.md](LICENSE.md) file for details.
+
+If you contribute to Aspine, please note that you are consenting to having your
+contributions released under the terms of this license. For any contributions
+dated on or after October 23, 2020, you also consent to having your
+contributions be released under any earlier or later version of the GNU General
+Public License, as published by the Free Software Foundation, if and when the
+licensing terms for Aspine are changed to allow such version(s). (For more
+information about the rationale behind this clause, please read issue
+[#38](https://github.com/Aspine/aspine/issues/38).)
