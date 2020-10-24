@@ -16,6 +16,11 @@ large_ctx.translate(large_radius, large_radius);
 
 logo = document.getElementById("logo");
 
+// For testing.
+// If this is set to a valid date/time string, that will be used instead of the
+// current date and time.
+let date_override = undefined;
+
 let schedulesCallback = function(response) {
     schedules = response;
     redraw_clock();
@@ -170,42 +175,35 @@ function get_period_name(default_name) {
     return period_names[bs_day][index].name;
 }
 
-function school_day() {
-    let now = new Date();
-    if (now.getDay() % 6 === 0) { // If it's a weekend
-        return false;
-    }
-    return true;
-}
-
 function redraw_clock() {
     // Fake call to get_period_name to set current_schedule
     get_period_name("Period 1");
-    // UTC to EST
     let number = 0;
     let period_name = "";
-    // let now = Date.now() - 5 * 60 * 60 * 1000;
-    let now = Date.now() - 4 * 60 * 60 * 1000;
-    let tod = now % (24 * 60 * 60 * 1000);
+    const now = date_override ? new Date(date_override) : new Date();
+    // Time of day
+    const tod = now.getHours() * 60 * 60 * 1000
+        + now.getMinutes() * 60 * 1000
+        + now.getSeconds() * 1000
+        + now.getMilliseconds();
     let pos;
-    if (school_day()) {
-        // let tod = 41399000; // Simulate time
-        
+    if (![0, 6].includes(now.getDay())) {
+        // School day
         let current_period_i = 0;// Get current period from array
         while (current_period_i < schedules[current_schedule].length - 1 &&
                 tod > schedules[current_schedule][current_period_i + 1].start) {
             current_period_i++;
         }
             
-        let current_period = schedules[current_schedule][current_period_i];
-        let next_period = schedules[current_schedule][current_period_i + 1];
+        const current_period = schedules[current_schedule][current_period_i];
+        const next_period = schedules[current_schedule][current_period_i + 1];
         
-        if(tod < current_period.start) { // Before school
+        if (tod < current_period.start) { // Before school
             period_name = "Before School";
             pos = tod / current_period.start;
             number = current_period.start - tod;
         }
-        else if(!next_period && tod > current_period.end) { // After school
+        else if (!next_period && tod > current_period.end) { // After school
             // Realtime
             period_name = "";
             pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
@@ -214,7 +212,7 @@ function redraw_clock() {
                 number += 12 * 60 * 60 * 1000;
             }
         }
-        else if(tod > current_period.end) { // Between classes
+        else if (tod > current_period.end) { // Between classes
             period_name = get_period_name(current_period.name) +
             " ➡ " + get_period_name(next_period.name);
             pos = (tod - current_period.end) / (next_period.start - current_period.end);
