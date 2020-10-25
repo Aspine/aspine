@@ -208,24 +208,80 @@ function getLetterGrade(gradeToBeLettered) {
   }
 }
 
+//consts for the first version of getColor
+// //max is the maximum color in rgb
+// const max = [74, 224, 104];
+// //min is the minimum color in rgb, if not red I suggest black
+// const min = [222, 75, 75];
+// //lowest is the grade that'll make it the min color
+// const lowest = 0.5;
+
+//consts for the second version of getColor
+const green_rgb = [29, 219, 93]
+const blue_rgb = [102, 102, 255]
+const yellow_rgb = [255, 231, 0]
+const orange_rgb = [255, 165, 0]
+const red_rgb = [255, 0, 0]
+const black_rgb = [0, 0, 0]
+
+//function for the second version of getColor
+function calculateColorAddition(max, min, grade, color_rgb) {
+  let result = "#"
+  const percentage = (max-grade)/(max-min)/2
+  for (i=0; i<3; i++) {
+    const color = Math.round(color_rgb[i]-percentage*color_rgb[i]).toString(16)
+    result += color.length == 1 ? "0" + color : color
+  }
+  return result
+}
+
 function getColor(gradeToBeColored) {
   if (vip_username_list.includes(currentTableData.username)) {
     return "#1E8541";
   }
 
+  //THIS IS THE FIST OPTION: It does a gradient from green to red (or any other two colors should you wish it) for any grade
+  // //percentage is the percent of the maximum color we take away
+  // const percentage = (1-parseFloat(gradeToBeColored)/100)*(1/lowest);
+
+  // //if it's below the lowest sets it to the min value
+  // if (gradeToBeColored <= (lowest*100)) {
+  //   let result = "#";
+  //   for (i=0; i<3; i++) {
+  //     const color = Math.round(min[i]).toString(16);
+  //     result += color.length == 1 ? "0" + color : color;
+  //   }
+  //   return result;
+  // }
+
+  // let result = "#";
+  // for (i=0; i<3; i++) {
+  //   //finds the color it should be at as hex by subtracting/adding from the max whatever percentage it needs to
+  //   let color
+  //   if (max[i] > min[i]) color = Math.round(max[i] - percentage * (max[i] - min[i])).toString(16);
+  //   else color = Math.round(max[i] + percentage * (min[i] - max[i])).toString(16);
+
+  //   //adds hex value to the result
+  //   result += color.length == 1 ? "0" + color : color;
+  // }
+
+  // return result
+
+  //THIS IS THE SECOND OPTION: Goes from black to the color based off of what percentage within its range is
   if (parseFloat(gradeToBeColored) >= 89.5) {
-    return "#1E8541";
+    return calculateColorAddition(100, 89.5, gradeToBeColored, green_rgb);
   } else if (parseFloat(gradeToBeColored) >= 79.5) {
-    return "#6666FF";
+    return calculateColorAddition(89.5, 79.5, gradeToBeColored, blue_rgb);
   } else if (parseFloat(gradeToBeColored) >= 69.5) {
-    return "#ff9900";
+    return calculateColorAddition(79.5, 69.5, gradeToBeColored, yellow_rgb);
   } else if (parseFloat(gradeToBeColored) >= 59.5) {
-    return "orange";
+    return calculateColorAddition(69.5, 59.5, gradeToBeColored, orange_rgb);
   } else if (parseFloat(gradeToBeColored) >= 0) {
-    return "red";
+    return calculateColorAddition(59.5, 0, gradeToBeColored, red_rgb);
   } else {
     return "black";
   }
+
 }
 
 let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
