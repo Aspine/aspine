@@ -171,13 +171,16 @@ function get_period_name(default_name) {
                 period_names.silver.push(currentTableData.schedule.silver[i]);
             }
         }
-        // Guess lunch
-        current_schedule = get_schedule(period_names.black[2].room, period_names.black[2].id);
+        // Guess lunch if there is a period 3 and we are not following the
+        // covid schedule
+        if (!covid_schedule && period_names.black[2]) {
+            current_schedule = get_schedule(period_names.black[2].room, period_names.black[2].id);
+        }
     }
     let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
     let index = Number(default_name.charAt(default_name.length - 1)) - 1;
-    if(isNaN(index)) {
+    if(isNaN(index) || !period_names[bs_day][index]) {
         return default_name;
     }
     return period_names[bs_day][index].name;
