@@ -24,9 +24,14 @@ let current_schedule = covid_schedule ? "covid" : "regular";
 // current date and time.
 let date_override = undefined;
 
-let last_thousand = 0
+let last_interval = 0
+const refreshes_per_second = 4
 function redraw_clock_with_timestamp(timestamp) {
-    redraw_clock();
+    if (timestamp > last_interval*1000/refreshes_per_second) {
+        last_interval++;
+        console.log(last_interval)
+        redraw_clock();
+    }
     window.requestAnimationFrame(redraw_clock_with_timestamp);
 }
 
