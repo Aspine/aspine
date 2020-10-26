@@ -24,12 +24,21 @@ let current_schedule = covid_schedule ? "covid" : "regular";
 // current date and time.
 let date_override = undefined;
 
+let last_thousand = 0
+function redraw_clock_with_timestamp(timestamp) {
+    redraw_clock();
+    window.requestAnimationFrame(redraw_clock_with_timestamp);
+}
+
 let schedulesCallback = function(response) {
     schedules = response;
     redraw_clock();
-    setInterval(function() {
-        redraw_clock();
-    }, 1000);
+
+    window.requestAnimationFrame(redraw_clock_with_timestamp);
+
+    // setInterval(function() {
+    //     redraw_clock();
+    // }, 1000);
 };
 
 //#ifndef lite
