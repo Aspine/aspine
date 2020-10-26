@@ -29,7 +29,6 @@ const refreshes_per_second = 4
 function redraw_clock_with_timestamp(timestamp) {
     if (timestamp > last_interval*1000/refreshes_per_second) {
         last_interval++;
-        console.log(last_interval)
         redraw_clock();
     }
     window.requestAnimationFrame(redraw_clock_with_timestamp);
