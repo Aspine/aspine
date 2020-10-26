@@ -24,13 +24,21 @@ let current_schedule = covid_schedule ? "covid" : "regular";
 // current date and time.
 let date_override = undefined;
 
-let schedulesCallback = function(response) {
+function schedulesCallback(response) {
     schedules = response;
-    redraw_clock();
-    setInterval(function() {
-        redraw_clock();
-    }, 1000);
-};
+
+    let last_interval = 0;
+    const redraw_clock_with_timestamp = timestamp => {
+        // Redraw clock 4 times per second (once every 1000/4 milliseconds)
+        if (timestamp > last_interval * 1000/4) {
+            last_interval++;
+            redraw_clock();
+        }
+        window.requestAnimationFrame(redraw_clock_with_timestamp);
+    }
+
+    redraw_clock_with_timestamp();
+}
 
 //#ifndef lite
 $.ajax({
