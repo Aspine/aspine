@@ -34,7 +34,7 @@ const port = 8080;
 
 const app = express();
 app.use(compression({ filter: (..._) => true }));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Aspine listening on port ${port}!`));
 
 // // redis setup
 // client.on("error", function (err) {
