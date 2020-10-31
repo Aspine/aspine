@@ -66,7 +66,7 @@
 
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
+    <button class="tablinks" onclick="openTab(event, 'recent'), load_recent()">Recent Activity</button>
     <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
     <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
@@ -300,13 +300,14 @@
     <div id='calendar'></div>
   </div>
   -->
-  <div id="recent" class="tabcontent">
-    <label class="switch">
+  <div id="recent" class="tabcontent" onload="load_recent()">
+    <h3>Recent Attendance</h3>
+    <!-- <label class="switch">
       <input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
       <span class="slider round"></span>
       <p id="recent_title" class="unselectable">Assignments</p>
-    </label>
-    <div id="recentActivity"></div>
+    </label>-->
+    <div id="recentActivity"></div> 
     <div id="recentAttendance"></div>
   </div>
   <div id="reports" class="tabcontent">
