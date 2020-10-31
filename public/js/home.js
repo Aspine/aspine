@@ -831,6 +831,10 @@ function responseCallback(response, includedTerms) {
         if (currentTableData.recent.recentAttendanceArray[i].tardy === "true") {
             currentTableData.recent.recentAttendanceArray[i].event += "Tardy ";
         }
+        // addition for COVID
+        if (currentTableData.recent.recentAttendanceArray[i].code === "VP") {
+            currentTableData.recent.recentAttendanceArray[i].event += "VP ";
+        }
     }
 
     let activityArray = currentTableData.recent.recentActivityArray.slice();
