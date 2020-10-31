@@ -19,9 +19,6 @@ let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
-//variable for the number of synthetic assignments at the top
-let total_synthetic_assignments = 0
-
 let tempCell;
 // When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
@@ -319,15 +316,21 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         {
             title: "Stats",
             titleFormatter: () => '<i class="fa fa-info-circle" aria-hidden="true"></i>',
-            formatter: cell => 
-                (!isNaN(cell.getRow().getData().score) && cell.getRow().getPosition() >= total_synthetic_assignments) ?
-                '<i class="fa fa-info" aria-hidden="true"></i>' : "",
+            formatter: cell => (
+                isNaN(cell.getRow().getData().score)
+                || currentTableData.currentTermData
+                    .classes[selected_class_i]
+                    .assignments[cell.getRow().getPosition()].synthetic
+            ) ? "" : '<i class="fa fa-info" aria-hidden="true"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
-                if (isNaN(cell.getRow().getData().score) || cell.getRow().getPosition() < total_synthetic_assignments) {
-                    return;
-                }
+                if (
+                    isNaN(cell.getRow().getData().score)
+                    || currentTableData.currentTermData
+                        .classes[selected_class_i]
+                        .assignments[cell.getRow().getPosition()].synthetic
+                ) return;
                 noStats();
                 document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                 showModal("stats");
@@ -519,18 +522,11 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         {
             title: "Add",
             titleFormatter: () => '<i class="fa fa-plus grades" aria-hidden="true"></i>',
-            headerClick: function () {
-                total_synthetic_assignments++;
-                newAssignment();
-            },
+            headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-                //if the index is less than the total number of synthetic assignments it must be a synthetic assignment
-                if (cell.getRow().getPosition() < total_synthetic_assignments)
-                    total_synthetic_assignments--;
-
                 cell.getRow().delete();
             },
             headerSort: false,
