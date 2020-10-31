@@ -11,6 +11,7 @@ let newAssignment = function() {
       "max_score": 10,
       "percentage": 100,
       "color": "green",
+      "synthetic": "true",
     });
     
     updateGradePage();  

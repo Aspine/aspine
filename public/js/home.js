@@ -316,15 +316,21 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         {
             title: "Stats",
             titleFormatter: () => '<i class="fa fa-info-circle" aria-hidden="true"></i>',
-            formatter: cell =>
-                (!isNaN(cell.getRow().getData().score)) ?
-                '<i class="fa fa-info" aria-hidden="true"></i>' : "",
+            formatter: cell => (
+                isNaN(cell.getRow().getData().score)
+                || currentTableData.currentTermData
+                    .classes[selected_class_i]
+                    .assignments[cell.getRow().getPosition()].synthetic
+            ) ? "" : '<i class="fa fa-info" aria-hidden="true"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
-                if (isNaN(cell.getRow().getData().score)) {
-                    return;
-                }
+                if (
+                    isNaN(cell.getRow().getData().score)
+                    || currentTableData.currentTermData
+                        .classes[selected_class_i]
+                        .assignments[cell.getRow().getPosition()].synthetic
+                ) return;
                 noStats();
                 document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                 showModal("stats");
