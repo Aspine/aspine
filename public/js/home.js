@@ -178,7 +178,6 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         assignmentsTable.clearFilter();
 
-        
         //checks if it's already selected
         if (currentFilterRow != row.getPosition()) {
             currentFilterRow = row.getPosition();
