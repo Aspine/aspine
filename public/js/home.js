@@ -150,6 +150,10 @@ let recentActivity = new Tabulator("#recentActivity", {
         classesTable.selectRow(1);
     },
 });
+
+//current filter row is the row that's currently selected in the categories table.
+//this gets reset every time it switches class
+let currentFilterRow = null;
 let categoriesTable = new Tabulator("#categoriesTable", {
     //	height: 400,
     selectable: 1,
@@ -173,9 +177,16 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         assignmentsTable.clearFilter();
+
+        
+        //checks if it's already selected
+        if (currentFilterRow != row.getPosition()) {
+            currentFilterRow = row.getPosition();
         assignmentsTable.addFilter([
             {field: "category", type:"=", value: row.getData().category}
         ]);
+        }
+        else currentFilterRow = null;
     },
 });
 
@@ -633,7 +644,11 @@ let classesTable = new Tabulator("#classesTable", {
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
+
         assignmentsTable.clearFilter();
+        //nulls this so it can correcetly keep track of the filter
+        currentFilterRow = null;
+        
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
         selected_class_i = row.getPosition();
