@@ -73,19 +73,27 @@
     </label>
   </div>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'recent')">Attendance</button>
-    <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
-    <!-- TODO: post-covid, setting lunch should be migrated to settings -->
-    <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
-    <button class="tablinks" onclick="openTab(event, 'information')" id="information_open">Info</button>
-<!--#ifndef lite-->
-    <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
-<!--#endif-->
-    <div class="GPA gpa_custom-select custom-select" style="width:270px;">
+  <!-- SIDENAV STUFF -->
+  <div id="sidenav" class="sidenav">
+    <button onclick="closeSideNav()" class="tablinks">
+      <i class="fa fa-times" style="position: absolute; top: 20px; left: 20px;"></i>
+      Close
+    </button>
+    <button class="tablinks screensize-show-2" onclick="openTab(event, 'grades');closeSideNav()">Grades</button>
+    <button class="tablinks screensize-show-2" onclick="openTab(event, 'recent');closeSideNav()">Recent Activity</button>
+    <button class="tablinks screensize-show-2" onclick="openTab(event, 'schedule');closeSideNav()">Schedule</button>
+    <button class="tablinks screensize-show-2" onclick="openTab(event, 'clock');closeSideNav()">Clock</button>
+    <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab');closeSideNav()">Calendar</button>-->
+    <button class="tablinks screensize-show-2" onclick="openTab(event, 'reports');closeSideNav()" id="reports_open">Reports</button>
+    <div class="GPA tableData_custom-select custom-select", id="navbar_tableData_div">
+      <select id="tableData_select">
+        <option value="0">Current Year</option>
+        <option value="0">Current Year</option>
+        <option value="import">Import Data...</option>
+      </select>
+    </div>
+    <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
+    <div class="GPA gpa_custom-select custom-select">
       <select id="gpa_select">
         <option id="init_gpa" value="0">Current Quarter GPA: </option>
         <option id="current_gpa" value="0">Current Quarter GPA: </option>
@@ -96,8 +104,34 @@
         <option id="cum_gpa"></option>
       </select>
     </div>
-    <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
-    <div class="GPA tableData_custom-select custom-select" style="width:270px;">
+  </div>
+
+  <div class="tab">
+    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
+    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'schedule')">Schedule</button>
+    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'recent')">Attendance</button>
+    <!--<button class="tablinks screensize-hide-2" onclick="openTab(event, 'clock')">Clock</button>-->
+    <!-- TODO: post-covid, setting lunch should be migrated to settings -->
+    <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
+    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
+    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'information')" id="information_open">Info</button>
+<!--#ifndef lite-->
+    <button class="tablinks tablinks-right screensize-show-1" onclick="openSideNav()"><i class="fa fa-bars"></i></button>
+    <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
+<!--#endif-->
+    <div class="GPA gpa_custom-select custom-select screensize-hide-1" style="width:270px;">
+      <select id="gpa_select">
+        <option id="init_gpa" value="0">Current Quarter GPA: </option>
+        <option id="current_gpa" value="0">Current Quarter GPA: </option>
+        <option id="q1_gpa" value="1">Q1 GPA:</option>
+        <option id="q2_gpa" value="2">Q2 GPA:</option>
+        <option id="q3_gpa" value="3">Q3 GPA:</option>
+        <option id="q4_gpa" value="4">Q4 GPA:</option>
+        <option id="cum_gpa"></option>
+      </select>
+    </div>
+    <button class="tablinks tablinks-right screensize-hide-1" onclick="GPAType();">GPA Type</button>
+    <div class="GPA tableData_custom-select custom-select screensize-hide-1" style="width:270px;">
       <select id="tableData_select">
         <option value="0">Current Year</option>
         <option value="0">Current Year</option>
@@ -374,66 +408,66 @@
     <div id="instructions-header" style="text-align: left">
       <h2 class="info-header">Overview</h2>
       <p class="info-text">
-      Aspine is a website that makes it easier for CPSD students to access and 
-      predict their grades. For example, a student can use Aspine to see how a 
-      better score on a test or an A on an upcoming project would affect their 
+      Aspine is a website that makes it easier for CPSD students to access and
+      predict their grades. For example, a student can use Aspine to see how a
+      better score on a test or an A on an upcoming project would affect their
       grade in a particular class as well as their GPA.
       </p>
       <h2 class="info-header">Editing Assignments</h2>
       <p class="info-text">
-      To edit assignments, select a class from the <strong>Grades</strong> tab 
-      to see its grading categories and individual assignments. Selecting a 
-      particular category displays the assignments in that category. Assignment 
-      names, categories, scores, and maximum scores can all be modified, which 
-      temporarily updates the overall grade and category subtotals based on what 
+      To edit assignments, select a class from the <strong>Grades</strong> tab
+      to see its grading categories and individual assignments. Selecting a
+      particular category displays the assignments in that category. Assignment
+      names, categories, scores, and maximum scores can all be modified, which
+      temporarily updates the overall grade and category subtotals based on what
       was entered.
       </p>
       <h2 class="info-header">Adding Assignments</h2>
       <p class="info-text">
-      Clicking the plus (<i class="fa fa-plus"></i>) icon adds a new assignment 
-      in the currently selected category, which can be edited to reflect possible 
+      Clicking the plus (<i class="fa fa-plus"></i>) icon adds a new assignment
+      in the currently selected category, which can be edited to reflect possible
       upcoming assignments.
       </p>
       <h2 class="info-header">Test Corrections</h2>
       <p class="info-text">
       Clicking the hammer (<i class="fa fa-hammer"></i>) icon on an assignment
-      allows you to predict your grade if it is possible to redeem a certain 
-      percentage of the points lost on that assignment. For example, if a student 
-      scores 80/100 on a test and their teacher allows them to get 50% of their 
-      points back, entering 50% would recalculate their grade with a score of 
+      allows you to predict your grade if it is possible to redeem a certain
+      percentage of the points lost on that assignment. For example, if a student
+      scores 80/100 on a test and their teacher allows them to get 50% of their
+      points back, entering 50% would recalculate their grade with a score of
       90/100 on the test.
       </p>
       <h2 class="info-header">Assignment Statistics</h2>
       <p class="info-text">
-      For classes where the teachers report assignment statistics, clicking the 
-      statistics (<i class="fa fa-info"></i>) icon on an 
+      For classes where the teachers report assignment statistics, clicking the
+      statistics (<i class="fa fa-info"></i>) icon on an
       assignment contextualizes your score with a profile of your classmates' scores.
       </p>
       <h2 class="info-header">Report Cards</h2>
       <p class="info-text">
-      Use the <strong>Reports</strong> tab to view and download your report 
+      Use the <strong>Reports</strong> tab to view and download your report
       cards and progress reports.
       </p>
       <h2 class="info-header">Clock</h2>
       <p class="info-text">
-      During the school day, the clock found in the upper left-hand corner displays 
-      the name of your current class and the amount of time remaining in that class. 
-      If viewed before the start of the school day, the clock shows the amount of 
+      During the school day, the clock found in the upper left-hand corner displays
+      the name of your current class and the amount of time remaining in that class.
+      If viewed before the start of the school day, the clock shows the amount of
       time left until first period starts.
       </p>
       <h2 class="info-header">Importing/Exporting grades</h2>
       <p class="info-text">
-      Clicking the download (<i class="fa fa-file-download"></i>) icon exports 
-      your grades in a machine-readable format stored on your computer. You can 
-      import these files back into Aspine later on by clicking the <strong>Current 
+      Clicking the download (<i class="fa fa-file-download"></i>) icon exports
+      your grades in a machine-readable format stored on your computer. You can
+      import these files back into Aspine later on by clicking the <strong>Current
       Year</strong> dropdown menu and selecting <strong>Import Data</strong>.
       </p>
       <h2 class="info-header">GPA Type and Switching Quarters</h2>
       <p class="info-text">
       Clicking on the <strong>GPA Type</strong> button toggles between displaying
-      your GPA on the 100 point scale, unweighted (4.0) scale, and weighted 
-      (5.0) scale. The <strong>Current Quarter</strong> dropdown displays your 
-      GPA for each quarter, which when clicked allows you to see your grades and 
+      your GPA on the 100 point scale, unweighted (4.0) scale, and weighted
+      (5.0) scale. The <strong>Current Quarter</strong> dropdown displays your
+      GPA for each quarter, which when clicked allows you to see your grades and
       assignments for that quarter.
       </p>
     </div>

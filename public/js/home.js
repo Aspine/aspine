@@ -1142,6 +1142,16 @@ function openTab(evt, tab_name) {
     recentAttendance.redraw();
 }
 
+function openSideNav() {
+    let sidenav = document.getElementById("sidenav");
+    if (sidenav.clientWidth == 250) sidenav.style.width = "0px";
+    else sidenav.style.width = "250px";
+}
+
+function closeSideNav() {
+    document.getElementById("sidenav").style.width = "0px";
+}
+
 $("#export_button").click(() => {
     prefs = {};
 
