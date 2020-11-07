@@ -1118,13 +1118,13 @@ p#large_clock_period {
 }
 
 .sidenav .activated-select-items {
-  color: black !important;
+  color: black;
+  background-color: rgb(249 249 249);
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   width: 100%;
   border-color: transparent !important;
-  font-weight: normal !important;
 }
 
 .sidenav .select-items {
