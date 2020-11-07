@@ -664,7 +664,7 @@ let initialize_resize_hamburger = function() {
   let left_width = 44.25 + $('#logout_button').outerWidth()
 
   //gets all non-tablinks-right elements and adds their width to total_width  and also left_width
-  $('.tab > *:not([class*="tablinks-right"])').outerWidth(function(i, w) {total_width += w; left_width += w; console.log(w)});
+  $('.tab > *:not([class*="tablinks-right"])').outerWidth(function(i, w) {total_width += w; left_width += w;});
 
   //gets all tablinks-right elements and adds their width to total_width
   $('.tab > *[class*="tablinks-right"]').outerWidth(function(i, w) {total_width += w;})
