@@ -6,7 +6,7 @@ let newAssignment = function() {
     
     currentTableData.currentTermData.classes[selected_class_i].assignments.unshift({
       "name": "Assignment",
-      "category": Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories)[0],
+      "category": Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories)[currentFilterRow >= 0 ? currentFilterRow : 0],
       "score": 10,
       "max_score": 10,
       "percentage": 100,
