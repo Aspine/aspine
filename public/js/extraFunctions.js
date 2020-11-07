@@ -656,8 +656,8 @@ function tableData_closeAllSelect(elmnt) {
 
 let initialize_resize_hamburger = function() {
 
-  //total width of all items in hamburger
-  let total_width = 0;
+  //total width of all items in tab minus hamburger
+  let total_width = -44.25;
 
   //width of all items to the left (because they get removed last) plus logout button and hamburger widths
   //44.25 is hamburger width, has to be hardcoded becuase it might be display: none;'d
@@ -667,52 +667,108 @@ let initialize_resize_hamburger = function() {
   $('.tab > *:not([class*="tablinks-right"])').outerWidth(function(i, w) {total_width += w; left_width += w; console.log(w)});
 
   //gets all tablinks-right elements and adds their width to total_width
-  $('.tab > *[class*="tablinks-right"]').outerWidth(function(i, w) {total_width += w;});
+  $('.tab > *[class*="tablinks-right"]').outerWidth(function(i, w) {total_width += w;})
 
-  let in_nav_bar = ($(".tab").width() <= total_width);
+  let switch_left_items = function() {
+    //checks if left items are in sidenav
+    const in_sidenav = $('.tab > *:not([class*="tablinks-right"])').first().hasClass("hide")
 
-  window.addEventListener("resize", function () {
-    //widest state
-    if ($(".tab").width() > total_width && in_nav_bar) {
-      in_nav_bar = false;
-      //takes it out of navbar
-      $(".gpa_custom-select").detach().appendTo($(".tab"));
-
-      //reorders things
-      $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function (v) { return $(".tab").children()[v] }));
-
-      //shows things
-      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').removeClass("hide")
-      $('#hamburger_button').addClass("hide")
-
-      //also closes the thing
-      closeSideNav();
-    }
-    //smallest state
-    else if ($(".tab").width() <= left_width) {
-      //shows left-items in sidenav
+    if (in_sidenav) {
+      //hides left-items in sidenav and shows left-items in tab
+      $('#sidenav > *[class*="left-item"]').addClass("hide")
+      $('.tab > *:not([class*="tablinks-right"])').removeClass("hide")
+    } else {
+      //shows left-items in sidenav and hides left-items in tab
       $('#sidenav > *[class*="left-item"]').removeClass("hide")
-      //hides left-items in tab
       $('.tab > *:not([class*="tablinks-right"])').addClass("hide")
     }
-    //smallest to middle
-    else if ($(".tab").width() > left_width && $(".tab").width() <= total_width && in_nav_bar) {
-      //hides left-items in sidenav
-      $('#sidenav > *[class*="left-item"]').addClass("hide")
-      //shows left-items in tab
-      $('.tab > *:not([class*="tablinks-right"])').removeClass("hide")
-    }
-    //middle state
-    else if ($(".tab").width() <= total_width && !in_nav_bar) {
-      in_nav_bar = true;
-      //puts it in navbar
-      $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
+  }
 
-      //hides all the right items that need to be hidden and shows hamburger
+  let switch_right_items = function() {
+    //checks if right-items (more specifically buttons) are hidden
+    const in_sidenav = $('.tab > button[class*="tablinks-right"]:not(#hamburger_button, #logout_button)').first().hasClass("hide")
+
+    if (in_sidenav) {
+      //takes gpa_custom-select out of the sidebar and puts it in the tab,
+      //reorders right items,
+      //and shows other tablinks-right items
+      $(".gpa_custom-select").detach().appendTo($(".tab"));
+      $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function (v) { return $(".tab").children()[v] }));
+      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').removeClass("hide")
+
+      //also closes the sidebar
+      closeSideNav();
+    }
+    else {
+      //takes gpa_custom-select out of the tab and puts it in the sidenav
+      $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
+      //hides all the right items that need to be hidden
       //doesn't hide the gpa_custom-select because it needs to move it
       $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').addClass("hide")
-      $('#hamburger_button').removeClass("hide")
     }
+  }
+
+  let switch_hamburger = function() {
+    //if hamburger is hidden
+    const is_hidden = $('#hamburger_button').hasClass("hide")
+    
+    //hides or unhides the hamburger
+    if (is_hidden) $('#hamburger_button').removeClass("hide")
+    else $('#hamburger_button').addClass("hide")
+  }
+
+  //navbar_state has 3 states
+  //0 -> bar has enough space for everything, THIS IS THE DEFAULT IN THE CSS/HTML
+  //1 -> bar can't fit the items on the right
+  //2 -> bar can only fit logout and hamburger
+  //old_navbar_state is used to compare the newer navbar_state to the current navbar_state
+  let navbar_state, old_navbar_state;
+  let update_navbar_state = function() {
+    if ($(".tab").width() <= left_width) navbar_state = 2;
+    else if ($(".tab").width() <= total_width) navbar_state = 1;
+    else navbar_state = 0;
+  }
+
+  //initially instantiates nav_bar_state and old_nav_bar_state
+  update_navbar_state();
+  old_navbar_state = navbar_state;
+
+  //initially switches whatever is necessary, only if navbar_state is 1 or 2 because 0 is default
+  switch(navbar_state) {
+    case 1:
+      switch_right_items();
+      switch_hamburger();
+      break;
+    case 2:
+      switch_right_items();
+      switch_left_items();
+      switch_hamburger();
+      break;
+  }
+
+  /* ADDS THE EVENT LISTENER */
+  window.addEventListener("resize", function () {
+
+    //updates navbar_state
+    update_navbar_state()
+
+    //if they're different, updates the tab and sidenav
+    if (old_navbar_state != navbar_state) {
+      if ((old_navbar_state == 0 && navbar_state == 1) || (old_navbar_state == 1 && navbar_state == 0)) {
+        //when moving to and from 0 and 1, needs to switch both right items and hamburgers
+        switch_right_items();
+        switch_hamburger();
+      }
+      else if ((old_navbar_state == 1 && navbar_state == 2) || (old_navbar_state == 2 && navbar_state == 1)) {
+        //when moving between 1 and 2, needs to switch left items
+        switch_left_items();
+      }
+
+    }
+
+    //updates the old navbar state for later comparisons
+    old_navbar_state = navbar_state;
+
   });
 
   //initially sets stuff

@@ -1071,7 +1071,7 @@ p#large_clock_period {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #f1f1f1;
+  background-color: #eeeeee;
   overflow-x: hidden;
   padding-top: 5px;
   transition: 0.5s;
@@ -1081,19 +1081,25 @@ p#large_clock_period {
 .sidenav button {
   clear: both;
   background-color: #f1f1f1;
-  float: left;
+  /* float: left; */
+  /* float: right; */
   border: none;
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  width: 270px;
+  width: 260px;
   margin-bottom: 5px;
-  float: right;
+  margin-left: 5px;
+  margin-right: 5px;
   /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
 }
 
+.sidenav .select-selected:hover {
+  background-color: #ddd !important;
+}
+
 .sidenav button:hover {
-  background-color: #ddd;
+  background-color: #ddd !important;
 }
 
 .sidenav .GPA {
@@ -1103,16 +1109,24 @@ p#large_clock_period {
 
 .sidenav .select-selected {
   color: black !important;
-  float: right;
+  background-color: #f1f1f1;
+  /* float: right; */
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
-  width: 270px;
+  width: 260px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.sidenav .select-selected:after {
+  right: 15px;
 }
 
 .sidenav .activated-selected-item {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
-  margin: 0px 0px 0px 0px;
+  margin: 0px 5px 5px 5px;
   border-style: solid;
   border-color: transparent !important; /* empty borders for these because it looks better */
 }
@@ -1123,8 +1137,16 @@ p#large_clock_period {
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
-  width: 100%;
+  width: 260px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
   border-color: transparent !important;
+}
+
+/* this is just here becuase there was some funniness with margins between the gpa type button and the tableData dropdown */
+.sidenav .activated-select-items:last-child {
+  margin-bottom: 0px;
 }
 
 .sidenav .select-items {
