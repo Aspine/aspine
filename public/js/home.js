@@ -1144,8 +1144,8 @@ function openTab(evt, tab_name) {
 
 function openSideNav() {
     let sidenav = document.getElementById("sidenav");
-    if (sidenav.clientWidth == 250) sidenav.style.width = "0px";
-    else sidenav.style.width = "250px";
+    if (sidenav.clientWidth == 270) sidenav.style.width = "0px";
+    else sidenav.style.width = "270px";
 }
 
 function closeSideNav() {

@@ -1078,6 +1078,7 @@ p#large_clock_period {
 }
 
 .sidenav button {
+  clear: both;
   background-color: #f1f1f1;
   float: left;
   border: none;
@@ -1093,13 +1094,17 @@ p#large_clock_period {
   background-color: #ddd;
 }
 
+.sidenav .GPA {
+  clear: both;
+  height: 44px;
+}
+
 .sidenav .select-selected {
   color: black !important;
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   width: 100%;
-  height: min-content;
 }
 
 .sidenav .activated-select-items {
@@ -1108,25 +1113,6 @@ p#large_clock_period {
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   width: 100%;
-}
-
-.sidenav .select-selected:after {
-  color: black;
-  float: right;
-  position: relative;
-  content: "";
-  top: 5px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #000 transparent transparent transparent;
-}
-
-/* Point the arrow upwards when the select box is open (active): */
-.sidenav .select-selected.select-arrow-active:after {
-  border-color: transparent transparent #000 transparent;
-  top: -1px;
 }
 
 .sidenav .select-items {

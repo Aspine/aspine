@@ -827,12 +827,37 @@ let listener = function(event) {
   }
 };
 
+let in_nav_bar = (window.innerWidth <= 1206);
+
+window.addEventListener("resize", function() {
+  if (window.innerWidth > 1206 && in_nav_bar) {
+    in_nav_bar = false;
+    $(".gpa_custom-select").detach().appendTo($(".tab"));
+  
+    //reorders things
+    $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function(v) {return $(".tab").children()[v]}));
+
+    //also closes the thing
+    closeSideNav();
+  }
+  else if (window.innerWidth <= 1206 && !in_nav_bar) {
+    in_nav_bar = true;
+    $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
+  }
+})
+
 /*
  * includedTerms is an optional parameter which contains the terms
  * included in an import (in the case that currentTableData is imported
  * and not all of the terms' data have been put into currentTableData)
  */
 let initialize_quarter_dropdown = function(includedTerms) {
+
+  //initially puts it in navbar
+  if (in_nav_bar) {
+    $(".gpa_custom-select").detach().appendTo($("#sidenav"));
+  }
+
   /* Look for any elements with the class "gpa_custom-select": */
   let x = document.getElementsByClassName("gpa_custom-select")[0];
   let selElmnt = x.getElementsByTagName("select")[0];
