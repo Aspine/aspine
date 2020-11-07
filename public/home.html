@@ -79,12 +79,12 @@
       <i class="fa fa-times" style="position: absolute; top: 20px; left: 20px;"></i>
       Close
     </button>
-    <button class="tablinks screensize-show-2" onclick="openTab(event, 'grades');closeSideNav()">Grades</button>
-    <button class="tablinks screensize-show-2" onclick="openTab(event, 'recent');closeSideNav()">Recent Activity</button>
-    <button class="tablinks screensize-show-2" onclick="openTab(event, 'schedule');closeSideNav()">Schedule</button>
-    <button class="tablinks screensize-show-2" onclick="openTab(event, 'clock');closeSideNav()">Clock</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'grades');closeSideNav()">Grades</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'recent');closeSideNav()">Recent Activity</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'schedule');closeSideNav()">Schedule</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'clock');closeSideNav()">Clock</button>
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab');closeSideNav()">Calendar</button>-->
-    <button class="tablinks screensize-show-2" onclick="openTab(event, 'reports');closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks left-item" onclick="openTab(event, 'reports');closeSideNav()" id="reports_open">Reports</button>
     <div class="GPA tableData_custom-select custom-select", id="navbar_tableData_div">
       <select id="tableData_select">
         <option value="0">Current Year</option>
@@ -97,19 +97,19 @@
   </div>
 
   <div class="tab">
-    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'schedule')">Schedule</button>
-    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'recent')">Attendance</button>
-    <!--<button class="tablinks screensize-hide-2" onclick="openTab(event, 'clock')">Clock</button>-->
+    <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
+    <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
+    <button class="tablinks" onclick="openTab(event, 'recent')">Attendance</button>
+    <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
     <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
-    <button class="tablinks screensize-hide-2" onclick="openTab(event, 'information')" id="information_open">Info</button>
+    <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
+    <button class="tablinks" onclick="openTab(event, 'information')" id="information_open">Info</button>
 <!--#ifndef lite-->
-    <button class="tablinks tablinks-right screensize-show-1" onclick="openSideNav()"><i class="fa fa-bars"></i></button>
-    <button class="tablinks tablinks-right" onclick="location.href='/logout'">Logout</button>
+    <button class="tablinks tablinks-right hide" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
+    <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
 <!--#endif-->
-    <div class="GPA gpa_custom-select custom-select" style="width: 270px; float: right;">
+    <div class="GPA gpa_custom-select custom-select tablinks-right" style="width: 270px">
       <select id="gpa_select">
         <option id="init_gpa" value="0">Current Quarter GPA: </option>
         <option id="current_gpa" value="0">Current Quarter GPA: </option>
@@ -120,8 +120,8 @@
         <option id="cum_gpa"></option>
       </select>
     </div>
-    <button class="tablinks tablinks-right screensize-hide-1" onclick="GPAType();">GPA Type</button>
-    <div class="GPA tableData_custom-select custom-select screensize-hide-1" style="width:270px;">
+    <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
+    <div class="GPA tableData_custom-select custom-select tablinks-right" style="width:270px;">
       <select id="tableData_select">
         <option value="0">Current Year</option>
         <option value="0">Current Year</option>

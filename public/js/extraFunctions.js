@@ -654,6 +654,92 @@ function tableData_closeAllSelect(elmnt) {
 
 }
 
+let initialize_resize_hamburger = function() {
+
+  //total width of all items in hamburger
+  let total_width = 0;
+
+  //width of all items to the left (because they get removed last) plus logout button and hamburger widths
+  //44.25 is hamburger width, has to be hardcoded becuase it might be display: none;'d
+  let left_width = 44.25 + $('#logout_button').outerWidth()
+  console.log(left_width)
+
+  //gets all non-tablinks-right elements and adds their width to total_width  and also left_width
+  $('.tab > *:not([class*="tablinks-right"])').outerWidth(function(i, w) {total_width += w; left_width += w; console.log(w)});
+
+  //gets all tablinks-right elements and adds their width to total_width
+  $('.tab > *[class*="tablinks-right"]').outerWidth(function(i, w) {total_width += w;});
+
+  console.log(left_width)
+
+  let in_nav_bar = ($(".tab").width() <= total_width);
+
+  window.addEventListener("resize", function () {
+    //widest state
+    if ($(".tab").width() > total_width && in_nav_bar) {
+      in_nav_bar = false;
+      //takes it out of navbar
+      $(".gpa_custom-select").detach().appendTo($(".tab"));
+
+      //reorders things
+      $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function (v) { return $(".tab").children()[v] }));
+
+      //shows things
+      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').removeClass("hide")
+      $('#hamburger_button').addClass("hide")
+
+      //also closes the thing
+      closeSideNav();
+    }
+    //smallest state
+    else if ($(".tab").width() <= left_width) {
+      //shows left-items in sidenav
+      $('#sidenav > *[class*="left-item"]').removeClass("hide")
+      //hides left-items in tab
+      $('.tab > *:not([class*="tablinks-right"])').addClass("hide")
+    }
+    //smallest to middle
+    else if ($(".tab").width() > left_width && $(".tab").width() <= total_width && in_nav_bar) {
+      //hides left-items in sidenav
+      $('#sidenav > *[class*="left-item"]').addClass("hide")
+      //shows left-items in tab
+      $('.tab > *:not([class*="tablinks-right"])').removeClass("hide")
+    }
+    //middle state
+    else if ($(".tab").width() <= total_width && !in_nav_bar) {
+      in_nav_bar = true;
+      //puts it in navbar
+      $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
+
+      //hides all the right items that need to be hidden and shows hamburger
+      //doesn't hide the gpa_custom-select because it needs to move it
+      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').addClass("hide")
+      $('#hamburger_button').removeClass("hide")
+    }
+  });
+
+  //initially sets stuff
+  if ($(".tab").width() <= left_width) {
+    //shows left-items in sidenav
+    $('#sidenav > *[class*="left-item"]').removeClass("hide")
+    //hides left-items in tab
+    $('.tab > *:not([class*="tablinks-right"])').addClass("hide")
+  }
+  if ($(".tab").width() <= total_width) {
+    //moves gpa_custom-select
+    $(".gpa_custom-select").detach().appendTo($("#sidenav"));
+    //shows hamburger
+    $("#hamburger_button").removeClass("hide")
+    //hides gpa type button
+    $('.tab > button[class*="tablinks-right"]:not(#logout_button, #hamburger_button)').addClass("hide")
+    //hides tableData_custom-select
+    $('.tab > .tableData_custom-select').addClass("hide")
+  }
+
+  
+}
+
+
 //pdf dropdown stuff
 let initialize_pdf_dropdown = function() {
 
@@ -829,36 +915,12 @@ let listener = function(event) {
   }
 };
 
-let in_nav_bar = (window.innerWidth <= 1206);
-
-window.addEventListener("resize", function() {
-  if (window.innerWidth > 1206 && in_nav_bar) {
-    in_nav_bar = false;
-    $(".gpa_custom-select").detach().appendTo($(".tab"));
-  
-    //reorders things
-    $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function(v) {return $(".tab").children()[v]}));
-
-    //also closes the thing
-    closeSideNav();
-  }
-  else if (window.innerWidth <= 1206 && !in_nav_bar) {
-    in_nav_bar = true;
-    $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
-  }
-})
-
 /*
  * includedTerms is an optional parameter which contains the terms
  * included in an import (in the case that currentTableData is imported
  * and not all of the terms' data have been put into currentTableData)
  */
 let initialize_quarter_dropdown = function(includedTerms) {
-
-  //initially puts it in navbar
-  if (in_nav_bar) {
-    $(".gpa_custom-select").detach().appendTo($("#sidenav"));
-  }
 
   /* Look for any elements with the class "gpa_custom-select": */
   let x = document.getElementsByClassName("gpa_custom-select")[0];

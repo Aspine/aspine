@@ -920,6 +920,8 @@ function responseCallback(response, includedTerms) {
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 
+    //initializes hamburger resize
+    initialize_resize_hamburger()
 
     $.ajax({
         url: "/schedule",

@@ -1131,26 +1131,6 @@ p#large_clock_period {
   position: static;
 }
 
-@media only screen and (max-width: 1206px) {
-  .screensize-hide-1 {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 601px) {
-  .screensize-hide-2 {
-    display: none;
-  }
-}
-
-@media only screen and (min-width: 1207px) {
-  .screensize-show-1 {
-    display: none;
-  }
-}
-
-@media only screen and (min-width: 602px) {
-  .screensize-show-2 {
-    display: none;
-  }
+.hide {
+  display: none;
 }
