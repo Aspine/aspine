@@ -731,6 +731,8 @@ let initialize_pdf_dropdown = function() {
       and open/close the current select box: */
       e.stopPropagation();
       pdf_closeAllSelect(this);
+      closeAllSelect();
+      tableData_closeAllSelect();
       this.nextSibling.classList.toggle("pdf_select-hide");
       this.classList.toggle("pdf_select-arrow-active");
     });
@@ -873,6 +875,8 @@ let initialize_quarter_dropdown = function(includedTerms) {
       and open/close the current select box: */
       e.stopPropagation();
       closeAllSelect(this);
+      pdf_closeAllSelect();
+      tableData_closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
       $('.gpa_select-selected').toggleClass("activated-selected-item");
@@ -1027,7 +1031,8 @@ let initialize_tableData_dropdown = function() {
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
       e.stopPropagation();
-      //pdf_closeAllSelect(this);
+      pdf_closeAllSelect(this);
+      closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
       $('.tableData_select-selected').toggleClass("activated-selected-item");

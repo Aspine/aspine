@@ -1031,7 +1031,7 @@ p#large_clock_period {
 .select-items {
   position: absolute;
   background-color: var(--white2);
-  top: 100%;
+  top: calc(100% + 1px);
   left: 0;
   right: 0;
   z-index: 99;
@@ -1047,7 +1047,8 @@ p#large_clock_period {
 
 .activated-selected-item {
   /*border: 1px transparent solid;*/
-  border-width: 1px 1px 1px 1px !important;
+  border-width: 0px 1px 0px 1px !important;
+  margin: 1px 0px 1px 0px;
   border-style: solid;
   border-color: var(--gray) !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
@@ -1085,8 +1086,9 @@ p#large_clock_period {
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  width: 100%;
+  width: 270px;
   margin-bottom: 5px;
+  float: right;
   /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
 }
 
@@ -1104,7 +1106,15 @@ p#large_clock_period {
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
-  width: 100%;
+  width: 270px;
+}
+
+.sidenav .activated-selected-item {
+  /*border: 1px transparent solid;*/
+  border-width: 1px 1px 1px 1px !important;
+  margin: 0px 0px 0px 0px;
+  border-style: solid;
+  border-color: transparent !important; /* empty borders for these because it looks better */
 }
 
 .sidenav .activated-select-items {
@@ -1113,6 +1123,8 @@ p#large_clock_period {
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   width: 100%;
+  border-color: transparent !important;
+  font-weight: normal !important;
 }
 
 .sidenav .select-items {
