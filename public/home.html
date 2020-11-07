@@ -84,7 +84,8 @@
     <button class="tablinks left-item hide" onclick="openTab(event, 'schedule');closeSideNav()">Schedule</button>
     <button class="tablinks left-item hide" onclick="openTab(event, 'clock');closeSideNav()">Clock</button>
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab');closeSideNav()">Calendar</button>-->
-    <button class="tablinks left-item" onclick="openTab(event, 'reports');closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'reports');closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks left-item hide" onclick="openTab(event, 'information')" id="information_open">Info</button>
     <div class="GPA tableData_custom-select custom-select", id="navbar_tableData_div" style="width: 270px;">
       <select id="tableData_select">
         <option value="0">Current Year</option>
@@ -121,7 +122,7 @@
       </select>
     </div>
     <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
-    <div class="GPA tableData_custom-select custom-select tablinks-right" style="width: 270px;">
+    <div class="GPA tableData_custom-select custom-select tablinks-right" style="width: 210px;">
       <select id="tableData_select">
         <option value="0">Current Year</option>
         <option value="0">Current Year</option>

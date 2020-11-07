@@ -690,10 +690,18 @@ let initialize_resize_hamburger = function() {
 
     if (in_sidenav) {
       //takes gpa_custom-select out of the sidebar and puts it in the tab,
-      //reorders right items,
-      //and shows other tablinks-right items
       $(".gpa_custom-select").detach().appendTo($(".tab"));
-      $(".tab").append($.map([0, 1, 2, 3, 4, 5, 6, 9, 7, 8], function (v) { return $(".tab").children()[v] }));
+
+      //reorders right items becuase the gpa_custom-select is now the last item in the list
+      //puts it at the third position from the top
+      const children = $('.tab > *[class*="tablinks-right"]')
+      for (i=0; i<children.length; i++) {
+        if (i <= 1) $(".tab").append(children[i]);
+        if (i == 2) $(".tab").append(children[children.length-1]);
+        else $(".tab").append(children[i-1]);
+      }
+
+      //shows other tablinks-right items
       $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').removeClass("hide")
 
       //also closes the sidebar
