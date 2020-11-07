@@ -323,7 +323,7 @@ div.tabcontent, div.tab {
 
 .logo {
   height: 100px;
-  margin: 10px 10px 25px 10px;
+  margin: 10px 10px 25px 1%;
   width: 100px;
   float: left;
 }
@@ -590,7 +590,7 @@ p#small_clock_period {
   
   position: absolute;
   top: 110px;
-  left: 10px;
+  left: 1%;
 }
 p#large_clock_period {
   font-size: 50px;
