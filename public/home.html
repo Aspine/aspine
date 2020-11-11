@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta name="apple-itunes-app" content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8">
-  
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    
+
     gtag('config', 'UA-149290199-1');
   </script>
-  
+
   <title>Aspine | CRLS Student Dashboard</title>
-  
+
   <meta name="Description" content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, the CRLS Clock, and your report cards. Checking grades the cool way since 2019!">
   <meta charset="utf-8">
   <meta name="Aspine" content="Aspen Scraper and Beautifier">
@@ -63,7 +63,7 @@
     <p id="small_clock_period"></p>
     <h4 id="title">Aspine</h4>
   </div>
-  
+
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
     <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
@@ -94,7 +94,7 @@
       </select>
     </div>
   </div>
-  
+
   <!--
   <div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">
     <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">
@@ -107,7 +107,7 @@
   <div id="loader">
     <div class="loader"></div>
   </div>
-        
+
   <div id="stats_modal" class="modal">
     <!-- Modal content -->
     <div id="stats_modal_content" class="modal-content">
@@ -229,7 +229,7 @@
       </ul>
       <p>Status: <span id="export_status"></span></p>
       <button id="export_button">Export</button>
-    </div>        
+    </div>
   </div>
 
   <div id="import_modal" class="modal">
@@ -240,7 +240,7 @@
       <input type="file" id="import_filepicker">
       <button id="import_button">Import</button>
       <p id="import_error"></p>
-    </div>        
+    </div>
   </div>
 
   <div id="grades" class="tabcontent">
@@ -262,8 +262,8 @@
     <div id="scheduleTable"></div>
   </div>
   <div id="clock" class="tabcontent">
-    <span style="display: none;"><p>Lunch:</p>  
-    <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">  
+    <span style="display: none;"><p>Lunch:</p>
+    <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
     <p id="lunch_label" class="unselectable">ABC</p> </span>
     <canvas id="large_clock" width="400" height="400"></canvas>
     <p id="large_clock_period"></p>
@@ -309,13 +309,13 @@
     <div id="recentActivity"></div>
     <div id="recentAttendance"></div>
   </div>
-  <div id="reports" class="tabcontent">  
+  <div id="reports" class="tabcontent">
     <div class="pdf_topnav">
       <div class="pdf_custom-select">
         <select id="pdf_select">
         </select>
       </div>
-      
+
       <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()">
         <i class="fa fa-expand-alt" aria-hidden="true"></i>
       </span>
@@ -323,11 +323,11 @@
       <span class="right hover pointer" onclick="download_pdf()" aria-label="Download PDF">
         <i class="fa fa-download" aria-hidden="true"></i>
       </span>
-      
+
       <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;">
         |
       </span>
-      
+
       <span class="right hover pointer" onclick="zoom_in_pdf()" aria-label="Zoom in">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </span>
@@ -337,11 +337,11 @@
       <span class="right hover pointer" onclick="zoom_out_pdf()" aria-label="Zoom out">
         <i class="fa fa-minus" aria-hidden="true"></i>
       </span>
-      
+
       <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;" aria-hidden="true">
         |
       </span>
-      
+
       <span class="right hover pointer" onclick="next_page_pdf()" aria-label="Next page">
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </span>
@@ -351,7 +351,7 @@
       <span class="right hover pointer" onclick="prev_page_pdf()" aria-label="Previous page">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </span>
-    </div>   
+    </div>
     <div id="pdf-container">
       <h1 id="pdf_loading_text"> Loading... </h1>
       <canvas id="pdf-canvas" width="400" height="400"></canvas>
@@ -365,4 +365,4 @@
   <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
-      
+
