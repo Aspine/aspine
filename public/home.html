@@ -66,9 +66,10 @@
 
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'recent')">Recent Activity</button>
     <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>
+    <button class="tablinks" onclick="openTab(event, 'recent')">Attendance</button>
+    <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
+    <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
     <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
 <!--#ifndef lite-->
@@ -246,8 +247,9 @@
   <div id="grades" class="tabcontent">
     <div id="classesTable"></div>
     <div id="mostRecentDiv" style="display:none">
-      <h3 align="left">Most Recent Activity:</h3>
-      <div id="mostRecentTable"></div>
+      <!-- hide most recent activity; removed from aspen -->
+      <!-- <h3 align="left">Most Recent Activity:</h3> -->
+      <div id="mostRecentTable" style="display: none;"></div>
     </div>
     <div id="categoriesTable"></div>
     <div id="assignmentsTable"></div>
@@ -301,13 +303,14 @@
   </div>
   -->
   <div id="recent" class="tabcontent">
-    <label class="switch">
+    <!-- <label class="switch">
       <input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
       <span class="slider round"></span>
       <p id="recent_title" class="unselectable">Assignments</p>
-    </label>
-    <div id="recentActivity"></div>
-    <div id="recentAttendance"></div>
+    </label>-->
+    <div id="recentActivity" style="display: none"></div>
+    <div id="recentAttendance" style="display: block"></div>
+    <!-- recentActivity is hidden because Aspen does not display recent assignments -->
   </div>
   <div id="reports" class="tabcontent">
     <div class="pdf_topnav">

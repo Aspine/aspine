@@ -831,6 +831,10 @@ function responseCallback(response, includedTerms) {
         if (currentTableData.recent.recentAttendanceArray[i].tardy === "true") {
             currentTableData.recent.recentAttendanceArray[i].event += "Tardy ";
         }
+        // addition for COVID
+        if (currentTableData.recent.recentAttendanceArray[i].code === "VP") {
+            currentTableData.recent.recentAttendanceArray[i].event += "VP ";
+        }
     }
 
     let activityArray = currentTableData.recent.recentActivityArray.slice();
@@ -1010,15 +1014,17 @@ function pdfCallback(response) {
         generate_pdf(pdf_index);
     }
 }
-
+// Currently no need for toggle; there are no recent assignments
+/*
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
-        //recentActivity.setData(tableData.recent.recentActivityArray);
+        recentActivity.setData(tableData.recent.recentActivityArray);
         document.getElementById("recentActivity").style.display = "block";
         document.getElementById("recentAttendance").style.display = "none";
         document.getElementById("recent_title").innerHTML = "Assignments";
         recentActivity.redraw();
-    } else {
+    }
+    else {
         //recentActivity.setData(tableData.recent.recentAttendanceArray);
         document.getElementById("recentActivity").style.display = "none";
         document.getElementById("recentAttendance").style.display = "block";
@@ -1026,6 +1032,7 @@ function recent_toggle() {
         recentAttendance.redraw();
     }
 }
+*/
 
 function schedule_toggle() {
     if (document.getElementById("schedule_toggle").checked) {
