@@ -67,7 +67,7 @@
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
     <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'recent'), load_recent()">Attendance</button>
+    <button class="tablinks" onclick="openTab(event, 'recent')">Attendance</button>
     <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
     <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
@@ -308,8 +308,9 @@
       <span class="slider round"></span>
       <p id="recent_title" class="unselectable">Assignments</p>
     </label>-->
-    <div id="recentActivity"></div> 
-    <div id="recentAttendance"></div>
+    <div id="recentActivity" style="display: none"></div>
+    <div id="recentAttendance" style="display: block"></div>
+    <!-- recentActivity is hidden because Aspen does not display recent assignments -->
   </div>
   <div id="reports" class="tabcontent">
     <div class="pdf_topnav">
