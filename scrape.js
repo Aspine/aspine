@@ -374,7 +374,7 @@ async function scrape_overview(username, password) {
     let data = [];
     $("tr.gradesCell").each(function(i, elem) {
         // Description 	Teacher 	Schedule term 	Q1 	Q2 	Q3 	Q4 	YTD 	Abs 	Tdy 	Dsm
-        let row = {};
+        let row = {}; // TODO: remember how to declare objects cache $(this).children at top or make lamda to remove boilerplate
         //row["name"] = $(this).find("a").first().text();
         //row["category"] = $(this).children().eq(2).text().trim();
         row["class"] = $(this).children().eq(0).text().trim();
@@ -396,6 +396,18 @@ async function scrape_overview(username, password) {
 }
 
 // Returns object of recent activity
+/**
+ * @typedef {object} RecentActivity
+ * @property {string} date
+ * @property {string} classname
+ * @property {string} score
+ * @property {string} assignment
+ */
+/**
+ * @param {string} username
+ * @param {string} password
+ * @returns {Promise<Promise<object>>}
+ */
 async function scrape_recent(username, password) {
     let session = await scrape_login();
     let page = await submit_login(username, password, session.apache_token, session.session_id);
@@ -876,6 +888,7 @@ async function scrape_assignments(session_id, apache_token) {
 
     while (true) {
         $("tr.listCell.listRowHeight").each(function(i, elem) {
+          // TODO: hello fix me
             let row = {};
             //row["name"] = $(this).find("a").first().text();
             //row["category"] = $(this).children().eq(2).text().trim();

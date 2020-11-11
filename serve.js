@@ -222,6 +222,7 @@ app.post('/data', async (req, res) => {
         res.send({ nologin: true });
     }
     else {
+        // TODO add nologin field for consistency
         res.send(await scraper.scrape_student(
             req.session.username, req.session.password, req.body.quarter
         ));

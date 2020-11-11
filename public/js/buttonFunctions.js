@@ -367,6 +367,12 @@ let exportTableData = async function(prefs) {
   }), filename);
 };
 
+/**
+ * Imports a JSON file and adds the data as a TableDataObject to the 
+ *
+ * @param {object} obj - Data loaded from json file
+ * @returns {Promise<string>}
+ */
 let importTableData = async function(obj) {
 
 //#ifndef lite

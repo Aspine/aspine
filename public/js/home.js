@@ -1,3 +1,5 @@
+// State
+
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let pdfrendering = false;
@@ -13,8 +15,23 @@ let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = "current";
+/**
+ * All the data provided by Aspine API
+ *  @typedef TableDataObject
+ *	@property {GPA} [cumGPA]
+ *	@property {Term} [currentTermData]
+ *	@property {string} [name]
+ *	@property {Overview[]} [overview]
+ *	@property {RecentActivity} [recent]
+ *	@property {Schedule} [schedule]
+ *	@property {Terms} [terms]
+ *  @property {?string} [username]
+ *  @property {boolean} [imported=true]
+ */
+/** @type {TableDataObject[]}*/
 let tableData = [{ name: "Current Year" }];
 let currentTableDataIndex = 0;
+/**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
@@ -79,15 +96,29 @@ let noStats = function() {
     document.getElementById("stats_modal_content").style.height = "5rem";
 };
 
+/**
+ * Hide a modal window
+ * @param {string} key Name of modal window.
+ */
 let hideModal = function(key) {
     modals[key].style.display = "none";
-    if (key === "stats") noStats();
-
-    if (key === "corrections") {
-        document.getElementById("corrections_modal_input").value = "";
+    switch (key)
+    {
+        case 'stats':
+            noStats();
+            break;
+        case 'corrections':
+            document.getElementById("corrections_modal_input").value = "";
+            break;
+        default:
+            console.error(`${key} is not a valid modal name`)
     }
 }
 
+/**
+ * Un-hide a modal window
+ * @param {string} key Name of modal window.
+ */
 let showModal = function(key) {
     modals[key].style.display = "inline-block";
 }
@@ -105,14 +136,14 @@ let recentAttendance = new Tabulator("#recentAttendance", {
 
 let recentActivity = new Tabulator("#recentActivity", {
     //	height: 400,
-    layout:"fitColumns",
+    layout: "fitColumns",
     columns: [
-        {title:"Date", field:"date", formatter: rowFormatter},
-        {title:"Class", field:"classname", formatter: classFormatter},
-        {title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
-        {title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
-        {title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
-        {title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
+        {title: "Date", field: "date", formatter: rowFormatter},
+        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
+        {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
+        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
+        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
@@ -160,11 +191,11 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     layout: "fitColumns",
     layoutColumnsOnNewData: true,
     columns: [
-        {title:"Category", field:"category", formatter: rowFormatter, headerSort: false},
-        {title:"Weight", field:"weight", formatter:weightFormatter, headerSort: false},
-        {title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
-        {title:"Max Score", field:"maxScore", formatter: rowFormatter, headerSort: false},
-        {title:"Percentage", field:"grade", formatter: rowGradeFormatter, headerSort:false},
+        {title: "Category", field: "category", formatter: rowFormatter, headerSort: false},
+        {title: "Weight", field: "weight", formatter: weightFormatter, headerSort: false},
+        {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
+        {title: "Max Score", field: "maxScore", formatter: rowFormatter, headerSort: false},
+        {title: "Percentage", field: "grade", formatter: rowGradeFormatter, headerSort: false},
         //filler column to match the assignments table
         //{title: "", width:1, align:"center", headerSort: false},
         {
@@ -181,7 +212,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         if (currentFilterRow !== row.getPosition()) {
             currentFilterRow = row.getPosition();
             assignmentsTable.addFilter([
-                {field: "category", type:"=", value: row.getData().category}
+                {field: "category", type: "=", value: row.getData().category}
             ]);
         }
         else {
@@ -192,15 +223,15 @@ let categoriesTable = new Tabulator("#categoriesTable", {
 
 let mostRecentTable = new Tabulator("#mostRecentTable", {
     //	height: 400,
-    layout:"fitColumns",
+    layout: "fitColumns",
     columns: [
         //{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
-        {title:"Date", field:"date", formatter: rowFormatter},
-        {title:"Class", field:"classname", formatter: classFormatter},
-        {title:"Assignment", field:"assignment", formatter: rowFormatter, headerSort: false},
-        {title:"Score", field:"score", formatter: rowFormatter, headerSort: false},
-        {title:"Max Score", field:"max_score", formatter: rowFormatter, headerSort: false},
-        {title:"Percentage", field:"percentage", formatter: rowGradeFormatter},
+        {title: "Date", field: "date", formatter: rowFormatter},
+        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
+        {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
+        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
+        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
@@ -259,28 +290,12 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         {
             title: "Category",
             field: "category",
-            editor:"select",
+            editor: "select",
             editorParams: function(cell) {
                 let catCategories = [];
 
-                for (
-                    let k = 0;
-                    k < Object.keys(
-                        currentTableData.currentTermData.classes[selected_class_i].categories
-                    ).length;
-                    k++
-                ) {
-                    catCategories.push((
-                        Object.keys(
-                            currentTableData.currentTermData.classes[selected_class_i].categories
-                        )[k] + " (" +
-                        (
-                            Object.values(
-                                currentTableData.currentTermData.classes[selected_class_i].categories
-                            )[k] * 100
-                        ) + "%)"
-                    ));
-                }
+                for (let category of Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories))
+                    catCategories.push(`${category} (${category * 100}%)`);
                 return {values: catCategories};
             },
             formatter: rowFormatter,
@@ -620,9 +635,8 @@ let classesTable = new Tabulator("#classesTable", {
                             .removeAttr("aria-label")
                             .removeAttr("tabindex")
                             .removeClass("hastooltip");
-                    }
-                    else {
-                        $(`#export_checkbox_terms_${term}`) .attr("disabled", true);
+                    } else {
+                        $(`#export_checkbox_terms_${term}`).attr("disabled", true);
                         $(`#export_checkbox_terms_${term} ~ span`)
                             .attr("aria-label", isAccessibleObj.reason)
                             .attr("tabindex", 0)
@@ -647,7 +661,7 @@ let classesTable = new Tabulator("#classesTable", {
 
         assignmentsTable.clearFilter();
         currentFilterRow = -1;
-        
+
         document.getElementById("categoriesTable").style.display = "block";
         document.getElementById("assignmentsTable").style.display = "block";
         selected_class_i = row.getPosition();
@@ -693,18 +707,39 @@ $("#corrections_modal_input").keypress(({ which }) => {
         correct();
     }
 });
-
-/*
- * Callback for response from /data
+/**
+ * @typedef {object} Classes
+ * @param {string} name
+ * @param {string} grade
+ * @param {object} categories
+ * @param {object[]} assignments
+ * @param {object} tokens
  *
- * includedTerms is an optional parameter which contains the terms
- * included in an import (in the case that currentTableData is imported
- * and not all of the terms' data have been put into currentTableData)
+ * @typedef {object} RecentActivity
+ * @param {RecentAttendance[]} recentAttendanceArray
+ * @param {RecentAssignments[]} recentActivityArray
+ * @param {string} studentName
+ *
+ * @typedef {object} scrapedStudent
+ * @param {Classes[]} response.classes
+ * @param {RecentActivity} response.recent
+ * @param {Overview[]} response.overview
+ * @param {string} response.username
+ * @param {string} response.quarter
+ *
+ * @typedef {object} noLogin response object on no login
+ * @oaram {boolean} noLogin.nologin - parameter present on login fail
+ */
+ /** Callback for response from /data
+ *
+ * @param {noLogin|scrapedStudent} response
+ * @param {(scrapedStudent|string)} includedTerms - optional parameter which contains the terms included in an import (in the case that
+ * currentTableData is imported and not all of the terms' data have been put into currentTableData)
  */
 function responseCallback(response, includedTerms) {
     // console.log(response);
     if (response.nologin) {
-        tableData = [];
+        tableData = []; // TODO: dont manipulate global state here, return values
         currentTableData = undefined;
         currentTableDataIndex = -1;
 
@@ -715,7 +750,7 @@ function responseCallback(response, includedTerms) {
         return;
     }
     if (response.recent.login_fail) {
-        location.href='/logout';
+        location.href = '/logout';
     }
 
     if (response.classes.length === 0) {
@@ -764,7 +799,7 @@ function responseCallback(response, includedTerms) {
 
     $("#loader").hide();
 
-    //parsing the data extracted by the scrappers, and getting tableData ready for presentation
+    //parsing the data extracted by the scrapers, and getting tableData ready for presentation
     if (typeof currentTableData.terms === 'undefined') {
         currentTableData.terms = {
             current: {},
@@ -818,9 +853,8 @@ function responseCallback(response, includedTerms) {
             currentTableData.recent.recentActivityArray[i].max_score = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
             currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
             currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
-        }
-        catch(err) {
-            console.log("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+        } catch (err) {
+            console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
         }
     }
 
@@ -837,9 +871,9 @@ function responseCallback(response, includedTerms) {
     }
     document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
-    // Calculate  for each quarter
+    // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
-        currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview,i);
+        currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview, i);
     }
 
     //Stuff to do now that tableData is initialized
@@ -1047,8 +1081,7 @@ function openTab(evt, tab_name) {
                 dataType: "json json",
                 success: pdfCallback
             });
-        }
-        else if (typeof currentTableData.pdf_files !== 'undefined') {
+        } else if (typeof currentTableData.pdf_files !== 'undefined') {
             generate_pdf(pdf_index);
         }
         // Redraw PDF to fit new viewport dimensions when transitioning
@@ -1060,11 +1093,9 @@ function openTab(evt, tab_name) {
         };
         if (elem.onfullscreenchange !== undefined) {
             elem.onfullscreenchange = handlefullscreenchange;
-        }
-        else if (elem.mozonfullscreenchange !== undefined) { // Firefox
+        } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
             elem.mozonfullscreenchange = handlefullscreenchange;
-        }
-        else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
+        } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
             elem.MSonfullscreenchange = handlefullscreenchange;
         }
     }
