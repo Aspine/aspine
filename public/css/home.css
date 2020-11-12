@@ -588,6 +588,51 @@ i.fa.fa-toolbox {
   cursor: pointer;
 }
 
+#classesTable .tabulator-col, #classesTable .tabulator-header, #assignmentsTable .tabulator-col, #assignmentsTable .tabulator-header{
+  overflow: initial !important;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  font-family:  'Poppins-Regular';
+  font-size: small;
+  width: auto;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.left81percent::after {
+  left: 81% !important;
+}
+
+.left79percent::after {
+  left: 79% !important;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 canvas#large_clock {
   width: 100%;
   max-width: 400px;

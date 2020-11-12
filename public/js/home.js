@@ -345,7 +345,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Corrections",
-            titleFormatter: () => '<i class="fa fa-toolbox" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 103%;">Revisions</span></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
                 '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
@@ -361,7 +361,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: () => '<i class="material-icons md-18" aria-hidden="true">leaderboard</i>',
+            titleFormatter: () => '<span class="tooltip"><i class="material-icons md-18" aria-hidden="true">leaderboard</i><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
@@ -567,7 +567,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext left81percent" style="left: -58%;">New Assignment</span></i>',
             headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
@@ -643,7 +643,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Export Table Data",
-            titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Export Grades</span></i>',
             headerClick: async () => {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
@@ -670,7 +670,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 91%;">Reset</span></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
