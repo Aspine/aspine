@@ -220,10 +220,11 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false},
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 96%;">Hide</span></i>',
             headerClick: hideCategoriesTable,
             width: 76,
-            headerSort: false
+            headerSort: false,
+            cssClass: "icon-col"
         },
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
@@ -345,7 +346,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Corrections",
-            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"></i><span class="tooltiptext" style="left: 103%;">Revisions</span>',
+            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 103%;">Revisions</span></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
                 '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
@@ -358,7 +359,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#corrections_modal_input").focus();
             },
             headerSort: false,
-            cssClass: "tooltip"
+            cssClass: "icon-col"
         },
         {
             title: "Stats",
@@ -565,10 +566,11 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     .attr("stroke-width", "0.2rem");
             },
             headerSort: false,
+            cssClass: "icon-col"
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext" style="left: -58%;">New Assignment</span></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext" style="left: -80%;">New Assignment</span></i>',
             headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
@@ -577,6 +579,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 cell.getRow().delete();
             },
             headerSort: false,
+            cssClass: "icon-col"
         },
     ],
 });
@@ -668,6 +671,7 @@ let classesTable = new Tabulator("#classesTable", {
             },
             width: 76,
             headerSort: false,
+            cssClass: "icon-col"
         },
         {
             title: "Reset Table Data",
@@ -675,6 +679,7 @@ let classesTable = new Tabulator("#classesTable", {
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
+            cssClass: "icon-col"
         },
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
