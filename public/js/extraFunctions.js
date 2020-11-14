@@ -771,6 +771,12 @@ let initialize_resize_hamburger = function() {
         //when moving between 1 and 2, needs to switch left items
         switch_left_items();
       }
+      else if ((old_navbar_state == 0 && navbar_state == 2) || (old_navbar_state == 2 && navbar_state == 0)) {
+        //if it goes from 0 to 2 or 2 to 0, do everything in succession
+        switch_right_items();
+        switch_hamburger();
+        switch_left_items();
+      }
 
     }
 
