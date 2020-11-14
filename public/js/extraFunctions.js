@@ -664,29 +664,33 @@ let initialize_resize_hamburger = function() {
   let left_width = 44.25 + $('#logout_button').outerWidth()
 
   //gets all non-tablinks-right elements and adds their width to total_width  and also left_width
-  $('.tab > *:not([class*="tablinks-right"])').outerWidth(function(i, w) {total_width += w; left_width += w;});
+  $('.tab .tablinks:not(.tablinks-right)').outerWidth(function(i, w) {total_width += w; left_width += w;});
 
   //gets all tablinks-right elements and adds their width to total_width
-  $('.tab > *[class*="tablinks-right"]').outerWidth(function(i, w) {total_width += w;})
+  $('.tab .tablinks-right').outerWidth(function(i, w) {total_width += w;})
 
   let switch_left_items = function() {
     //checks if left items are in sidenav
-    const in_sidenav = $('.tab > *:not([class*="tablinks-right"])').first().hasClass("hide")
+    const in_sidenav = $('.tab .tablinks:not(.tablinks-right)').length == 0
 
     if (in_sidenav) {
-      //hides left-items in sidenav and shows left-items in tab
-      $('#sidenav > *[class*="left-item"]').addClass("hide")
-      $('.tab > *:not([class*="tablinks-right"])').removeClass("hide")
+      //moves items from sidenav to tab
+      $('#sidenav .tablinks:not(.tablinks-right, .switch-exempt)').detach().appendTo($(".tab"));
     } else {
-      //shows left-items in sidenav and hides left-items in tab
-      $('#sidenav > *[class*="left-item"]').removeClass("hide")
-      $('.tab > *:not([class*="tablinks-right"])').addClass("hide")
+      //moves items from tab to sidenav
+      $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').detach().appendTo($("#sidenav"));
+      //puts all the tablinks-right things below the non-tablinks-right things
+      const children = $('#sidenav .tablinks-right');
+      for (i=0; i<children.length; i++) {
+        $('#sidenav').append(children[i]);
+      }
     }
   }
 
   let switch_right_items = function() {
     //checks if right-items (more specifically buttons) are hidden
-    const in_sidenav = $('.tab > button[class*="tablinks-right"]:not(#hamburger_button, #logout_button)').first().hasClass("hide")
+
+    const in_sidenav = $('.tab .gpa_custom-select').length == 0
 
     if (in_sidenav) {
       //takes gpa_custom-select out of the sidebar and puts it in the tab,
@@ -694,7 +698,7 @@ let initialize_resize_hamburger = function() {
 
       //reorders right items becuase the gpa_custom-select is now the last item in the list
       //puts it at the third position from the top
-      const children = $('.tab > *[class*="tablinks-right"]')
+      const children = $('.tab .tablinks-right')
       for (i=0; i<children.length; i++) {
         if (i <= 1) $(".tab").append(children[i]);
         if (i == 2) $(".tab").append(children[children.length-1]);
@@ -702,7 +706,7 @@ let initialize_resize_hamburger = function() {
       }
 
       //shows other tablinks-right items
-      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').removeClass("hide")
+      $('.tab .tablinks-right:not(#logout_button, #hamburger_button, .gpa_custom-select)').removeClass("hide")
 
       //also closes the sidebar
       closeSideNav();
@@ -712,7 +716,7 @@ let initialize_resize_hamburger = function() {
       $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
       //hides all the right items that need to be hidden
       //doesn't hide the gpa_custom-select because it needs to move it
-      $('.tab > *[class*="tablinks-right"]:not(#logout_button, #hamburger_button, gpa_custom-select)').addClass("hide")
+      $('.tab .tablinks-right:not(#logout_button, #hamburger_button, .gpa_custom-select)').addClass("hide")
     }
   }
 
@@ -785,25 +789,6 @@ let initialize_resize_hamburger = function() {
 
   });
 
-  //initially sets stuff
-  if ($(".tab").width() <= left_width) {
-    //shows left-items in sidenav
-    $('#sidenav > *[class*="left-item"]').removeClass("hide")
-    //hides left-items in tab
-    $('.tab > *:not([class*="tablinks-right"])').addClass("hide")
-  }
-  if ($(".tab").width() <= total_width) {
-    //moves gpa_custom-select
-    $(".gpa_custom-select").detach().appendTo($("#sidenav"));
-    //shows hamburger
-    $("#hamburger_button").removeClass("hide")
-    //hides gpa type button
-    $('.tab > button[class*="tablinks-right"]:not(#logout_button, #hamburger_button)').addClass("hide")
-    //hides tableData_custom-select
-    $('.tab > .tableData_custom-select').addClass("hide")
-  }
-
-  
 }
 
 
