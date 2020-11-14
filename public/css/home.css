@@ -145,6 +145,10 @@ h4#title {
   height: 35px;
 }
 
+.tabulator-col.icon-col {
+  text-align: center !important;
+}
+
 button {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
@@ -388,8 +392,8 @@ div.tabcontent, div.tab {
 
 i.fa.fa-plus.grades {
   color: var(--green2);
-  padding-left: 31%;
-  padding-top: 25%;
+  /* padding-left: 31%; */
+  padding-top: 8.5px;
   font-size: large;
   cursor: pointer;
 }
@@ -401,24 +405,24 @@ i.fa.fa-plus.grades {
 
 i.fa.fa-info-circle,
 i.fa.fa-toolbox {
-  padding-top: 25%;
+  padding-top: 8.5px;
   font-size: large;
   cursor: default;
-  display: inline-block;
-  width: 100%;
-  text-align: center;
 }
 
 .header-icon {
   color: var(--green2);
-  padding-top: 11%;
+  padding-top: 8.5px;
   font-size: large;
   cursor: pointer;
-  width: 100%;
-  text-align: center;
 }
 
-#classesTable .tabulator-col, #classesTable .tabulator-header, #assignmentsTable .tabulator-col, #assignmentsTable .tabulator-header{
+#classesTable .tabulator-col,
+#classesTable .tabulator-header,
+#assignmentsTable .tabulator-col,
+#assignmentsTable .tabulator-header,
+#categoriesTable .tabulator-col,
+#categoriesTable .tabulator-header {
   overflow: initial !important;
 }
 
