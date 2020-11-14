@@ -208,15 +208,8 @@ function getLetterGrade(gradeToBeLettered) {
   }
 }
 
-//consts for the first version of getColor
-// //max is the maximum color in rgb
-// const max = [74, 224, 104];
-// //min is the minimum color in rgb, if not red I suggest black
-// const min = [222, 75, 75];
-// //lowest is the grade that'll make it the min color
-// const lowest = 0.5;
 
-//consts for the second version of getColor
+//consts for getColor
 const green_rgb = [29, 219, 93]
 const blue_rgb = [102, 102, 255]
 const yellow_rgb = [255, 231, 0]
@@ -224,7 +217,7 @@ const orange_rgb = [255, 165, 0]
 const red_rgb = [255, 0, 0]
 const black_rgb = [0, 0, 0]
 
-//function for the second version of getColor
+//calculates how much color should be added
 function calculateColorAddition(max, min, grade, color_rgb) {
   let result = "#"
   const percentage = (max-grade)/(max-min)/2
@@ -240,34 +233,7 @@ function getColor(gradeToBeColored) {
     return "#1E8541";
   }
 
-  //THIS IS THE FIST OPTION: It does a gradient from green to red (or any other two colors should you wish it) for any grade
-  // //percentage is the percent of the maximum color we take away
-  // const percentage = (1-parseFloat(gradeToBeColored)/100)*(1/lowest);
-
-  // //if it's below the lowest sets it to the min value
-  // if (gradeToBeColored <= (lowest*100)) {
-  //   let result = "#";
-  //   for (i=0; i<3; i++) {
-  //     const color = Math.round(min[i]).toString(16);
-  //     result += color.length == 1 ? "0" + color : color;
-  //   }
-  //   return result;
-  // }
-
-  // let result = "#";
-  // for (i=0; i<3; i++) {
-  //   //finds the color it should be at as hex by subtracting/adding from the max whatever percentage it needs to
-  //   let color
-  //   if (max[i] > min[i]) color = Math.round(max[i] - percentage * (max[i] - min[i])).toString(16);
-  //   else color = Math.round(max[i] + percentage * (min[i] - max[i])).toString(16);
-
-  //   //adds hex value to the result
-  //   result += color.length == 1 ? "0" + color : color;
-  // }
-
-  // return result
-
-  //THIS IS THE SECOND OPTION: Goes from black to the color based off of what percentage within its range is
+  //Goes from black to the color based off of what percentage within its range is
   if (parseFloat(gradeToBeColored) >= 89.5) {
     return calculateColorAddition(100, 89.5, gradeToBeColored, green_rgb);
   } else if (parseFloat(gradeToBeColored) >= 79.5) {
