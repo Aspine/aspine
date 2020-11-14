@@ -401,18 +401,21 @@ i.fa.fa-plus.grades {
 
 i.fa.fa-info-circle,
 i.fa.fa-toolbox {
-  padding-left: 31%;
   padding-top: 25%;
   font-size: large;
   cursor: default;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
 }
 
 .header-icon {
   color: var(--green2);
-  padding-left: 38%;
   padding-top: 11%;
   font-size: large;
   cursor: pointer;
+  width: 100%;
+  text-align: center;
 }
 
 #classesTable .tabulator-col, #classesTable .tabulator-header, #assignmentsTable .tabulator-col, #assignmentsTable .tabulator-header{
@@ -429,7 +432,7 @@ i.fa.fa-toolbox {
   text-align: center;
   border-radius: 6px;
   padding: 5px 10px;
-  
+
   position: absolute;
   z-index: 1;
   top: 100%;
@@ -437,23 +440,15 @@ i.fa.fa-toolbox {
   margin-left: -60px;
 }
 
-.tooltip .tooltiptext::after {
+.tooltip:hover::after {
   content: "";
   position: absolute;
-  bottom: 100%;
+  bottom: 0%;
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;
-}
-
-.left81percent::after {
-  left: 81% !important;
-}
-
-.left79percent::after {
-  left: 79% !important;
 }
 
 .tooltip:hover .tooltiptext {

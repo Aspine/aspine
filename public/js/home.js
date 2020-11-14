@@ -325,7 +325,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Corrections",
-            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 103%;">Revisions</span></i>',
+            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"></i><span class="tooltiptext" style="left: 103%;">Revisions</span>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
                 '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
@@ -338,6 +338,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#corrections_modal_input").focus();
             },
             headerSort: false,
+            cssClass: "tooltip"
         },
         {
             title: "Stats",
@@ -547,7 +548,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext left81percent" style="left: -58%;">New Assignment</span></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext" style="left: -58%;">New Assignment</span></i>',
             headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
