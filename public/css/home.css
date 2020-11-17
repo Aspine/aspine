@@ -32,12 +32,39 @@ noscript p {
   max-width: 960px;
 }
 
+:root {
+    --green: #268A48;
+    --green1: #107031;
+    --green2: #00551D;
+    --green3: #003913;
+
+    --white: #ffffff;
+    --white1: #f7f7f7;
+    --white2: #f2f2f2;
+    --white3: #ddd;
+
+    --gray: #ccc;
+    --gray1: #888;
+    --gray2: #666666;
+    --gray3: #333;
+
+    --black: #000000;
+
+    --blue: #2196F3;
+
+    --purple: #e9a1ff;
+
+    --orange: #f6b93b;
+
+    --red: #ff0000;
+}
+
 /*---------------------------------------------*/
 a {
   font-family: Poppins-Regular;
   font-size: 14px;
   line-height: 1.7;
-  color: #33752e;
+  color: var(--green1);
   margin: 0px;
   transition: all 0.4s;
   -webkit-transition: all 0.4s;
@@ -51,7 +78,7 @@ a:focus {
 
 a:hover {
   text-decoration: none;
-  color: #57b846;
+  color: var(--green);
 }
 
 /*---------------------------------------------*/
@@ -63,7 +90,7 @@ p {
   font-family: Poppins-Regular;
   font-size: 14px;
   line-height: 1.7;
-  color: #666666;
+  color: var(--gray2);
   margin: 0px;
 }
 
@@ -74,7 +101,7 @@ ul, li {
 
 body {
   background-size: cover;
-  background-color: #f7f7f7;
+  background-color: var(--white1);
   text-align: center;
 }
 
@@ -93,7 +120,7 @@ h4#title {
   font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
   font-size: 80px;
   font-weight: normal;
-  color: #00551D;
+  color: var(--green2);
   left: 0px;
   right: 0px;
   margin-left: 125px;
@@ -131,8 +158,8 @@ button {
 
 .assignmentsButton {
   text-transform: capitalize !important;
-  color: white !important;
-  background: #ffffff;
+  color: var(--white) !important;
+  background: var(--white);
   padding: 10px 10px;
   margin: -5% 5% 0.5% 5% !important;
   /*border: 4px solid #494949 !important; */
@@ -143,9 +170,9 @@ button {
 }
 
 .assignmentsButton:hover {
-  color: #ffffff !important;
-  background: #f6b93b;
-  border-color: #f6b93b !important;
+  color: var(--white) !important;
+  background: var(--orange);
+  border-color: var(--orange) !important;
   /*transition: all 0.4s ease 0s;*/
 }
 
@@ -185,7 +212,7 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #000;
+  background-color: var(--black);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -197,17 +224,17 @@ button {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--white);
   -webkit-transition: 1s;
   transition: 1s;
 }
 
 .switch input:checked + .slider {
-  background-color: #999;
+  background-color: var(--gray1);
 }
 
 .switch input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px var(--blue);
 }
 
 .switch input:checked + .slider:before {
@@ -230,8 +257,8 @@ button {
   overflow: visible;
   /*overflow: visible;*/
   display: inline-block;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  border: 1px solid var(--gray);
+  background-color: var(--white2);
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -252,19 +279,19 @@ button {
 */
 
 .tab .GPA {
-  color: black !important;
+  color: var(--black) !important;
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
 }
 
 .inaccessible {
-  color: #666 !important;
-  background-color: #ccc;
+  color: var(--gray2) !important;
+  background-color: var(--gray);
 }
 
 .inaccessible:hover {
-  background-color: #ccc !important;
+  background-color: var(--gray) !important;
 }
 
 .tab .tablinks-right {
@@ -273,12 +300,12 @@ button {
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: var(--white3);
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+  background-color: var(--gray);
 }
 
 /* Style the tab content */
@@ -286,7 +313,7 @@ button {
   background: rgba(255, 255, 255, 0.3);
   display: none;
   padding: 6px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--gray);
   border-top: none;
 }
 
@@ -300,14 +327,14 @@ button {
   to {opacity: 1;}
 }
 #recent_title {
-  color: white;
+  color: var(--white);
   display: inline;
   position: relative;
   font-size: 20px;
   letter-spacing: 0.1em;
 }
 #schedule_title {
-  color: white;
+  color: var(--white);
   display: inline;
   position: relative;
   font-size: 20px;
@@ -342,11 +369,11 @@ div.tabcontent, div.tab {
 }
 
 .tablinks {
-  color: black;
+  color: var(--black);
 }
 
 i.fa.fa-plus.grades {
-  color: #00551C;
+  color: var(--green2);
   padding-left: 31%;
   padding-top: 25%;
   font-size: large;
@@ -355,7 +382,7 @@ i.fa.fa-plus.grades {
 
 i.fa.fa-info-circle,
 i.fa.fa-toolbox {
-  color: #00551C;
+  color: var(--green2);
   padding-left: 31%;
   padding-top: 25%;
   font-size: large;
@@ -363,7 +390,7 @@ i.fa.fa-toolbox {
 }
 
 .header-icon {
-  color: #00551C;
+  color: var(--green2);
   padding-left: 38%;
   padding-top: 11%;
   font-size: large;
@@ -387,8 +414,8 @@ canvas#large_clock {
 }
 
 .loader {
-  border: 16px solid white; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 16px solid var(--white); /* Light grey */
+  border-top: 16px solid var(--blue); /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -413,17 +440,16 @@ canvas#large_clock {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgba(0, 0, 0, 0.4); /* Fallback color: black with opacity */
 }
 
 /* Modal Content */
 .modal-content {
   position: relative;
-  background-color: #fefefe;
+  background-color: var(--white);
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--gray1);
   width: 80%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
   -webkit-animation-name: animatetop;
@@ -446,7 +472,7 @@ canvas#large_clock {
 /* The Close Button */
 
 .close {
-  color: black;
+  color: var(--black);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -454,15 +480,15 @@ canvas#large_clock {
 
 .close:hover,
 .close:focus {
-  color: #000;
+  color: var(--black);
   text-decoration: none;
   cursor: pointer;
 }
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #00551D;
-  color: white;
+  background-color: var(--green2);
+  color: var(--white);
 }
 
 .modal-body {
@@ -482,7 +508,7 @@ canvas#large_clock {
   display: block;
   position: relative;
   top: 7px;
-  color: #0d0d0d;
+  color: var(--black);
   width: 400px;
   margin: auto;
 }
@@ -494,9 +520,9 @@ canvas#large_clock {
 }
 
 .stats_modal_heading {
-  color: black;
+  color: var(--black);
   position: relative;
-  border-bottom: 1px solid #00551D;
+  border-bottom: 1px solid var(--green2);
   text-align: left;
 }
 
@@ -517,7 +543,7 @@ canvas#large_clock {
 
 #stats_modal_table td,
 #stats_modal_table th {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--white3);
   text-align: left;
   padding: 8px;
 }
@@ -556,15 +582,15 @@ canvas#large_clock {
 }
 
 .hastooltip {
-  border-bottom: 1px dotted black;
+  border-bottom: 1px dotted var(--black);
 }
 
 .hastooltip::before {
   display: block;
   content: attr(aria-label);
   width: 15rem;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--black);
+  color: var(--white);
   font-size: 0.8rem;
   border-radius: 5px;
   padding: 1em;
@@ -600,7 +626,7 @@ p#large_clock_period {
   width: 225px;
   height: 34px;
   border-radius: 17px;
-  background: #000000;
+  background: var(--black);
   outline: none;
   opacity: 0.7;
   -webkit-transition: .2s;
@@ -618,7 +644,7 @@ p#large_clock_period {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: white;
+  background: var(--white);
   cursor: pointer;
   /*margin: 0px 10px 0px 10px;*/
 }
@@ -627,18 +653,18 @@ p#large_clock_period {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: #4CAF50;
+  background: var(--green);
   cursor: pointer;
   margin: 0px 10px 0px 10px;
 }
 
 #lunch_label {
-  color: white;
+  color: var(--white);
   text-shadow:
-  -1px -1px 5px #000,
-  1px -1px 5px #000,
-  -1px 1px 5px #000,
-  1px 1px 5px #000;
+  -1px -1px 5px var(--black),
+  1px -1px 5px var(--black),
+  -1px 1px 5px var(--black),
+  1px 1px 5px var(--black);
   position: relative;
   font-size: 25px;
   top: -44px;
@@ -659,119 +685,9 @@ p#large_clock_period {
   cursor: pointer;
 }
 
-#calendar {
-  width: 95%;
-  margin: auto;
-}
-
-#calendar-list-container {
-  margin: auto;
-  max-width: 80%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 13px;
-}
-ul.ks-cboxtags {
-  list-style: none;
-  padding: 20px;
-}
-ul.ks-cboxtags li{
-  display: inline;
-}
-ul.ks-cboxtags li label{
-  display: inline-block;
-  background-color: rgba(255, 255, 255, .9);
-  border: 2px solid rgba(139, 139, 139, .3);
-  color: #adadad;
-  border-radius: 25px;
-  white-space: nowrap;
-  margin: 3px 0px;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: all .2s;
-}
-
-ul.ks-cboxtags li label {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-ul.ks-cboxtags li label::before {
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  font-size: 12px;
-  padding: 2px 6px 2px 2px;
-  content: "❌";
-  transition: transform .3s ease-in-out;
-}
-
-ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
-  content: "✔";
-  transform: rotate(-360deg);
-  transition: transform .3s ease-in-out;
-}
-
-ul.ks-cboxtags li input[type="checkbox"]:checked + label {
-  border: 2px solid #1bdbf8;
-  background-color: #12bbd4;
-  color: #fff;
-  transition: all .2s;
-}
-
-ul.ks-cboxtags li input[type="checkbox"] {
-  display: absolute;
-}
-ul.ks-cboxtags li input[type="checkbox"] {
-  position: absolute;
-  opacity: 0;
-}
-ul.ks-cboxtags li input[type="checkbox"]:focus + label {
-  border: 2px solid #e9a1ff;
-}
-
-i#calendar-edit-toggle, i#calendar-add-toggle {
-  padding: 10px 15px 10px 0px;
-  float: left;
-  cursor: pointer;
-  color: black;
-}
-
-#add-calendar input {
-  border: 2px #00551D solid;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 3px;
-  width: 300px;
-}
-
-input#calendar-add-submit {
-  background: #268A48;
-  padding: 5px 20px;
-  margin: 3px;
-  cursor: pointer;
-}
-
-input#calendar-add-submit:hover {
-  background: #107031;
-}
-
-p#add-calendar-error {
-  color: red;
-}
-
-
-
 /* Add a black background color to the top navigation */
 .pdf_topnav {
-  background-color: #333;
+  background-color: var(--gray3);
   overflow: visible;
   height: 41px;
 }
@@ -779,7 +695,7 @@ p#add-calendar-error {
 /* Style the links inside the navigation bar */
 .pdf_topnav span.right {
   float: right;
-  color: #f2f2f2;
+  color: var(--white2);
   text-align: center;
   padding: 10px 16px;
   text-decoration: none;
@@ -788,8 +704,8 @@ p#add-calendar-error {
 
 /* Change the color of links on hover */
 .pdf_topnav span.right.hover:hover {
-  background-color: #555;
-  color: #f2f2f2;
+  background-color: var(--gray2);
+  color: var(--white2);
 }
 
 
@@ -807,8 +723,7 @@ p#add-calendar-error {
 }
 
 .pdf_select-selected {
-  background-color: #248A48;
-
+  background-color: var(--green);
 }
 
 /* Style the arrow inside the select element: */
@@ -820,18 +735,18 @@ p#add-calendar-error {
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
+  border-color: var(--white) transparent transparent transparent;
 }
 
 /* Point the arrow upwards when the select box is open (active): */
 .pdf_select-selected.pdf_select-arrow-active:after {
-  border-color: transparent transparent #fff transparent;
+  border-color: transparent transparent var(--white) transparent;
   top: 10px;
 }
 
 /* style the items (options), including the selected item: */
 .pdf_select-items div,.pdf_select-selected {
-  color: white;
+  color: var(--white);
   padding: 10px 16px;
   border: 1px solid transparent;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
@@ -841,7 +756,7 @@ p#add-calendar-error {
 /* Style items (options): */
 .pdf_select-items {
   position: absolute;
-  background-color: #248A48;
+  background-color: var(--green);
   top: 100%;
   left: 0;
   right: 0;
@@ -854,11 +769,12 @@ p#add-calendar-error {
 }
 
 .pdf_select-items div:hover, .pdf_same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--black);
+  opacity: 0.1;
 }
 
 #pdf-container {
-  background: #333;
+  background: var(--gray3);
   border: solid 3px;
   width: 100%;
   height: 60%;
@@ -869,7 +785,7 @@ p#add-calendar-error {
 
 #pdf-canvas {
   margin: auto;
-  border: 1px solid black;
+  border: 1px solid var(--black);
 }
 
 .pointer {
@@ -891,13 +807,13 @@ p#add-calendar-error {
   border-color: transparent;
 }
 .select-selected:hover {
-  background-color: #ddd;
+  background-color: var(--white3);
 }
 
 
 /* Style the arrow inside the select element: */
 .select-selected:after {
-  color: black;
+  color: var(--black);
   position: absolute;
   content: "";
   top: 19px;
@@ -905,19 +821,19 @@ p#add-calendar-error {
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-color: #000 transparent transparent transparent;
+  border-color: var(--black) transparent transparent transparent;
 }
 
 /* Point the arrow upwards when the select box is open (active): */
 .select-selected.select-arrow-active:after {
-  border-color: transparent transparent #000 transparent;
+  border-color: transparent transparent var(--black) transparent;
   top: 12px;
 }
 
 /* style the items (options), including the selected item: */
 .select-items div,.select-selected {
   /*color: #ffffff;*/
-  color: black;
+  color: var(--black);
   font-weight: bold;
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
@@ -929,7 +845,7 @@ p#add-calendar-error {
 /* Style items (options): */
 .select-items {
   position: absolute;
-  background-color: #f2f2f2;
+  background-color: var(--white2);
   top: 100%;
   left: 0;
   right: 0;
@@ -940,7 +856,7 @@ p#add-calendar-error {
   /*border: 1px transparent solid;*/
   border-width: 0px 1px 1px 1px !important;
   border-style: solid;
-  border-color: #248A48;
+  border-color: var(--green);
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
@@ -948,7 +864,7 @@ p#add-calendar-error {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   border-style: solid;
-  border-color: #248A48 !important;
+  border-color: var(--green) !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
@@ -958,5 +874,5 @@ p#add-calendar-error {
 }
 
 .select-items div:hover, .same-as-selected {
-  background-color: #f9f9f9;
+  background-color: var(--white1);
 }
