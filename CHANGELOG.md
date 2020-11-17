@@ -6,9 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.5.0] - tagged 2020-11-17
+- Update "Recent Activity" (now renamed "Attendance") in light of changes due to
+  covid-19 ([#166], [#144], [#159])
+- Add support for covid-19 schedule and fix time zone handling in clock
+  ([#145], [#84])
+- Make "Add assignment" button add to the currently selected category ([#162])
+- Stop offering to show nonexistent statistics for assignments added by the user
+  that are not actually in Aspen ([#149])
+- Add download button to Reports tab ([#147], [#143])
+- Use requestAnimationFrame for clock instead of setInterval ([#151], [#135])
+- Add JSDoc comments ([#128], works toward [#153])
+- Change "Example app listening on port ${port}!" to "Aspine listening on port
+  ${port}!"
+- Fix clock alignment
+- Update dependencies
 
-## [2.4.3] - tagged 2020-10-13, production TBD
+## [2.4.3] - tagged 2020-10-13
 - Added client-side "remember me" feature ([#141], [#112])
 
 ## [2.4.2] - tagged 2020-09-30
@@ -97,18 +111,26 @@ and this project adheres to
 [2.4.0]: https://github.com/Aspine/aspine/releases/tag/v2.4.0
 [2.4.1]: https://github.com/Aspine/aspine/releases/tag/v2.4.1
 [2.4.2]: https://github.com/Aspine/aspine/releases/tag/v2.4.2
+[2.4.3]: https://github.com/Aspine/aspine/releases/tag/v2.4.3
+[2.5.0]: https://github.com/Aspine/aspine/releases/tag/v2.5.0
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
 [#72]: https://github.com/Aspine/aspine/issues/72
 [#74]: https://github.com/Aspine/aspine/issues/74
 [#83]: https://github.com/Aspine/aspine/issues/83
+[#84]: https://github.com/Aspine/aspine/issues/84
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
 [#96]: https://github.com/Aspine/aspine/issues/96
 [#112]: https://github.com/Aspine/aspine/issues/112
 [#122]: https://github.com/Aspine/aspine/issues/122
 [#131]: https://github.com/Aspine/aspine/issues/131
+[#135]: https://github.com/Aspine/aspine/issues/135
+[#143]: https://github.com/Aspine/aspine/issues/143
+[#144]: https://github.com/Aspine/aspine/issues/144
+[#153]: https://github.com/Aspine/aspine/issues/153
+[#159]: https://github.com/Aspine/aspine/issues/159
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -123,5 +145,12 @@ and this project adheres to
 [#125]: https://github.com/Aspine/aspine/pull/125
 [#126]: https://github.com/Aspine/aspine/pull/126
 [#127]: https://github.com/Aspine/aspine/pull/127
+[#128]: https://github.com/Aspine/aspine/pull/128
 [#139]: https://github.com/Aspine/aspine/pull/139
 [#141]: https://github.com/Aspine/aspine/pull/141
+[#145]: https://github.com/Aspine/aspine/pull/145
+[#147]: https://github.com/Aspine/aspine/pull/147
+[#149]: https://github.com/Aspine/aspine/pull/149
+[#151]: https://github.com/Aspine/aspine/pull/151
+[#162]: https://github.com/Aspine/aspine/pull/162
+[#166]: https://github.com/Aspine/aspine/pull/166
