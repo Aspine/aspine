@@ -135,12 +135,12 @@ h4#title {
   font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1.25em;
-  color: #00551D;
+  color: var(--green2);
 }
 
 .info-text {
   font-size: 1em;
-  color: #000000;
+  color: var(--black);
   margin-bottom: 1.5em;
 }
 
