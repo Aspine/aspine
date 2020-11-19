@@ -234,14 +234,14 @@ iframe {
 /*------------------------------------------------------------------
 [  ]*/
 #login100-form {
-  width: 290px;
+  width: 320px;
   margin: auto 0 auto 0;
   height: fit-content;
 }
 
 #login100-form-title {
   font-family: Poppins-Bold;
-  font-size: 24px;
+  font-size: 35px;
   color: var(--gray3);
   line-height: 1.2;
   text-align: center;
@@ -258,6 +258,7 @@ iframe {
   width: 100%;
   z-index: 1;
   margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 .input100 {
@@ -352,6 +353,7 @@ iframe {
   flex-wrap: wrap;
   justify-content: center;
   padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 #login100-form-btn {
