@@ -1062,9 +1062,15 @@ function openTab(evt, tab_name) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
+    // Show the current tab contents, and add an "active" class to the button
+    // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
-    evt.currentTarget.className += " active";
+    const tab_button = document.querySelector(
+        `.tablinks[onclick="openTab(event, '${tab_name}')"]`
+    );
+    if (tab_button) {
+        tab_button.classList.add("active");
+    }
 
     if (tab_name === "clock") {
         document.getElementById("small_clock").style.display = "none";
