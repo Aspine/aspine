@@ -353,7 +353,7 @@ async function scrape_overview(username, password) {
     let session = await scrape_login();
     let page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page.fail) {
-        resolve({"login_fail": true});
+        return {"login_fail": true};
     }
     let info = await get_home(session.session_id);
 
