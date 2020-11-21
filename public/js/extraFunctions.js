@@ -222,7 +222,7 @@ function calculateColorAddition(max, min, grade, color_rgb) {
   let result = "#"
   const percentage = (max-grade)/(max-min)/2
   for (const channel of color_rgb) {
-    const color = Math.round(color_rgb[i]-percentage*color_rgb[i]).toString(16)
+    const color = Math.round(channel-percentage*channel).toString(16);
     result += color.length == 1 ? "0" + color : color
   }
   return result
