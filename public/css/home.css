@@ -380,9 +380,13 @@ i.fa.fa-plus.grades {
   cursor: pointer;
 }
 
+.bar-graph-icon {
+  padding-left: 28%;
+  padding-top: 25%;
+}
+
 i.fa.fa-info-circle,
 i.fa.fa-toolbox {
-  color: var(--green2);
   padding-left: 31%;
   padding-top: 25%;
   font-size: large;
