@@ -380,11 +380,12 @@ i.fa.fa-plus.grades {
   cursor: pointer;
 }
 
-.inverse {
+.bar-graph-icon {
   padding-left: 28%;
   padding-top: 25%;
 }
 
+i.fa.fa-info-circle,
 i.fa.fa-toolbox {
   padding-left: 31%;
   padding-top: 25%;

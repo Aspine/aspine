@@ -341,13 +341,13 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: () => '<img class="inverse" src="../images/Inverse_Bar_Graph.svg" width=28>',
+            titleFormatter: () => '<img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28">',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
                     .assignments[cell.getRow().getPosition()].synthetic
-            ) ? "" : '<img class="bar-graph" src="../images/Bar_Graph.svg" width=17>',
+            ) ? "" : '<i class="fa fa-info" aria-hidden="true"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
