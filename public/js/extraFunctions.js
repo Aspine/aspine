@@ -210,22 +210,22 @@ function getLetterGrade(gradeToBeLettered) {
 
 
 //consts for getColor
-const green_rgb = [29, 219, 93]
-const blue_rgb = [102, 102, 255]
-const yellow_rgb = [255, 231, 0]
-const orange_rgb = [255, 165, 0]
-const red_rgb = [255, 0, 0]
-const black_rgb = [0, 0, 0]
+const green_rgb = [29, 219, 93];
+const blue_rgb = [102, 102, 255];
+const yellow_rgb = [255, 231, 0];
+const orange_rgb = [255, 165, 0];
+const red_rgb = [255, 0, 0];
+const black_rgb = [0, 0, 0];
 
 //calculates how much color should be added
 function calculateColorAddition(max, min, grade, color_rgb) {
-  let result = "#"
-  const percentage = (max-grade)/(max-min)/2
+  let result = "#";
+  const percentage = (max-grade)/(max-min)/2;
   for (const channel of color_rgb) {
     const color = Math.round(channel-percentage*channel).toString(16);
-    result += color.length == 1 ? "0" + color : color
+    result += color.length == 1 ? "0" + color : color;
   }
-  return result
+  return result;
 }
 
 function getColor(gradeToBeColored) {
