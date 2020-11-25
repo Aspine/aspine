@@ -664,10 +664,10 @@ let initialize_resize_hamburger = function() {
   let left_width = 44.25 + $('#logout_button').outerWidth()
 
   //gets all non-tablinks-right elements and adds their width to total_width  and also left_width
-  $('.tab .tablinks:not(.tablinks-right)').outerWidth(function(i, w) {total_width += w; left_width += w;});
+  $('.tab .tablinks:not(.tablinks-right)').outerWidth(function(_i, w) {total_width += w; left_width += w;});
 
   //gets all tablinks-right elements and adds their width to total_width
-  $('.tab .tablinks-right').outerWidth(function(i, w) {total_width += w;})
+  $('.tab .tablinks-right').outerWidth(function(_i, w) {total_width += w;})
 
   let switch_left_items = function() {
     //checks if left items are in sidenav
@@ -700,9 +700,19 @@ let initialize_resize_hamburger = function() {
       //puts it at the third position from the top
       const children = $('.tab .tablinks-right')
       for (i=0; i<children.length; i++) {
-        if (i <= 1) $(".tab").append(children[i]);
-        if (i == 2) $(".tab").append(children[children.length-1]);
-        else $(".tab").append(children[i-1]);
+
+        var current_child;
+
+        if (i <= 1) {
+          current_child = children[i];
+        } else if (i == 2) {
+          current_child = children[children.length - 1];
+        } else {
+          current_child = children[i - 1]
+        }
+
+        $(".tab").append(current_child);
+
       }
 
       //shows other tablinks-right items
@@ -725,8 +735,11 @@ let initialize_resize_hamburger = function() {
     const is_hidden = $('#hamburger_button').hasClass("hide")
     
     //hides or unhides the hamburger
-    if (is_hidden) $('#hamburger_button').removeClass("hide")
-    else $('#hamburger_button').addClass("hide")
+    if (is_hidden) {
+      $('#hamburger_button').removeClass("hide")
+    } else {
+      $('#hamburger_button').addClass("hide")
+    }
   }
 
   //navbar_state has 3 states
@@ -736,9 +749,13 @@ let initialize_resize_hamburger = function() {
   //old_navbar_state is used to compare the newer navbar_state to the current navbar_state
   let navbar_state, old_navbar_state;
   let update_navbar_state = function() {
-    if ($(".tab").width() <= left_width) navbar_state = 2;
-    else if ($(".tab").width() <= total_width) navbar_state = 1;
-    else navbar_state = 0;
+    if ($(".tab").width() <= left_width) {
+      navbar_state = 2;
+    } else if ($(".tab").width() <= total_width) {
+      navbar_state = 1;
+    } else {
+      navbar_state = 0;
+    }
   }
 
   //initially instantiates nav_bar_state and old_nav_bar_state
@@ -746,16 +763,13 @@ let initialize_resize_hamburger = function() {
   old_navbar_state = navbar_state;
 
   //initially switches whatever is necessary, only if navbar_state is 1 or 2 because 0 is default
-  switch(navbar_state) {
-    case 1:
-      switch_right_items();
-      switch_hamburger();
-      break;
-    case 2:
-      switch_right_items();
-      switch_left_items();
-      switch_hamburger();
-      break;
+  if (navbar_state === 1) {
+    switch_right_items();
+    switch_hamburger();
+  } else if (navbar_state === 2) {
+    switch_right_items();
+    switch_left_items();
+    switch_hamburger();
   }
 
   /* ADDS THE EVENT LISTENER */
@@ -766,16 +780,16 @@ let initialize_resize_hamburger = function() {
 
     //if they're different, updates the tab and sidenav
     if (old_navbar_state != navbar_state) {
-      if ((old_navbar_state == 0 && navbar_state == 1) || (old_navbar_state == 1 && navbar_state == 0)) {
+      if ((old_navbar_state === 0 && navbar_state === 1) || (old_navbar_state === 1 && navbar_state === 0)) {
         //when moving to and from 0 and 1, needs to switch both right items and hamburgers
         switch_right_items();
         switch_hamburger();
       }
-      else if ((old_navbar_state == 1 && navbar_state == 2) || (old_navbar_state == 2 && navbar_state == 1)) {
+      else if ((old_navbar_state === 1 && navbar_state === 2) || (old_navbar_state === 2 && navbar_state === 1)) {
         //when moving between 1 and 2, needs to switch left items
         switch_left_items();
       }
-      else if ((old_navbar_state == 0 && navbar_state == 2) || (old_navbar_state == 2 && navbar_state == 0)) {
+      else if ((old_navbar_state === 0 && navbar_state === 2) || (old_navbar_state === 2 && navbar_state === 0)) {
         //if it goes from 0 to 2 or 2 to 0, do everything in succession
         switch_right_items();
         switch_hamburger();
