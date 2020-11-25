@@ -125,6 +125,7 @@ h4#title {
   right: 0px;
   margin-left: 125px;
   margin-right: 125px;
+  cursor: pointer;
 }
 
 .tabulator-col {
@@ -622,6 +623,11 @@ p#small_clock_period {
   top: 110px;
   left: 1%;
 }
+
+canvas#small_clock {
+  cursor: pointer;
+}
+
 p#large_clock_period {
   font-size: 50px;
 }
