@@ -669,7 +669,7 @@ let initialize_resize_hamburger = function() {
   //gets all tablinks-right elements and adds their width to total_width
   $('.tab .tablinks-right').outerWidth(function(_i, w) {total_width += w;})
 
-  let switch_left_items = function() {
+  const switch_left_items = function() {
     //checks if left items are in sidenav
     const in_sidenav = $('.tab .tablinks:not(.tablinks-right)').length == 0
 
@@ -687,7 +687,7 @@ let initialize_resize_hamburger = function() {
     }
   }
 
-  let switch_right_items = function() {
+  const switch_right_items = function() {
     //checks if right-items (more specifically buttons) are hidden
 
     const in_sidenav = $('.tab .gpa_custom-select').length == 0
@@ -701,7 +701,7 @@ let initialize_resize_hamburger = function() {
       const children = $('.tab .tablinks-right')
       for (i=0; i<children.length; i++) {
 
-        var current_child;
+        let current_child;
 
         if (i <= 1) {
           current_child = children[i];
@@ -730,7 +730,7 @@ let initialize_resize_hamburger = function() {
     }
   }
 
-  let switch_hamburger = function() {
+  const switch_hamburger = function() {
     //if hamburger is hidden
     const is_hidden = $('#hamburger_button').hasClass("hide")
     
@@ -748,7 +748,7 @@ let initialize_resize_hamburger = function() {
   //2 -> bar can only fit logout and hamburger
   //old_navbar_state is used to compare the newer navbar_state to the current navbar_state
   let navbar_state, old_navbar_state;
-  let update_navbar_state = function() {
+  const update_navbar_state = function() {
     if ($(".tab").width() <= left_width) {
       navbar_state = 2;
     } else if ($(".tab").width() <= total_width) {
