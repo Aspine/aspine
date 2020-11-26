@@ -6,6 +6,11 @@ type Session = {
   apache_token: string,
 };
 
+type PDFFile = {
+  title: string,
+  content: string,
+};
+
 async function scrape_student(
   username: string, password: string, quarter: 0 | 1 | 2 | 3 | 4
 ) {
@@ -13,21 +18,50 @@ async function scrape_student(
   if (!(await submit_login(username, password, session))) {
     return { "login_fail": true };
   }
-  await scrape_pdf_files(session);
 }
 
-async function scrape_pdf_files({ session_id, apache_token }: Session) {
-  const files = await (await fetch("https://aspen.cpsd.us/aspen/rest/reports", {
+/**
+ * Returns an array containing all PDF files
+ */
+async function scrape_pdf_files(session: Session): Promise<PDFFile[]> {
+  const pdf_files = await list_pdf_files(session);
+  return await Promise.all(pdf_files.map(async ({ id, filename }) => ({
+    title: filename,
+    content: await download_pdf(session, id),
+  })));
+}
+
+/**
+ * Get a list of published reports (PDF files)
+ */
+async function list_pdf_files(
+  { session_id, apache_token }: Session
+): Promise<{ id: string, filename: string, contentTypeId: string }[]> {
+  return await (await fetch("https://aspen.cpsd.us/aspen/rest/reports", {
     headers: {
       "Cookie": `JSESSIONID=${session_id}`,
     },
   })).json();
-  for (const { id, filename } of files) {
-    console.log(filename);
-    // TODO download the file
-  }
 }
 
+/**
+ * Download a PDF file by ID (from list_pdf_files)
+ */
+async function download_pdf(
+  { session_id, apache_token }: Session, id: string
+): Promise<string> {
+  return await (await fetch(
+    `https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).text();
+}
+
+/**
+ * Scrape the Aspen login page and return a session ID and Apache token
+ */
 async function scrape_login(): Promise<Session> {
   const page = await (await fetch(
     "https://aspen.cpsd.us/aspen/logon.do"
@@ -38,6 +72,10 @@ async function scrape_login(): Promise<Session> {
   return { session_id, apache_token };
 }
 
+/**
+ * Log in to Aspen under a given session using a given username and password.
+ * The return value indicates the success of the login.
+ */
 async function submit_login(
   username: string, password: string, { session_id, apache_token }: Session
 ): Promise<boolean> {
@@ -65,4 +103,5 @@ if (require.main === module) {
 
 module.exports = {
   scrape_student,
+  scrape_pdf_files,
 };
