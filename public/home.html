@@ -76,10 +76,10 @@
   <!-- SIDENAV STUFF -->
   <div id="sidenav" class="sidenav">
     <!-- switch-exempt makes the switch out of navbar pass over this -->
-    <button onclick="closeSideNav()" class="tablinks switch-exempt">
-      <i class="fa fa-times" style="position: absolute; top: 20px; left: 20px;"></i>
-      Close
+    <button onclick="closeSideNav()" class="tablinks switch-exempt" style="margin: 0px;width: 270px; height: 44px; color: #eee">
+      <i class="fa fa-times fa-2x" style="position: absolute; top: 18px; left: 18px; font-size: 1.5em; color: #000""></i>
     </button>
+    <hr/>
     <div class="GPA tableData_custom-select custom-select tablinks-right", id="navbar_tableData_div" style="width: 270px;">
       <select id="tableData_select">
         <option value="0">Current Year</option>
@@ -92,16 +92,16 @@
   </div>
 
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'grades')" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'schedule')">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'recent')">Attendance</button>
+    <button class="tablinks hide switch-exempt" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
+    <button class="tablinks" onclick="openTab(event, 'grades'); closeSideNav()" id="default_open">Grades</button>
+    <button class="tablinks" onclick="openTab(event, 'schedule'); closeSideNav()">Schedule</button>
+    <button class="tablinks" onclick="openTab(event, 'recent'); closeSideNav()">Attendance</button>
     <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
     <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab(event, 'reports')" id="reports_open">Reports</button>
-    <button class="tablinks" onclick="openTab(event, 'information')" id="information_open">Info</button>
+    <button class="tablinks" onclick="openTab(event, 'reports'); closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks" onclick="openTab(event, 'information'); closeSideNav()" id="information_open">Info</button>
 <!--#ifndef lite-->
-    <button class="tablinks tablinks-right hide" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
     <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
 <!--#endif-->
     <div class="GPA gpa_custom-select custom-select tablinks-right" style="width: 270px">

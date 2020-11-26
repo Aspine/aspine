@@ -671,7 +671,7 @@ let initialize_resize_hamburger = function() {
 
   const switch_left_items = function() {
     //checks if left items are in sidenav
-    const in_sidenav = $('.tab .tablinks:not(.tablinks-right)').length == 0
+    const in_sidenav = $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').length == 0
 
     if (in_sidenav) {
       //moves items from sidenav to tab
@@ -703,9 +703,9 @@ let initialize_resize_hamburger = function() {
 
         let current_child;
 
-        if (i <= 1) {
+        if (i <= 0) {
           current_child = children[i];
-        } else if (i == 2) {
+        } else if (i === 1) {
           current_child = children[children.length - 1];
         } else {
           current_child = children[i - 1]

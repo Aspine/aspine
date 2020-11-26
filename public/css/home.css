@@ -51,6 +51,8 @@ body {
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #666666;
 
+  --lightgray: #d8d8d8;
+
   --transparent-gray: rgba(255, 255, 255, 0.3);
 
   --black: #000000;
@@ -1063,6 +1065,15 @@ p#large_clock_period {
   background-color: var(--white1);
 }
 
+.sidenav hr {
+  height: 4px;
+  width: 270px;
+  background-color: var(--lightgray);
+  clear: both;
+  margin: 5px 0px;
+  border: 0px;
+}
+
 /*thanks w3schools lol*/
 .sidenav {
   height: 100%;
@@ -1105,6 +1116,10 @@ p#large_clock_period {
 .sidenav .GPA {
   clear: both;
   height: 44px;
+}
+
+.sidenav .tableData_custom-select {
+  margin-top: 5px
 }
 
 .sidenav .select-selected {
