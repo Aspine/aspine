@@ -1,9 +1,5 @@
-import fetch, { RequestInit } from "node-fetch";
+import fetch from "node-fetch";
 import { URLSearchParams } from "url";
-
-const HEADERS = {
-  "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
-};
 
 type Session = {
   session_id: string,
@@ -23,7 +19,6 @@ async function scrape_student(
 async function scrape_pdf_files({ session_id, apache_token }: Session) {
   const files = await (await fetch("https://aspen.cpsd.us/aspen/rest/reports", {
     headers: {
-      "User-Agent": HEADERS["User-Agent"],
       "Cookie": `JSESSIONID=${session_id}`,
     },
   })).json();
@@ -34,11 +29,9 @@ async function scrape_pdf_files({ session_id, apache_token }: Session) {
 }
 
 async function scrape_login(): Promise<Session> {
-  const page = await (await fetch("https://aspen.cpsd.us/aspen/logon.do", {
-    headers: {
-      "User-Agent": HEADERS["User-Agent"],
-    },
-  })).text();
+  const page = await (await fetch(
+    "https://aspen.cpsd.us/aspen/logon.do"
+  )).text();
   const [, session_id, ] = /sessionId='(.+)';/.exec(page) || [];
   const [, apache_token, ] =
     /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(page) || [];
@@ -50,7 +43,6 @@ async function submit_login(
 ): Promise<boolean> {
   const page = await (await fetch("https://aspen.cpsd.us/aspen/logon.do", {
     headers: {
-      "User-Agent": HEADERS["User-Agent"],
       "Cookie": `JSESSIONID=${session_id}`,
     },
     method: "POST",
