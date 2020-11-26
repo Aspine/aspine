@@ -680,53 +680,38 @@ let initialize_resize_hamburger = function() {
       //moves items from tab to sidenav
       $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').detach().appendTo($("#sidenav"));
       //puts all the tablinks-right things below the non-tablinks-right things
-      const children = $('#sidenav .tablinks-right');
-      for (i=0; i<children.length; i++) {
-        $('#sidenav').append(children[i]);
+      for (const child of $('#sidenav .tablinks-right')) {
+        $('#sidenav').append(child);
       }
     }
   }
 
+  //REASON IT ADDS ITEMS IN REVERSE:
+  //otherwise the items would basically go from right to left (in tab) 
+  //to down to up, when I'd like it to be up to down.
   const switch_right_items = function() {
     //checks if right-items (more specifically buttons) are hidden
 
     const in_sidenav = $('.tab .gpa_custom-select').length == 0
 
     if (in_sidenav) {
-      //takes gpa_custom-select out of the sidebar and puts it in the tab,
-      $(".gpa_custom-select").detach().appendTo($(".tab"));
 
-      //reorders right items becuase the gpa_custom-select is now the last item in the list
-      //puts it at the third position from the top
-      const children = $('.tab .tablinks-right')
+      //adds right items to tab in reverse
+      const children = $('#sidenav .tablinks-right:not(#logout_button)')
       for (i=0; i<children.length; i++) {
-
-        let current_child;
-
-        if (i <= 0) {
-          current_child = children[i];
-        } else if (i === 1) {
-          current_child = children[children.length - 1];
-        } else {
-          current_child = children[i - 1]
-        }
-
-        $(".tab").append(current_child);
-
+        $(".tab").append(children[children.length-1-i])
       }
-
-      //shows other tablinks-right items
-      $('.tab .tablinks-right:not(#logout_button, #hamburger_button, .gpa_custom-select)').removeClass("hide")
 
       //also closes the sidebar
       closeSideNav();
     }
     else {
-      //takes gpa_custom-select out of the tab and puts it in the sidenav
-      $(".gpa_custom-select").detach().appendTo($("#gpa_sidenav_container"));
-      //hides all the right items that need to be hidden
-      //doesn't hide the gpa_custom-select because it needs to move it
-      $('.tab .tablinks-right:not(#logout_button, #hamburger_button, .gpa_custom-select)').addClass("hide")
+
+      //adds right items to sidenav in reverse
+      const children = $('.tab .tablinks-right:not(#logout_button)')
+      for (i=0; i<children.length; i++) {
+        $("#sidenav").append(children[children.length-1-i])
+      }
     }
   }
 
