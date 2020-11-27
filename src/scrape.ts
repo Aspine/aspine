@@ -1,34 +1,9 @@
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 
-type Session = {
-  session_id: string,
-  apache_token: string,
-};
-
-type PDFFileInfo = {
-  id: string,
-  filename: string,
-};
-
-type PDFFile = {
-  title: string,
-  content: string,
-};
-
-type ClassInfo = {
-  name: string,
-  grade: string,
-  oid: string,
-};
-
-const enum Quarter {
-  Current = 0,
-  Q1,
-  Q2,
-  Q3,
-  Q4,
-}
+import type { Session, PDFFileInfo, PDFFile, ClassInfo } from "./types";
+// Using `import type` with an enum disallows accessing the enum variants
+import { Quarter } from "./types";
 
 async function scrape_student(
   username: string, password: string, quarter: Quarter
