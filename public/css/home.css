@@ -48,7 +48,10 @@ noscript p {
     --gray2: #666666;
     --gray3: #333;
 
+    --transparent-gray: rgba(255, 255, 255, 0.3);
+
     --black: #000000;
+    --transparent-black: rgba(0, 0, 0, 0.6);
 
     --blue: #2196F3;
 
@@ -311,7 +314,7 @@ button {
 
 /* Style the tab content */
 .tabcontent {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--transparent-gray);
   display: none;
   padding: 6px 12px;
   border: 1px solid var(--gray);
