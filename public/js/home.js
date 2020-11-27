@@ -343,7 +343,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: () => '<span class="tooltip"><img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28"><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
+            titleFormatter: () => '<span class="tooltip"><img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28" style="margin-right: 20%;"><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
