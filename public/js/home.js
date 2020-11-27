@@ -363,7 +363,11 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
+<<<<<<< HEAD
             titleFormatter: () => '<span class="tooltip"><i class="material-icons md-18" aria-hidden="true">leaderboard</i><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
+=======
+            titleFormatter: () => '<span class="tooltip"><img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28" style="margin-right: 20%;"><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
+>>>>>>> 991230d... Fix positioning of bar graph icon
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
