@@ -2,8 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "alwaysStrict": true,
-    "strictNullChecks": true,
+    "strict": true,
     "outDir": "js"
   },
   "include": [

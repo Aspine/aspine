@@ -1,22 +1,22 @@
 export type Session = {
-  session_id: string,
-  apache_token: string,
+  session_id: string;
+  apache_token: string;
 };
 
 export type PDFFileInfo = {
-  id: string,
-  filename: string,
+  id: string;
+  filename: string;
 };
 
 export type PDFFile = {
-  title: string,
-  content: string,
+  title: string;
+  content: string;
 };
 
 export type ClassInfo = {
-  name: string,
-  grade: string,
-  oid: string,
+  name: string;
+  grade: string;
+  oid: string;
 };
 
 export const enum Quarter {

@@ -15,7 +15,7 @@ async function scrape_student(
   }
   const { student_name, student_oid } = await get_student_info(session);
   const quarter_oid = await get_quarter_oid(session, quarter);
-  console.log(await scrape_academics(session, student_oid, quarter_oid));
+  const academics = await scrape_academics(session, student_oid, quarter_oid);
 }
 
 /**
@@ -60,7 +60,7 @@ async function get_quarter_oid(
 async function scrape_academics(
   { session_id }: Session, student_oid: string, quarter_oid: string
 ): Promise<ClassInfo[]> {
-  const classes = await (await fetch(
+  const classes: any[] = await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?" +
     new URLSearchParams({
       "selectedStudent": student_oid,
@@ -95,11 +95,14 @@ async function scrape_pdf_files(session: Session): Promise<PDFFile[]> {
  * Get a list of published reports (PDF files)
  */
 async function list_pdf_files({ session_id }: Session): Promise<PDFFileInfo[]> {
-  return (await (await fetch("https://aspen.cpsd.us/aspen/rest/reports", {
-    headers: {
-      "Cookie": `JSESSIONID=${session_id}`,
-    },
-  })).json()).filter(({ contentTypeId }) => contentTypeId);
+  const pdf_files: any[] = await (await fetch(
+    "https://aspen.cpsd.us/aspen/rest/reports", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).json();
+  return pdf_files.filter(({ contentTypeId }) => contentTypeId == "cttPdf");
 }
 
 /**
@@ -124,8 +127,8 @@ async function scrape_login(): Promise<Session> {
   const page = await (await fetch(
     "https://aspen.cpsd.us/aspen/logon.do"
   )).text();
-  const [, session_id, ] = /sessionId='(.+)';/.exec(page) || [];
-  const [, apache_token, ] =
+  const [, session_id] = /sessionId='(.+)';/.exec(page) || [];
+  const [, apache_token] =
     /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(page) || [];
   return { session_id, apache_token };
 }
@@ -155,8 +158,8 @@ async function submit_login(
 
 // Code for testing purposes
 if (require.main === module) {
-  const [username, password, ..._] = process.argv.slice(2);
-  scrape_student(username, password, 0).then(console.log);
+  const [username, password] = process.argv.slice(2);
+  scrape_student(username, password, 1).then(console.log);
 }
 
 module.exports = {
