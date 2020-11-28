@@ -10,8 +10,8 @@ async function get_student(
 ) {
   return await get_session(username, password, async session => {
     const { student_name, student_oid } = await get_student_info(session);
-    const quarter_oid = await get_quarter_oid(session, quarter);
-    return await get_academics(session, student_oid, quarter_oid);
+    const quarter_oids = await get_quarter_oids(session);
+    return await get_academics(session, student_oid, quarter_oids);
   });
 }
 
@@ -31,33 +31,36 @@ async function get_student_info({ session_id }: Session): Promise<{
   return { student_name, student_oid };
 }
 
-async function get_quarter_oid(
-  { session_id }: Session, quarter: Quarter
-): Promise<string> {
-  if (quarter !== Quarter.Current) {
-    const term_mapping = await (await fetch(
-      "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list/studentGradeTerms", {
-        headers: {
-          "Cookie": `JSESSIONID=${session_id}`,
-        },
-      }
-    )).json();
-    for (const { gradeTermId, oid } of term_mapping) {
-      if (gradeTermId === `Q${quarter}`) {
-        return oid;
-      }
+async function get_quarter_oids(
+  { session_id }: Session
+): Promise<Map<Quarter, string>> {
+  const mapping = new Map<Quarter, string>();
+  const terms: { gradeTermId: string, oid: string }[] = await (await fetch(
+    "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list/studentGradeTerms", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).json();
+  for (const { gradeTermId, oid } of terms) {
+    const [, quarter] = /^Q(\d)$/.exec(gradeTermId) || [];
+    const quarter_num = parseInt(quarter) ?? -1;
+    if (quarter_num in Quarter) {
+      mapping.set(quarter_num, oid);
     }
   }
-  return "current";
+  mapping.set(Quarter.Current, "current");
+  return mapping;
 }
 
 /**
- * Get basic information about classes
+ * Get basic information (name, term grades, and OID) about classes
  */
 async function get_academics(
-  { session_id }: Session, student_oid: string, quarter_oid: string
+  { session_id }: Session, student_oid: string,
+  quarter_oids: Map<Quarter, string>
 ): Promise<ClassInfo[]> {
-  const classes: any[] = await (await fetch(
+  const get_classes = async (quarter_oid: string) => await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?" +
     new URLSearchParams({
       "selectedStudent": student_oid,
@@ -67,14 +70,47 @@ async function get_academics(
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).json();
-  return classes.map(({
-    cfTermAverage, oid, relSscMstOid_mstDescription
-  }) => ({
-    name: relSscMstOid_mstDescription,
-    grade: cfTermAverage,
-    oid: oid,
-  }));
+  )).json() as any[];
+
+  // Get classes from all terms in an array
+  const all_classes = await get_classes("all");
+  // Set up a mapping from quarters to mappings from OIDs to class info
+  const term_classes_mapping = new Map<Quarter, Map<string, any>>();
+
+  // Populate term_classes_mapping with data from each term
+  for (const [quarter, quarter_oid] of quarter_oids) {
+    term_classes_mapping.set(
+      quarter,
+      // Construct a 2D array with elements [oid, rest] where
+      // rest is the object containing class info, then convert that to a
+      // Map<string, any>
+      new Map<string, any>((await get_classes(quarter_oid)).map(
+        ({oid, ...rest}) => [oid, rest]
+      ))
+    );
+  }
+
+  // For each class, assemble a ClassInfo object
+  return all_classes.map(({ oid, relSscMstOid_mstDescription: name }) => {
+    // Mapping the terms in which this class meets to the corresponding term
+    // averages
+    const grades = new Map<Quarter, string>();
+
+    for (const quarter of Object.values(Quarter)) {
+      // Exclude enum variant names; we just want to iterate over
+      // Current, Q1, Q2, etc.
+      if (typeof quarter !== "number") continue;
+
+      const term_data = term_classes_mapping.get(quarter)?.get(oid);
+      // We don't want to count this term if the class does not have any data
+      // for this term
+      if (!term_data) continue;
+
+      // Enter the grade for this term into the grades mapping
+      grades.set(quarter, (term_data.cfTermAverage ?? "") as string);
+    }
+    return { name, oid, grades };
+  });
 }
 
 /**
