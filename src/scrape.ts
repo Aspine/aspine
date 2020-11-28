@@ -16,6 +16,7 @@ async function scrape_student(
   const { student_name, student_oid } = await get_student_info(session);
   const quarter_oid = await get_quarter_oid(session, quarter);
   const academics = await scrape_academics(session, student_oid, quarter_oid);
+  await logout(session);
 }
 
 /**
@@ -136,7 +137,9 @@ async function scrape_login(): Promise<Session> {
 /**
  * Log in to Aspen under a given session using a given username and password.
  * The return value indicates the success of the login.
+ * Always make sure to close the session afterwards with logout().
  */
+// TODO use proper error handling instead of returning a boolean
 async function submit_login(
   username: string, password: string, { session_id, apache_token }: Session
 ): Promise<boolean> {
@@ -145,6 +148,7 @@ async function submit_login(
       "Cookie": `JSESSIONID=${session_id}`,
     },
     method: "POST",
+    redirect: "manual",
     body: new URLSearchParams({
       "org.apache.struts.taglib.html.TOKEN": apache_token,
       "userEvent": "930",
@@ -154,6 +158,19 @@ async function submit_login(
     }),
   })).text();
   return !page.includes("Invalid login.");
+}
+
+/**
+ * Log out of Aspen under a given session.
+ */
+async function logout({ session_id }: Session): Promise<boolean> {
+  const page = await (await fetch("https://aspen.cpsd.us/aspen/logout.do", {
+    headers: {
+      "Cookie": `JSESSIONID=${session_id}`,
+    },
+    redirect: "manual",
+  })).text();
+  return !page.includes("You are not logged on or your session has expired.");
 }
 
 // Code for testing purposes
