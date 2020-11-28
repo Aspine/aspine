@@ -8,13 +8,11 @@ import { Quarter } from "./types";
 async function get_student(
   username: string, password: string, quarter: Quarter
 ) {
-  const session = await login(username, password);
-  const { student_name, student_oid } = await get_student_info(session);
-  const quarter_oid = await get_quarter_oid(session, quarter);
-  const academics = await get_academics(session, student_oid, quarter_oid);
-  try {
-    await logout(session);
-  } catch (e) {}
+  return await get_session(username, password, async session => {
+    const { student_name, student_oid } = await get_student_info(session);
+    const quarter_oid = await get_quarter_oid(session, quarter);
+    return await get_academics(session, student_oid, quarter_oid);
+  });
 }
 
 /**
@@ -82,12 +80,16 @@ async function get_academics(
 /**
  * Return an array containing all PDF files
  */
-async function get_pdf_files(session: Session): Promise<PDFFile[]> {
-  const pdf_files = await list_pdf_files(session);
-  return await Promise.all(pdf_files.map(async ({ id, filename }) => ({
-    title: filename,
-    content: await download_pdf(session, id),
-  })));
+async function get_pdf_files(
+  username: string, password: string
+): Promise<PDFFile[]> {
+  return await get_session(username, password, async session => {
+    const pdf_files = await list_pdf_files(session);
+    return await Promise.all(pdf_files.map(async ({ id, filename }) => ({
+      title: filename,
+      content: await download_pdf(session, id),
+    })));
+  });
 }
 
 /**
@@ -120,10 +122,13 @@ async function download_pdf(
 }
 
 /**
- * Log in to Aspen using a given username and password, returning a session.
- * Always make sure to close the session afterwards with logout().
+ * Log in to Aspen using a given username and password and execute the given
+ * callback within that session, throwing an error upon an invalid login.
  */
-async function login(username: string, password: string): Promise<Session> {
+async function get_session<T>(
+  username: string, password: string,
+  callback: (session: Session) => Promise<T>
+): Promise<T> {
   // Get a session from Aspen by visiting the login page
   const login_page = await (await fetch(
     "https://aspen.cpsd.us/aspen/logon.do"
@@ -135,42 +140,38 @@ async function login(username: string, password: string): Promise<Session> {
     ) || [];
 
   // Submit login username, password, and session information
-  const page = await (await fetch("https://aspen.cpsd.us/aspen/logon.do", {
-    headers: {
-      "Cookie": `JSESSIONID=${session_id}`,
-    },
-    method: "POST",
-    redirect: "manual",
-    body: new URLSearchParams({
-      "org.apache.struts.taglib.html.TOKEN": apache_token,
-      "userEvent": "930",
-      "deploymentId": "x2sis",
-      "username": username,
-      "password": password,
-    }),
-  })).text();
-
-  if (page.includes("Invalid login.")) {
+  const login_response = await (await fetch(
+    "https://aspen.cpsd.us/aspen/logon.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+      method: "POST",
+      redirect: "manual",
+      body: new URLSearchParams({
+        "org.apache.struts.taglib.html.TOKEN": apache_token,
+        "userEvent": "930",
+        "deploymentId": "x2sis",
+        "username": username,
+        "password": password,
+      }),
+    }
+  )).text();
+  if (login_response.includes("Invalid login.")) {
     throw new Error("Invalid login");
   }
 
-  return { session_id, apache_token };
-}
+  const result = await callback({ session_id, apache_token });
 
-/**
- * Log out of Aspen, destroying the given session.
- */
-async function logout({ session_id }: Session): Promise<void> {
-  const page = await (await fetch("https://aspen.cpsd.us/aspen/logout.do", {
-    headers: {
-      "Cookie": `JSESSIONID=${session_id}`,
-    },
-    redirect: "manual",
-  })).text();
+  await (await fetch(
+    "https://aspen.cpsd.us/aspen/logout.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+      redirect: "manual",
+    }
+  )).text();
 
-  if (page.includes("You are not logged on or your session has expired.")) {
-    throw new Error("Logout failed");
-  }
+  return result;
 }
 
 // Code for testing purposes
