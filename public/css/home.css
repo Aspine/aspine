@@ -52,6 +52,9 @@ body {
   --gray-to-white: #666666;
 
   --lightgray: #d8d8d8;
+  --lightgray1: #e0e0e0;
+  --lightgray2: #eaeaea;
+  --lightgray3:  #d4d4d4;
 
   --transparent-gray: rgba(255, 255, 255, 0.3);
 
@@ -1056,6 +1059,10 @@ p#large_clock_period {
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
+.tab .tableData_custom-select {
+  width: 210px;
+}
+
 /* Hide the items when the select box is closed: */
 .select-hide {
   display: none;
@@ -1074,7 +1081,6 @@ p#large_clock_period {
   border: 0px;
 }
 
-/*thanks w3schools lol*/
 .sidenav {
   height: 100%;
   width: 0;
@@ -1082,7 +1088,7 @@ p#large_clock_period {
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: #eeeeee;
+  background-color: var(--lightgray1);
   overflow-x: hidden;
   padding-top: 5px;
   transition: 0.5s;
@@ -1091,7 +1097,7 @@ p#large_clock_period {
 
 .sidenav button {
   clear: both;
-  background-color: #f1f1f1;
+  background-color: var(--lightgray2);
   /* float: left; */
   /* float: right; */
   border: none;
@@ -1106,22 +1112,23 @@ p#large_clock_period {
 }
 
 .sidenav .select-selected:hover {
-  background-color: #ddd !important;
+  background-color: var(--lightgray3) !important;
 }
 
 .sidenav button:hover {
-  background-color: #ddd !important;
+  background-color: var(--lightgray3) !important;
 }
 
 .sidenav .GPA {
   clear: both;
   height: 44px;
-  margin-bottom: 5px
+  margin-bottom: 5px;
+  width: 270px;
 }
 
 .sidenav .select-selected {
   color: black !important;
-  background-color: #f1f1f1;
+  background-color: var(--lightgray2);
   /* float: right; */
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
@@ -1156,11 +1163,6 @@ p#large_clock_period {
   border-color: transparent !important;
 }
 
-/* this is just here becuase there was some funniness with margins between the gpa type button and the tableData dropdown */
-.sidenav .activated-select-items:last-child {
-  margin-bottom: 0px;
-}
-
 .sidenav .select-items {
   position: static;
 }
@@ -1176,5 +1178,5 @@ p#large_clock_period {
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1;
   visibility: hidden;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
