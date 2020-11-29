@@ -1,17 +1,27 @@
 import fetch from "node-fetch";
 import { URLSearchParams } from "url";
 
-import type { Session, PDFFileInfo, PDFFile, ClassInfo } from "./types";
+import type {
+  Session,
+  PDFFileInfo,
+  ClassInfo,
+  ClassDetails,
+} from "./types";
+import type { PDFFile, OverviewItem } from "./types-shared";
 // Using `import type` with an enum disallows accessing the enum variants
-import { Quarter } from "./types";
+import { Quarter } from "./types-shared";
 
-async function get_student(
+export async function get_student(
   username: string, password: string, quarter: Quarter
 ) {
   return await get_session(username, password, async session => {
     const { student_name, student_oid } = await get_student_info(session);
     const quarter_oids = await get_quarter_oids(session);
-    return await get_academics(session, student_oid, quarter_oids);
+    const academics = await get_academics(session, student_oid, quarter_oids);
+    const class_details = await Promise.all(academics.map(async class_info =>
+      get_class_details(session, class_info)));
+    const overview = get_overview(class_details);
+    return overview;
   });
 }
 
@@ -54,14 +64,14 @@ async function get_quarter_oids(
 }
 
 /**
- * Get basic information (name, term grades, and OID) about classes
+ * Get basic information (name, grades, teacher, term, and OID) about classes
  */
 async function get_academics(
   { session_id }: Session, student_oid: string,
   quarter_oids: Map<Quarter, string>
 ): Promise<ClassInfo[]> {
   const get_classes = async (quarter_oid: string) => await (await fetch(
-    "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?" +
+    "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?fieldSetOid=fsnX2Cls++++++&" +
     new URLSearchParams({
       "selectedStudent": student_oid,
       "customParams": `selectedYear|current;selectedTerm|${quarter_oid}`,
@@ -91,7 +101,12 @@ async function get_academics(
   }
 
   // For each class, assemble a ClassInfo object
-  return all_classes.map(({ oid, relSscMstOid_mstDescription: name }) => {
+  return all_classes.map(({
+    oid,
+    relSscMstOid_mstDescription: name,
+    relSscMstOid_mstStaffView: teachers,
+    sscTermView: term,
+  }) => {
     // Mapping the terms in which this class meets to the corresponding term
     // averages
     const grades = new Map<Quarter, string>();
@@ -109,14 +124,97 @@ async function get_academics(
       // Enter the grade for this term into the grades mapping
       grades.set(quarter, (term_data.cfTermAverage ?? "") as string);
     }
-    return { name, oid, grades };
+
+    let teacher = "";
+    try {
+      [{ name: teacher }] = teachers;
+    } catch (e) {
+      // In the case of a TypeError (if the class has no teachers),
+      // let teacher be ""
+      if (!(e instanceof TypeError)) {
+        throw e;
+      }
+    }
+
+    return { name, grades, teacher, term, oid };
+  });
+}
+
+/**
+ * Get extended information about a class (attendance, categories)
+ */
+async function get_class_details(
+  { session_id }: Session, class_info: ClassInfo
+): Promise<ClassDetails> {
+  const { averageSummary, attendanceSummary } = await (await fetch(
+    `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_info.oid}/academics`, {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).json();
+
+  const attendance = { absent: 0, tardy: 0, dismissed: 0 };
+  for (const { total, type } of attendanceSummary) {
+    switch (type) {
+      case "Absent": attendance.absent = total; break;
+      case "Tardy": attendance.tardy = total; break;
+      case "Dismissed": attendance.dismissed = total; break;
+    }
+  }
+  const categories: { [key: string]: string } = {};
+  for (const {
+    category, percentageQ1, percentageQ2, percentageQ3, percentageQ4
+  } of averageSummary) {
+    if (category !== "Gradebook average") {
+      categories[category] = (parseFloat(percentageQ1 || percentageQ2 ||
+        percentageQ3 || percentageQ4) / 100.0).toString();
+    }
+  }
+
+  return { attendance, categories, ...class_info };
+}
+
+function get_overview(class_details: ClassDetails[]): OverviewItem[] {
+  return class_details.map(({
+    name,
+    grades,
+    teacher,
+    term,
+    oid,
+    attendance: { absent, tardy, dismissed },
+  }) => {
+    const [q1, q2, q3, q4] =
+      [Quarter.Q1, Quarter.Q2, Quarter.Q3, Quarter.Q4].map(q =>
+        parseFloat(grades.get(q) ?? ""));
+    // Get all quarter grades that are not NaN, and average them to get the
+    // year-to-date grade
+    const quarter_grades = [q1, q2, q3, q4].filter(x => !isNaN(x));
+    const ytd = quarter_grades.length ?
+      quarter_grades.reduce((a, b) => a + b) : NaN;
+    // Custom function for formatting numbers so that NaN is mapped to the
+    // empty string
+    const format = (x: number) => isNaN(x) ? "" : x.toString();
+    return {
+      class: name,
+      teacher: teacher,
+      term: term,
+      q1: format(q1),
+      q2: format(q2),
+      q3: format(q3),
+      q4: format(q4),
+      ytd: format(ytd),
+      absent: format(absent),
+      tardy: format(tardy),
+      dismissed: format(dismissed),
+    };
   });
 }
 
 /**
  * Return an array containing all PDF files
  */
-async function get_pdf_files(
+export async function get_pdf_files(
   username: string, password: string
 ): Promise<PDFFile[]> {
   return await get_session(username, password, async session => {
@@ -214,12 +312,12 @@ async function get_session<T>(
 if (require.main === module) {
   const [username, password] = process.argv.slice(2);
   get_student(username, password, 1).then(
-    console.log,
-    e => console.error(`Error: ${e.message}`)
+    console.log, e => {
+      if (e.message === "Invalid login") {
+        console.error(`Error: ${e.message}`);
+      } else {
+        console.error(e);
+      }
+    }
   );
 }
-
-module.exports = {
-  get_student,
-  get_pdf_files,
-};
