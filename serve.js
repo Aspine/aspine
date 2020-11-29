@@ -263,6 +263,14 @@ app.get('/logout', async (req, res) => {
     res.redirect('/login.html');
 });
 
+app.get('/404', (req, res) => res.sendFile(__dirname + '/public/404.html'));
+
+app.use((req, res) => {
+    res.status(404);
+    res.redirect("/404");
+  });
+
+
 // app.post('/set-settings', async (req, res) => {
 //     // TODO: Sanitization
 //     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
