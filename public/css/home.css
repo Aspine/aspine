@@ -54,12 +54,47 @@ noscript p {
     --transparent-black: rgba(0, 0, 0, 0.6);
 
     --blue: #2196F3;
+    --blue1: #9ebcea;
+    --blue2: #769bcc;
+    --blue3: #1d68cd;
 
     --purple: #e9a1ff;
 
     --orange: #f6b93b;
 
     --red: #ff0000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --green: #00a336;
+    --green1: #00b83d;
+    --green2: #00cc44;
+    --green3: #00ff52;
+
+    --white: #141415;
+    --white1: #1e1f1f;
+    --white2: #28292a;
+    --white3: #323334;
+
+    --gray: #3c3d3e;
+    --gray1: #464749;
+    --gray2: #5a5c5e;
+    --gray3: #6e7072;
+
+    --black: #ffffff;
+
+    --blue: #2196F3;
+    --blue1: #1a3e75;
+    --blue2: #769bcc;
+    --blue3: #2c6bc9;
+
+    --purple: #e9a1ff;
+
+    --orange: #f6b93b;
+
+    --red: #ff0000;
+  }
 }
 
 /*---------------------------------------------*/
@@ -108,10 +143,82 @@ body {
   text-align: center;
 }
 
+/* Text above the dark mode toggle */
+.dark-mode {
+  position: relative;
+  padding-top: 70px;
+  padding-left: 92%;
+}
+
+/* Dark mode switch */
+.dark-mode-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.dark-mode-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Toggle slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--white3);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--white);
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: var(--green2);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--green2);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 input {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14px;
+  color: var(--black);
+  background-color: var(--white);
 }
 
 label {
@@ -139,6 +246,13 @@ button {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14px;
+  border: 1px solid var(--black);
+  border-radius: 2px;
+  background-color: var(--white2);
+}
+
+button:hover {
+  background-color: var(--white3);
 }
 
 
@@ -372,7 +486,7 @@ div.tabcontent, div.tab {
   margin-bottom: auto;
 }
 
-.tablinks {
+.tablinks, .tabcontent {
   color: var(--black);
 }
 
@@ -384,9 +498,13 @@ i.fa.fa-plus.grades {
   cursor: pointer;
 }
 
-.bar-graph-icon {
-  padding-left: 28%;
-  padding-top: 25%;
+.material-icons,
+.material-icons.md-18 {
+  padding-left: 23%;
+  padding-top: 19%;
+  border-radius: 2px;
+  font-size: 22px;
+  color: var(--black);
 }
 
 i.fa.fa-info-circle,
@@ -455,6 +573,7 @@ canvas#large_clock {
 .modal-content {
   position: relative;
   background-color: var(--white);
+  color: var(--black);
   margin: auto;
   padding: 20px;
   border: 1px solid var(--gray1);
@@ -525,6 +644,7 @@ canvas#large_clock {
   display: inline-block;
   position: relative;
   left: 12px;
+  color: var(--black);
 }
 
 .stats_modal_heading {
@@ -554,6 +674,7 @@ canvas#large_clock {
   border: 1px solid var(--white3);
   text-align: left;
   padding: 8px;
+  color: var(--black);
 }
 
 #stats_modal_table th {
@@ -574,19 +695,23 @@ canvas#large_clock {
 #export_modal_content, #import_modal_content {
   width: 25em;
   text-align: left;
+  color: var(--black);
 }
 
 #export_modal_content ul {
   margin-left: 1em;
+  color: var(--black);
 }
 
 #export_modal_content label {
   display: inline-block;
+  color: var(--black);
 }
 
 #export_button, #import_button {
   padding: 14px 16px;
   cursor: pointer;
+  color: var(--black);
 }
 
 .hastooltip {
@@ -782,8 +907,8 @@ p#large_clock_period {
 }
 
 .pdf_select-items div:hover, .pdf_same-as-selected {
-  background-color: var(--black);
-  opacity: 0.1;
+  background-color: var(--green1);
+  color: var(--white);
 }
 
 #pdf-container {

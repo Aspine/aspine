@@ -53,6 +53,67 @@ window.addEventListener("click", function(event) {
     }
 });
 
+// Toggle dark mode
+let dark = true;
+function darkMode() {
+    let r = document.querySelector(':root');
+    let rs = getComputedStyle(r);
+    // If the color variables are set to light mode, toggle dark mode
+    if (rs.getPropertyValue('--white') === "#ffffff" || rs.getPropertyValue('--white') === " #ffffff") {
+        r.style.setProperty('--green', '#00a336');
+        r.style.setProperty('--green1', '#00b83d');
+        r.style.setProperty('--green2', '#00cc44');
+        r.style.setProperty('--green3', '#00ff52');
+        
+        r.style.setProperty('--white', '#141415');
+        r.style.setProperty('--white1', '#1e1f1f');
+        r.style.setProperty('--white2', '#28292a');
+        r.style.setProperty('--white3', '#323334');
+    
+        r.style.setProperty('--gray', '#3c3d3e');
+        r.style.setProperty('--gray1', '#464749');
+        r.style.setProperty('--gray2', '#5a5c5e');
+        r.style.setProperty('--gray3', '#6e7072');
+    
+        r.style.setProperty('--black', '#ffffff');
+    
+        r.style.setProperty('--blue1', '#1a3e75');
+        r.style.setProperty('--blue3', '#2c6bc9');
+        
+        dark = true;
+    }
+    // Otherwise, toggle back to light mode
+    else {
+        r.style.setProperty('--green', '#268a48');
+        r.style.setProperty('--green1', '#107031');
+        r.style.setProperty('--green2', '#00551d');
+        r.style.setProperty('--green3', '#003913');
+        
+        r.style.setProperty('--white', '#ffffff');
+        r.style.setProperty('--white1', '#f7f7f7');
+        r.style.setProperty('--white2', '#f2f2f2');
+        r.style.setProperty('--white3', '#dddddd');
+    
+        r.style.setProperty('--gray', '#cccccc');
+        r.style.setProperty('--gray1', '#888888');
+        r.style.setProperty('--gray2', '#666666');
+        r.style.setProperty('--gray3', '#333333');
+    
+        r.style.setProperty('--black', '#000000');
+    
+        r.style.setProperty('--blue1', '#9ebcea');
+        r.style.setProperty('--blue3', '#1d68cd');
+
+        dark = false;
+    }
+}
+
+function getMode() {
+    let r = document.querySelector(':root');
+    let rs = getComputedStyle(r);
+    return rs.getPropertyValue('--white') === "#ffffff" || rs.getPropertyValue('--white') === " #ffffff";
+}
+
 window.getStats = async function(session_id, apache_token, assignment_id) {
     return new Promise(function(resolve, reject) {
         $.ajax({
@@ -341,7 +402,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: () => '<img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28">',
+            titleFormatter: () => '<span class="material-icons md-18">leaderboard</span>',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
@@ -969,7 +1030,7 @@ function scheduleCallback(response) {
     periods = periods.filter(Boolean).map(x => "Period: " + x);
 
     let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-
+    let darkModeColors = ["#00290e", "#003d14", "#00551d", "#007a29", "#008f30", "#00a336", "#00b83d", "#00cc44"];
 
 	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE =======
     if (currentTableData.schedule.black.length > 10) {
@@ -987,14 +1048,28 @@ function scheduleCallback(response) {
 
     for (let i = 0; i < periods.length; i++) {
         if (currentTableData.schedule.black[i]) {
-            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-            currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
-            currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+            if (getMode()) {
+                currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+                currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
+                currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
+            }
+            else {
+                currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+                currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
+                currentTableData.schedule.black[i].color = darkModeColors[i] ? darkModeColors[i] : darkModeColors[darkModeColors.length - 1];
+            }
         }
         if (currentTableData.schedule.silver[i]) {
-            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-            currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
-            currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+            if (getMode()) {
+                currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+                currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
+                currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
+            }
+            else {
+                currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+                currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
+                currentTableData.schedule.silver[i].color = darkModeColors[darkModeColors.length - 1 - i] ? darkModeColors[darkModeColors.length - 1 - i] : colors[0];
+            }
         }
     }
 
