@@ -220,11 +220,10 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false},
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 96%;">Hide</span></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Hide</span></i>',
             headerClick: hideCategoriesTable,
             width: 76,
-            headerSort: false,
-            cssClass: "icon-col"
+            headerSort: false
         },
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
@@ -346,7 +345,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Corrections",
-            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 103%;">Revisions</span></i>',
+            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext">Revisions</span></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
                 '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
@@ -363,11 +362,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-<<<<<<< HEAD
-            titleFormatter: () => '<span class="tooltip"><i class="material-icons md-18" aria-hidden="true">leaderboard</i><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
-=======
-            titleFormatter: () => '<span class="tooltip"><img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28" style="margin-right: 20%;"><span class="tooltiptext" style="left: 105%; line-height: 1;">Statistics</span></span>',
->>>>>>> 991230d... Fix positioning of bar graph icon
+            titleFormatter: () => '<span class="tooltip"><i class="material-icons md-18" aria-hidden="true">leaderboard</i><span class="tooltiptext" style="line-height: 1;">Statistics</span></span>',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
@@ -574,7 +569,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext" style="left: -80%;">New Assignment</span></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext readjust-exempt" style="margin-left: -113px;">New Assignment</span></i>',
             headerClick: newAssignment,
             formatter: "buttonCross",
             width: 40,
@@ -679,7 +674,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="left: 91%;">Reset</span></i>',
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Reset</span></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
@@ -701,6 +696,10 @@ let classesTable = new Tabulator("#classesTable", {
             if (tabledata[i].name === row.getData().name) {
                 assignmentsTable.setData(tabledata[i].assignments);
                 categoriesTable.setData(tabledata[i].categoryDisplay);
+
+                //sets up the tooltip margins for the newly created table(s)
+                setup_tooltip_margins();
+
                 return;
             }
         }
@@ -939,6 +938,8 @@ function responseCallback(response, includedTerms) {
         dataType: "json json",
         success: scheduleCallback
     });
+
+    setup_tooltip_margins();
 }
 
 function responseCallbackPartial(response) {
@@ -1112,6 +1113,8 @@ function openTab(evt, tab_name) {
     if (tab_name === "reports") {
         if (!currentTableData.pdf_files) {
             $("#loader").show();
+            //sets the margins for the pdf viewer
+            setup_tooltip_margins();
             $.ajax({
                 url: "/pdf",
                 method: "POST",

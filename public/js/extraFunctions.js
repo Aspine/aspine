@@ -995,6 +995,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
       $('.gpa_select-selected').toggleClass("activated-selected-item");
       $('.gpa_select-items div').toggleClass("activated-select-items");
       //resetTableData();
+
+      //sets up tooltip margins for this
+      setup_tooltip_margins();
     });
   }
   a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
@@ -1017,11 +1020,11 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1] || "cum";
     }
-    const term = termConverter[parseInt(c.innerHTML[1]) || 0];
+    const term = termConverter[parseInt(c.id[1]) || 0];
     const isAccessibleObj = isAccessible(term, includedTerms);
     $(c)
-      .removeClass(["inaccessible", "hastooltip"])
-      .removeAttr("aria-label")
+      .removeClass(["inaccessible", "tooltip"])
+      .remove(".tooltiptext")
       .removeAttr("tabindex");
     c.removeEventListener("click", listener);
 
@@ -1029,9 +1032,11 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.addEventListener("click", listener);
     }
     else {
+      console.log(isAccessibleObj.reason)
       $(c)
-        .addClass(["inaccessible", "hastooltip"])
-        .attr("aria-label", isAccessibleObj.reason)
+        .addClass(["inaccessible", "tooltip"])
+        // .attr("aria-label", isAccessibleObj.reason)
+        .append('<span class="tooltiptext" style="white-space: nowrap;">' + isAccessibleObj.reason + '</span>')
         .attr("tabindex", 0);
     }
 
@@ -1056,7 +1061,7 @@ let setup_quarter_dropdown = function() {
                   $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
                   document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent;
               } else {
-                  $(this).html("Q" + i + " GPA: None");
+                  $(this).append("Q" + i + " GPA: None");
                   document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None";
               }
           }
@@ -1098,7 +1103,7 @@ let tableData_option_onclick = function() {
   initialize_quarter_dropdown()
   setup_quarter_dropdown();
 
-
+  
 
   classesTable.setData(currentTableData.currentTermData.classes);
   scheduleTable.setData(currentTableData.schedule.black);
@@ -1151,6 +1156,16 @@ let initialize_tableData_dropdown = function() {
       $('.tableData_select-selected').toggleClass("activated-selected-item");
       $('.tableData_select-items div').toggleClass("activated-select-items");
     });
+  }
+}
+
+let setup_tooltip_margins = function() {
+  console.log("ITS HAPPENING AHHHHHHHHHHT")
+  for(const child of $(".tooltiptext:not(.readjust-exempt)")) {
+    child.setAttribute("style", `${child.getAttribute("style") || ""} margin-left: -${child.offsetWidth/2}px;`)
+    if (child.offsetWidth != 0) {
+      child.classList.add("readjust-exempt")
+    }
   }
 }
 

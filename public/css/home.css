@@ -1085,7 +1085,7 @@ p#large_clock_period {
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
   /*border-width: 0px;*/
-
+  position: relative;
   cursor: pointer;
 }
 
