@@ -68,6 +68,8 @@ window.getStats = async function(session_id, apache_token, assignment_id) {
     });
 };
 
+initialize_jquery_prototype()
+
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
 window.addEventListener('resize', function() {
@@ -203,7 +205,8 @@ let categoriesTable = new Tabulator("#categoriesTable", {
             titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Hide</span></i>',
             headerClick: hideCategoriesTable,
             width: 76,
-            headerSort: false
+            headerSort: false,
+            cssClass: "icon-col"
         },
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
@@ -325,10 +328,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Corrections",
-            titleFormatter: () => '<i class="fa fa-toolbox tooltip" aria-hidden="true"><span class="tooltiptext">Revisions</span></i>',
+            titleFormatter: () => '<i class="fa fa-toolbox" aria-hidden="true"></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
-                '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
+                '<i class="fa fa-hammer standard-icon tooltip" aria-hidden="true"><span class="tooltiptext">Revisions</span></i>' : "",
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
@@ -338,17 +341,17 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#corrections_modal_input").focus();
             },
             headerSort: false,
-            cssClass: "icon-col"
+            cssClass: "icon-col allow-overflow"
         },
         {
             title: "Stats",
-            titleFormatter: () => '<span class="tooltip"><img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28" style="margin-right: 20%;"><span class="tooltiptext" style="line-height: 1;">Statistics</span></span>',
+            titleFormatter: () => '<img class="bar-graph-icon" src="../images/Bar_Graph.svg" width="28" style="margin-right: 20%;">',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
                     .assignments[cell.getRow().getPosition()].synthetic
-            ) ? "" : '<i class="fa fa-info" aria-hidden="true"></i>',
+            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="line-height: 1;">Statistics</span></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
@@ -545,20 +548,20 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     .attr("stroke-width", "0.2rem");
             },
             headerSort: false,
-            cssClass: "icon-col"
+            cssClass: "icon-col allow-overflow"
         },
         {
             title: "Add",
             titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext readjust-exempt" style="margin-left: -113px;">New Assignment</span></i>',
             headerClick: newAssignment,
-            formatter: "buttonCross",
+            formatter: () => '<i class="fa fa-times standard-icon tooltip" aria-hidden="true" style="color: #ce1515; font-size: 1.3em"><span class="tooltiptext readjust-exempt" style="margin-left: -127px;">Delete Assignment</span></i>',
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
                 cell.getRow().delete();
             },
             headerSort: false,
-            cssClass: "icon-col"
+            cssClass: "icon-col allow-overflow"
         },
     ],
 });
