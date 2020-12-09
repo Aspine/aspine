@@ -29,18 +29,6 @@
   <!--<link rel="stylesheet" type="text/css" href="css/fullcalendar.min.css">-->
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="manifest" href="manifest.json">
-  <script src="vendor/d3/d3-array.min.js"></script>
-  <script src="vendor/d3/d3-axis.min.js"></script>
-  <script src="vendor/d3/d3-format.min.js"></script>
-  <script src="vendor/d3/d3-interpolate.min.js"></script>
-  <script src="vendor/d3/d3-time.min.js"></script>
-  <script src="vendor/d3/d3-time-format.min.js"></script>
-  <script src="vendor/d3/d3-scale.min.js"></script>
-  <script src="vendor/d3/d3-selection.min.js"></script>
-  <script src="vendor/d3/d3-boxplot.min.js"></script>
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/pdf.js/pdf.min.js"></script>
-  <script src="vendor/file-saver/FileSaver.min.js" async="true"></script>
 
 
   <style>
@@ -57,48 +45,19 @@
 
 </head>
 <body>
-  <noscript>
-    <p><strong>
-      Aspine is designed to work mainly as a client-side web application
-      to maintain security and privacy, which means that most of the code is
-      JavaScript code run in your Web browser.
-      Aspine is free/libre and open source software with source code available
-      at
-      <a href="https://github.com/Aspine/aspine/">https://github.com/Aspine/aspine/</a>.
-      Please enable JavaScript in your Web browser in order to use Aspine.
-    </strong></p>
-  </noscript>
-
-  <script>
-    function goHome() {
-      window.location.href="home.html"
-    }
-  </script>
   <div id="header">
-    <div class="logo" onclick="openTab(event, 'clock')">
-      <img id="logo" src="images/logo-circle198x198.png" alt="logo" hidden>
-    </div>
-    <h4 id="title" onclick="goHome()">Aspine</h4>
+    <div class="logo"></div>
+    <a href="/"><h4 id="title">Aspine</h4></a>
   </div>
 
   <div class="tab">
   <!-- Empty Div creates a seperating line -->
   </div>
 
-
   <div id="main">
-    <h1>Error 404:</h1>
-    <h4>Page not found</h4>
-    <p id="home-link"><a href="home.html"> Click to go back to Aspine.</a></p>
+    <h2>Error 404: Page not found</h2>
+    <p id="home-link"><a href="home.html">Go back to Aspine</a></p>
   </div>
-
-
-  <!-- <p>Aspine version: <span id="version">(loading&hellip;)</span></p> -->
-  <script type="text/javascript" src="js/clock.js"></script>
-  <!--<script type="text/javascript" src="/vendor/jscolor/jscolor.js"></script>-->
-  <script type="text/javascript" src="js/calculate_grade.js"></script>
-  <script type="text/javascript" src="js/home.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
 
