@@ -83,9 +83,15 @@ export async function get_schedule(
     const rows = document.querySelectorAll(
       "table[cellspacing='1'] > tbody > tr:not([class])"
     );
+
     // Get a matrix of the cells in the first three columns of the table, then
     // transpose it to get a list of periods, a list of silver day classes
     // (from Monday), and a list of black day classes (from Tuesday).
+
+    const transpose = <T>(matrix: T[][]): T[][] =>
+      matrix[0].map((col, i) => matrix.map(row => row[i]));
+    // Transpose algorithm: https://stackoverflow.com/a/46805290
+
     const [periods, silver_html, black_html] = transpose([...rows].map(row =>
       [1, 2, 3].map(n =>
         row.querySelector(`td:nth-child(${n})`)
@@ -118,10 +124,6 @@ export async function get_schedule(
   });
 }
 
-// https://stackoverflow.com/a/46805290
-function transpose<T>(matrix: T[][]): T[][] {
-  return matrix[0].map((col, i) => matrix.map(row => row[i]));
-}
 
 /**
  * Get the current quarter (Q1, Q2, Q3, Q4). In the absence of the OID of a
