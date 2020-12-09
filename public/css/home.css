@@ -601,6 +601,7 @@ i.fa.fa-toolbox {
 
 .tooltip .tooltiptext {
   visibility: hidden;
+  opacity: 0;
   font-family:  'Poppins-Regular';
   font-size: small;
   width: auto;
@@ -615,9 +616,13 @@ i.fa.fa-toolbox {
   top: 100%;
   left: 50%;
   margin-left: -60px;
+
+  transition: visibility 0ms 107ms, opacity 87ms 20ms;
 }
 
-.tooltip:hover::after {
+.tooltip::after {
+  visibility: hidden;
+  opacity: 0;
   content: "";
   position: absolute;
   bottom: 0%;
@@ -626,10 +631,23 @@ i.fa.fa-toolbox {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;
+
+  transition: visibility 0ms 107ms, opacity 87ms 20ms;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext, .tooltip:hover::after {
+  opacity: 1;
   visibility: visible;
+  transition: opacity 125ms 750ms, visibility 0ms 750ms;
+}
+
+.standard-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.allow-overflow {
+  overflow: inherit !important;
 }
 
 canvas#large_clock {
