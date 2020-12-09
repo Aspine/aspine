@@ -218,6 +218,13 @@ iframe {
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 5% 7.5% 5% 7.5%;
+
+  position: relative
+}
+
+.text-divider {
+  padding-left: 9px;
+  padding-right: 5px;
 }
 
 /*------------------------------------------------------------------
