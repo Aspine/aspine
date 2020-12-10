@@ -219,12 +219,24 @@ iframe {
   justify-content: space-between;
   padding: 5% 7.5% 5% 7.5%;
 
-  position: relative
+  position: relative;
 }
 
-.text-divider {
-  padding-left: 9px;
-  padding-right: 5px;
+#bottom-text {
+  position: absolute;
+  bottom: 5px;
+  left: 14px;
+  margin-right: 14px;
+}
+
+#bottom-text li {
+  display: inline;
+}
+
+#bottom-text li + li::before {
+  content: " | ";
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 /*------------------------------------------------------------------
