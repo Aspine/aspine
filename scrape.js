@@ -36,6 +36,8 @@ TERM_NAMES[0] = TERM_NAMES[CURRENT_QUARTER];
 // --------------- Includes ------------------
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const { JSDOM } = require('jsdom');
+const { URLSearchParams } = require('url');
 
 // Initialize with the string
 
@@ -946,74 +948,70 @@ async function scrape_assignments(session_id, apache_token) {
 
 // Returns list of black/silver day pairs of class names and room numbers
 async function scrape_schedule(username, password) {
-    let session = await scrape_login();
-    let page = await submit_login(username, password, session.apache_token, session.session_id);
+    const session = await scrape_login();
+    const page = await submit_login(username, password, session.apache_token, session.session_id);
     if (page.fail) {
-        return {"login_fail": true};
+        return { "login_fail": true };
     }
 
-    let schedule_page = (await fetch_body(
-        "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list",
-        {
-            "credentials": "include",
-            "headers": {
-                "Connection": "keep-alive",
-                "User-Agent": HEADERS["User-Agent"],
-                "Accept": HEADERS["Accept"],
-                "Accept-Language": HEADERS["Accept-Language"],
-                "Referer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-                "Accept-Encoding": HEADERS["Accept-Encoding"],
-                "Cookie": `JSESSIONID=${session.session_id}`
+    const initial_page = await (await fetch(
+        "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list", {
+        headers: {
+            "Cookie": `JSESSIONID=${session.session_id}`,
+        },
+    })).text();
+    // This is a term OID that is specific to the schedule view (not the same
+    // as the OIDs in the output of get_quarter_oids)
+    const [, term_oid] = new RegExp(
+        String.raw`<option value="(.+)">Q${CURRENT_QUARTER}</option>`
+    ).exec(initial_page);
+    const schedule_page = await (await fetch(
+        "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?" +
+        new URLSearchParams({
+            "navkey": "myInfo.sch.matrix",
+            "termOid": term_oid,
+        }), {
+            headers: {
+                "Cookie": `JSESSIONID=${session.session_id}`,
             },
-            "referrer": "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=2/5/2019&userEvent=0",
-            "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": null,
-            "method": "GET",
-            "mode": "cors"
-        }
+        })).text();
+    const { window: { document } } = new JSDOM(schedule_page);
+    const rows = document.querySelectorAll(
+        "table[cellspacing='1'] > tbody > tr:not([class])"
+    );
+
+    // Get a matrix of the cells in the first three columns of the table, then
+    // transpose it to get a list of periods, a list of silver day classes
+    // (from Monday), and a list of black day classes (from Tuesday).
+
+    const transpose = matrix =>
+        matrix[0].map((col, i) => matrix.map(row => row[i]));
+    // Transpose algorithm: https://stackoverflow.com/a/46805290
+
+    const [periods, silver_html, black_html] = transpose([...rows].map(row =>
+        [1, 2, 3].map(n =>
+            row.querySelector(`td:nth-child(${n})`)
+            ?.querySelector("td, th")?.innerHTML.trim() ?? ""
+        )
     ));
-
-    if (schedule_page.includes("Matrix view")) {
-        schedule_page = (await fetch_body(
-            "https://aspen.cpsd.us/aspen/studentScheduleMatrix.do?navkey=myInfo.sch.matrix&termOid=&schoolOid=null&k8Mode=null&viewDate=&userEvent=0",
-            {
-                "credentials": "include",
-                "headers": {
-                    "Connection": "keep-alive",
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache",
-                    "User-Agent": HEADERS["User-Agent"],
-                    "Accept": HEADERS["Accept"],
-                    "Accept-Language": HEADERS["Accept-Language"],
-                    "Referer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
-                    "Accept-Encoding": HEADERS["Accept-Encoding"],
-                    "Cookie": `deploymentId=x2sis; JSESSIONID=${session.session_id}`
-                },
-                "referrer": "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list&forceRedirect=false",
-                "referrerPolicy": "strict-origin-when-cross-origin",
-                "body": null,
-                "method": "GET",
-                "mode": "cors"
+    const isScheduleItem = x => x !== undefined;
+    const [black, silver] = [black_html, silver_html].map(arr =>
+        arr.map((x, i) => {
+            if (x) {
+                const lines = x.split("<br>");
+                // Decode HTML entities (https://stackoverflow.com/a/7394787)
+                const textarea = document.createElement("textarea");
+                const [id, name, teacher, room] = lines.map(line => {
+                    textarea.innerHTML = line;
+                    return textarea.value;
+                });
+                const aspenPeriod = periods[i];
+                return { id, name, teacher, room, aspenPeriod };
             }
-        ));
-    }
+        }).filter(isScheduleItem)
+    );
 
-    let $ = cheerio.load(schedule_page);
-    let data = { black:[], silver:[] };
-
-    $('td[style="width: 125px"]').each(function(i, elem) {
-        const parts = $(this).html().trim().split('<br>').slice(0, 4);
-        const period = $(this).parentsUntil('td').prev().find('th').html().trim();
-        const block = {id: parts[0], name: parts[1], teacher: parts[2], room: parts[3], aspenPeriod: period};
-        if (i % 2 == 0) {
-            data.black[i/2] = block;
-        } else {
-            data.silver[Math.floor(i/2)] = block;
-        }
-    });
-
-    log("schedule", data);
-    return data;
+    return { black, silver };
 }
 
 // Returns body of fetch
