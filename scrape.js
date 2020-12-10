@@ -989,10 +989,13 @@ async function scrape_schedule(username, password) {
     // Transpose algorithm: https://stackoverflow.com/a/46805290
 
     const [periods, silver_html, black_html] = transpose([...rows].map(row =>
-        [1, 2, 3].map(n =>
-            row.querySelector(`td:nth-child(${n})`)
-            ?.querySelector("td, th")?.innerHTML.trim() ?? ""
-        )
+        [1, 2, 3].map(n => {
+            const a = row.querySelector(`td:nth-child(${n})`);
+            if (!a) return "";
+            const b = a.querySelector("td, th");
+            if (!b) return "";
+            return b.innerHTML.trim() || "";
+        })
     ));
     const isScheduleItem = x => x !== undefined;
     const [black, silver] = [black_html, silver_html].map(arr =>
