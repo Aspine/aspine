@@ -45,54 +45,55 @@
     <div class="limiter">
       <div class="container-login100">
         <div class="wrap-login100">
-          <div class="login100-pic js-tilt" data-tilt style="display: flex; justify-content: center; align-items: center;">
-            <picture>
+          <div class="login-form-container">
+            <div class="login100-pic js-tilt" data-tilt style="display: flex; justify-content: center; align-items: center;">
+              <picture>
                 <source srcset="images/blank.png" media="(max-width: 768px)">
                 <img src="images/logo-circle350x350.png" alt="Aspine logo">
-            </picture>
+              </picture>
+            </div>
+
+            <form id="login100-form" action="/login" method="POST">
+              <span id="login100-form-title">
+                Aspine Login
+              </span>
+              <div class="text-center p-t-12">
+                <span class="txt1" style="color:#595959">
+                  Aspen credentials or leave blank to import data
+                </span>
+              </div>
+              <!-- Username Input -->
+              <div class="wrap-input100">
+                <input class="input100" id="input-username" type="text" name="username" placeholder="Student ID" aria-label="Aspen Student ID" autofocus>
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                  <i class="fa fa-id-card" aria-hidden="true"></i>
+                </span>
+              </div>
+              <!-- Password Input -->
+              <div class="wrap-input100">
+                <input class="input100" id="input-password" type="password" name="password" placeholder="Password" aria-label="Aspen Password">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100">
+                  <i class="fa fa-lock" aria-hidden="true"></i>
+                </span>
+              </div>
+              <!-- Remember Me Checkbox -->
+              <div><label style="float: left;">
+                  <input id="remember-me" type="checkbox" style="position: relative; top: 1px; left: 35px;">
+                  <span style="position: relative; left: 50px">Remember Me</span>
+                </label></div>
+                <!-- Login Button -->
+                <div id="container-login100-form-btn">
+                  <button id="login100-form-btn" style="background:#3F8532">
+                    Login
+                  </button>
+                </div>
+                <div class="text-center">
+                  <img src="images/district-logo.png" style="width:75%">
+                </div>
+            </form>
           </div>
-
-          <form id="login100-form" action="/login" method="POST">
-            <span id="login100-form-title">
-              Aspine Login
-            </span>
-            <div class="text-center p-t-12">
-              <span class="txt1" style="color:#595959">
-                Aspen credentials or leave blank to import data
-              </span>
-            </div>
-            <!-- Username Input -->
-            <div class="wrap-input100">
-              <input class="input100" id="input-username" type="text" name="username" placeholder="Student ID" aria-label="Aspen Student ID" autofocus>
-              <span class="focus-input100"></span>
-              <span class="symbol-input100">
-                <i class="fa fa-id-card" aria-hidden="true"></i>
-              </span>
-            </div>
-            <!-- Password Input -->
-            <div class="wrap-input100">
-              <input class="input100" id="input-password" type="password" name="password" placeholder="Password" aria-label="Aspen Password">
-              <span class="focus-input100"></span>
-              <span class="symbol-input100">
-                <i class="fa fa-lock" aria-hidden="true"></i>
-              </span>
-            </div>
-            <!-- Remember Me Checkbox -->
-            <div><label style="float: left;">
-                <input id="remember-me" type="checkbox" style="position: relative; top: 1px; left: 35px;">
-                <span style="position: relative; left: 50px">Remember Me</span>
-            </label></div>
-            <!-- Login Button -->
-            <div id="container-login100-form-btn">
-              <button id="login100-form-btn" style="background:#3F8532">
-                Login
-              </button>
-
-            </div>
-            <div class="text-center">
-              <img src="images/district-logo.png" style="width:75%">
-            </div>
-          </form>
 
           <span id="bottom-text">
             <ul>

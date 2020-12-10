@@ -215,18 +215,26 @@ iframe {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  flex-direction: column;
+}
+
+.login-form-container {
+  width: 100%;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 5% 7.5% 5% 7.5%;
-
-  position: relative;
+  overflow: hidden;
 }
 
 #bottom-text {
-  position: absolute;
-  bottom: 5px;
-  left: 14px;
-  margin-right: 14px;
+  text-align: left;
+  margin: 5px 14px;
 }
 
 #bottom-text li {
@@ -414,7 +422,7 @@ iframe {
 
 
 @media (max-width: 992px) {
-  .wrap-login100 {
+  .login-form-container {
     padding: 70px 90px 33px 85px;
   }
 
@@ -428,7 +436,7 @@ iframe {
 }
 
 @media (max-width: 768px) {
-  .wrap-login100 {
+  .login-form-container {
     padding: 33px 80px 33px 80px;
   }
 
@@ -439,10 +447,14 @@ iframe {
   #login100-form {
     width: 100%;
   }
+
+  #bottom-text {
+    text-align: center;
+  }
 }
 
 @media (max-width: 576px) {
-  .wrap-login100 {
+  .login-form-container {
     padding: 33px 15px 33px 15px;
   }
 }
