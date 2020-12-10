@@ -146,8 +146,9 @@ body {
 /* Text above the dark mode toggle */
 .dark-mode {
   position: relative;
-  padding-top: 70px;
-  padding-left: 92%;
+  margin-top: 70px;
+  float: right;
+  margin-right: 10px;
 }
 
 /* Dark mode switch */
