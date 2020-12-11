@@ -1032,6 +1032,18 @@ let setup_tooltip_margins = function() {
   }
 }
 
+let toggle_fullscreen_icon = function() {
+  if ($('#expand-pdf-icon i').hasClass('fa-expand-alt')) {
+    $('#expand-pdf-icon i').removeClass("fa-expand-alt").addClass("fa-compress-alt");
+    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -92px;", "margin-left: -95px;")).replace_text("Exit Fullscreen")
+
+  } else {
+    $('#expand-pdf-icon i').removeClass("fa-compress-alt").addClass("fa-expand-alt");
+    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -95px;", "margin-left: -92px;")).replace_text("Go Fullscreen")
+
+  }
+}
+
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports');
 
@@ -1039,40 +1051,40 @@ let toggle_fullscreen_pdf = function() {
   if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.mozRequestFullScreen) { /* Firefox */
       elem.mozRequestFullScreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
       let new_height = $(window).height();
       elem.webkitRequestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.msRequestFullscreen) { /* IE/Edge */
       elem.msRequestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     }
   } else {
 
     if (document.exitFullscreen) {
       document.exitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.mozCancelFullScreen) { /* Firefox */
       document.mozCancelFullScreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
       document.webkitExitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     }
   }
 }
