@@ -214,6 +214,16 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* Hide toggle on small screens */
+@media only screen and (max-width: 500px) {
+  .dark-mode {
+    display: none;
+  }
+  .dark-mode-toggle {
+    display: none;
+  }
+}
+
 input {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
