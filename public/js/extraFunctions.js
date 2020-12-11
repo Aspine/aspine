@@ -968,7 +968,7 @@ let tableData_option_onclick = function() {
   initialize_quarter_dropdown()
   setup_quarter_dropdown();
 
-  
+
 
   classesTable.setData(currentTableData.currentTermData.classes);
   scheduleTable.setData(currentTableData.schedule.black);
@@ -1024,7 +1024,7 @@ let initialize_tableData_dropdown = function() {
 }
 
 let setup_tooltip_margins = function() {
-  for(const child of $(".tooltiptext:not(.readjust-exempt)")) {
+  for (const child of $(".tooltiptext:not(.readjust-exempt)")) {
     if (child.offsetWidth != 0) {
       child.classList.add("readjust-exempt")
       child.setAttribute("style", `${child.getAttribute("style") || ""} margin-left: -${child.offsetWidth/2}px;`)
@@ -1091,7 +1091,7 @@ let toggle_fullscreen_pdf = function() {
 
 
 function parseTableData(classes) {
-  for(let i = 0; i < classes.length; i++) {
+  for (let i = 0; i < classes.length; i++) {
 
     //initialize every the edited key for every class and set it to false
     classes[i].edited = false;
