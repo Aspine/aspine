@@ -561,7 +561,6 @@ div.tabcontent, div.tab {
 
 i.fa.fa-plus.grades {
   color: var(--green2);
-  /* padding-left: 31%; */
   padding-top: 8.5px;
   font-size: large;
   cursor: pointer;
