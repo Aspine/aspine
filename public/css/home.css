@@ -48,6 +48,9 @@ noscript p {
     --gray2: #666666;
     --gray3: #333;
 
+    /* Different variable for gray subtitles that turn to white for dark mode */
+    --gray-to-white: #666666;
+
     --transparent-gray: rgba(255, 255, 255, 0.3);
 
     --black: #000000;
@@ -81,6 +84,9 @@ noscript p {
     --gray1: #464749;
     --gray2: #5a5c5e;
     --gray3: #6e7072;
+
+    /* Different variable for gray subtitles that turn to white for dark mode */
+    --gray-to-white: #ccc;
 
     --black: #ffffff;
 
@@ -128,7 +134,7 @@ p {
   font-family: Poppins-Regular;
   font-size: 14px;
   line-height: 1.7;
-  color: var(--gray2);
+  color: var(--gray-to-white);
   margin: 0px;
 }
 
@@ -230,6 +236,7 @@ input {
   font-size: 14px;
   color: var(--black);
   background-color: var(--white);
+  border-color: var(--black);
 }
 
 label {

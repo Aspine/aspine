@@ -74,6 +74,7 @@ function darkMode() {
         r.style.setProperty('--gray1', '#464749');
         r.style.setProperty('--gray2', '#5a5c5e');
         r.style.setProperty('--gray3', '#6e7072');
+        r.style.setProperty('--gray-to-white', "#cccccc");
     
         r.style.setProperty('--black', '#ffffff');
     
@@ -98,6 +99,7 @@ function darkMode() {
         r.style.setProperty('--gray1', '#888888');
         r.style.setProperty('--gray2', '#666666');
         r.style.setProperty('--gray3', '#333333');
+        r.style.setProperty('--gray-to-white', "#666666");
     
         r.style.setProperty('--black', '#000000');
     
