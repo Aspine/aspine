@@ -465,7 +465,7 @@ i.fa.fa-toolbox {
 .tooltip:hover .tooltiptext, .tooltip:hover::after {
   opacity: 1;
   visibility: visible;
-  transition: opacity 125ms 750ms, visibility 0ms 750ms;
+  transition: opacity 125ms 375ms, visibility 0ms 375ms;
 }
 
 .standard-icon {
