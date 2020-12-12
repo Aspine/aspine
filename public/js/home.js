@@ -52,6 +52,34 @@ window.addEventListener("click", function(event) {
         tableData_closeAllSelect();
     }
 });
+// detect color scheme and set slider
+window.addEventListener("load", loadMode);
+function loadMode() {
+    // loads current os mode and sets slider accordingly
+    const slider = document.getElementById("dark-check");
+    let cssMode = (window.matchMedia('(prefers-color-scheme: dark)').matches);
+    let currentMode = "";
+    if(cssMode == true) {
+        currentMode = "dark";
+        // sets the slider to match the actual mode
+        slider.checked = true;
+        }
+    else {
+        currentMode = "light";
+    }
+    if (localStorage.getItem("color-scheme") === null) {
+        var prefferedMode = currentMode
+      }
+    else {
+        var prefferedMode = localStorage.getItem('color-scheme');
+    }
+    // sets mode to preffered if it's different than the current one
+    if (prefferedMode !== currentMode) {
+        slider.click();
+        currentMode = prefferedMode;
+    }
+    return currentMode;
+};
 
 // Toggle dark mode
 let dark = true;
@@ -64,23 +92,25 @@ function darkMode() {
         r.style.setProperty('--green1', '#00b83d');
         r.style.setProperty('--green2', '#00cc44');
         r.style.setProperty('--green3', '#00ff52');
-        
+
         r.style.setProperty('--white', '#141415');
         r.style.setProperty('--white1', '#1e1f1f');
         r.style.setProperty('--white2', '#28292a');
         r.style.setProperty('--white3', '#323334');
-    
+
         r.style.setProperty('--gray', '#3c3d3e');
         r.style.setProperty('--gray1', '#464749');
         r.style.setProperty('--gray2', '#5a5c5e');
         r.style.setProperty('--gray3', '#6e7072');
         r.style.setProperty('--gray-to-white', "#cccccc");
-    
+
+
         r.style.setProperty('--black', '#ffffff');
-    
+
         r.style.setProperty('--blue1', '#1a3e75');
         r.style.setProperty('--blue3', '#2c6bc9');
-        
+
+        localStorage.setItem("color-scheme", "dark");
         dark = true;
     }
     // Otherwise, toggle back to light mode
@@ -89,26 +119,28 @@ function darkMode() {
         r.style.setProperty('--green1', '#107031');
         r.style.setProperty('--green2', '#00551d');
         r.style.setProperty('--green3', '#003913');
-        
+
         r.style.setProperty('--white', '#ffffff');
         r.style.setProperty('--white1', '#f7f7f7');
         r.style.setProperty('--white2', '#f2f2f2');
         r.style.setProperty('--white3', '#dddddd');
-    
+
         r.style.setProperty('--gray', '#cccccc');
         r.style.setProperty('--gray1', '#888888');
         r.style.setProperty('--gray2', '#666666');
         r.style.setProperty('--gray3', '#333333');
         r.style.setProperty('--gray-to-white', "#666666");
-    
+
+
         r.style.setProperty('--black', '#000000');
-    
+
         r.style.setProperty('--blue1', '#9ebcea');
         r.style.setProperty('--blue3', '#1d68cd');
 
+        localStorage.setItem("color-scheme", "light");
         dark = false;
     }
-}
+ }
 
 function getMode() {
     let r = document.querySelector(':root');
