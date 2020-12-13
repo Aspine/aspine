@@ -718,11 +718,9 @@ function initialize_resize_hamburger() {
   }
 
   const switch_hamburger = function() {
-    // If hamburger is hidden
-    const is_hidden = $('#hamburger_button').hasClass("hide")
     
     // Hides or unhides the hamburger
-    if (is_hidden) {
+    if ($('#hamburger_button').hasClass("hide")) {
       $('#hamburger_button').removeClass("hide")
     } else {
       $('#hamburger_button').addClass("hide")
