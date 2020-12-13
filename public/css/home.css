@@ -423,11 +423,11 @@ button:hover {
 
 .inaccessible {
   color: var(--gray2) !important;
-  background-color: var(--gray);
+  background-color: var(--white3);
 }
 
 .inaccessible:hover {
-  background-color: var(--gray) !important;
+  background-color: var(--white3) !important;
 }
 
 .tab .tablinks-right {
@@ -1012,7 +1012,7 @@ p#large_clock_period {
   /*border: 1px transparent solid;*/
   border-width: 0px 1px 1px 1px !important;
   border-style: solid;
-  border-color: var(--green);
+  border-color: var(--gray);
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
@@ -1020,7 +1020,7 @@ p#large_clock_period {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   border-style: solid;
-  border-color: var(--green) !important;
+  border-color: var(--gray) !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
