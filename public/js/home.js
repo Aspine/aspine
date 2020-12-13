@@ -1080,7 +1080,7 @@ function openTab(evt, tab_name) {
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
     const tab_button = document.querySelector(
-        `.tablinks[onclick="openTab(event, '${tab_name}')"]`
+        `.tablinks[onclick*="openTab(event, '${tab_name}')"]`
     );
     if (tab_button) {
         tab_button.classList.add("active");
