@@ -654,7 +654,7 @@ function tableData_closeAllSelect(elmnt) {
 
 }
 
-let initialize_resize_hamburger = function() {
+function initialize_resize_hamburger() {
 
   // Total width of all items in tab minus hamburger
   let total_width = -44.25;
@@ -664,14 +664,17 @@ let initialize_resize_hamburger = function() {
   let left_width = 44.25 + $('#logout_button').outerWidth()
 
   // Gets all non-tablinks-right elements and adds their width to total_width  and also left_width
-  $('.tab .tablinks:not(.tablinks-right)').outerWidth(function(_i, w) {total_width += w; left_width += w;});
+  $('.tab .tablinks:not(.tablinks-right)').outerWidth((_, w) => {
+    total_width += w;
+    left_width += w;
+  });
 
   // Gets all tablinks-right elements and adds their width to total_width
-  $('.tab .tablinks-right').outerWidth(function(_i, w) {total_width += w;})
+  $('.tab .tablinks-right').outerWidth((_, w) => {total_width += w;})
 
-  const switch_left_items = function() {
+  const switch_left_items = () => {
     // Checks if left items are in sidenav
-    const in_sidenav = $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').length == 0
+    const in_sidenav = $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').length === 0
 
     if (in_sidenav) {
       // Moves items from sidenav to tab
@@ -698,19 +701,18 @@ let initialize_resize_hamburger = function() {
 
       // Adds right items to tab in reverse
       const children = $('#sidenav .tablinks-right:not(#logout_button)')
-      for (i=0; i<children.length; i++) {
-        $(".tab").append(children[children.length-1-i])
+      for (const child of [...children].reverse()) {
+        $(".tab").append(child);
       }
 
       // Also closes the sidebar
       closeSideNav();
-    }
-    else {
+    } else {
 
       // Adds right items to sidenav in reverse
       const children = $('.tab .tablinks-right:not(#logout_button)')
-      for (i=0; i<children.length; i++) {
-        $("#sidenav").append(children[children.length-1-i])
+      for (const child of [...children].reverse()) {
+        $("#sidenav").append(child)
       }
     }
   }
@@ -761,10 +763,10 @@ let initialize_resize_hamburger = function() {
   window.addEventListener("resize", function () {
 
     // Updates navbar_state
-    update_navbar_state()
+    update_navbar_state();
 
     // If they're different, updates the tab and sidenav
-    if (old_navbar_state != navbar_state) {
+    if (old_navbar_state !== navbar_state) {
       if ((old_navbar_state === 0 && navbar_state === 1) || (old_navbar_state === 1 && navbar_state === 0)) {
         // When moving to and from 0 and 1, needs to switch both right items and hamburgers
         switch_right_items();

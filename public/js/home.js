@@ -1144,10 +1144,7 @@ function openTab(evt, tab_name) {
     recentAttendance.redraw();
 }
 
-function openSideNav() {
-    let sidenav = document.getElementById("sidenav");
-    if (sidenav.clientWidth == 270) sidenav.style.width = "0px";
-    else sidenav.style.width = "270px";
+    sidenav.style.width = sidenav.clientWidth === 270 ? "0px" : "270px";
     // greys out the main section
     const mainSection = $("#sidenav-overlay");
     mainSection.css("visibility", "visible");
@@ -1158,7 +1155,6 @@ function closeSideNav() {
     document.getElementById("sidenav").style.width = "0px";
     const mainSection = $(".sidenav-overlay");
     $(mainSection).fadeOut("slow");
-    // mainSection.css("visibility", "hidden");
 }
 
 //  Allows exiting sidenav by clicking anywhere outside
