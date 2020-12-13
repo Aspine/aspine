@@ -1144,6 +1144,8 @@ function openTab(evt, tab_name) {
     recentAttendance.redraw();
 }
 
+function openSideNav() {
+    const sidenav = document.getElementById("sidenav");
     sidenav.style.width = sidenav.clientWidth === 270 ? "0px" : "270px";
     // greys out the main section
     const mainSection = $("#sidenav-overlay");
