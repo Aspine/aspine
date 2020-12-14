@@ -222,7 +222,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false},
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Hide</span></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true" tooltip="Hide"></i>',
             headerClick: hideCategoriesTable,
             width: 76,
             headerSort: false,
@@ -351,7 +351,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             titleFormatter: () => '<i class="fa fa-toolbox" aria-hidden="true"></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
-                '<i class="fa fa-hammer standard-icon tooltip" aria-hidden="true"><span class="tooltiptext">Revisions</span></i>' : "",
+                '<i class="fa fa-hammer standard-icon tooltip" aria-hidden="true" tooltip="Revisions"></i>' : "",
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
@@ -371,7 +371,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
                     .assignments[cell.getRow().getPosition()].synthetic
-            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true"><span class="tooltiptext" style="line-height: 1;">Statistics</span></i>',
+            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
@@ -572,9 +572,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true"><span class="tooltiptext readjust-exempt" style="margin-left: -113px;">New Assignment</span></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true" tooltip="New Assignment" tooltip-margin="-113px"></i>',
             headerClick: newAssignment,
-            formatter: () => '<i class="fa fa-times standard-icon tooltip" aria-hidden="true" style="color: #ce1515; font-size: 1.3em"><span class="tooltiptext readjust-exempt" style="margin-left: -127px;">Delete Assignment</span></i>',
+            formatter: () => '<i class="fa fa-times standard-icon tooltip" aria-hidden="true" style="color: #ce1515; font-size: 1.3em" tooltip="Delete Assignment" tooltip-margin="-127px"></i>',
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
@@ -649,7 +649,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Export Table Data",
-            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Export Grades</span></i>',
+            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>',
             headerClick: async () => {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
@@ -677,7 +677,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true"><span class="tooltiptext">Reset</span></i>',
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
@@ -701,13 +701,16 @@ let classesTable = new Tabulator("#classesTable", {
                 categoriesTable.setData(tabledata[i].categoryDisplay);
 
                 //sets up the tooltip margins for the newly created table(s)
-                setup_tooltip_margins();
+                setup_tooltips();
 
                 return;
             }
         }
     },
 });
+
+//sets up the tooltips in the classes table
+setup_tooltips()
 
 function correct() {
     const per = parseInt($("#corrections_modal_input").prop("value"));
@@ -942,7 +945,7 @@ function responseCallback(response, includedTerms) {
         success: scheduleCallback
     });
 
-    setup_tooltip_margins();
+    setup_tooltips();
 }
 
 function responseCallbackPartial(response) {
@@ -1117,7 +1120,7 @@ function openTab(evt, tab_name) {
         if (!currentTableData.pdf_files) {
             $("#loader").show();
             //sets the margins for the pdf viewer
-            setup_tooltip_margins();
+            setup_tooltips();
             $.ajax({
                 url: "/pdf",
                 method: "POST",

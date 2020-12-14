@@ -598,7 +598,7 @@ i.fa.fa-toolbox {
   overflow: initial !important;
 }
 
-.tooltip .tooltiptext {
+[tooltip] .tooltiptext {
   visibility: hidden;
   opacity: 0;
   font-family:  'Poppins-Regular';
@@ -609,6 +609,8 @@ i.fa.fa-toolbox {
   text-align: center;
   border-radius: 6px;
   padding: 5px 10px;
+  white-space: nowrap;
+  font-weight: 900;
 
   position: absolute;
   z-index: 1;
@@ -616,10 +618,10 @@ i.fa.fa-toolbox {
   left: 50%;
   margin-left: -60px;
 
-  transition: visibility 0ms 107ms, opacity 87ms 20ms;
+  transition: visibility 0ms 107ms, opacity 87ms 20ms !important;
 }
 
-.tooltip::after {
+[tooltip]::after {
   visibility: hidden;
   opacity: 0;
   content: "";
@@ -631,10 +633,10 @@ i.fa.fa-toolbox {
   border-style: solid;
   border-color: transparent transparent black transparent;
 
-  transition: visibility 0ms 107ms, opacity 87ms 20ms;
+  transition: visibility 0ms 107ms, opacity 87ms 20ms !important;
 }
 
-.tooltip:hover .tooltiptext, .tooltip:hover::after {
+[tooltip]:hover .tooltiptext, [tooltip]:hover::after {
   opacity: 1;
   visibility: visible;
   transition: opacity 125ms 375ms, visibility 0ms 375ms;

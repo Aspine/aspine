@@ -1004,7 +1004,7 @@ let initialize_quarter_dropdown = function(includedTerms) {
       //resetTableData();
 
       //sets up tooltip margins for this
-      setup_tooltip_margins();
+      setup_tooltips();
     });
   }
   a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
@@ -1041,10 +1041,12 @@ let initialize_quarter_dropdown = function(includedTerms) {
     else {
       console.log(isAccessibleObj.reason)
       $(c)
-        .addClass(["inaccessible", "tooltip"])
+        .addClass("inaccessible")
+        .attr("tooltip", isAccessibleObj.reason)
         // .attr("aria-label", isAccessibleObj.reason)
-        .append('<span class="tooltiptext" style="white-space: nowrap;">' + isAccessibleObj.reason + '</span>')
         .attr("tabindex", 0);
+
+      setup_tooltips();
     }
 
     b.appendChild(c);
@@ -1166,11 +1168,55 @@ let initialize_tableData_dropdown = function() {
   }
 }
 
-let setup_tooltip_margins = function() {
-  for (const child of $(".tooltiptext:not(.readjust-exempt)")) {
-    if (child.offsetWidth != 0) {
-      child.classList.add("readjust-exempt")
-      child.setAttribute("style", `${child.getAttribute("style") || ""} margin-left: -${child.offsetWidth/2}px;`)
+// To add a tooltip to anything, follow these 3 easy steps
+// 1. Make sure the element allows for overflow
+// 2. Make sure the element's position is clearly defined as relative or absolute or something
+// 3. Give the element the attribute 'tooltip="loreum ipsum dolor sit amet"
+// If the tooltip's position needs to be readjusted manually, give it the attribute tooltip-margin.
+function setup_tooltips() {
+
+  // Checks if it already has a tooltip
+  for (const child of document.querySelectorAll('[tooltip]')) {
+
+    if (child.querySelector('.tooltiptext') === null) {
+
+      // Creates the tooltip
+      let node = document.createElement("SPAN")
+      
+      // Gives it the class
+      node.classList.add("tooltiptext")
+      
+      // Adds the text from the tooltip attribute of the parent to the tooltip
+      node.appendChild(document.createTextNode(child.getAttribute("tooltip")))
+
+      // Adds the unfinished node to the parent
+      child.appendChild(node)
+
+      let tooltiptext = child.querySelector('.tooltiptext')
+
+      console.log(tooltiptext)
+      console.log(tooltiptext.offsetWidth)
+
+      // Set the margin to either be overridden or to be found
+      // For clarity, resize-exempt is given to an element so that it knows not to try to resize it again
+      if (child.hasAttribute("tooltip-margin")) {
+        tooltiptext.style.marginLeft = child.getAttribute("tooltip-margin")
+        tooltiptext.classList.add("resize-exempt")
+
+      } else if (tooltiptext.offsetWidth !== 0) {
+        tooltiptext.style.marginLeft = `${-tooltiptext.offsetWidth/2}px`
+        tooltiptext.classList.add("resize-exempt")
+      }
+
+    // If it's trying to set up the margins again because it couldn't do it the first time, it does so here
+    } else if (!child.querySelector('.tooltiptext').classList.contains("resize-exempt")) {
+
+      let node = child.querySelector('.tooltiptext')
+
+      if (node.offsetWidth !== 0) {
+        node.style.marginLeft = `${-node.offsetWidth/2}px`
+        node.classList.add("resize-exempt")
+      }
     }
   }
 }
