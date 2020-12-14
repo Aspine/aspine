@@ -1039,11 +1039,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.addEventListener("click", listener);
     }
     else {
-      console.log(isAccessibleObj.reason)
       $(c)
         .addClass("inaccessible")
         .attr("tooltip", isAccessibleObj.reason)
-        // .attr("aria-label", isAccessibleObj.reason)
         .attr("tabindex", 0);
 
       setup_tooltips();
@@ -1194,8 +1192,6 @@ function setup_tooltips() {
 
       let tooltiptext = child.querySelector('.tooltiptext')
 
-      console.log(tooltiptext)
-      console.log(tooltiptext.offsetWidth)
 
       // Set the margin to either be overridden or to be found
       // For clarity, resize-exempt is given to an element so that it knows not to try to resize it again
