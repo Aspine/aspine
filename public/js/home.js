@@ -59,7 +59,8 @@ function loadMode() {
     const slider = document.getElementById("dark-check");
     let cssMode = (window.matchMedia('(prefers-color-scheme: dark)').matches);
     let currentMode = "";
-    if (cssMode == true) {
+    if (cssMode === true) {
+        document.body.classList.toggle("dark");
         currentMode = "dark";
         // sets the slider to match the actual mode
         slider.checked = true;
@@ -78,7 +79,7 @@ function loadMode() {
         slider.click();
         currentMode = preferredMode;
     }
-    return currentMode;
+    return currentMode
 };
 
 // Toggle dark mode
@@ -86,17 +87,18 @@ let dark = true;
 function darkMode() {
     let r = document.querySelector(':root');
     let rs = getComputedStyle(r);
-    // If the color variables are set to light mode, toggle dark mode
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.toggle("dark");
-        localStorage.setItem("color-scheme", "dark");
-        dark = true;
-    }
-    // Otherwise, toggle back to light mode
-    else {
+    let currentMode = document.querySelector("body").classList.contains("dark");
+    // If the color variables are set to dark mode, toggle light mode
+    if (currentMode) {
         document.body.classList.toggle("dark");
         localStorage.setItem("color-scheme", "light");
         dark = false;
+    }
+    // Otherwise, toggle back to dark mode
+    else {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("color-scheme", "dark");
+        dark = true;
     }
  }
 
