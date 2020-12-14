@@ -131,6 +131,19 @@ h4#title {
   cursor: pointer;
 }
 
+.info-header {
+  font-family: Poppins-Bold, Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1.25em;
+  color: var(--green2);
+}
+
+.info-text {
+  font-size: 1em;
+  color: var(--black);
+  margin-bottom: 1.5em;
+}
+
 .tabulator-col {
   height: 35px;
 }
