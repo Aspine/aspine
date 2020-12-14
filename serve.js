@@ -159,7 +159,7 @@ new Map([
     [
         '/fonts/fontawesome/css/all.min.css',
         '/node_modules/@fortawesome/fontawesome-free/css/all.min.css'
-    ]
+    ],
 ]).forEach((path, endpoint) => {
     app.get(endpoint, (req, res) => {
         res.sendFile(__dirname + path);
@@ -167,6 +167,9 @@ new Map([
 });
 app.use('/fonts/fontawesome/webfonts', express.static(
     __dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts/'
+));
+app.use('/fonts/material-icons/iconfont', express.static(
+    __dirname + '/node_modules/material-icons/iconfont/'
 ));
 
 // Endpoint to expose version number to client

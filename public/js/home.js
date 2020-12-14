@@ -390,7 +390,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
         {
             title: "Stats",
-            titleFormatter: () => '<span class="material-icons md-18">leaderboard</span>',
+            titleFormatter: () => '<i class="material-icons md-18" aria-hidden="true">leaderboard</i>',
             formatter: cell => (
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
