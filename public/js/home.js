@@ -59,24 +59,24 @@ function loadMode() {
     const slider = document.getElementById("dark-check");
     let cssMode = (window.matchMedia('(prefers-color-scheme: dark)').matches);
     let currentMode = "";
-    if(cssMode == true) {
+    if (cssMode == true) {
         currentMode = "dark";
         // sets the slider to match the actual mode
         slider.checked = true;
-        }
+    }
     else {
         currentMode = "light";
     }
     if (localStorage.getItem("color-scheme") === null) {
-        var prefferedMode = currentMode
-      }
-    else {
-        var prefferedMode = localStorage.getItem('color-scheme');
+        var preferredMode = currentMode
     }
-    // sets mode to preffered if it's different than the current one
-    if (prefferedMode !== currentMode) {
+    else {
+        var preferredMode = localStorage.getItem('color-scheme');
+    }
+    // sets mode to preferred if it's different than the current one
+    if (preferredMode !== currentMode) {
         slider.click();
-        currentMode = prefferedMode;
+        currentMode = preferredMode;
     }
     return currentMode;
 };
@@ -110,6 +110,15 @@ function darkMode() {
         r.style.setProperty('--blue1', '#1a3e75');
         r.style.setProperty('--blue3', '#2c6bc9');
 
+        r.style.setProperty('--schedule1', '#00290e');
+        r.style.setProperty('--schedule2', '#003d14');
+        r.style.setProperty('--schedule3', '#00551d');
+        r.style.setProperty('--schedule4', '#007a29');
+        r.style.setProperty('--schedule5', '#008f30');
+        r.style.setProperty('--schedule6', '#00a336');
+        r.style.setProperty('--schedule7', '#00b83d');
+        r.style.setProperty('--schedule8', '#00cc44');
+
         localStorage.setItem("color-scheme", "dark");
         dark = true;
     }
@@ -137,16 +146,19 @@ function darkMode() {
         r.style.setProperty('--blue1', '#9ebcea');
         r.style.setProperty('--blue3', '#1d68cd');
 
+        r.style.setProperty('--schedule1', '#63c082');
+        r.style.setProperty('--schedule2', '#72c68e');
+        r.style.setProperty('--schedule3', '#82cc9b');
+        r.style.setProperty('--schedule4', '#91d2a7');
+        r.style.setProperty('--schedule5', '#a1d9b4');
+        r.style.setProperty('--schedule6', '#b1dfc0');
+        r.style.setProperty('--schedule7', '#c0e5cd');
+        r.style.setProperty('--schedule8', '#d0ecd9');
+
         localStorage.setItem("color-scheme", "light");
         dark = false;
     }
  }
-
-function getMode() {
-    let r = document.querySelector(':root');
-    let rs = getComputedStyle(r);
-    return rs.getPropertyValue('--white') === "#ffffff" || rs.getPropertyValue('--white') === " #ffffff";
-}
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
     return new Promise(function(resolve, reject) {
@@ -1063,8 +1075,7 @@ function scheduleCallback(response) {
 
     periods = periods.filter(Boolean).map(x => "Period: " + x);
 
-    let colors = ["#63C082", "#72C68E", "#82CC9B", "#91D2A7", "#A1D9B4", "#B1DFC0", "#C0E5CD", "#D0ECD9"];
-    let darkModeColors = ["#00290e", "#003d14", "#00551d", "#007a29", "#008f30", "#00a336", "#00b83d", "#00cc44"];
+    let colors = ["var(--schedule1)", "var(--schedule2)", "var(--schedule3)", "var(--schedule4)", "var(--schedule5)", "var(--schedule6)", "var(--schedule7)", "var(--schedule8)"];
 
 	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE =======
     if (currentTableData.schedule.black.length > 10) {
@@ -1082,28 +1093,14 @@ function scheduleCallback(response) {
 
     for (let i = 0; i < periods.length; i++) {
         if (currentTableData.schedule.black[i]) {
-            if (getMode()) {
-                currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-                currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
-                currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-            }
-            else {
-                currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-                currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
-                currentTableData.schedule.black[i].color = darkModeColors[i] ? darkModeColors[i] : darkModeColors[darkModeColors.length - 1];
-            }
+            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
+            currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
         }
         if (currentTableData.schedule.silver[i]) {
-            if (getMode()) {
-                currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-                currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
-                currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-            }
-            else {
-                currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
-                currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
-                currentTableData.schedule.silver[i].color = darkModeColors[darkModeColors.length - 1 - i] ? darkModeColors[darkModeColors.length - 1 - i] : colors[0];
-            }
+            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
+            currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
     }
 

@@ -66,6 +66,15 @@ noscript p {
     --orange: #f6b93b;
 
     --red: #ff0000;
+
+    --schedule1: #63c082;
+    --schedule2: #72c68e;
+    --schedule3: #82cc9b;
+    --schedule4: #91d2a7;
+    --schedule5: #a1d9b4;
+    --schedule6: #b1dfc0;
+    --schedule7: #c0e5cd;
+    --schedule8: #d0ecd9;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -100,6 +109,15 @@ noscript p {
     --orange: #f6b93b;
 
     --red: #ff0000;
+
+    --schedule1: #00290e;
+    --schedule2: #003d14;
+    --schedule3: #00551d;
+    --schedule4: #007a29;
+    --schedule5: #008f30;
+    --schedule6: #00a336;
+    --schedule7: #00b83d;
+    --schedule8: #00cc44;
   }
 }
 
