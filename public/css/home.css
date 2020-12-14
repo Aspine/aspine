@@ -618,7 +618,7 @@ i.fa.fa-toolbox {
   left: 50%;
   margin-left: -60px;
 
-  transition: visibility 0ms 107ms, opacity 87ms 20ms !important;
+  transition: visibility 0ms 300ms, opacity 125ms 175ms;
 }
 
 [tooltip]::after {
@@ -633,7 +633,7 @@ i.fa.fa-toolbox {
   border-style: solid;
   border-color: transparent transparent black transparent;
 
-  transition: visibility 0ms 107ms, opacity 87ms 20ms !important;
+  transition: visibility 0ms 300ms, opacity 125ms 175ms;
 }
 
 [tooltip]:hover .tooltiptext, [tooltip]:hover::after {
