@@ -87,74 +87,14 @@ function darkMode() {
     let r = document.querySelector(':root');
     let rs = getComputedStyle(r);
     // If the color variables are set to light mode, toggle dark mode
-    if (rs.getPropertyValue('--white') === "#ffffff" || rs.getPropertyValue('--white') === " #ffffff") {
-        r.style.setProperty('--green', '#00a336');
-        r.style.setProperty('--green1', '#00b83d');
-        r.style.setProperty('--green2', '#00cc44');
-        r.style.setProperty('--green3', '#00ff52');
-
-        r.style.setProperty('--white', '#141415');
-        r.style.setProperty('--white1', '#1e1f1f');
-        r.style.setProperty('--white2', '#28292a');
-        r.style.setProperty('--white3', '#323334');
-
-        r.style.setProperty('--gray', '#3c3d3e');
-        r.style.setProperty('--gray1', '#464749');
-        r.style.setProperty('--gray2', '#5a5c5e');
-        r.style.setProperty('--gray3', '#6e7072');
-        r.style.setProperty('--gray-to-white', "#cccccc");
-
-
-        r.style.setProperty('--black', '#ffffff');
-
-        r.style.setProperty('--blue1', '#1a3e75');
-        r.style.setProperty('--blue3', '#2c6bc9');
-
-        r.style.setProperty('--schedule1', '#00290e');
-        r.style.setProperty('--schedule2', '#003d14');
-        r.style.setProperty('--schedule3', '#00551d');
-        r.style.setProperty('--schedule4', '#007a29');
-        r.style.setProperty('--schedule5', '#008f30');
-        r.style.setProperty('--schedule6', '#00a336');
-        r.style.setProperty('--schedule7', '#00b83d');
-        r.style.setProperty('--schedule8', '#00cc44');
-
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.toggle("dark");
         localStorage.setItem("color-scheme", "dark");
         dark = true;
     }
     // Otherwise, toggle back to light mode
     else {
-        r.style.setProperty('--green', '#268a48');
-        r.style.setProperty('--green1', '#107031');
-        r.style.setProperty('--green2', '#00551d');
-        r.style.setProperty('--green3', '#003913');
-
-        r.style.setProperty('--white', '#ffffff');
-        r.style.setProperty('--white1', '#f7f7f7');
-        r.style.setProperty('--white2', '#f2f2f2');
-        r.style.setProperty('--white3', '#dddddd');
-
-        r.style.setProperty('--gray', '#cccccc');
-        r.style.setProperty('--gray1', '#888888');
-        r.style.setProperty('--gray2', '#666666');
-        r.style.setProperty('--gray3', '#333333');
-        r.style.setProperty('--gray-to-white', "#666666");
-
-
-        r.style.setProperty('--black', '#000000');
-
-        r.style.setProperty('--blue1', '#9ebcea');
-        r.style.setProperty('--blue3', '#1d68cd');
-
-        r.style.setProperty('--schedule1', '#63c082');
-        r.style.setProperty('--schedule2', '#72c68e');
-        r.style.setProperty('--schedule3', '#82cc9b');
-        r.style.setProperty('--schedule4', '#91d2a7');
-        r.style.setProperty('--schedule5', '#a1d9b4');
-        r.style.setProperty('--schedule6', '#b1dfc0');
-        r.style.setProperty('--schedule7', '#c0e5cd');
-        r.style.setProperty('--schedule8', '#d0ecd9');
-
+        document.body.classList.toggle("dark");
         localStorage.setItem("color-scheme", "light");
         dark = false;
     }
