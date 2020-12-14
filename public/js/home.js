@@ -57,9 +57,8 @@ window.addEventListener("load", loadMode);
 function loadMode() {
     // loads current os mode and sets slider accordingly
     const slider = document.getElementById("dark-check");
-    let cssMode = (window.matchMedia('(prefers-color-scheme: dark)').matches);
     let currentMode = "";
-    if (cssMode === true) {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document.body.classList.toggle("dark");
         currentMode = "dark";
         // sets the slider to match the actual mode
@@ -69,7 +68,7 @@ function loadMode() {
         currentMode = "light";
     }
     if (localStorage.getItem("color-scheme") === null) {
-        var preferredMode = currentMode
+        var preferredMode = currentMode;
     }
     else {
         var preferredMode = localStorage.getItem('color-scheme');
@@ -79,7 +78,7 @@ function loadMode() {
         slider.click();
         currentMode = preferredMode;
     }
-    return currentMode
+    return currentMode;
 };
 
 // Toggle dark mode
@@ -1001,8 +1000,15 @@ function scheduleCallback(response) {
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
     //let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-    let periods = currentTableData.schedule.black.slice().map(x => x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
-    let placeTimes = ["8:05 - 9:25", "9:29 - 9:44", "9:48 - 11:08", "11:12 - 1:06", "1:10 - 2:30"];
+    let periods = currentTableData.schedule.black.slice().map(x =>
+        x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
+    let placeTimes = [
+        "8:05 - 9:25",
+        "9:29 - 9:44",
+        "9:48 - 11:08",
+        "11:12 - 1:06",
+        "1:10 - 2:30"
+    ];
     let timesCounter = 0;
     let times = [];
 
@@ -1017,21 +1023,7 @@ function scheduleCallback(response) {
 
     periods = periods.filter(Boolean).map(x => "Period: " + x);
 
-    let colors = ["var(--schedule1)", "var(--schedule2)", "var(--schedule3)", "var(--schedule4)", "var(--schedule5)", "var(--schedule6)", "var(--schedule7)", "var(--schedule8)"];
-
-	//========== TEMP FIX FOR COVID SCHEDULE HAVING DIFFERENT STRUCTURE =======
-    if (currentTableData.schedule.black.length > 10) {
-        //prevent it from shaving the schedule too much
-        currentTableData.schedule.black.shift();
-        for (let w = 0; w < currentTableData.schedule.black.length; w++) {
-            currentTableData.schedule.black.splice(w + 1, 1);
-        }
-
-        for (let w = 0; w < currentTableData.schedule.silver.length; w++) {
-            currentTableData.schedule.silver.splice(w + 1, 1);
-        }
-    }
-	//=========================================================================
+    const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 
     for (let i = 0; i < periods.length; i++) {
         if (currentTableData.schedule.black[i]) {
