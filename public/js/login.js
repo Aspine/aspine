@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
   }
   else {
     document.getElementById("remember-me").setAttribute('checked', false);
-    document.getElementById("remember-me").click()
+    document.getElementById("remember-me").click();
   }
 
   if (localStorage.getItem("username") === null) {
