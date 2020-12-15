@@ -32,34 +32,91 @@ noscript p {
   max-width: 960px;
 }
 
-:root {
-    --green: #268A48;
-    --green1: #107031;
-    --green2: #00551D;
-    --green3: #003913;
+body {
+  --green: #268A48;
+  --green1: #107031;
+  --green2: #00551D;
+  --green3: #003913;
 
-    --white: #ffffff;
-    --white1: #f7f7f7;
-    --white2: #f2f2f2;
-    --white3: #ddd;
+  --white: #ffffff;
+  --white1: #f7f7f7;
+  --white2: #f2f2f2;
+  --white3: #ddd;
 
-    --gray: #ccc;
-    --gray1: #888;
-    --gray2: #666666;
-    --gray3: #333;
+  --gray: #ccc;
+  --gray1: #888;
+  --gray2: #666666;
+  --gray3: #333;
 
-    --transparent-gray: rgba(255, 255, 255, 0.3);
+  /* Different variable for gray subtitles that turn to white for dark mode */
+  --gray-to-white: #666666;
 
-    --black: #000000;
-    --transparent-black: rgba(0, 0, 0, 0.6);
+  --transparent-gray: rgba(255, 255, 255, 0.3);
 
-    --blue: #2196F3;
+  --black: #000000;
+  --transparent-black: rgba(0, 0, 0, 0.6);
 
-    --purple: #e9a1ff;
+  --blue: #2196F3;
+  --blue1: #9ebcea;
+  --blue2: #769bcc;
+  --blue3: #1d68cd;
 
-    --orange: #f6b93b;
+  --purple: #e9a1ff;
 
-    --red: #ff0000;
+  --orange: #f6b93b;
+
+  --red: #ff0000;
+
+  --schedule1: #63c082;
+  --schedule2: #72c68e;
+  --schedule3: #82cc9b;
+  --schedule4: #91d2a7;
+  --schedule5: #a1d9b4;
+  --schedule6: #b1dfc0;
+  --schedule7: #c0e5cd;
+  --schedule8: #d0ecd9;
+}
+
+body.dark {
+  --green: #00a336;
+  --green1: #00b83d;
+  --green2: #00cc44;
+  --green3: #00ff52;
+
+  --white: #141415;
+  --white1: #1e1f1f;
+  --white2: #28292a;
+  --white3: #323334;
+
+  --gray: #3c3d3e;
+  --gray1: #464749;
+  --gray2: #5a5c5e;
+  --gray3: #6e7072;
+
+  /* Different variable for gray subtitles that turn to white for dark mode */
+  --gray-to-white: #ccc;
+
+  --black: #ffffff;
+
+  --blue: #2196F3;
+  --blue1: #1a3e75;
+  --blue2: #769bcc;
+  --blue3: #2c6bc9;
+
+  --purple: #e9a1ff;
+
+  --orange: #f6b93b;
+
+  --red: #ff0000;
+
+  --schedule1: #00290e;
+  --schedule2: #003d14;
+  --schedule3: #00551d;
+  --schedule4: #007a29;
+  --schedule5: #008f30;
+  --schedule6: #00a336;
+  --schedule7: #00b83d;
+  --schedule8: #00cc44;
 }
 
 /*---------------------------------------------*/
@@ -93,7 +150,7 @@ p {
   font-family: Poppins-Regular;
   font-size: 14px;
   line-height: 1.7;
-  color: var(--gray2);
+  color: var(--gray-to-white);
   margin: 0px;
 }
 
@@ -108,10 +165,94 @@ body {
   text-align: center;
 }
 
+/* Text above the dark mode toggle */
+.dark-mode {
+  position: relative;
+  margin-top: 70px;
+  float: right;
+  margin-right: 10px;
+}
+
+/* Dark mode switch */
+.dark-mode-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.dark-mode-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Toggle slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--white3);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--white);
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: var(--green2);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--green2);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Hide toggle on small screens */
+@media only screen and (max-width: 500px) {
+  .dark-mode {
+    display: none;
+  }
+  .dark-mode-toggle {
+    display: none;
+  }
+}
+
 input {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14px;
+  color: var(--black);
+  background-color: var(--white);
+  border-color: var(--black);
 }
 
 label {
@@ -152,6 +293,13 @@ button {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14px;
+  border: 1px solid var(--black);
+  border-radius: 2px;
+  background-color: var(--white2);
+}
+
+button:hover {
+  background-color: var(--white3);
 }
 
 
@@ -304,11 +452,11 @@ button {
 
 .inaccessible {
   color: var(--gray2) !important;
-  background-color: var(--gray);
+  background-color: var(--white3);
 }
 
 .inaccessible:hover {
-  background-color: var(--gray) !important;
+  background-color: var(--white3) !important;
 }
 
 .tab .tablinks-right {
@@ -385,7 +533,7 @@ div.tabcontent, div.tab {
   margin-bottom: auto;
 }
 
-.tablinks {
+.tablinks, .tabcontent {
   color: var(--black);
 }
 
@@ -397,9 +545,13 @@ i.fa.fa-plus.grades {
   cursor: pointer;
 }
 
-.bar-graph-icon {
-  padding-left: 28%;
-  padding-top: 25%;
+.material-icons,
+.material-icons.md-18 {
+  padding-left: 23%;
+  padding-top: 19%;
+  border-radius: 2px;
+  font-size: 22px;
+  color: var(--black);
 }
 
 i.fa.fa-info-circle,
@@ -468,6 +620,7 @@ canvas#large_clock {
 .modal-content {
   position: relative;
   background-color: var(--white);
+  color: var(--black);
   margin: auto;
   padding: 20px;
   border: 1px solid var(--gray1);
@@ -538,6 +691,7 @@ canvas#large_clock {
   display: inline-block;
   position: relative;
   left: 12px;
+  color: var(--black);
 }
 
 .stats_modal_heading {
@@ -567,6 +721,7 @@ canvas#large_clock {
   border: 1px solid var(--white3);
   text-align: left;
   padding: 8px;
+  color: var(--black);
 }
 
 #stats_modal_table th {
@@ -587,19 +742,23 @@ canvas#large_clock {
 #export_modal_content, #import_modal_content {
   width: 25em;
   text-align: left;
+  color: var(--black);
 }
 
 #export_modal_content ul {
   margin-left: 1em;
+  color: var(--black);
 }
 
 #export_modal_content label {
   display: inline-block;
+  color: var(--black);
 }
 
 #export_button, #import_button {
   padding: 14px 16px;
   cursor: pointer;
+  color: var(--black);
 }
 
 .hastooltip {
@@ -795,8 +954,8 @@ p#large_clock_period {
 }
 
 .pdf_select-items div:hover, .pdf_same-as-selected {
-  background-color: var(--black);
-  opacity: 0.1;
+  background-color: var(--green1);
+  color: var(--white);
 }
 
 #pdf-container {
@@ -882,7 +1041,7 @@ p#large_clock_period {
   /*border: 1px transparent solid;*/
   border-width: 0px 1px 1px 1px !important;
   border-style: solid;
-  border-color: var(--green);
+  border-color: var(--gray);
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
@@ -890,7 +1049,7 @@ p#large_clock_period {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   border-style: solid;
-  border-color: var(--green) !important;
+  border-color: var(--gray) !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
 }
 
