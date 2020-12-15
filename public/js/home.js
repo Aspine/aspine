@@ -65,25 +65,13 @@ window.addEventListener("load", function loadMode() {
     }
 });
 
-// Toggle dark mode
-let dark = true;
+// Toggle between dark and light mode
 function darkMode() {
-    let r = document.querySelector(':root');
-    let rs = getComputedStyle(r);
-    let currentMode = document.querySelector("body").classList.contains("dark");
-    // If the color variables are set to dark mode, toggle light mode
-    if (currentMode) {
-        document.body.classList.toggle("dark");
-        localStorage.setItem("color-scheme", "light");
-        dark = false;
-    }
-    // Otherwise, toggle back to dark mode
-    else {
-        document.body.classList.toggle("dark");
-        localStorage.setItem("color-scheme", "dark");
-        dark = true;
-    }
- }
+    document.body.classList.toggle("dark");
+    localStorage.setItem("color-scheme",
+        document.querySelector("body").classList.contains("dark") ?
+            'dark' : 'light');
+}
 
 window.getStats = async function(session_id, apache_token, assignment_id) {
     return new Promise(function(resolve, reject) {
