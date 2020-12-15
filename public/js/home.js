@@ -53,33 +53,17 @@ window.addEventListener("click", function(event) {
     }
 });
 // detect color scheme and set slider
-window.addEventListener("load", loadMode);
-function loadMode() {
+window.addEventListener("load", function loadMode() {
     // loads current os mode and sets slider accordingly
     const slider = document.getElementById("dark-check");
-    let currentMode = "";
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    const preferredMode = localStorage.getItem('color-scheme');
+    if (preferredMode ? preferredMode === 'dark' :
+            window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document.body.classList.toggle("dark");
-        currentMode = "dark";
         // sets the slider to match the actual mode
         slider.checked = true;
     }
-    else {
-        currentMode = "light";
-    }
-    if (localStorage.getItem("color-scheme") === null) {
-        var preferredMode = currentMode;
-    }
-    else {
-        var preferredMode = localStorage.getItem('color-scheme');
-    }
-    // sets mode to preferred if it's different than the current one
-    if (preferredMode !== currentMode) {
-        slider.click();
-        currentMode = preferredMode;
-    }
-    return currentMode;
-};
+});
 
 // Toggle dark mode
 let dark = true;
