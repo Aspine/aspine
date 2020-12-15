@@ -244,7 +244,7 @@ app.get('/', async (req, res) => {
     if (req.session.username || req.session.nologin) {
         res.sendFile(__dirname + '/public/home.html');
     } else {
-        res.redirect('/login.html');
+        res.redirect('/login');
     }
 });
 
