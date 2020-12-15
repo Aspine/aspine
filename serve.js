@@ -258,12 +258,12 @@ app.post('/login', async (req, res) => {
     else {
         req.session.nologin = true;
     }
-    res.redirect('/home.html');
+    res.redirect('/');
 });
 
 app.get('/logout', async (req, res) => {
   req.session.destroy();
-    res.redirect('/login.html');
+    res.redirect('/login');
 });
 
 
