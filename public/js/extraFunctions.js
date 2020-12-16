@@ -654,6 +654,143 @@ function tableData_closeAllSelect(elmnt) {
 
 }
 
+function initialize_resize_hamburger() {
+
+  // Total width of all items in tab minus hamburger
+  let total_width = -44.25;
+
+  // Width of all items to the left (because they get removed last) plus logout button and hamburger widths
+  // 44.25 is hamburger width, has to be hardcoded becuase it might be display: none;'d
+  let left_width = 44.25 + $('#logout_button').outerWidth()
+
+  // Gets all non-tablinks-right elements and adds their width to total_width  and also left_width
+  $('.tab .tablinks:not(.tablinks-right)').outerWidth((_, w) => {
+    total_width += w;
+    left_width += w;
+  });
+
+  // Gets all tablinks-right elements and adds their width to total_width
+  $('.tab .tablinks-right').outerWidth((_, w) => {total_width += w;})
+
+  const switch_left_items = () => {
+    // Checks if left items are in sidenav
+    const in_sidenav = $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').length === 0
+
+    if (in_sidenav) {
+      // Moves items from sidenav to tab
+      $('#sidenav .tablinks:not(.tablinks-right, .switch-exempt)').detach().appendTo($(".tab"));
+    } else {
+      // Moves items from tab to sidenav
+      $('.tab .tablinks:not(.tablinks-right, .switch-exempt)').detach().appendTo($("#sidenav"));
+      // Puts all the tablinks-right things below the non-tablinks-right things
+      for (const child of $('#sidenav .tablinks-right')) {
+        $('#sidenav').append(child);
+      }
+    }
+  }
+
+  // REASON IT ADDS ITEMS IN REVERSE:
+  // Otherwise the items would basically go from right to left (in tab) 
+  // To down to up, when I'd like it to be up to down.
+  const switch_right_items = function() {
+    // Checks if right-items (more specifically buttons) are hidden
+
+    const in_sidenav = $('.tab .gpa_custom-select').length == 0
+
+    if (in_sidenav) {
+
+      // Adds right items to tab in reverse
+      const children = $('#sidenav .tablinks-right:not(#logout_button)')
+      for (const child of [...children].reverse()) {
+        $(".tab").append(child);
+      }
+
+      // Also closes the sidebar
+      closeSideNav();
+    } else {
+
+      // Adds right items to sidenav in reverse
+      const children = $('.tab .tablinks-right:not(#logout_button)')
+      for (const child of [...children].reverse()) {
+        $("#sidenav").append(child)
+      }
+    }
+  }
+
+  const switch_hamburger = function() {
+    
+    // Hides or unhides the hamburger
+    if ($('#hamburger_button').hasClass("hide")) {
+      $('#hamburger_button').removeClass("hide")
+    } else {
+      $('#hamburger_button').addClass("hide")
+    }
+  }
+
+  // navbar_state has 3 states
+  // 0 -> bar has enough space for everything, THIS IS THE DEFAULT IN THE CSS/HTML
+  // 1 -> bar can't fit the items on the right
+  // 2 -> bar can only fit logout and hamburger
+  // old_navbar_state is used to compare the newer navbar_state to the current navbar_state
+  let navbar_state, old_navbar_state;
+  const update_navbar_state = function() {
+    if ($(".tab").width() <= left_width) {
+      navbar_state = 2;
+    } else if ($(".tab").width() <= total_width) {
+      navbar_state = 1;
+    } else {
+      navbar_state = 0;
+    }
+  }
+
+  // Initially instantiates nav_bar_state and old_nav_bar_state
+  update_navbar_state();
+  old_navbar_state = navbar_state;
+
+  // Initially switches whatever is necessary, only if navbar_state is 1 or 2 because 0 is default
+  if (navbar_state === 1) {
+    switch_right_items();
+    switch_hamburger();
+  } else if (navbar_state === 2) {
+    switch_right_items();
+    switch_left_items();
+    switch_hamburger();
+  }
+
+  // ADDS THE EVENT LISTENER
+  window.addEventListener("resize", function () {
+
+    // Updates navbar_state
+    update_navbar_state();
+
+    // If they're different, updates the tab and sidenav
+    if (old_navbar_state !== navbar_state) {
+      if ((old_navbar_state === 0 && navbar_state === 1) || (old_navbar_state === 1 && navbar_state === 0)) {
+        // When moving to and from 0 and 1, needs to switch both right items and hamburgers
+        switch_right_items();
+        switch_hamburger();
+      }
+      else if ((old_navbar_state === 1 && navbar_state === 2) || (old_navbar_state === 2 && navbar_state === 1)) {
+        // When moving between 1 and 2, needs to switch left items
+        switch_left_items();
+      }
+      else if ((old_navbar_state === 0 && navbar_state === 2) || (old_navbar_state === 2 && navbar_state === 0)) {
+        // If it goes from 0 to 2 or 2 to 0, do everything in succession
+        switch_right_items();
+        switch_hamburger();
+        switch_left_items();
+      }
+
+    }
+
+    // Updates the old navbar state for later comparisons
+    old_navbar_state = navbar_state;
+
+  });
+
+}
+
+
 //pdf dropdown stuff
 let initialize_pdf_dropdown = function() {
 
@@ -731,6 +868,8 @@ let initialize_pdf_dropdown = function() {
       and open/close the current select box: */
       e.stopPropagation();
       pdf_closeAllSelect(this);
+      closeAllSelect();
+      tableData_closeAllSelect();
       this.nextSibling.classList.toggle("pdf_select-hide");
       this.classList.toggle("pdf_select-arrow-active");
     });
@@ -833,6 +972,7 @@ let listener = function(event) {
  * and not all of the terms' data have been put into currentTableData)
  */
 let initialize_quarter_dropdown = function(includedTerms) {
+
   /* Look for any elements with the class "gpa_custom-select": */
   let x = document.getElementsByClassName("gpa_custom-select")[0];
   let selElmnt = x.getElementsByTagName("select")[0];
@@ -848,6 +988,8 @@ let initialize_quarter_dropdown = function(includedTerms) {
       and open/close the current select box: */
       e.stopPropagation();
       closeAllSelect(this);
+      pdf_closeAllSelect();
+      tableData_closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
       $('.gpa_select-selected').toggleClass("activated-selected-item");
@@ -1002,7 +1144,8 @@ let initialize_tableData_dropdown = function() {
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
       e.stopPropagation();
-      //pdf_closeAllSelect(this);
+      pdf_closeAllSelect(this);
+      closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
       $('.tableData_select-selected').toggleClass("activated-selected-item");

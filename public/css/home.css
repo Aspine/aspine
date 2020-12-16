@@ -75,6 +75,15 @@ body {
   --schedule6: #b1dfc0;
   --schedule7: #c0e5cd;
   --schedule8: #d0ecd9;
+
+  --sidenav-color: #e0e0e0;
+  --sidenav-button-color: #eaeaea;
+  --sidenav-button-child-color:  #f9f9f9;
+  --sidenav-hr-color: #d8d8d8;
+
+  --sidenav-hover-color: #f3f3f3;
+  --sidenav-hover-lighter-color: #f3f3f3;
+
 }
 
 body.dark {
@@ -117,6 +126,15 @@ body.dark {
   --schedule6: #00a336;
   --schedule7: #00b83d;
   --schedule8: #00cc44;
+
+  --sidenav-color: #121212;
+  --sidenav-button-color: #292a2b;
+  --sidenav-button-child-color: #4e5257;
+  --sidenav-hr-color: #576069;
+
+  --sidenav-hover-color: #333436;
+  --sidenav-hover-lighter-color: #606d78;
+
 }
 
 /*---------------------------------------------*/
@@ -452,7 +470,7 @@ button:hover {
 
 .inaccessible {
   color: var(--gray2) !important;
-  background-color: var(--white3);
+  background-color: var(--white3) !important;
 }
 
 .inaccessible:hover {
@@ -1031,7 +1049,7 @@ p#large_clock_period {
 .select-items {
   position: absolute;
   background-color: var(--white2);
-  top: 100%;
+  top: calc(100% + 1px);
   left: 0;
   right: 0;
   z-index: 99;
@@ -1047,10 +1065,15 @@ p#large_clock_period {
 
 .activated-selected-item {
   /*border: 1px transparent solid;*/
-  border-width: 1px 1px 1px 1px !important;
+  border-width: 0px 1px 0px 1px !important;
+  margin: 1px 0px 1px 0px;
   border-style: solid;
   border-color: var(--gray) !important;
   /*border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;*/
+}
+
+.tab .tableData_custom-select {
+  width: 210px;
 }
 
 /* Hide the items when the select box is closed: */
@@ -1060,4 +1083,117 @@ p#large_clock_period {
 
 .select-items div:hover, .same-as-selected {
   background-color: var(--white1);
+}
+
+.sidenav .select-items div:hover {
+  background-color: var(--sidenav-hover-lighter-color);
+}
+
+.sidenav hr {
+  height: 4px;
+  width: 270px;
+  background-color: var(--sidenav-hr-color);
+  clear: both;
+  margin: 5px 0px;
+  border: 0px;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: var(--sidenav-color);
+  overflow-x: hidden;
+  padding-top: 5px;
+  transition: 0.5s;
+  display: block;
+}
+
+.sidenav button {
+  clear: both;
+  background-color: var(--sidenav-button-color);
+  /* float: left; */
+  /* float: right; */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  width: 260px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
+}
+
+.sidenav .select-selected:hover {
+  background-color: var(--sidenav-hover-color) !important;
+}
+
+.sidenav button:hover {
+  background-color: var(--sidenav-hover-color) !important;
+}
+
+.sidenav .GPA {
+  clear: both;
+  height: 44px;
+  margin-bottom: 5px;
+  width: 270px;
+}
+
+.sidenav .select-selected {
+  color: var(--black) !important;
+  background-color: var(--sidenav-button-color);
+  /* float: right; */
+  font-size: 14px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  width: 260px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.sidenav .select-selected:after {
+  right: 15px;
+}
+
+.sidenav .activated-selected-item {
+  /*border: 1px transparent solid;*/
+  border-width: 1px 1px 1px 1px !important;
+  margin: 0px 5px 5px 5px;
+  border-style: solid;
+  border-color: transparent !important; /* empty borders for these because it looks better */
+}
+
+.sidenav .activated-select-items {
+  color: var(--black);
+  background-color: var(--sidenav-button-child-color);
+  float: right;
+  font-size: 14px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  width: 260px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-color: transparent !important;
+}
+
+.sidenav .select-items {
+  position: static;
+}
+
+.hide {
+  display: none;
+}
+
+.sidenav-overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  visibility: hidden;
+  /* cursor: pointer; */
 }

@@ -920,6 +920,8 @@ function responseCallback(response, includedTerms) {
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
 
+    //initializes hamburger resize
+    initialize_resize_hamburger()
 
     $.ajax({
         url: "/schedule",
@@ -1078,7 +1080,7 @@ function openTab(evt, tab_name) {
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
     const tab_button = document.querySelector(
-        `.tablinks[onclick="openTab(event, '${tab_name}')"]`
+        `.tablinks[onclick*="openTab(event, '${tab_name}')"]`
     );
     if (tab_button) {
         tab_button.classList.add("active");
@@ -1141,6 +1143,24 @@ function openTab(evt, tab_name) {
     recentActivity.redraw();
     recentAttendance.redraw();
 }
+
+function openSideNav() {
+    const sidenav = document.getElementById("sidenav");
+    sidenav.style.width = sidenav.clientWidth === 270 ? "0px" : "270px";
+    // greys out the main section
+    const mainSection = $("#sidenav-overlay");
+    mainSection.css("visibility", "visible");
+    $(mainSection).fadeIn("slow");
+}
+
+function closeSideNav() {
+    document.getElementById("sidenav").style.width = "0px";
+    const mainSection = $(".sidenav-overlay");
+    $(mainSection).fadeOut("slow");
+}
+
+//  Allows exiting sidenav by clicking anywhere outside
+document.getElementById("sidenav-overlay").addEventListener("click", closeSideNav);
 
 $("#export_button").click(() => {
     prefs = {};
