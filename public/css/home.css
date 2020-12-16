@@ -51,8 +51,6 @@ body {
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #666666;
 
-  --transparent-gray: rgba(255, 255, 255, 0.3);
-
   --black: #000000;
   --transparent-black: rgba(0, 0, 0, 0.6);
 
@@ -399,7 +397,7 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--black);
+  background-color: black;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -411,13 +409,13 @@ button:hover {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--white);
+  background-color: white;
   -webkit-transition: 1s;
   transition: 1s;
 }
 
 .switch input:checked + .slider {
-  background-color: var(--gray1);
+  background-color: #888;
 }
 
 .switch input:focus + .slider {
@@ -497,7 +495,7 @@ button:hover {
 
 /* Style the tab content */
 .tabcontent {
-  background: var(--transparent-gray);
+  background: var(--white2);
   display: none;
   padding: 6px 12px;
   border: 1px solid var(--gray);
@@ -521,7 +519,7 @@ button:hover {
   letter-spacing: 0.1em;
 }
 #schedule_title {
-  color: var(--white);
+  color: white;
   display: inline;
   position: relative;
   font-size: 20px;
@@ -953,7 +951,7 @@ p#large_clock_period {
 
 /* Add a black background color to the top navigation */
 .pdf_topnav {
-  background-color: var(--gray3);
+  background-color: #333;
   overflow: visible;
   height: 41px;
 }
@@ -961,7 +959,7 @@ p#large_clock_period {
 /* Style the links inside the navigation bar */
 .pdf_topnav span.right {
   float: right;
-  color: var(--white2);
+  color: #f2f2f2;
   text-align: center;
   padding: 10px 16px;
   text-decoration: none;
@@ -971,7 +969,7 @@ p#large_clock_period {
 /* Change the color of links on hover */
 .pdf_topnav span.right.hover:hover {
   background-color: var(--gray2);
-  color: var(--white2);
+  color: #f2f2f2;
 }
 
 
@@ -1001,18 +999,18 @@ p#large_clock_period {
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-color: var(--white) transparent transparent transparent;
+  border-color: white transparent transparent transparent;
 }
 
 /* Point the arrow upwards when the select box is open (active): */
 .pdf_select-selected.pdf_select-arrow-active:after {
-  border-color: transparent transparent var(--white) transparent;
+  border-color: transparent transparent white transparent;
   top: 10px;
 }
 
 /* style the items (options), including the selected item: */
 .pdf_select-items div,.pdf_select-selected {
-  color: var(--white);
+  color: white;
   padding: 10px 16px;
   border: 1px solid transparent;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
@@ -1036,12 +1034,12 @@ p#large_clock_period {
 
 .pdf_select-items div:hover, .pdf_same-as-selected {
   background-color: var(--green1);
-  color: var(--white);
+  color: white;
 }
 
 #pdf-container {
-  background: var(--gray3);
-  border: solid 3px;
+  background: #333;
+  border: solid 3px var(--gray2);
   width: 100%;
   height: 60%;
   overflow-y: auto;
