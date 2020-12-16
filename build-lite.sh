@@ -36,6 +36,12 @@ cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ \
 dist-lite/fonts/fontawesome/webfonts
 # Copy Font Awesome files
 
+mkdir -p dist-lite/fonts/material-icons/
+
+cp -r ./node_modules/material-icons/iconfont/ \
+dist-lite/fonts/material-icons/iconfont
+# Copy Material Icons files
+
 rm dist-lite/login.html
 # Remove login page
 
