@@ -375,7 +375,7 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--black);
+  background-color: black;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -387,13 +387,13 @@ button:hover {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--white);
+  background-color: white;
   -webkit-transition: 1s;
   transition: 1s;
 }
 
 .switch input:checked + .slider {
-  background-color: var(--gray1);
+  background-color: #888;
 }
 
 .switch input:focus + .slider {
@@ -497,7 +497,7 @@ button:hover {
   letter-spacing: 0.1em;
 }
 #schedule_title {
-  color: var(--white);
+  color: white;
   display: inline;
   position: relative;
   font-size: 20px;
