@@ -51,11 +51,6 @@ body {
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #666666;
 
-  --lightgray: #d8d8d8;
-  --lightgray1: #e0e0e0;
-  --lightgray2: #eaeaea;
-  --lightgray3:  #d4d4d4;
-
   --transparent-gray: rgba(255, 255, 255, 0.3);
 
   --black: #000000;
@@ -80,6 +75,15 @@ body {
   --schedule6: #b1dfc0;
   --schedule7: #c0e5cd;
   --schedule8: #d0ecd9;
+
+  --sidenav-color: #e0e0e0;
+  --sidenav-button-color: #eaeaea;
+  --sidenav-button-child-color:  #f9f9f9;
+  --sidenav-hr-color: #d8d8d8;
+
+  --sidenav-hover-color: #f3f3f3;
+  --sidenav-hover-lighter-color: #f3f3f3;
+
 }
 
 body.dark {
@@ -122,6 +126,15 @@ body.dark {
   --schedule6: #00a336;
   --schedule7: #00b83d;
   --schedule8: #00cc44;
+
+  --sidenav-color: #121212;
+  --sidenav-button-color: #292a2b;
+  --sidenav-button-child-color: #4e5257;
+  --sidenav-hr-color: #576069;
+
+  --sidenav-hover-color: #333436;
+  --sidenav-hover-lighter-color: #606d78;
+
 }
 
 /*---------------------------------------------*/
@@ -457,7 +470,7 @@ button:hover {
 
 .inaccessible {
   color: var(--gray2) !important;
-  background-color: var(--white3);
+  background-color: var(--white3) !important;
 }
 
 .inaccessible:hover {
@@ -1072,10 +1085,14 @@ p#large_clock_period {
   background-color: var(--white1);
 }
 
+.sidenav .select-items div:hover {
+  background-color: var(--sidenav-hover-lighter-color);
+}
+
 .sidenav hr {
   height: 4px;
   width: 270px;
-  background-color: var(--lightgray);
+  background-color: var(--sidenav-hr-color);
   clear: both;
   margin: 5px 0px;
   border: 0px;
@@ -1088,7 +1105,7 @@ p#large_clock_period {
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: var(--lightgray1);
+  background-color: var(--sidenav-color);
   overflow-x: hidden;
   padding-top: 5px;
   transition: 0.5s;
@@ -1097,7 +1114,7 @@ p#large_clock_period {
 
 .sidenav button {
   clear: both;
-  background-color: var(--lightgray2);
+  background-color: var(--sidenav-button-color);
   /* float: left; */
   /* float: right; */
   border: none;
@@ -1112,11 +1129,11 @@ p#large_clock_period {
 }
 
 .sidenav .select-selected:hover {
-  background-color: var(--lightgray3) !important;
+  background-color: var(--sidenav-hover-color) !important;
 }
 
 .sidenav button:hover {
-  background-color: var(--lightgray3) !important;
+  background-color: var(--sidenav-hover-color) !important;
 }
 
 .sidenav .GPA {
@@ -1127,8 +1144,8 @@ p#large_clock_period {
 }
 
 .sidenav .select-selected {
-  color: black !important;
-  background-color: var(--lightgray2);
+  color: var(--black) !important;
+  background-color: var(--sidenav-button-color);
   /* float: right; */
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
@@ -1151,8 +1168,8 @@ p#large_clock_period {
 }
 
 .sidenav .activated-select-items {
-  color: black;
-  background-color: rgb(249 249 249);
+  color: var(--black);
+  background-color: var(--sidenav-button-child-color);
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
