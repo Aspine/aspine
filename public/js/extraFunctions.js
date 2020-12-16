@@ -1030,8 +1030,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
     const term = termConverter[parseInt(c.id[1]) || 0];
     const isAccessibleObj = isAccessible(term, includedTerms);
     $(c)
-      .removeClass(["inaccessible", "tooltip"])
+      .removeClass("inaccessible")
       .remove(".tooltiptext")
+      .removeAttr("tooltip")
       .removeAttr("tabindex");
     c.removeEventListener("click", listener);
 
@@ -1179,7 +1180,7 @@ function setup_tooltips() {
     if (child.querySelector('.tooltiptext') === null) {
 
       // Creates the tooltip
-      let node = document.createElement("SPAN")
+      const node = document.createElement("SPAN")
       
       // Gives it the class
       node.classList.add("tooltiptext")
