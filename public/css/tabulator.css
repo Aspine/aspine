@@ -46,7 +46,8 @@
   text-align: left;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-top: 6px;
+  margin-bottom: 12px;
   -ms-transform: translatez(0);
   transform: translatez(0);
 }
