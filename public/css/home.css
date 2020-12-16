@@ -51,8 +51,6 @@ body {
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #666666;
 
-  --transparent-gray: rgba(255, 255, 255, 0.3);
-
   --black: #000000;
   --transparent-black: rgba(0, 0, 0, 0.6);
 
@@ -475,7 +473,7 @@ button:hover {
 
 /* Style the tab content */
 .tabcontent {
-  background: var(--transparent-gray);
+  background: var(--white2);
   display: none;
   padding: 6px 12px;
   border: 1px solid var(--gray);
