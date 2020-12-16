@@ -88,6 +88,8 @@ window.getStats = async function(session_id, apache_token, assignment_id) {
     });
 };
 
+initialize_jquery_prototype()
+
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
 window.addEventListener('resize', function() {
@@ -220,10 +222,11 @@ let categoriesTable = new Tabulator("#categoriesTable", {
         //{title: "", width:1, align:"center", headerSort: false},
         {
             title: "Hide",
-            titleFormatter: () => '<i class="fa fa-eye-slash header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-eye-slash header-icon tooltip" aria-hidden="true" tooltip="Hide"></i>',
             headerClick: hideCategoriesTable,
             width: 76,
-            headerSort: false
+            headerSort: false,
+            cssClass: "icon-col"
         },
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
@@ -348,7 +351,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             titleFormatter: () => '<i class="fa fa-toolbox" aria-hidden="true"></i>',
             formatter: cell =>
                 (!isNaN(cell.getRow().getData().score)) ?
-                '<i class="fa fa-hammer" aria-hidden="true"></i>' : "",
+                '<i class="fa fa-hammer standard-icon tooltip" aria-hidden="true" tooltip="Revisions"></i>' : "",
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
@@ -358,6 +361,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#corrections_modal_input").focus();
             },
             headerSort: false,
+            cssClass: "icon-col allow-overflow"
         },
         {
             title: "Stats",
@@ -367,7 +371,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
                     .assignments[cell.getRow().getPosition()].synthetic
-            ) ? "" : '<i class="fa fa-info" aria-hidden="true"></i>',
+            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
@@ -564,18 +568,20 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     .attr("stroke-width", "0.2rem");
             },
             headerSort: false,
+            cssClass: "icon-col allow-overflow"
         },
         {
             title: "Add",
-            titleFormatter: () => '<i class="fa fa-plus grades" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-plus grades tooltip" aria-hidden="true" tooltip="New Assignment" tooltip-margin="-113px"></i>',
             headerClick: newAssignment,
-            formatter: "buttonCross",
+            formatter: () => '<i class="fa fa-times standard-icon tooltip" aria-hidden="true" style="color: #ce1515; font-size: 1.3em" tooltip="Delete Assignment" tooltip-margin="-127px"></i>',
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
                 cell.getRow().delete();
             },
             headerSort: false,
+            cssClass: "icon-col allow-overflow"
         },
     ],
 });
@@ -643,7 +649,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
         {
             title: "Export Table Data",
-            titleFormatter: () => '<i class="fa fa-file-download header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>',
             headerClick: async () => {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
@@ -667,13 +673,15 @@ let classesTable = new Tabulator("#classesTable", {
             },
             width: 76,
             headerSort: false,
+            cssClass: "icon-col"
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon" aria-hidden="true"></i>',
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
+            cssClass: "icon-col"
         },
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
@@ -691,11 +699,18 @@ let classesTable = new Tabulator("#classesTable", {
             if (tabledata[i].name === row.getData().name) {
                 assignmentsTable.setData(tabledata[i].assignments);
                 categoriesTable.setData(tabledata[i].categoryDisplay);
+
+                //sets up the tooltip margins for the newly created table(s)
+                setup_tooltips();
+
                 return;
             }
         }
     },
 });
+
+//sets up the tooltips in the classes table
+setup_tooltips()
 
 function correct() {
     const per = parseInt($("#corrections_modal_input").prop("value"));
@@ -929,6 +944,8 @@ function responseCallback(response, includedTerms) {
         dataType: "json json",
         success: scheduleCallback
     });
+
+    setup_tooltips();
 }
 
 function responseCallbackPartial(response) {
@@ -1102,6 +1119,8 @@ function openTab(evt, tab_name) {
     if (tab_name === "reports") {
         if (!currentTableData.pdf_files) {
             $("#loader").show();
+            //sets the margins for the pdf viewer
+            setup_tooltips();
             $.ajax({
                 url: "/pdf",
                 method: "POST",

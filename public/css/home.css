@@ -307,6 +307,10 @@ h4#title {
   height: 35px;
 }
 
+.tabulator-col.icon-col {
+  text-align: center !important;
+}
+
 button {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
@@ -557,8 +561,7 @@ div.tabcontent, div.tab {
 
 i.fa.fa-plus.grades {
   color: var(--green2);
-  padding-left: 31%;
-  padding-top: 25%;
+  padding-top: 8.5px;
   font-size: large;
   cursor: pointer;
 }
@@ -574,18 +577,78 @@ i.fa.fa-plus.grades {
 
 i.fa.fa-info-circle,
 i.fa.fa-toolbox {
-  padding-left: 31%;
-  padding-top: 25%;
+  padding-top: 8.5px;
   font-size: large;
   cursor: default;
 }
 
 .header-icon {
   color: var(--green2);
-  padding-left: 38%;
-  padding-top: 11%;
+  padding-top: 8.5px;
   font-size: large;
   cursor: pointer;
+}
+
+#classesTable .tabulator-col,
+#classesTable .tabulator-header,
+#assignmentsTable .tabulator-col,
+#assignmentsTable .tabulator-header,
+#categoriesTable .tabulator-col,
+#categoriesTable .tabulator-header {
+  overflow: initial !important;
+}
+
+[tooltip] .tooltiptext {
+  visibility: hidden;
+  opacity: 0;
+  font-family:  'Poppins-Regular';
+  font-size: small;
+  width: auto;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  font-weight: 900;
+
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  transition: visibility 0ms 300ms, opacity 125ms 175ms;
+}
+
+[tooltip]::after {
+  visibility: hidden;
+  opacity: 0;
+  content: "";
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+
+  transition: visibility 0ms 300ms, opacity 125ms 175ms;
+}
+
+[tooltip]:hover .tooltiptext, [tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 125ms 375ms, visibility 0ms 375ms;
+}
+
+.standard-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.allow-overflow {
+  overflow: inherit !important;
 }
 
 canvas#large_clock {
@@ -1041,7 +1104,7 @@ p#large_clock_period {
   padding: 13px 16px;
   /*border: 1px solid transparent;*/
   /*border-width: 0px;*/
-
+  position: relative;
   cursor: pointer;
 }
 

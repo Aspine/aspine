@@ -9,6 +9,13 @@ Number.prototype.countDecimals = function () {
     return this.toString().split(".")[1].length || 0;
 }
 
+//in a function because when extraFunctions first runs, jquery isn't initialized
+function initialize_jquery_prototype() {
+  jQuery.prototype.replace_text = function(input) {
+    this.contents().filter(function() {return (this.nodeType == 3);}).replaceWith(input)
+  }
+}
+
 function getGPA(gradeToBeGPA) {
 
   let parsed = parseFloat(gradeToBeGPA);
@@ -60,117 +67,117 @@ function GPAType() {
 
   if (selectedElem.html().includes("GPA")) {
     if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2) +
         "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
           (currentTableData.terms["q" + i].calcGPA ? (
             "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
           ) : "")
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2) +
         "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
     else {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2)
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Unweighted")) {
     if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2) +
         "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
           (currentTableData.terms["q" + i].calcGPA ? (
             "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
           ) : "")
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2) +
         "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
     else {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2)
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
       );
     }
   }
   else if (selectedElem.html().includes("Weighted")) {
     if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2) +
         "<br> Calculated: " + currentTableData.terms.current.calcGPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2) +
           (currentTableData.terms["q" + i].calcGPA ? (
             "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.percent.toFixed(2)
           ) : "")
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2) +
         "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
     else {
-      $("#current, #current_gpa, #init_gpa").html(
+      $("#current, #current_gpa, #init_gpa").replace_text(
         "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2)
       );
       for (let i = 1; i <= 4; i++) {
-        $(`#q${i}, #q${i}_gpa`).html(
+        $(`#q${i}, #q${i}_gpa`).replace_text(
           "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2)
         );
       }
-      selectedElem.html(
+      selectedElem.replace_text(
         quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
       );
-      $("#cum, #cum_gpa").html(
+      $("#cum, #cum_gpa").replace_text(
         "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
@@ -995,6 +1002,9 @@ let initialize_quarter_dropdown = function(includedTerms) {
       $('.gpa_select-selected').toggleClass("activated-selected-item");
       $('.gpa_select-items div').toggleClass("activated-select-items");
       //resetTableData();
+
+      //sets up tooltip margins for this
+      setup_tooltips();
     });
   }
   a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
@@ -1017,11 +1027,12 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1] || "cum";
     }
-    const term = termConverter[parseInt(c.innerHTML[1]) || 0];
+    const term = termConverter[parseInt(c.id[1]) || 0];
     const isAccessibleObj = isAccessible(term, includedTerms);
     $(c)
-      .removeClass(["inaccessible", "hastooltip"])
-      .removeAttr("aria-label")
+      .removeClass("inaccessible")
+      .remove(".tooltiptext")
+      .removeAttr("tooltip")
       .removeAttr("tabindex");
     c.removeEventListener("click", listener);
 
@@ -1030,9 +1041,11 @@ let initialize_quarter_dropdown = function(includedTerms) {
     }
     else {
       $(c)
-        .addClass(["inaccessible", "hastooltip"])
-        .attr("aria-label", isAccessibleObj.reason)
+        .addClass("inaccessible")
+        .attr("tooltip", isAccessibleObj.reason)
         .attr("tabindex", 0);
+
+      setup_tooltips();
     }
 
     b.appendChild(c);
@@ -1056,7 +1069,7 @@ let setup_quarter_dropdown = function() {
                   $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
                   document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent;
               } else {
-                  $(this).html("Q" + i + " GPA: None");
+                  $(this).append("Q" + i + " GPA: None");
                   document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None";
               }
           }
@@ -1154,6 +1167,69 @@ let initialize_tableData_dropdown = function() {
   }
 }
 
+// To add a tooltip to anything, follow these 3 easy steps
+// 1. Make sure the element allows for overflow
+// 2. Make sure the element's position is clearly defined as relative or absolute or something
+// 3. Give the element the attribute 'tooltip="loreum ipsum dolor sit amet"
+// If the tooltip's position needs to be readjusted manually, give it the attribute tooltip-margin.
+function setup_tooltips() {
+
+  // Checks if it already has a tooltip
+  for (const child of document.querySelectorAll('[tooltip]')) {
+
+    if (child.querySelector('.tooltiptext') === null) {
+
+      // Creates the tooltip
+      const node = document.createElement("SPAN")
+      
+      // Gives it the class
+      node.classList.add("tooltiptext")
+      
+      // Adds the text from the tooltip attribute of the parent to the tooltip
+      node.appendChild(document.createTextNode(child.getAttribute("tooltip")))
+
+      // Adds the unfinished node to the parent
+      child.appendChild(node)
+
+      let tooltiptext = child.querySelector('.tooltiptext')
+
+
+      // Set the margin to either be overridden or to be found
+      // For clarity, resize-exempt is given to an element so that it knows not to try to resize it again
+      if (child.hasAttribute("tooltip-margin")) {
+        tooltiptext.style.marginLeft = child.getAttribute("tooltip-margin")
+        tooltiptext.classList.add("resize-exempt")
+
+      } else if (tooltiptext.offsetWidth !== 0) {
+        tooltiptext.style.marginLeft = `${-tooltiptext.offsetWidth/2}px`
+        tooltiptext.classList.add("resize-exempt")
+      }
+
+    // If it's trying to set up the margins again because it couldn't do it the first time, it does so here
+    } else if (!child.querySelector('.tooltiptext').classList.contains("resize-exempt")) {
+
+      let node = child.querySelector('.tooltiptext')
+
+      if (node.offsetWidth !== 0) {
+        node.style.marginLeft = `${-node.offsetWidth/2}px`
+        node.classList.add("resize-exempt")
+      }
+    }
+  }
+}
+
+let toggle_fullscreen_icon = function() {
+  if ($('#expand-pdf-icon i').hasClass('fa-expand-alt')) {
+    $('#expand-pdf-icon i').removeClass("fa-expand-alt").addClass("fa-compress-alt");
+    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -92px;", "margin-left: -95px;")).replace_text("Exit Fullscreen")
+
+  } else {
+    $('#expand-pdf-icon i').removeClass("fa-compress-alt").addClass("fa-expand-alt");
+    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -95px;", "margin-left: -92px;")).replace_text("Go Fullscreen")
+
+  }
+}
+
 let toggle_fullscreen_pdf = function() {
   let elem = document.getElementById('reports');
 
@@ -1161,47 +1237,47 @@ let toggle_fullscreen_pdf = function() {
   if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.mozRequestFullScreen) { /* Firefox */
       elem.mozRequestFullScreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
       let new_height = $(window).height();
       elem.webkitRequestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     } else if (elem.msRequestFullscreen) { /* IE/Edge */
       elem.msRequestFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-compress-alt\" aria-hidden=\"true\"></i>");
     }
   } else {
 
     if (document.exitFullscreen) {
       document.exitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.mozCancelFullScreen) { /* Firefox */
       document.mozCancelFullScreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
       document.webkitExitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     } else if (document.msExitFullscreen) { /* IE/Edge */
       document.msExitFullscreen();
+      toggle_fullscreen_icon();
 
-      $('#expand-pdf-icon').html("<i class=\"fa fa-expand-alt\" aria-hidden=\"true\"></i>");
     }
   }
 }
 
 
 function parseTableData(classes) {
-  for(let i = 0; i < classes.length; i++) {
+  for (let i = 0; i < classes.length; i++) {
 
     //initialize every the edited key for every class and set it to false
     classes[i].edited = false;

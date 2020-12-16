@@ -100,10 +100,10 @@
       <select id="gpa_select">
         <option id="init_gpa" value="0">Current Quarter GPA: </option>
         <option id="current_gpa" value="0">Current Quarter GPA: </option>
-        <option id="q1_gpa" value="1">Q1 GPA:</option>
-        <option id="q2_gpa" value="2">Q2 GPA:</option>
-        <option id="q3_gpa" value="3">Q3 GPA:</option>
-        <option id="q4_gpa" value="4">Q4 GPA:</option>
+        <option id="q1_gpa" value="1"></option>
+        <option id="q2_gpa" value="2"></option>
+        <option id="q3_gpa" value="3"></option>
+        <option id="q4_gpa" value="4"></option>
         <option id="cum_gpa"></option>
       </select>
     </div>
@@ -340,11 +340,11 @@
         </select>
       </div>
 
-      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()">
+      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()" style="position: relative;" tooltip="Go Fullscreen" tooltip-margin="-92px">
         <i class="fa fa-expand-alt" aria-hidden="true"></i>
       </span>
 
-      <span class="right hover pointer" onclick="download_pdf()" aria-label="Download PDF">
+      <span class="right hover pointer" onclick="download_pdf()" aria-label="Download PDF" style="position: relative;" tooltip="Download PDF">
         <i class="fa fa-download" aria-hidden="true"></i>
       </span>
 
