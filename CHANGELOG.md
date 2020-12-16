@@ -6,7 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.5.1] - tagged 2020-11-18
+## [2.6.0] - tagged 2020-12-16
+- Dark mode ([#195], [#146], [#213], [#210])
+- Fix "Schedule" tab to work with the covid-19 remote learning schedule ([#198],
+  [#140])
+- Collapse navigation bar into hamburger menu (side navigation) on small screens
+  ([#164], [#152])
+- Show tooltips when hovering over UI elements ([#205], [#178])
+- Add "Info" tab with information about Aspine ([#204], [#76])
+- Improve design of login page ([#179], [#142], [#196], [#192])
+- Make "remember me" more secure by only storing the username ([#207])
+- Tweak grades table margins to be more consistent ([#215])
+- Change mouse cursor in header and small clock ([#186])
+- Change icon for assignment statistics and make colors more consistent ([#183],
+  [#185])
+- Reword `<meta>` tag on login and home pages ([#216], [#191])
+- Make a 404 page ([#190], [#188])
+- Remove extraneous redirects to improve page load time ([#208], [#209])
+
+## [2.5.1] - tagged 2020-11-18, production 2020-11-20
 - Modify Aspine header onclick behavior ([#177], [#168])
 - Fix confusing message when editing assignments ([#176])
 
@@ -119,11 +137,13 @@ and this project adheres to
 [2.4.3]: https://github.com/Aspine/aspine/releases/tag/v2.4.3
 [2.5.0]: https://github.com/Aspine/aspine/releases/tag/v2.5.0
 [2.5.1]: https://github.com/Aspine/aspine/releases/tag/v2.5.1
+[2.6.0]: https://github.com/Aspine/aspine/releases/tag/v2.6.0
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
 [#72]: https://github.com/Aspine/aspine/issues/72
 [#74]: https://github.com/Aspine/aspine/issues/74
+[#76]: https://github.com/Aspine/aspine/issues/76
 [#83]: https://github.com/Aspine/aspine/issues/83
 [#84]: https://github.com/Aspine/aspine/issues/84
 [#88]: https://github.com/Aspine/aspine/issues/88
@@ -133,11 +153,21 @@ and this project adheres to
 [#122]: https://github.com/Aspine/aspine/issues/122
 [#131]: https://github.com/Aspine/aspine/issues/131
 [#135]: https://github.com/Aspine/aspine/issues/135
+[#140]: https://github.com/Aspine/aspine/issues/140
+[#142]: https://github.com/Aspine/aspine/issues/142
 [#143]: https://github.com/Aspine/aspine/issues/143
 [#144]: https://github.com/Aspine/aspine/issues/144
+[#146]: https://github.com/Aspine/aspine/issues/146
+[#152]: https://github.com/Aspine/aspine/issues/152
 [#153]: https://github.com/Aspine/aspine/issues/153
 [#159]: https://github.com/Aspine/aspine/issues/159
 [#168]: https://github.com/Aspine/aspine/issues/168
+[#178]: https://github.com/Aspine/aspine/issues/178
+[#185]: https://github.com/Aspine/aspine/issues/185
+[#188]: https://github.com/Aspine/aspine/issues/188
+[#191]: https://github.com/Aspine/aspine/issues/191
+[#192]: https://github.com/Aspine/aspine/issues/192
+[#210]: https://github.com/Aspine/aspine/issues/210
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -160,6 +190,22 @@ and this project adheres to
 [#149]: https://github.com/Aspine/aspine/pull/149
 [#151]: https://github.com/Aspine/aspine/pull/151
 [#162]: https://github.com/Aspine/aspine/pull/162
+[#164]: https://github.com/Aspine/aspine/pull/164
 [#166]: https://github.com/Aspine/aspine/pull/166
 [#176]: https://github.com/Aspine/aspine/pull/176
 [#177]: https://github.com/Aspine/aspine/pull/177
+[#179]: https://github.com/Aspine/aspine/pull/179
+[#183]: https://github.com/Aspine/aspine/pull/183
+[#186]: https://github.com/Aspine/aspine/pull/186
+[#190]: https://github.com/Aspine/aspine/pull/190
+[#195]: https://github.com/Aspine/aspine/pull/195
+[#196]: https://github.com/Aspine/aspine/pull/196
+[#198]: https://github.com/Aspine/aspine/pull/198
+[#204]: https://github.com/Aspine/aspine/pull/204
+[#205]: https://github.com/Aspine/aspine/pull/205
+[#207]: https://github.com/Aspine/aspine/pull/207
+[#208]: https://github.com/Aspine/aspine/pull/208
+[#209]: https://github.com/Aspine/aspine/pull/209
+[#213]: https://github.com/Aspine/aspine/pull/213
+[#215]: https://github.com/Aspine/aspine/pull/215
+[#216]: https://github.com/Aspine/aspine/pull/216

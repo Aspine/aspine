@@ -1,7 +1,7 @@
 {
   "name": "aspine",
-  "version": "2.5.1",
-  "description": "Aspen Scraper and Alternate Frontend",
+  "version": "2.6.0",
+  "description": "Alternate frontend for Aspen",
   "homepage": "https://github.com/maxtkc/aspine#readme",
   "bugs": {
     "url": "https://github.com/maxtkc/aspine/issues"
