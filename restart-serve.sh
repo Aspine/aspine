@@ -1,5 +1,2 @@
-pkill "node"
-pkill "redis-server"
-
-# redis-server redis.conf &
-node ./serve.js &
+sudo pkill "node"
+sudo $NVM_BIN/node ./serve.js &
