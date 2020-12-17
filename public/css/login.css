@@ -232,11 +232,20 @@ iframe {
   overflow: hidden;
 }
 
-#bottom-text {
+#bottom-text-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
   text-align: left;
-  margin: 5px 14px;
+  margin: 7.5px 17.5px;
 }
 
+#bottom-text {
+  float: left;
+}
+
+#bottom-text ul,
 #bottom-text li {
   display: inline;
 }
@@ -245,6 +254,12 @@ iframe {
   content: " | ";
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+#district-logo {
+  float: right;
+  max-height: 45px;
+  vertical-align: baseline;
 }
 
 /*------------------------------------------------------------------
@@ -433,6 +448,20 @@ iframe {
   #login100-form {
     width: 50%;
   }
+
+  #bottom-text-container {
+    flex-direction: column;
+  }
+
+  #bottom-text {
+    align-self: center;
+    text-align: center;
+  }
+
+  #district-logo {
+    align-self: center;
+    margin-top: 7.5px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -446,10 +475,6 @@ iframe {
 
   #login100-form {
     width: 100%;
-  }
-
-  #bottom-text {
-    text-align: center;
   }
 }
 
