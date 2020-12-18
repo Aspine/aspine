@@ -346,7 +346,7 @@ function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
     // year-to-date grade
     const quarter_grades = [q1, q2, q3, q4].filter(x => !isNaN(x));
     const ytd = quarter_grades.length ?
-      quarter_grades.reduce((a, b) => a + b) : NaN;
+      quarter_grades.reduce((a, b) => a + b) / quarter_grades.length : NaN;
     // Custom function for formatting numbers so that NaN is mapped to the
     // empty string
     const format = (x: number) => isNaN(x) ? "" : x.toString();
