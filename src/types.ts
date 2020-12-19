@@ -24,6 +24,11 @@ export interface ClassDetails extends ClassInfo {
     tardy: number;
     dismissed: number;
   };
-  // Maps category names to decimals (stored as strings)
-  categories: { [key: string]: string };
+  // Maps category names to weights (as decimals) and OIDs
+  categories: Map<string, Category>;
+}
+
+export interface Category {
+  weight: number;
+  oid: string;
 }

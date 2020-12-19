@@ -7,29 +7,67 @@ import type {
   PDFFileInfo,
   ClassInfo,
   ClassDetails,
+  Category,
 } from "./types";
 
 import type {
   PDFFile,
   OverviewItem,
   Schedule,
-  ScheduleItem
+  ScheduleItem,
+  Assignment,
+  StudentData,
+  Class,
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
 import { Quarter } from "./types-shared";
 
 export async function get_student(
-  username: string, password: string, quarter: Quarter
-) {
+  username: string, password: string, quarter: Quarter = Quarter.Current
+): Promise<StudentData> {
   return await get_session(username, password, async session => {
     const { student_name, student_oid } = await get_student_info(session);
     const quarter_oids = await get_quarter_oids(session);
+
     const academics = await get_academics(session, student_oid, quarter_oids);
     const class_details = await Promise.all(academics.map(async class_info =>
       get_class_details(session, class_info)));
     const overview = assemble_overview(class_details);
-    return overview;
+    const assignments = await Promise.all(class_details.map(async details =>
+      get_assignments(session, quarter, quarter_oids, details)));
+
+    const isClass = function(x: Class | undefined): x is Class {
+      return x !== undefined;
+    };
+    const classes = class_details.map((details, i) => {
+      // Don't include a class if it does not exist in this quarter
+      if (!details.grades.has(quarter)) {
+        return undefined;
+      }
+
+      let categories: { [key: string]: string } = {};
+      for (const [cat, { weight} ] of details.categories) {
+        categories[cat] = weight.toString();
+      }
+      return {
+        name: details.name,
+        grade: details.grades.get(quarter) || "",
+        categories: categories,
+        assignments: assignments[i],
+      };
+    }).filter(isClass);
+
+    return {
+      classes: classes,
+      recent: {
+        recentActivityArray: [],
+        recentAttendanceArray: [],
+      },
+      overview: overview,
+      username: username,
+      quarter: quarter,
+    };
   });
 }
 
@@ -124,7 +162,6 @@ export async function get_schedule(
   });
 }
 
-
 /**
  * Get the current quarter (Q1, Q2, Q3, Q4). In the absence of the OID of a
  * class (which can be fetched from get_academics), this function makes a
@@ -197,13 +234,13 @@ async function get_student_info({ session_id }: Session): Promise<{
 }
 
 async function get_quarter_oids(
-  { session_id }: Session
+  session: Session
 ): Promise<Map<Quarter, string>> {
   const mapping = new Map<Quarter, string>();
   const terms: { gradeTermId: string, oid: string }[] = await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list/studentGradeTerms", {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}`,
+        "Cookie": `JSESSIONID=${session.session_id}`,
       },
     }
   )).json();
@@ -214,7 +251,8 @@ async function get_quarter_oids(
       mapping.set(quarter_num, oid);
     }
   }
-  mapping.set(Quarter.Current, "current");
+  mapping.set(Quarter.Current,
+    mapping.get(await get_current_quarter(session)) || "current");
   return mapping;
 }
 
@@ -317,17 +355,72 @@ async function get_class_details(
       case "Dismissed": attendance.dismissed = total; break;
     }
   }
-  const categories: { [key: string]: string } = {};
+  const categories = new Map<string, Category>();
   for (const {
-    category, percentageQ1, percentageQ2, percentageQ3, percentageQ4
+    category, categoryOid,
+    percentageQ1, percentageQ2, percentageQ3, percentageQ4
   } of averageSummary) {
     if (category !== "Gradebook average") {
-      categories[category] = (parseFloat(percentageQ1 || percentageQ2 ||
-        percentageQ3 || percentageQ4) / 100.0).toString();
+      categories.set(category, {
+        weight: parseFloat(percentageQ1 || percentageQ2 || percentageQ3 ||
+          percentageQ4) / 100.0,
+        oid: categoryOid,
+      });
     }
   }
 
   return { attendance, categories, ...class_info };
+}
+
+async function get_assignments(
+  { session_id }: Session, quarter: Quarter, quarter_oids: Map<Quarter, string>,
+  class_details: ClassDetails
+): Promise<Assignment[]> {
+  // If this class does not exist in the given quarter, then there are no
+  // assignments
+  if (!class_details.grades.has(quarter)) {
+    return [];
+  }
+
+  const quarter_oid = quarter_oids.get(quarter);
+  const past_due = await (await fetch(
+    `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_details.oid}/categoryDetails/pastDue?gradeTermOid=${quarter_oid}`, {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).json();
+  const upcoming = await (await fetch(
+    `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_details.oid}/categoryDetails/upcoming?gradeTermOid=${quarter_oid}`, {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+    }
+  )).json();
+  return [...past_due, ...upcoming].map(({
+    name, categoryOid, assignedDate, dueDate, remark, oid,
+    scoreElements: [{ score, pointMax }],
+  }) => {
+    // Get category name
+    let category = "";
+    for (const [cat, { oid }] of class_details.categories) {
+      if (categoryOid === oid) {
+        category = cat;
+      }
+    }
+
+    return {
+      name: name,
+      category: category,
+      date_assigned: new Date(assignedDate).toLocaleDateString("en-US"),
+      date_due: new Date(dueDate).toLocaleDateString("en-US"),
+      feedback: remark || "",
+      assignment_id: oid,
+      special: "",
+      score: score,
+      max_score: pointMax,
+    };
+  });
 }
 
 function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
