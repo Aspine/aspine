@@ -78,11 +78,19 @@ export async function get_pdf_files(
   username: string, password: string
 ): Promise<PDFFile[]> {
   return await get_session(username, password, async session => {
-    const pdf_files = await list_pdf_files(session);
-    return await Promise.all(pdf_files.map(async ({ id, filename }) => ({
-      title: filename,
-      content: await download_pdf(session, id),
-    })));
+    const pdf_files = [];
+    // Get PDF files sequentially to avoid rejection of requests
+    for (const { id, filename } of await list_pdf_files(session)) {
+      // Get a unique identifier for each file, so that the frontend recognizes
+      // the files as distinct (TODO fix frontend bug)
+      const [, truncated_id] = /RDR0+(.+)/.exec(id) as RegExpExecArray;
+
+      pdf_files.push({
+        title: `${filename} (${truncated_id})`,
+        content: await download_pdf(session, id),
+      });
+    }
+    return pdf_files;
   });
 }
 
@@ -465,13 +473,13 @@ function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
 async function download_pdf(
   { session_id }: Session, id: string
 ): Promise<string> {
-  return await (await fetch(
+  return (await (await fetch(
     `https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).text();
+  )).buffer()).toString("binary");
 }
 
 /**
