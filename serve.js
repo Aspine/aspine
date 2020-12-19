@@ -1,6 +1,7 @@
 const express = require('express');
 const { program } = require('commander');
 const scraper = require('./scrape.js');
+const new_scraper = require('./js/scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
@@ -208,7 +209,7 @@ app.post('/data', async (req, res) => {
     // });
 
     let response;
-    //res.send(await scraper.scrape_student(req.session.username, req.session.password));
+    //res.send(await new_scraper.get_student(req.session.username, req.session.password));
     //
     // Get data from scraper:
     //
@@ -217,18 +218,19 @@ app.post('/data', async (req, res) => {
     }
     else {
         // TODO add nologin field for consistency
-        res.send(await scraper.scrape_student(
-            req.session.username, req.session.password, req.body.quarter
+        res.send(await new_scraper.get_student(
+            req.session.username, req.session.password,
+            parseInt(req.body.quarter)
         ));
     }
 });
 
 app.post('/schedule', async (req, res) => {
-    res.send(await scraper.scrape_schedule(req.session.username, req.session.password));
+    res.send(await new_scraper.get_schedule(req.session.username, req.session.password));
 });
 
 app.post('/pdf', async (req, res) => {
-    res.send(await scraper.scrape_pdf_files(req.session.username, req.session.password));
+    res.send(await new_scraper.get_pdf_files(req.session.username, req.session.password));
 });
 
 app.get('/', async (req, res) => {
