@@ -52,6 +52,7 @@ body {
 
   --black: #000000;
   --transparent-black: rgba(0, 0, 0, 0.6);
+  --transparent-black-lite: rgba(0, 0, 0, 0.2);
 
   --blue: #2196F3;
   --blue1: #9ebcea;
@@ -1339,4 +1340,69 @@ hr {
 
 #more-versions a {
   font-size: 120%;
+}
+
+.snackbar {
+  height: 44px;
+  width: auto;
+  background-color: var(--gray);
+  position: fixed;
+  left: 17px;
+  bottom: 10px;
+
+  transform: translateY(0px);
+  transition: transform 250ms;
+}
+
+.snackbar.hidden {
+  transform: translateY(54px);
+  transition: transform 250ms;
+}
+
+.snackbar button {
+  height: 32px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  margin-right: 4px;
+  position: relative;
+  float: right;
+  border: none;
+  background-color: var(--gray);
+  cursor: pointer;
+}
+
+.snackbar button::after {
+  content: '';
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color:var(--transparent-black-lite);
+  z-index: 1;
+  opacity: 0;
+
+  transition: opacity 100ms ease-in;
+}
+
+.snackbar button:hover::after {
+  opacity: 1;
+}
+
+.snackbar button:focus {
+  outline: none;
+}
+
+.snackbar span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 44px;
+  padding: 0px 8px;
+}
+
+.snackbar button span {
+  line-height: 32px;
+  font-weight: normal;
+  font-size: 16px;
+  font-family: 'Poppins-Regular';
 }

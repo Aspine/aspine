@@ -1194,6 +1194,198 @@ function closeSideNav() {
 //  Allows exiting sidenav by clicking anywhere outside
 document.getElementById("sidenav-overlay").addEventListener("click", closeSideNav);
 
+
+class Snackbar {
+
+    static snackbars = {}
+    static snackbarIDs = []
+
+    static getSnackbarByID(id) {
+        return snackbarIDs[id]
+    }
+
+    constructor(text, options) {
+        this.text = text;
+        this.color = options["color"];
+        this.textColor = options["textColor"];
+        this.buttonText = options["buttonText"];
+        this.buttonOnClick = options["buttonOnClick"];
+        this.destroyWhenButtonClicked = options["destroyWhenButtonClicked"] || true;
+        this.bodyOnClick = options["bodyOnClick"];
+
+        this.id;
+    }
+
+    /**
+     * creates the snackbar in the HTML
+     * returns the snackbar object
+     */
+    make() {
+
+        //stops if the element already exists
+        if (typeof document.getElementById(`sidenav-${this.id}`) === undefined) {
+            return;
+        }
+
+        if (this.id === undefined) {
+            this.id = this.createID();
+        }
+
+        //creates the snackbar and gives it classes and text
+        const snackbarNode = document.createElement("DIV");
+        snackbarNode.classList.add("snackbar")
+        snackbarNode.classList.add("hidden")
+
+        //assigns it id based off of it's actual id
+        snackbarNode.id = `snackbar-${this.id}`
+
+        //adds color if given
+        if (this.color !== undefined) {
+            snackbarNode.style.backgroundColor = `${this.color}`
+        }
+
+        //sets the onClick with which just destroys it by default
+        snackbarNode.setAttribute("onclick", this.onBodyClick || `Snackbar.snackbars[${this.id}].destroy();`);
+
+        //adds the text
+        const textNode = document.createElement("SPAN")
+        textNode.textContent = this.text
+
+        //colors the text if necessary
+        if (this.textColor === undefined) {
+            textNode.style.color = this.textColor
+        }
+
+        //adds the text
+        snackbarNode.appendChild(textNode)
+
+        //makes the button if given button parameters
+        if (this.buttonText !== undefined && this.buttonOnClick != undefined) {
+
+            //creates the button and adds class
+            const buttonNode = document.createElement("BUTTON")
+
+            //creates the text span
+            const buttonTextNode = document.createElement("SPAN")
+            buttonTextNode.textContent = this.buttonText
+
+            //colors the text if necessary
+            if (this.textColor !== undefined) {
+                buttonTextNode.style.color = this.textColor
+            }
+
+            if (this.color !== undefined) {
+                buttonNode.style.backgroundColor = this.color
+            }
+
+            //adds the node
+            buttonNode.appendChild(buttonTextNode)
+
+            //adds the onclick and if destroyWhenButtonClicked is true, destroys when the button is clicked (otherwise does nothing)
+            buttonNode.setAttribute("onclick", `${this.buttonOnClick};${this.destroyWhenButtonClicked ? ` Snackbar.snackbars[${this.id}].destroy();` : ""}`)
+
+            snackbarNode.appendChild(buttonNode)
+        }
+
+        //adds the node to the body, puts reference to DOM element in this.element
+        document.body.appendChild(snackbarNode);
+        this.element = document.getElementById(`snackbar-${this.id}`)
+
+        return this;
+    }
+
+    /**
+     * shows the snackbar
+     * if it's not already made, makes it
+     * if you need to show right after making, use this
+     * returns the snackbar object
+     */
+    show() {
+        const snackbar = this
+        
+        //function for the callback for setTimeout
+        const removeHidden = function() {
+            snackbar.element.classList.remove("hidden");
+        }
+
+        //if not already made, makes the snackbar
+        if (this.element === undefined) {
+            this.make();
+            setTimeout(removeHidden, 250);
+            return this;
+
+        } else {
+            removeHidden();
+            return this;
+        }
+    }
+
+    /** 
+     * hides the snackbar
+     * returns the snackbar object
+     */
+    hide() {
+        this.element.classList.add("hidden");
+        return this;
+    }
+
+    /**
+     * destroys the snackbar, its references and its ID
+     * if it's not already hidden, hides it unless override is true
+     */
+    destroy() {
+
+        const snackbar = this
+
+        //function which deletes the references and ids
+        const finalizeDeletion = function() {
+            snackbar.element.remove();
+            delete Snackbar.snackbarIDs[Snackbar.snackbarIDs.indexOf(snackbar.id)];
+            delete Snackbar.snackbars[snackbar.id];
+            snackbar.id = undefined;
+        }
+
+        //if it's not hidden it shouldn't just dissapear
+        if (this.element.classList.contains("hidden")) {
+            finalizeDeletion()
+        } else {
+            this.hide()
+            //deletes it as soon as it's actually hidden
+            setTimeout(finalizeDeletion, 250)
+        }
+    }
+
+    /**
+     * creates and reserves the ID for this snackbar
+     * also creates its reference in snackbars
+     */
+    createID() {
+        
+        let id = null;
+
+        //goes through all consecutive numbers to find an id
+        let iterator = 0
+        while (id === null) {
+            //checks if the id already exists, otherwise continues to iterate
+            Snackbar.snackbarIDs.includes(iterator) ? iterator++ : id = iterator;
+        }
+
+        Snackbar.snackbarIDs.push(id);
+        Snackbar.snackbars[id] = this
+
+        return id;
+    }
+
+}
+
+/**
+ * destroys a snackbar taking an ID
+ */
+function destroySnackbar(id) {
+    Snackbar.snackbars[id].destroy()
+}
+
+
 $("#export_button").click(() => {
     prefs = {};
 
