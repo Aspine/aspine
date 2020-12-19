@@ -5,3 +5,4 @@ usage_log.txt
 dist-lite/
 local.*
 js/
+.env

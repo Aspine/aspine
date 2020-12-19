@@ -438,8 +438,7 @@ async function get_session<T>(
 
 // Code for testing purposes
 if (require.main === module) {
-  const [username, password] = process.argv.slice(2);
-  get_student(username, password, 1).then(
+  get_student(process.env.USERNAME || "", process.env.PASSWORD || "", 1).then(
     console.log, e => {
       if (e.message === "Invalid login") {
         console.error(`Error: ${e.message}`);
