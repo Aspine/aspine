@@ -19,8 +19,13 @@ let newAssignment = function() {
   }
 }
 
+function dothething() {
+  const assignments = currentTableData.currentTermData.classes[selected_class_i].assignments;
+  console.log(assignments)
+}
+
 function replaceAssignmentFromID(oldData, newData, classID) {
-  const assignments = currentTableData.currentTermData.classes[classID].assignments
+  const assignments = currentTableData.currentTermData.classes[classID].assignments;
 
   //this weird version of indexOf is necessary (I think) because when comparing the two it doesn't always match correctly
   let index = -1;
@@ -30,10 +35,18 @@ function replaceAssignmentFromID(oldData, newData, classID) {
       break;
     }
   }
-  assignments[index] = newData
+  assignments[index] = newData;
   updateGradePage();
 }
 
+function removeAssignmentFromID(id, classID) {
+  const assignments = currentTableData.currentTermData.classes[classID].assignments;
+  const newArray = assignments.filter((obj) => {
+    return obj["assignment_id"] !== id;
+  });
+  assignments.length = 0
+  assignments.push.apply(assignments, newArray)
+}
 
 let editAssignment = function(data) {
 

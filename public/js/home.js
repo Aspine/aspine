@@ -589,9 +589,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     color: "var(--red1)",
                     textColor: "var(--white)",
                     buttonText: "Undo?", 
-                    buttonClick: () => {replaceAssignmentFromID({assignment_id: data["assignment_id"], placeholder: true}, data, selected_class_i)},
+                    buttonClick: () => {replaceAssignmentFromID({assignment_id: data["assignment_id"], placeholder: true}, data, selected_class_i);},
                     timeout: 7500,
-                    timeoutFunction: () => {cell.getRow().delete()}
+                    timeoutFunction: () => {removeAssignmentFromID(data["assignment_id"], selected_class_i);},
+                    bodyClick: () => {removeAssignmentFromID(data["assignment_id"], selected_class_i);}
                 }).show();
             },
             headerSort: false,
