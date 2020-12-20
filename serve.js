@@ -7,9 +7,8 @@ const express = require('express');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-// const RedisStore = require('connect-redis')(session);
-// const redis = require("redis"),
-//     client = redis.createClient(6310);
+const MemoryStore = require('memorystore')(session)
+const crypto = require('crypto');
 const http = require('http');
 const fs = require('fs');
 const https = require('https');
@@ -197,10 +196,14 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
 app.use(session({
-    // store: new RedisStore(options),
-    secret: 'scheming+anaconda+bunkbed+greeting+octopus+ultimate+viewable+hangout+everybody',
+    cookie: { maxAge: 28800000 },
+    store: new MemoryStore({ checkPeriod: 28800000 }),
+    // Sessions expire every 8 hours (28800000 ms)
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    secret: crypto.randomBytes(64).toString('hex'),
+    // Sessions are destroyed on restarting the server anyway (because we use
+    // MemoryStore), so the secret can be random
 }));
 
 app.post('/stats', async (req, res) => {

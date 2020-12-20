@@ -39,6 +39,7 @@
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
     "material-icons": "^0.5.1",
+    "memorystore": "^1.6.4",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
     "pdfjs-dist": "^2.5.207",
