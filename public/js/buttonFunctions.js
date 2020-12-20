@@ -19,11 +19,6 @@ let newAssignment = function() {
   }
 }
 
-function dothething() {
-  const assignments = currentTableData.currentTermData.classes[selected_class_i].assignments;
-  console.log(assignments)
-}
-
 function replaceAssignmentFromID(oldData, newData, classID) {
   const assignments = currentTableData.currentTermData.classes[classID].assignments;
 
@@ -44,8 +39,8 @@ function removeAssignmentFromID(id, classID) {
   const newArray = assignments.filter((obj) => {
     return obj["assignment_id"] !== id;
   });
-  assignments.length = 0
-  assignments.push.apply(assignments, newArray)
+  assignments.length = 0;
+  assignments.push.apply(assignments, newArray);
 }
 
 let editAssignment = function(data) {
