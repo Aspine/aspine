@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.1] - tagged 2020-12-20
+- Improve session handling ([#219], [#218])
+- Fix size of district logo on login page ([#221])
+
 ## [2.6.0] - tagged 2020-12-16
 - Dark mode ([#195], [#146], [#213], [#210])
 - Fix "Schedule" tab to work with the covid-19 remote learning schedule ([#198],
@@ -45,7 +49,7 @@ and this project adheres to
 - Fix clock alignment
 - Update dependencies
 
-## [2.4.3] - tagged 2020-10-13
+## [2.4.3] - tagged 2020-10-13, production 2020-10-13
 - Added client-side "remember me" feature ([#141], [#112])
 
 ## [2.4.2] - tagged 2020-09-30
@@ -138,6 +142,7 @@ and this project adheres to
 [2.5.0]: https://github.com/Aspine/aspine/releases/tag/v2.5.0
 [2.5.1]: https://github.com/Aspine/aspine/releases/tag/v2.5.1
 [2.6.0]: https://github.com/Aspine/aspine/releases/tag/v2.6.0
+[2.6.1]: https://github.com/Aspine/aspine/releases/tag/v2.6.1
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
@@ -168,6 +173,7 @@ and this project adheres to
 [#191]: https://github.com/Aspine/aspine/issues/191
 [#192]: https://github.com/Aspine/aspine/issues/192
 [#210]: https://github.com/Aspine/aspine/issues/210
+[#218]: https://github.com/Aspine/aspine/issues/218
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -209,3 +215,5 @@ and this project adheres to
 [#213]: https://github.com/Aspine/aspine/pull/213
 [#215]: https://github.com/Aspine/aspine/pull/215
 [#216]: https://github.com/Aspine/aspine/pull/216
+[#219]: https://github.com/Aspine/aspine/pull/219
+[#221]: https://github.com/Aspine/aspine/pull/221
