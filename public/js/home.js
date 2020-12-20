@@ -581,7 +581,18 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-                cell.getRow().delete();
+
+                const data = cell.getRow().getData()
+                replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
+
+                new Snackbar(`You deleted ${data["name"]}`, {
+                    color: "var(--red1)",
+                    textColor: "var(--white)",
+                    buttonText: "Undo?", 
+                    buttonClick: () => {replaceAssignmentFromID({assignment_id: data["assignment_id"], placeholder: true}, data, selected_class_i)},
+                    // timeout: 7500,
+                    timeoutFunction: () => {cell.getRow().delete()}
+                }).show();
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"
@@ -1197,27 +1208,50 @@ document.getElementById("sidenav-overlay").addEventListener("click", closeSideNa
 
 class Snackbar {
 
-    static snackbars = {}
-    static snackbarIDs = []
+    static snackbars = {};
+    static snackbarIDs = [];
 
     static getSnackbarByID(id) {
-        return snackbarIDs[id]
+        return snackbarIDs[id];
     }
 
+    /**
+     * text is the main requirement, and it's just text
+     * color: String - string reference to a color or a variable, sets the background color
+     * textColor: String - string reference to a color or a variable, sets the text color
+     * buttonText: String - Sets the button text, both it and buttonClick have to be defined for the button to show
+     * buttonClick: Function - Sets the button's onclick logic, both it and buttonText have to be defined for the button to show
+     * destroyWhenButtonClicked : Boolean - Whether or not it should destroy itself when the button is clicked, defaults to true
+     * bodyClick: Function - Sets the body's onclick logic
+     * destroyWhenBodyClicked : Boolean - Whether or not it should destroy itself when the body is clicked, defaults to true
+     * timeout: Int - Time in ms  
+     * timeoutFunction: Function - What to run on timeout
+     */
     constructor(text, options) {
         this.text = text;
         this.color = options["color"];
         this.textColor = options["textColor"];
         this.buttonText = options["buttonText"];
-        this.buttonOnClick = options["buttonOnClick"];
+        this.buttonClick = options["buttonClick"];
         this.destroyWhenButtonClicked = options["destroyWhenButtonClicked"] || true;
-        this.bodyOnClick = options["bodyOnClick"];
+        this.bodyClick = options["bodyClick"];
+        this.destroyWhenBodyClicked = options["destroyWhenBodyClicked"] || true;
+
+        //timeout logic
+        const timeoutFunction = options["timeoutFunction"] === undefined ? options["timeoutFunction"] : () => {};
+        if (options["timeout"] !== undefined) {
+            setTimeout(() => {
+                timeoutFunction();
+                this.destroy();
+            }, options["timeout"])
+        }
 
         this.id;
     }
 
     /**
      * creates the snackbar in the HTML
+     * if you want to show it as soon as you make it, use show without calling make instead
      * returns the snackbar object
      */
     make() {
@@ -1233,63 +1267,73 @@ class Snackbar {
 
         //creates the snackbar and gives it classes and text
         const snackbarNode = document.createElement("DIV");
-        snackbarNode.classList.add("snackbar")
-        snackbarNode.classList.add("hidden")
+        snackbarNode.classList.add("snackbar");
+        snackbarNode.classList.add("hidden");
 
         //assigns it id based off of it's actual id
-        snackbarNode.id = `snackbar-${this.id}`
+        snackbarNode.id = `snackbar-${this.id}`;
 
         //adds color if given
         if (this.color !== undefined) {
-            snackbarNode.style.backgroundColor = `${this.color}`
+            snackbarNode.style.backgroundColor = `${this.color}`;
         }
 
         //sets the onClick with which just destroys it by default
-        snackbarNode.setAttribute("onclick", this.onBodyClick || `Snackbar.snackbars[${this.id}].destroy();`);
+        const bodyOnClickFunction = this.bodyClick !== undefined ? () => {this.bodyClick();} : () => {};
+        const destroyFromBody = this.destroyWhenBodyClicked ? () => {this.destroy();} : () => {};
+        snackbarNode.addEventListener("click", () => {
+            bodyOnClickFunction();
+            destroyFromBody();
+        })
 
         //adds the text
-        const textNode = document.createElement("SPAN")
-        textNode.textContent = this.text
+        const textNode = document.createElement("SPAN");
+        textNode.textContent = this.text;
 
         //colors the text if necessary
-        if (this.textColor === undefined) {
-            textNode.style.color = this.textColor
+        if (this.textColor !== undefined) {
+            textNode.style.color = this.textColor;
         }
 
         //adds the text
-        snackbarNode.appendChild(textNode)
+        snackbarNode.appendChild(textNode);
 
         //makes the button if given button parameters
-        if (this.buttonText !== undefined && this.buttonOnClick != undefined) {
+        if (this.buttonText !== undefined && this.buttonClick != undefined) {
 
             //creates the button and adds class
-            const buttonNode = document.createElement("BUTTON")
+            const buttonNode = document.createElement("BUTTON");
 
             //creates the text span
-            const buttonTextNode = document.createElement("SPAN")
-            buttonTextNode.textContent = this.buttonText
+            const buttonTextNode = document.createElement("SPAN");
+            buttonTextNode.textContent = this.buttonText;
 
             //colors the text if necessary
             if (this.textColor !== undefined) {
-                buttonTextNode.style.color = this.textColor
+                buttonTextNode.style.color = this.textColor;
             }
 
             if (this.color !== undefined) {
-                buttonNode.style.backgroundColor = this.color
+                buttonNode.style.backgroundColor = this.color;
             }
 
             //adds the node
-            buttonNode.appendChild(buttonTextNode)
+            buttonNode.appendChild(buttonTextNode);
 
             //adds the onclick and if destroyWhenButtonClicked is true, destroys when the button is clicked (otherwise does nothing)
-            buttonNode.setAttribute("onclick", `${this.buttonOnClick};${this.destroyWhenButtonClicked ? ` Snackbar.snackbars[${this.id}].destroy();` : ""}`)
+            const destroyFromButton = this.destroyWhenButtonClicked ? () => {this.destroy();} : () => {};
+            buttonNode.addEventListener("click", (event) => {
+                this.buttonClick();
+                destroyFromButton();
+                event.stopPropagation();
+            })
 
-            snackbarNode.appendChild(buttonNode)
+            snackbarNode.appendChild(buttonNode);
         }
 
         //adds the node to the body, puts reference to DOM element in this.element
         document.body.appendChild(snackbarNode);
-        this.element = document.getElementById(`snackbar-${this.id}`)
+        this.element = document.getElementById(`snackbar-${this.id}`);
 
         return this;
     }
@@ -1301,7 +1345,7 @@ class Snackbar {
      * returns the snackbar object
      */
     show() {
-        const snackbar = this
+        const snackbar = this;
         
         //function for the callback for setTimeout
         const removeHidden = function() {
@@ -1309,7 +1353,7 @@ class Snackbar {
         }
 
         //if not already made, makes the snackbar
-        if (this.element === undefined) {
+        if (document.getElementById(`snackbar-${this.id}`) === null) {
             this.make();
             setTimeout(removeHidden, 250);
             return this;
@@ -1335,7 +1379,7 @@ class Snackbar {
      */
     destroy() {
 
-        const snackbar = this
+        const snackbar = this;
 
         //function which deletes the references and ids
         const finalizeDeletion = function() {
@@ -1345,13 +1389,15 @@ class Snackbar {
             snackbar.id = undefined;
         }
 
+        console.log(this.element.classList.contains("hidden"))
+
         //if it's not hidden it shouldn't just dissapear
         if (this.element.classList.contains("hidden")) {
-            finalizeDeletion()
+            finalizeDeletion();
         } else {
-            this.hide()
+            this.hide();
             //deletes it as soon as it's actually hidden
-            setTimeout(finalizeDeletion, 250)
+            setTimeout(finalizeDeletion, 250);
         }
     }
 
@@ -1377,14 +1423,6 @@ class Snackbar {
     }
 
 }
-
-/**
- * destroys a snackbar taking an ID
- */
-function destroySnackbar(id) {
-    Snackbar.snackbars[id].destroy()
-}
-
 
 $("#export_button").click(() => {
     prefs = {};
