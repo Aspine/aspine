@@ -64,7 +64,7 @@ body {
   --orange: #f6b93b;
 
   --red: #ff0000;
-  --red1: #800000;
+  --red1: #a70000;
 
   --schedule1: #63c082;
   --schedule2: #72c68e;
@@ -107,7 +107,7 @@ body.dark {
   --orange: #f6b93b;
 
   --red: #ff0000;
-  --red1: #ff0000;
+  --red1: #ff8585;
 
   --schedule1: #00290e;
   --schedule2: #003d14;

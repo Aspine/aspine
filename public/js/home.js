@@ -590,7 +590,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     textColor: "var(--white)",
                     buttonText: "Undo?", 
                     buttonClick: () => {replaceAssignmentFromID({assignment_id: data["assignment_id"], placeholder: true}, data, selected_class_i)},
-                    // timeout: 7500,
+                    timeout: 7500,
                     timeoutFunction: () => {cell.getRow().delete()}
                 }).show();
             },
@@ -1388,8 +1388,6 @@ class Snackbar {
             delete Snackbar.snackbars[snackbar.id];
             snackbar.id = undefined;
         }
-
-        console.log(this.element.classList.contains("hidden"))
 
         //if it's not hidden it shouldn't just dissapear
         if (this.element.classList.contains("hidden")) {
