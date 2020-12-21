@@ -1275,8 +1275,8 @@ class Snackbar {
         }
 
         //sets the body onclick listener which just destroys it by default
-        const bodyOnClickFunction = this.bodyClick !== undefined ? () => {this.bodyClick();} : () => {};
-        const destroyFromBody = this.destroyWhenBodyClicked ? () => {this.destroy();} : () => {};
+        const bodyOnClickFunction = this.bodyClick !== undefined ? () => this.bodyClick() : () => {};
+        const destroyFromBody = this.destroyWhenBodyClicked ? () => this.destroy() : () => {};
         snackbarNode.addEventListener("click", () => {
             bodyOnClickFunction();
             destroyFromBody();
@@ -1296,7 +1296,6 @@ class Snackbar {
 
         //makes the button if given button parameters
         if (this.buttonText !== undefined && this.buttonClick != undefined) {
-
             //creates the button and adds class
             const buttonNode = document.createElement("BUTTON");
 
@@ -1317,8 +1316,8 @@ class Snackbar {
             buttonNode.appendChild(buttonTextNode);
 
             //sets the button onclick listener which runs the given funtion and destroys the snackar by default
-            const destroyFromButton = this.destroyWhenButtonClicked ? () => {this.destroy();} : () => {};
-            buttonNode.addEventListener("click", (event) => {
+            const destroyFromButton = this.destroyWhenButtonClicked ? () => this.destroy() : () => {};
+            buttonNode.addEventListener("click", event => {
                 this.buttonClick();
                 destroyFromButton();
                 //stops propogation so the body event isn't called
@@ -1342,12 +1341,7 @@ class Snackbar {
      * returns the snackbar object
      */
     show() {
-        const snackbar = this;
-        
-        //function for the callback for setTimeout
-        const removeHidden = function() {
-            snackbar.element.classList.remove("hidden");
-        }
+        const removeHidden = () => this.element.classList.remove("hidden");
 
         //if not already made, makes the snackbar
         if (document.getElementById(`snackbar-${this.id}`) === null) {
@@ -1355,7 +1349,6 @@ class Snackbar {
             //waits a momement to make sure the snackbar's animation functions properly
             setTimeout(removeHidden, 10);
             return this;
-
         } else {
             removeHidden();
             return this;
@@ -1416,7 +1409,6 @@ class Snackbar {
 
         return id;
     }
-
 }
 
 $("#export_button").click(() => {
