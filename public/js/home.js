@@ -581,7 +581,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-
                 const data = cell.getRow().getData()
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
 
@@ -589,10 +588,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     color: "var(--red1)",
                     textColor: "var(--white)",
                     buttonText: "Undo?", 
-                    buttonClick: () => {replaceAssignmentFromID({assignment_id: data["assignment_id"], placeholder: true}, data, selected_class_i);},
+                    buttonClick: () => replaceAssignmentFromID({ assignment_id: data["assignment_id"], placeholder: true }, data, selected_class_i),
                     timeout: 7500,
-                    timeoutFunction: () => {removeAssignmentFromID(data["assignment_id"], selected_class_i);},
-                    bodyClick: () => {removeAssignmentFromID(data["assignment_id"], selected_class_i);}
+                    timeoutFunction: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
+                    bodyClick: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
                 }).show();
             },
             headerSort: false,
@@ -1252,7 +1251,6 @@ class Snackbar {
      * returns the snackbar object
      */
     make() {
-
         //stops if the element already exists
         if (typeof document.getElementById(`sidenav-${this.id}`) === undefined) {
             return;
@@ -1378,7 +1376,6 @@ class Snackbar {
      * if it's not already hidden, hides it unless override is true
      */
     destroy() {
-
         const snackbar = this;
 
         //function which deletes the references and ids
@@ -1404,7 +1401,6 @@ class Snackbar {
      * also creates its reference in snackbars
      */
     createID() {
-        
         let id = null;
 
         //goes through all consecutive numbers to find an id

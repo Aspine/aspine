@@ -22,25 +22,20 @@ let newAssignment = function() {
 function replaceAssignmentFromID(oldData, newData, classID) {
   const assignments = currentTableData.currentTermData.classes[classID].assignments;
 
-  //this weird version of indexOf is necessary (I think) because when comparing the two it doesn't always match correctly
-  let index = -1;
-  for (i=0; i<assignments.length-1; i++) {
-    if (assignments[i]["assignment_id"] === oldData["assignment_id"]) {
-      index = i;
-      break;
-    }
-  }
+  const index = assignments.findIndex(({ assignment_id }) =>
+    assignment_id === oldData.assignment_id
+  );
   assignments[index] = newData;
   updateGradePage();
 }
 
 function removeAssignmentFromID(id, classID) {
   const assignments = currentTableData.currentTermData.classes[classID].assignments;
-  const newArray = assignments.filter((obj) => {
-    return obj["assignment_id"] !== id;
-  });
+  const newArray = assignments.filter(({ assignment_id }) =>
+    assignment_id !== id
+  );
   assignments.length = 0;
-  assignments.push.apply(assignments, newArray);
+  assignments.push(...newArray);
 }
 
 let editAssignment = function(data) {
@@ -151,9 +146,10 @@ let updateGradePage = function() {
   classesTable.replaceData(currentTableData.currentTermData.classes);
   categoriesTable.setData(currentTableData.currentTermData.classes[selected_class_i].categoryDisplay);
 
-  assignmentsTable.replaceData(currentTableData.currentTermData.classes[selected_class_i].assignments.filter((obj) => {
-    return obj.placeholder !== true
-  }));
+  assignmentsTable.replaceData(currentTableData.currentTermData
+	  .classes[selected_class_i].assignments
+	  .filter(({ placeholder }) => !placeholder)
+  );
 
   currentTableData.currentTermData.calcGPA = computeGPA(currentTableData.currentTermData.classes);
   currentTableData.terms[currentTerm].calcGPA = computeGPA(currentTableData.currentTermData.classes);
