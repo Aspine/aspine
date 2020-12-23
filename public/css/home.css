@@ -1169,7 +1169,7 @@ p#large_clock_period {
   background-color: var(--sidenav-color);
   overflow-x: hidden;
   padding-top: 5px;
-  transition: 0.5s;
+  transition: 0.3s;
   display: block;
 }
 
