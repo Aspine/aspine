@@ -81,7 +81,7 @@ body {
 
   --sidenav-hover-color: #f3f3f3;
   --sidenav-hover-lighter-color: #f3f3f3;
-
+  --sidenav-active-color: #fafafa;
 }
 
 body.dark {
@@ -132,7 +132,7 @@ body.dark {
 
   --sidenav-hover-color: #333436;
   --sidenav-hover-lighter-color: #606d78;
-
+  --sidenav-active-color: #464749;
 }
 
 /*---------------------------------------------*/
@@ -1187,6 +1187,10 @@ p#large_clock_period {
   margin-left: 5px;
   margin-right: 5px;
   /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
+}
+
+.sidenav button.active {
+  background-color: var(--sidenav-active-color);
 }
 
 .sidenav .select-selected:hover {
