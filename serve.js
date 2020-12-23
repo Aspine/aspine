@@ -86,18 +86,6 @@ new Map([
         '/node_modules/animate.css/animate.min.css'
     ],
     [
-        '/vendor/hamburgers/hamburgers.min.css',
-        '/node_modules/hamburgers/dist/hamburgers.min.css'
-    ],
-    [
-        '/vendor/bootstrap/bootstrap.min.css',
-        '/node_modules/bootstrap/dist/css/bootstrap.min.css'
-    ],
-    [
-        '/vendor/bootstrap/bootstrap.min.css.map',
-        '/node_modules/bootstrap/dist/css/bootstrap.min.css.map'
-    ],
-    [
         '/vendor/d3/d3-array.min.js',
         '/node_modules/d3-array/dist/d3-array.min.js'
     ],

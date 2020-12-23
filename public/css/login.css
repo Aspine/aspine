@@ -74,6 +74,7 @@ a {
   line-height: 1.7;
   color: var(--green1);
   margin: 0px;
+  text-decoration: none;
   transition: all 0.4s;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
