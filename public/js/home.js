@@ -1221,7 +1221,8 @@ class Snackbar {
      * bodyClick: Function - Sets the body's onclick logic
      * destroyWhenBodyClicked : Boolean - Whether or not it should destroy itself when the body is clicked, defaults to true
      * timeout: Int - Time in ms  
-     * timeoutFunction: Function - What to run on timeout
+     * timeoutFunction: Function - What to run on timeout (doesn't run if hidden or destroyed)
+     * timeoutMode: can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
     constructor(text, options) {
         this.text = text;
@@ -1234,14 +1235,26 @@ class Snackbar {
         this.destroyWhenBodyClicked = options["destroyWhenBodyClicked"] || true;
 
         //timeout logic
-        const timeoutFunction = options["timeoutFunction"] === undefined ? options["timeoutFunction"] : () => {};
-        if (options["timeout"] !== undefined) {
-            setTimeout(() => {
-                timeoutFunction();
-                this.destroy();
-            }, options["timeout"]);
+        this.timeoutFunction = options["timeoutFunction"] !== undefined ? options["timeoutFunction"] : () => {};
+        this.timeout = options["timeout"];
+        this.timeoutInProgress;
+
+        //what to run on timeout
+        this.timeoutEndFunction;
+        switch(options["timeoutMode"]) {
+            case "destroy":
+            case undefined:
+                this.timeoutEndFunction = () => this.destroy();
+                break;
+            case "hide":
+                this.timeoutEndFunction = () => this.hide();
+                break;
+            case "none":
+                this.timeoutEndFunction = () => {};
+                break;
         }
 
+        //creates this.id
         this.id;
     }
 
@@ -1341,6 +1354,15 @@ class Snackbar {
      * returns the snackbar object
      */
     show() {
+        //starts the timeout
+        if (this.timeout !== undefined) {
+            this.timeoutInProgress = setTimeout(() => {
+                this.timeoutFunction();
+                this.timeoutEndFunction();
+                this.timeoutInProgress = undefined; //resets the timeoutInProgress variable at the end of the timeout
+            }, this.timeout);
+        }
+        
         const removeHidden = () => this.element.classList.remove("hidden");
 
         //if not already made, makes the snackbar
@@ -1360,6 +1382,11 @@ class Snackbar {
      * returns the snackbar object
      */
     hide() {
+        if (this.timeoutInProgress !== undefined) {
+            clearTimeout(this.timeoutInProgress);
+            this.timeoutInProgress = undefined;
+        }
+
         this.element.classList.add("hidden");
         return this;
     }
