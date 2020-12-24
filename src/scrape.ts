@@ -289,7 +289,8 @@ async function get_academics(
   const term_classes_mapping = new Map<Quarter, Map<string, any>>();
 
   // Populate term_classes_mapping with data from each term
-  for (const [quarter, quarter_oid] of quarter_oids) {
+  await Promise.all([...quarter_oids.entries()].map(
+    async ([quarter, quarter_oid]) =>
     term_classes_mapping.set(
       quarter,
       // Construct a 2D array with elements [oid, rest] where
@@ -298,8 +299,8 @@ async function get_academics(
       new Map<string, any>((await get_classes(quarter_oid)).map(
         ({oid, ...rest}) => [oid, rest]
       ))
-    );
-  }
+    )
+  ));
 
   // For each class, assemble a ClassInfo object
   return all_classes.map(({
