@@ -5,6 +5,7 @@ let newAssignment = function() {
   if (!isNaN(selected_class_i)) {
 
     currentTableData.currentTermData.classes[selected_class_i].assignments.unshift({
+      "assignment_id": newAssignmentIDCounter.toString(),
       "name": "Assignment",
       "category": Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories)[currentFilterRow >= 0 ? currentFilterRow : 0],
       "score": 10,
@@ -13,6 +14,7 @@ let newAssignment = function() {
       "color": "green",
       "synthetic": "true",
     });
+    newAssignmentIDCounter++;
 
     updateGradePage();
 

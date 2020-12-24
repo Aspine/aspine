@@ -36,6 +36,9 @@ let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
+// Counter for creating new assignments
+var newAssignmentIDCounter = 0;
+
 let tempCell;
 // When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
@@ -366,7 +369,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
-                    .assignments[cell.getRow().getPosition()].synthetic
+                    .assignments.filter(value => {
+                        return !(value["placeholder"] || false)
+                    })[cell.getRow().getPosition()].synthetic
             ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
             width: 40,
             align: "center",
@@ -587,7 +592,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 new Snackbar(`You deleted ${data["name"]}`, {
                     color: "var(--red1)",
                     textColor: "var(--white)",
-                    buttonText: "Undo?", 
+                    buttonText: "Undo", 
                     buttonClick: () => replaceAssignmentFromID({ assignment_id: data["assignment_id"], placeholder: true }, data, selected_class_i),
                     timeout: 7500,
                     timeoutFunction: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
@@ -1224,7 +1229,7 @@ class Snackbar {
      * timeoutFunction: Function - What to run on timeout (doesn't run if hidden or destroyed)
      * timeoutMode: can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
-    constructor(text, options) {
+    constructor(text, options = {}) {
         this.text = text;
         this.color = options["color"];
         this.textColor = options["textColor"];
