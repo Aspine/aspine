@@ -391,21 +391,21 @@ async function get_assignments(
   }
 
   const quarter_oid = quarter_oids.get(quarter);
-  const past_due = await (await fetch(
+  const past_due =  fetch(
     `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_details.oid}/categoryDetails/pastDue?gradeTermOid=${quarter_oid}`, {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).json();
-  const upcoming = await (await fetch(
+  ).then(response => response.json());
+  const upcoming = fetch(
     `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_details.oid}/categoryDetails/upcoming?gradeTermOid=${quarter_oid}`, {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).json();
-  return [...past_due, ...upcoming].map(({
+  ).then(response => response.json());
+  return [...await past_due, ...await upcoming].map(({
     name, categoryOid, assignedDate, dueDate, remark, oid,
     scoreElements: [{ score, pointMax }],
   }) => {
