@@ -218,19 +218,38 @@ app.post('/data', async (req, res) => {
     }
     else {
         // TODO add nologin field for consistency
-        res.send(await new_scraper.get_student(
-            req.session.username, req.session.password,
-            parseInt(req.body.quarter)
-        ));
+        try {
+            res.send(await new_scraper.get_student(
+                req.session.username, req.session.password,
+                parseInt(req.body.quarter)
+            ));
+        } catch (e) {
+            console.error(e);
+            res.send({ recent: { login_fail: true } });
+        }
     }
 });
 
 app.post('/schedule', async (req, res) => {
-    res.send(await new_scraper.get_schedule(req.session.username, req.session.password));
+    try {
+        res.send(await new_scraper.get_schedule(
+            req.session.username, req.session.password
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send({ login_fail: true });
+    }
 });
 
 app.post('/pdf', async (req, res) => {
-    res.send(await new_scraper.get_pdf_files(req.session.username, req.session.password));
+    try {
+        res.send(await new_scraper.get_pdf_files(
+            req.session.username, req.session.password
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send([]);
+    }
 });
 
 app.get('/', async (req, res) => {
