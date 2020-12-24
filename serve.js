@@ -35,11 +35,6 @@ const app = express();
 app.use(compression({ filter: (..._) => true }));
 app.listen(port, () => console.log(`Aspine listening on port ${port}!`));
 
-// // redis setup
-// client.on("error", function (err) {
-//     console.error("Error " + err);
-// });
-
 if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
     // Certificate
     const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
