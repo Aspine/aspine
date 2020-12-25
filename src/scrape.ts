@@ -18,6 +18,9 @@ import type {
   Assignment,
   StudentData,
   Class,
+  Recent,
+  AttendanceEvent,
+  ActivityEvent,
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
@@ -36,6 +39,7 @@ export async function get_student(
     const overview = assemble_overview(class_details);
     const assignments = await Promise.all(class_details.map(async details =>
       get_assignments(session, quarter, quarter_oids, details)));
+    const recent = await get_recent(session);
 
     const isClass = function(x: Class | undefined): x is Class {
       return x !== undefined;
@@ -58,16 +62,7 @@ export async function get_student(
       };
     }).filter(isClass);
 
-    return {
-      classes: classes,
-      recent: {
-        recentActivityArray: [],
-        recentAttendanceArray: [],
-      },
-      overview: overview,
-      username: username,
-      quarter: quarter,
-    };
+    return { classes, recent, overview, username, quarter };
   });
 }
 
@@ -168,6 +163,46 @@ export async function get_schedule(
 
     return { black, silver };
   });
+}
+
+async function get_recent(session: Session): Promise<Recent> {
+  const page = await (await fetch(
+    "https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?" +
+    new URLSearchParams({
+      "preferences":
+      `<?xml version="1.0" encoding="UTF-8"?><preference-set>
+        <pref id="dateRange" type="int">4</pref>
+      </preference-set>`
+    }),
+    {
+      headers: {
+        "Cookie": `JSESSIONID=${session.session_id}`,
+      },
+    }
+  )).text();
+
+  const { window: { document } } = new JSDOM(page, { contentType: "text/xml" });
+  const recentAttendanceArray =
+    [...document.querySelectorAll("periodAttendance")].map(x =>
+      Object.fromEntries([
+        "date", "period", "code", "classname", "dismissed",
+        "absent", "excused", "tardy",
+      ].map(att => [att, x.getAttribute(att)])) as unknown as AttendanceEvent
+    );
+  const recentActivityArray = [
+    ...[...document.querySelectorAll("gradebookScore")].map(x =>
+      Object.fromEntries([
+        "date", "classname", "score", "assignment",
+      ].map(att => [att, x.getAttribute(att)])) as unknown as ActivityEvent
+    ),
+    ...[...document.querySelectorAll("gradePost")].map(x => ({
+      "date": x.getAttribute("date"),
+      "classname": x.getAttribute("classname"),
+      "score": "",
+      "assignment": "Grades Posted",
+    } as unknown as ActivityEvent)),
+  ];
+  return { recentAttendanceArray, recentActivityArray };
 }
 
 /**

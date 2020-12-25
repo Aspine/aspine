@@ -41,10 +41,8 @@ export interface OverviewItem {
 }
 
 export interface Recent {
-  // Empty array at the moment because Aspen does not show recent activity
-  // w.r.t. assignments
-  recentActivityArray: [];
   recentAttendanceArray: AttendanceEvent[];
+  recentActivityArray: ActivityEvent[];
 }
 
 export interface AttendanceEvent {
@@ -56,6 +54,13 @@ export interface AttendanceEvent {
   absent: string;
   excused: string;
   tardy: string;
+}
+
+export interface ActivityEvent {
+  date: string;
+  classname: string;
+  score: string;
+  assignment: string;
 }
 
 export interface Schedule {
