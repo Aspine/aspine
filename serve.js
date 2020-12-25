@@ -4,6 +4,7 @@
 
 
 const express = require('express');
+const { program } = require('commander');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -16,26 +17,18 @@ const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 const child_process = require('child_process');
 // -------------------------------------------
-
-if (args.hasOwnProperty('help') || args._.includes('help')) {
-    console.log(`Usage: ./serve.js [OPTION]...
-Starts the Aspine web server.
-
-Options:
-  --insecure  do not secure connections with TLS (HTTPS)
-  --help      display this help and exit
-`);
-    process.exit();
-}
+program
+    .version('2.6.1')
+    .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
+    .option('-p, --port <number>', 'port to listen on', 8080)
+    .parse();
 
 // ------------ Web Server -------------------
-const port = 8080;
-
 const app = express();
-app.use(compression({ filter: (..._) => true }));
-app.listen(port, () => console.log(`Aspine listening on port ${port}!`));
+app.use(compression());
+app.listen(program.port, () => console.log(`Aspine listening on port ${program.port}!`));
 
-if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
+if(!program.insecure) {
     // Certificate
     const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8');
@@ -47,22 +40,19 @@ if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
         ca: ca
     };
 
-    app.all('*', ensureSecure); // at top of routing calls
-
-    http.createServer(app).listen(8090);
-    https.createServer(credentials, app).listen(4430, () => { //443
-        console.log('HTTPS Server running on port 4430'); //443
-    });
-
-    function ensureSecure(req, res, next){
-        if(req.secure){
+    app.all('*', (req, res, next) => {
+        if (req.secure) {
             // OK, continue
             return next();
         }
         // handle port numbers if you need non defaults
-        // res.redirect('https://' + req.host + req.url); // express 3.x
         res.redirect('https://' + req.hostname + req.url); // express 4.x
-    }
+    }); // at top of routing calls
+
+    http.createServer(app).listen(8090);
+    https.createServer(credentials, app).listen(4430, () =>//443
+        console.log('HTTPS Server running on port 4430') //443
+    );
 }
 
 // Expose frontend dependencies from node-modules
@@ -248,7 +238,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', async (req, res) => {
-  req.session.destroy();
+    req.session.destroy();
     res.redirect('/login');
 });
 
