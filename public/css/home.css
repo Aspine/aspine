@@ -73,15 +73,6 @@ body {
   --schedule6: #b1dfc0;
   --schedule7: #c0e5cd;
   --schedule8: #d0ecd9;
-
-  --sidenav-color: #e0e0e0;
-  --sidenav-button-color: #eaeaea;
-  --sidenav-button-child-color:  #f9f9f9;
-  --sidenav-hr-color: #d8d8d8;
-
-  --sidenav-hover-color: #f3f3f3;
-  --sidenav-hover-lighter-color: #f3f3f3;
-
 }
 
 body.dark {
@@ -124,15 +115,6 @@ body.dark {
   --schedule6: #00a336;
   --schedule7: #00b83d;
   --schedule8: #00cc44;
-
-  --sidenav-color: #121212;
-  --sidenav-button-color: #292a2b;
-  --sidenav-button-child-color: #4e5257;
-  --sidenav-hr-color: #576069;
-
-  --sidenav-hover-color: #333436;
-  --sidenav-hover-lighter-color: #606d78;
-
 }
 
 /*---------------------------------------------*/
@@ -1146,36 +1128,36 @@ p#large_clock_period {
   background-color: var(--white1);
 }
 
-.sidenav .select-items div:hover {
-  background-color: var(--sidenav-hover-lighter-color);
+#sidenav .select-items div:hover {
+  background-color: var(--white3);
 }
 
-.sidenav hr {
+#sidenav hr {
   height: 4px;
   width: 270px;
-  background-color: var(--sidenav-hr-color);
+  background-color: var(--white3);
   clear: both;
   margin: 5px 0px;
   border: 0px;
 }
 
-.sidenav {
+#sidenav {
   height: 100%;
   width: 0;
   position: fixed;
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: var(--sidenav-color);
+  background-color: var(--white2);
   overflow-x: hidden;
   padding-top: 5px;
-  transition: 0.5s;
+  transition: 0.3s;
   display: block;
 }
 
-.sidenav button {
+#sidenav button {
   clear: both;
-  background-color: var(--sidenav-button-color);
+  background-color: inherit;
   /* float: left; */
   /* float: right; */
   border: none;
@@ -1189,24 +1171,28 @@ p#large_clock_period {
   /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
 }
 
-.sidenav .select-selected:hover {
-  background-color: var(--sidenav-hover-color) !important;
+#sidenav button.active {
+  background-color: var(--gray);
 }
 
-.sidenav button:hover {
-  background-color: var(--sidenav-hover-color) !important;
+#sidenav .select-selected:hover {
+  background-color: var(--white3) !important;
 }
 
-.sidenav .GPA {
+#sidenav button:hover {
+  background-color: var(--white3) !important;
+}
+
+#sidenav .GPA {
   clear: both;
   height: 44px;
   margin-bottom: 5px;
   width: 270px;
 }
 
-.sidenav .select-selected {
+#sidenav .select-selected {
   color: var(--black) !important;
-  background-color: var(--sidenav-button-color);
+  background-color: inherit;
   /* float: right; */
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
@@ -1216,11 +1202,11 @@ p#large_clock_period {
   margin-bottom: 5px;
 }
 
-.sidenav .select-selected:after {
+#sidenav .select-selected:after {
   right: 15px;
 }
 
-.sidenav .activated-selected-item {
+#sidenav .activated-selected-item {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   margin: 0px 5px 5px 5px;
@@ -1228,9 +1214,9 @@ p#large_clock_period {
   border-color: transparent !important; /* empty borders for these because it looks better */
 }
 
-.sidenav .activated-select-items {
+#sidenav .activated-select-items {
   color: var(--black);
-  background-color: var(--sidenav-button-child-color);
+  background-color: inherit;
   float: right;
   font-size: 14px !important;
   font-family: Arial, Helvetica, sans-serif !important;
@@ -1241,7 +1227,7 @@ p#large_clock_period {
   border-color: transparent !important;
 }
 
-.sidenav .select-items {
+#sidenav .select-items {
   position: static;
 }
 
@@ -1249,7 +1235,7 @@ p#large_clock_period {
   display: none;
 }
 
-.sidenav-overlay {
+#sidenav-overlay {
   width: 100%;
   height: 100%;
   position: fixed;
