@@ -28,7 +28,7 @@ const app = express();
 app.use(compression());
 app.listen(program.port, () => console.log(`Aspine listening on port ${program.port}!`));
 
-if(!program.insecure) {
+if (!program.insecure) {
     // Certificate
     const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8');
@@ -46,12 +46,11 @@ if(!program.insecure) {
             return next();
         }
         // handle port numbers if you need non defaults
-        res.redirect('https://' + req.hostname + req.url); // express 4.x
+        res.redirect('https://' + req.hostname + req.url);
     }); // at top of routing calls
 
-    http.createServer(app).listen(8090);
-    https.createServer(credentials, app).listen(4430, () =>//443
-        console.log('HTTPS Server running on port 4430') //443
+    https.createServer(credentials, app).listen(4430, () =>
+        console.log('HTTPS Server running on port 4430')
     );
 }
 
