@@ -189,19 +189,12 @@ async function get_recent(session: Session): Promise<Recent> {
         "absent", "excused", "tardy",
       ].map(att => [att, x.getAttribute(att)])) as unknown as AttendanceEvent
     );
-  const recentActivityArray = [
-    ...[...document.querySelectorAll("gradebookScore")].map(x =>
+  const recentActivityArray =
+    [...document.querySelectorAll("gradebookScore")].map(x =>
       Object.fromEntries([
         "date", "classname", "score", "assignment",
       ].map(att => [att, x.getAttribute(att)])) as unknown as ActivityEvent
-    ),
-    ...[...document.querySelectorAll("gradePost")].map(x => ({
-      "date": x.getAttribute("date"),
-      "classname": x.getAttribute("classname"),
-      "score": "",
-      "assignment": "Grades Posted",
-    } as unknown as ActivityEvent)),
-  ];
+    );
   return { recentAttendanceArray, recentActivityArray };
 }
 
