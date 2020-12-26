@@ -1128,11 +1128,11 @@ p#large_clock_period {
   background-color: var(--white1);
 }
 
-.sidenav .select-items div:hover {
+#sidenav .select-items div:hover {
   background-color: var(--white3);
 }
 
-.sidenav hr {
+#sidenav hr {
   height: 4px;
   width: 270px;
   background-color: var(--white3);
@@ -1141,7 +1141,7 @@ p#large_clock_period {
   border: 0px;
 }
 
-.sidenav {
+#sidenav {
   height: 100%;
   width: 0;
   position: fixed;
@@ -1155,7 +1155,7 @@ p#large_clock_period {
   display: block;
 }
 
-.sidenav button {
+#sidenav button {
   clear: both;
   background-color: inherit;
   /* float: left; */
@@ -1171,26 +1171,26 @@ p#large_clock_period {
   /*transition: 0.3s; commented out to prevent weird transitions involving Calculated GPA*/
 }
 
-.sidenav button.active {
+#sidenav button.active {
   background-color: var(--gray);
 }
 
-.sidenav .select-selected:hover {
+#sidenav .select-selected:hover {
   background-color: var(--white3) !important;
 }
 
-.sidenav button:hover {
+#sidenav button:hover {
   background-color: var(--white3) !important;
 }
 
-.sidenav .GPA {
+#sidenav .GPA {
   clear: both;
   height: 44px;
   margin-bottom: 5px;
   width: 270px;
 }
 
-.sidenav .select-selected {
+#sidenav .select-selected {
   color: var(--black) !important;
   background-color: inherit;
   /* float: right; */
@@ -1202,11 +1202,11 @@ p#large_clock_period {
   margin-bottom: 5px;
 }
 
-.sidenav .select-selected:after {
+#sidenav .select-selected:after {
   right: 15px;
 }
 
-.sidenav .activated-selected-item {
+#sidenav .activated-selected-item {
   /*border: 1px transparent solid;*/
   border-width: 1px 1px 1px 1px !important;
   margin: 0px 5px 5px 5px;
@@ -1214,7 +1214,7 @@ p#large_clock_period {
   border-color: transparent !important; /* empty borders for these because it looks better */
 }
 
-.sidenav .activated-select-items {
+#sidenav .activated-select-items {
   color: var(--black);
   background-color: inherit;
   float: right;
@@ -1227,7 +1227,7 @@ p#large_clock_period {
   border-color: transparent !important;
 }
 
-.sidenav .select-items {
+#sidenav .select-items {
   position: static;
 }
 
@@ -1235,7 +1235,7 @@ p#large_clock_period {
   display: none;
 }
 
-.sidenav-overlay {
+#sidenav-overlay {
   width: 100%;
   height: 100%;
   position: fixed;
