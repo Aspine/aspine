@@ -24,10 +24,14 @@
   <link rel="stylesheet"
         href="fonts/material-icons/iconfont/material-icons.css"
         media="print" onload="this.media='all'">
-  <script src="vendor/tabulator/tabulator.min.js"></script>
-  <script src="js/extraFunctions.js"></script>
-  <script src="js/buttonFunctions.js"></script>
-  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/tabulator/tabulator.min.js" defer></script>
+  <script src="js/extraFunctions.js" defer></script>
+  <script src="js/buttonFunctions.js" defer></script>
+  <script src="vendor/jquery/jquery.min.js" defer></script>
+  <script src="js/clock.js" defer></script>
+  <script src="js/calculate_grade.js" defer></script>
+  <script src="js/home.js" defer></script>
+  <script src="js/app.js" defer></script>
   <script src="vendor/pdf.js/pdf.min.js" defer></script>
   <script src="vendor/file-saver/FileSaver.min.js" defer></script>
   <script src="vendor/d3/d3-array.min.js" defer></script>
@@ -415,10 +419,6 @@
     </div>
   </div>
   <p>Aspine version: <span id="version">(loading&hellip;)</span></p>
-  <script src="js/clock.js"></script>
-  <script src="js/calculate_grade.js"></script>
-  <script src="js/home.js"></script>
-  <script src="js/app.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       window.dataLayer = window.dataLayer || [];
