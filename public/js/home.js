@@ -1212,7 +1212,6 @@ document.getElementById("sidenav-overlay").addEventListener("click", closeSideNa
 
 
 class Snackbar {
-
     static snackbars = {};
     static snackbarIDs = [];
 
