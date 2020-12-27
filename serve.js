@@ -21,36 +21,33 @@ program
     .version(version)
     .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
     .option('-p, --port <number>', 'port to listen on', 8080)
+    .option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430)
     .parse();
 
 // ------------ Web Server -------------------
 const app = express();
 app.use(compression());
-app.listen(program.port, () => console.log(`Aspine listening on port ${program.port}!`));
+app.listen(program.port, () =>
+    console.log(`Aspine listening on port ${program.port}!`)
+);
 
 if (!program.insecure) {
-    // Certificate
-    const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8');
-
-    const credentials = {
-        key: privateKey,
-        cert: certificate,
-        ca: ca
-    };
-
     app.all('*', (req, res, next) => {
         if (req.secure) {
-            // OK, continue
             return next();
         }
         // handle port numbers if you need non defaults
         res.redirect('https://' + req.hostname + req.url);
     }); // at top of routing calls
 
+    const credentials = {
+        key: fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8'),
+        cert: fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8'),
+        ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
+    };
+
     https.createServer(credentials, app).listen(4430, () =>
-        console.log('HTTPS Server running on port 4430')
+        console.log(`HTTPS Server running on port ${program.portHttps}`)
     );
 }
 
