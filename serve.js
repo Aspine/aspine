@@ -15,8 +15,10 @@ const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
 // -------------------------------------------
+// version number from package.json
+const { version } = require('./package.json');
 program
-    .version('2.6.1')
+    .version(version)
     .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
     .option('-p, --port <number>', 'port to listen on', 8080)
     .parse();
