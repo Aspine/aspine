@@ -15,8 +15,11 @@ const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
 // -------------------------------------------
-// version number from package.json
-const { version } = require('./package.json');
+
+// Get Aspine version number without leading 'v'
+const version = child_process.execSync('git describe')
+    .toString().trim().match(/^v?(.*)/)[1];
+
 program
     .version(version)
     .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
@@ -141,14 +144,7 @@ app.use('/fonts/material-icons/iconfont', express.static(
 ));
 
 // Endpoint to expose version number to client
-app.get('/version', async (req, res) => {
-    child_process.exec('git describe',
-        (error, stdout, stderr) => res.send(
-            // Trim 'v' from version number
-            stdout.trim().match(/^v?(.*)/)[1]
-        )
-    );
-});
+app.get('/version', (req, res) => res.send(version));
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
