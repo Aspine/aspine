@@ -49,7 +49,7 @@ if (!program.insecure) {
         ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
     };
 
-    https.createServer(credentials, app).listen(4430, () =>
+    https.createServer(credentials, app).listen(program.portHttps, () =>
         console.log(`HTTPS Server running on port ${program.portHttps}`)
     );
 }
