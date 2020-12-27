@@ -4,65 +4,54 @@
 
 
 const express = require('express');
+const { program } = require('commander');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session)
 const crypto = require('crypto');
-const http = require('http');
 const fs = require('fs');
 const https = require('https');
-const args = require('minimist')(process.argv.slice(2));
 const compression = require('compression');
 const child_process = require('child_process');
 // -------------------------------------------
 
-if (args.hasOwnProperty('help') || args._.includes('help')) {
-    console.log(`Usage: ./serve.js [OPTION]...
-Starts the Aspine web server.
+// Get Aspine version number without leading 'v'
+const version = child_process.execSync('git describe')
+    .toString().trim().match(/^v?(.*)/)[1];
 
-Options:
-  --insecure  do not secure connections with TLS (HTTPS)
-  --help      display this help and exit
-`);
-    process.exit();
-}
+program
+    .version(version)
+    .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
+    .option('-p, --port <number>', 'port to listen on', 8080)
+    .option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430)
+    .parse();
 
 // ------------ Web Server -------------------
-const port = 8080;
-
 const app = express();
-app.use(compression({ filter: (..._) => true }));
-app.listen(port, () => console.log(`Aspine listening on port ${port}!`));
+app.use(compression());
+app.listen(program.port, () =>
+    console.log(`Aspine listening on port ${program.port}!`)
+);
 
-if(!(args.hasOwnProperty('insecure') || args._.includes("insecure"))) {
-    // Certificate
-    const privateKey = fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8');
-
-    const credentials = {
-        key: privateKey,
-        cert: certificate,
-        ca: ca
-    };
-
-    app.all('*', ensureSecure); // at top of routing calls
-
-    http.createServer(app).listen(8090);
-    https.createServer(credentials, app).listen(4430, () => { //443
-        console.log('HTTPS Server running on port 4430'); //443
-    });
-
-    function ensureSecure(req, res, next){
-        if(req.secure){
-            // OK, continue
+if (!program.insecure) {
+    app.all('*', (req, res, next) => {
+        if (req.secure) {
             return next();
         }
         // handle port numbers if you need non defaults
-        // res.redirect('https://' + req.host + req.url); // express 3.x
-        res.redirect('https://' + req.hostname + req.url); // express 4.x
-    }
+        res.redirect('https://' + req.hostname + req.url);
+    }); // at top of routing calls
+
+    const credentials = {
+        key: fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8'),
+        cert: fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8'),
+        ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
+    };
+
+    https.createServer(credentials, app).listen(4430, () =>
+        console.log(`HTTPS Server running on port ${program.portHttps}`)
+    );
 }
 
 // Expose frontend dependencies from node-modules
@@ -155,14 +144,7 @@ app.use('/fonts/material-icons/iconfont', express.static(
 ));
 
 // Endpoint to expose version number to client
-app.get('/version', async (req, res) => {
-    child_process.exec('git describe',
-        (error, stdout, stderr) => res.send(
-            // Trim 'v' from version number
-            stdout.trim().match(/^v?(.*)/)[1]
-        )
-    );
-});
+app.get('/version', (req, res) => res.send(version));
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
@@ -248,7 +230,7 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', async (req, res) => {
-  req.session.destroy();
+    req.session.destroy();
     res.redirect('/login');
 });
 
