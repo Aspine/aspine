@@ -52,18 +52,30 @@ window.addEventListener("click", function(event) {
         tableData_closeAllSelect();
     }
 });
-// detect color scheme and set slider
-window.addEventListener("load", function loadMode() {
-    // loads current os mode and sets slider accordingly
+
+// Detect color scheme (dark or light) and set slider accordingly
+// Argument (optional) can be a "change" event from a MediaQueryList;
+// if present, e.matches is used to determine the operating system color scheme
+function loadMode(e = {}) {
     const slider = document.getElementById("dark-check");
-    const preferredMode = localStorage.getItem('color-scheme');
-    if (preferredMode ? preferredMode === 'dark' :
-            window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.body.classList.toggle("dark");
-        // sets the slider to match the actual mode
+    // Get the mode (dark or light) stored in localStorage, if any
+    const storedMode = localStorage.getItem('color-scheme');
+    // Check if operating system uses dark mode
+    const osIsDark = "matches" in e ? e.matches :
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (storedMode ? storedMode === "dark" : osIsDark) {
+        document.body.classList.add("dark");
         slider.checked = true;
+    } else {
+        document.body.classList.remove("dark");
+        slider.checked = false;
     }
-});
+}
+
+// Update color scheme on page load as well as when system color scheme changes
+window.addEventListener("load", loadMode);
+window.matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", loadMode);
 
 // Toggle between dark and light mode
 function darkMode() {
