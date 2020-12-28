@@ -1,14 +1,9 @@
-#!/bin/sh
-':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
-// https://unix.stackexchange.com/a/65295
-
-
 const express = require('express');
 const { program } = require('commander');
 const scraper = require('./scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const MemoryStore = require('memorystore')(session)
+const MemoryStore = require('memorystore')(session);
 const crypto = require('crypto');
 const fs = require('fs');
 const https = require('https');

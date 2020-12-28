@@ -1,7 +1,3 @@
-#!/bin/sh
-':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
-// https://unix.stackexchange.com/a/65295
-
 // --------------- Parameters ----------------
 // Multi-Threads
 const CLASS_THREADS = 12;
