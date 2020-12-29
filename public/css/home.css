@@ -1244,3 +1244,15 @@ p#large_clock_period {
   visibility: hidden;
   /* cursor: pointer; */
 }
+
+#sidenav-overlay.fade-in {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 300ms 0ms, visibility 0ms 0ms;
+}
+
+#sidenav-overlay.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 300ms 0ms, visibility 0ms 300ms;
+}

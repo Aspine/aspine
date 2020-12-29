@@ -1178,16 +1178,26 @@ function openTab(evt, tab_name) {
 function openSideNav() {
     const sidenav = document.getElementById("sidenav");
     sidenav.style.width = sidenav.clientWidth === 270 ? "0px" : "270px";
-    // greys out the main section
-    const mainSection = $("#sidenav-overlay");
-    mainSection.css("visibility", "visible");
-    $(mainSection).fadeIn("slow");
+
+    // makes sidenav overlay fade out
+    const sidenavOverlay = document.getElementById("sidenav-overlay")
+    if (sidenavOverlay.classList.contains("fade-out")) {
+        sidenavOverlay.classList.remove("fade-out")
+    }
+    sidenavOverlay.classList.add("fade-in")
 }
 
 function closeSideNav() {
-    document.getElementById("sidenav").style.width = "0px";
-    const mainSection = $(".sidenav-overlay");
-    $(mainSection).fadeOut("slow");
+    const sidenav = document.getElementById("sidenav")
+    sidenav.style.width = "0px";
+
+    // makes sidenav overlay fade in
+    const sidenavOverlay = document.getElementById("sidenav-overlay")
+    if (sidenavOverlay.classList.contains("fade-in")) {
+        sidenavOverlay.classList.remove("fade-in")
+    }
+    sidenavOverlay.classList.add("fade-out")
+    
 }
 
 //  Allows exiting sidenav by clicking anywhere outside
