@@ -9,6 +9,8 @@ const fs = require('fs');
 const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
+const marked = require("marked");
+
 // -------------------------------------------
 
 // Get Aspine version number without leading 'v'
@@ -156,6 +158,16 @@ app.use('/fonts/material-icons/iconfont', express.static(
 // Endpoint to expose version number to client
 app.get('/version', (req, res) => res.send(version));
 
+
+
+app.get('/updates', async (req, res) => {
+
+const changelog = await fs.promises.readFile(__dirname + '/CHANGELOG.md');
+
+res.send(marked("" + changelog));
+
+});
+
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -249,6 +261,11 @@ app.use((req, res) => {
     res.status(404);
     res.sendFile(__dirname + '/public/404.html');
 });
+
+
+
+
+
 
 
 // app.post('/set-settings', async (req, res) => {

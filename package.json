@@ -37,6 +37,7 @@
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
+    "marked": "^1.2.7",
     "material-icons": "^0.5.1",
     "memorystore": "^1.6.4",
     "node-fetch": "^2.6.1",

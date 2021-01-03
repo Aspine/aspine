@@ -1250,6 +1250,24 @@ document.getElementById("default_open").click();
 
 //#ifndef lite
 $.ajax("/version").then(ver => $("#version").text(ver));
+
+$.ajax("/updates").then(upt => {
+		
+	$("#updates").html(upt);
+	document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
+   
+   
+	var h2s = document.getElementsByTagName('h2');
+	for(var i = 0, length = h2s.length; i < length; i++){
+	    // Do something with
+	    h2s[i].className = "info-header";
+	}
+
+});
+
+
+
+
 //#endif
 
 //#ifdef lite
