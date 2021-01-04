@@ -17,10 +17,25 @@ const version = child_process.execSync('git describe')
 
 program
     .version(version)
-    .option('-i, --insecure', 'do not secure connections with TLS (HTTPS)')
     .option('-p, --port <number>', 'port to listen on', 8080)
-    .option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430)
-    .parse();
+    .option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430);
+
+// Secure by default on production, insecure by default for development
+if (process.env.NODE_ENV === "production") {
+    program.option('-i, --no-secure, --insecure',
+        'do not secure connections with TLS (HTTPS)'
+    );
+    program.option('-s, --secure',
+        'secure connections with TLS (HTTPS) [default for production]'
+    );
+} else {
+    program.option('-s, --secure', 'secure connections with TLS (HTTPS)');
+    program.option('-i, --no-secure, --insecure',
+        'do not secure connections with TLS (HTTPS) [default for development]'
+    );
+}
+
+program.parse();
 
 // ------------ Web Server -------------------
 const app = express();
@@ -29,7 +44,7 @@ app.listen(program.port, () =>
     console.log(`Aspine listening on port ${program.port}!`)
 );
 
-if (!program.insecure) {
+if (program.secure) {
     app.all('*', (req, res, next) => {
         if (req.secure) {
             return next();
