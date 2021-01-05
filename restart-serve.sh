@@ -1,2 +1,2 @@
 sudo pkill "node"
-sudo $NVM_BIN/npm start &
+sudo NODE_ENV=production $NVM_BIN/npm start &

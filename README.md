@@ -117,9 +117,9 @@ downloaded Aspine, and run `npm install`.
   + On Windows, double-click on the script `npminstall.bat`. The `.bat` file
 extension may be invisible depending on your system configuration.
 
-- Start the Aspine server by running `npm start -- -i` in a terminal window (or
+- Start the Aspine server by running `npm start` in a terminal window (or
   Command Prompt on Windows). If you are on a Unix-like system, you can run
-  `npm start -- -i &` to run the server in the background and then run
+  `npm start &` to run the server in the background and then run
   `killall node` when you want to kill the server.
 
 ## Authors
