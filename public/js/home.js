@@ -1024,7 +1024,7 @@ function scheduleCallback(response) {
         }
     }
 
-    periods = periods.filter(Boolean).map(x => "Period: " + x);
+    periods = periods.filter(Boolean);
 
     const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 
@@ -1197,7 +1197,7 @@ function closeSideNav() {
         sidenavOverlay.classList.remove("fade-in")
     }
     sidenavOverlay.classList.add("fade-out")
-    
+
 }
 
 //  Allows exiting sidenav by clicking anywhere outside

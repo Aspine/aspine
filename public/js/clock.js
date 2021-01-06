@@ -167,18 +167,10 @@ function get_period_name(default_name) {
     ) {
         return default_name;
     }
-    if(period_names.black.length === 0) {
+    if (period_names.black.length === 0) {
         // set period_names -- should only be run once
-        for(let i in currentTableData.schedule.black) {
-            if(currentTableData.schedule.black[i].name !== "Community Meeting") {
-                period_names.black.push(currentTableData.schedule.black[i]);
-            }
-        }
-        for(let i in currentTableData.schedule.silver) {
-            if(currentTableData.schedule.silver[i].name !== "Community Meeting") {
-                period_names.silver.push(currentTableData.schedule.silver[i]);
-            }
-        }
+        period_names.black = currentTableData.schedule.black;
+        period_names.silver = currentTableData.schedule.silver;
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
         if (!covid_schedule && period_names.black[2]) {
@@ -189,15 +181,9 @@ function get_period_name(default_name) {
     // period_names has class names now
     let block;
     for (const { name, period } of period_names[bs_day]) {
-        if (!isNaN(default_name.charAt(default_name.length - 1))) {
-            block = "Period: BLOCK " + default_name.charAt(default_name.length - 1);
-        }
-        else {
-            block = "Period: " + period;
-        }
-        if (block === period) {
+        if (period === default_name
+            || period === `BLOCK ${default_name.slice(-1)}`)
             return name;
-        }
     }
     return default_name;
 }
