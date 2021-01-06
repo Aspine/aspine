@@ -187,28 +187,19 @@ function get_period_name(default_name) {
     }
     let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
-    let index;
-    if (period_names[bs_day][0].name.includes("Before School")) {
-        if (bs_day == "black") {
-            index = Number(default_name.charAt(default_name.length - 1)) + 1;
+    let block;
+    for (const { name, period } of period_names[bs_day]) {
+        if (!isNaN(default_name.charAt(default_name.length - 1))) {
+            block = "Period: BLOCK " + default_name.charAt(default_name.length - 1);
         }
         else {
-            index = Number(default_name.charAt(default_name.length - 1));
+            block = "Period: " + period;
+        }
+        if (block === period) {
+            return name;
         }
     }
-    else {
-        if (bs_day == "black") {
-            index = Number(default_name.charAt(default_name.length - 1));
-        }
-        else {
-            index = Number(default_name.charAt(default_name.length - 1)) - 1;
-        }
-    }
-
-    if(isNaN(index) || !period_names[bs_day][index]) {
-        return default_name;
-    }
-    return period_names[bs_day][index].name;
+    return default_name;
 }
 
 function redraw_clock() {

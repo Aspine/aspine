@@ -1030,12 +1030,12 @@ function scheduleCallback(response) {
 
     for (let i = 0; i < periods.length; i++) {
         if (currentTableData.schedule.black[i]) {
-            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + times[i] : "Extra";
             currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
             currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
         }
         if (currentTableData.schedule.silver[i]) {
-            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + "<br>" + times[i] : "Extra";
+            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + times[i] : "Extra";
             currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
             currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
