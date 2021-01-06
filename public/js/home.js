@@ -1002,40 +1002,26 @@ function scheduleCallback(response) {
 
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
-    //let periods = ["Period 1",  "CM/OTI", "Period 2", "Period 3", "Period 4"];
-    let periods = currentTableData.schedule.black.slice().map(x =>
-        x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1));
-    let placeTimes = [
-        "8:05 - 9:25",
-        "9:29 - 9:44",
-        "9:48 - 11:08",
-        "11:12 - 1:06",
-        "1:10 - 2:30"
-    ];
-    let timesCounter = 0;
-    let times = [];
 
-    for (let i = 0; i < periods.length; i++) {
-        if (!isNaN(parseFloat(periods[i])) || periods[i] === "CM") {
-            times[i] = placeTimes[timesCounter];
-            timesCounter++;
-        } else {
-            times[i] = "";
-        }
-    }
-
-    periods = periods.filter(Boolean);
+    // Get lists of properly formatted black/silver periods
+    const [blackPeriods, silverPeriods] = ["black", "silver"].map(bs =>
+        currentTableData.schedule[bs].slice().map(x =>
+            x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1)
+        ).filter(Boolean)
+    );
 
     const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 
-    for (let i = 0; i < periods.length; i++) {
+    for (i in blackPeriods) {
         if (currentTableData.schedule.black[i]) {
-            currentTableData.schedule.black[i].period = periods[i] ? periods[i] + times[i] : "Extra";
+            currentTableData.schedule.black[i].period = blackPeriods[i];
             currentTableData.schedule.black[i].class = currentTableData.schedule.black[i].name + "<br>" + currentTableData.schedule.black[i].teacher;
             currentTableData.schedule.black[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
         }
+    }
+    for (i in silverPeriods) {
         if (currentTableData.schedule.silver[i]) {
-            currentTableData.schedule.silver[i].period = periods[i] ? periods[i] + times[i] : "Extra";
+            currentTableData.schedule.silver[i].period = silverPeriods[i];
             currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
             currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
