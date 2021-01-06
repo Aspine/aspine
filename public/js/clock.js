@@ -167,18 +167,10 @@ function get_period_name(default_name) {
     ) {
         return default_name;
     }
-    if(period_names.black.length === 0) {
+    if (period_names.black.length === 0) {
         // set period_names -- should only be run once
-        for(let i in currentTableData.schedule.black) {
-            if(currentTableData.schedule.black[i].name !== "Community Meeting") {
-                period_names.black.push(currentTableData.schedule.black[i]);
-            }
-        }
-        for(let i in currentTableData.schedule.silver) {
-            if(currentTableData.schedule.silver[i].name !== "Community Meeting") {
-                period_names.silver.push(currentTableData.schedule.silver[i]);
-            }
-        }
+        period_names.black = currentTableData.schedule.black;
+        period_names.silver = currentTableData.schedule.silver;
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
         if (!covid_schedule && period_names.black[2]) {
@@ -187,11 +179,13 @@ function get_period_name(default_name) {
     }
     let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
     // period_names has class names now
-    let index = Number(default_name.charAt(default_name.length - 1)) - 1;
-    if(isNaN(index) || !period_names[bs_day][index]) {
-        return default_name;
+    let block;
+    for (const { name, period } of period_names[bs_day]) {
+        if (period === default_name
+            || period === `BLOCK ${default_name.slice(-1)}`)
+            return name;
     }
-    return period_names[bs_day][index].name;
+    return default_name;
 }
 
 function redraw_clock() {
