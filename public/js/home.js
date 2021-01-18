@@ -39,6 +39,23 @@ let termsReset = {};
 // Counter for creating new assignments
 var newAssignmentIDCounter = 0;
 
+// Registry for undos, contains assignment ID and the snackbar that corresponds to it
+// contains all the undo snackbars
+const undoRegistry = []
+
+document.onkeydown = e => {
+    var evtobj = window.event || e
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoRegistry.length !== 0) {
+        console.log(`list: ${undoRegistry}`)
+        console.log(`state: ${undoRegistry[0].state}`)
+        if (undoRegistry[0].state == Snackbar.SHOWN) {
+            undoRegistry[0].destroy();
+        }
+        undoRegistry[0].buttonClick();
+    }
+}
+
+
 let tempCell;
 // When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
@@ -586,18 +603,27 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
+                
                 const data = cell.getRow().getData()
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
 
-                new Snackbar(`You deleted ${data["name"]}`, {
+                const undoSnackbar = new Snackbar(`You deleted ${data["name"]}`, {
                     color: "var(--red1)",
                     textColor: "var(--white)",
                     buttonText: "Undo", 
-                    buttonClick: () => replaceAssignmentFromID({ assignment_id: data["assignment_id"], placeholder: true }, data, selected_class_i),
+                    //buttonclick replaces the assignment with a placeholder that just contains the assignemnt ID
+                    buttonClick: () => {
+                        replaceAssignmentFromID({ assignment_id: data["assignment_id"], placeholder: true }, data, selected_class_i)
+                        undoRegistry.splice(undoRegistry.indexOf(undoSnackbar), 1)
+                    },
                     timeout: 7500,
+                    //on either timeout or bodyclick (basically just when its dismissed) deletes the placeholder assignment
                     timeoutFunction: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
                     bodyClick: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
                 }).show();
+
+                undoRegistry.push(undoSnackbar)
+
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"

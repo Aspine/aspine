@@ -1,6 +1,28 @@
+/** snackbar.js
+ * Has all the snackbar class code in it
+ * To use the snackbar, just give it some text, give it some options (or not) and .show() it.
+ * It goes a little more into detail in the descriptions of each function. It also has a nice
+ * little jsdoc thing if you're using something that supports it. If not, sucks for you.
+ */
 class Snackbar {
+
+    /**
+     * snackbars contains key value pairs of snackbar IDs and snackbar references respectively 
+     *  if you ever need to get a snackbar from an ID
+     * snackbarIDs makes sure the IDs are unique
+     */
     static snackbars = {};
     static snackbarIDs = [];
+
+    /**
+     * state IDs
+     * DESTROYED means it doesn't exist in html
+     * HIDDEN means it exists but is hdiden
+     * SHOWN means it exists and is shown
+     */
+    static DESTROYED = 0
+    static HIDDEN = 1
+    static SHOWN = 2
 
     /**
      * text is the main requirement, and it's just text
@@ -47,6 +69,10 @@ class Snackbar {
 
         //creates this.id
         this.id;
+
+        //sets state to destroyed
+        this.state = Snackbar.DESTROYED
+
     }
 
     /**
@@ -61,6 +87,7 @@ class Snackbar {
         }
 
         //gives it an ID if it doesn't already have one
+        //this can happen if the snackbar object still exists but has been destroyed
         if (this.id === undefined) {
             this.createID();
         }
@@ -70,12 +97,12 @@ class Snackbar {
         snackbarNode.classList.add("snackbar");
         snackbarNode.classList.add("hidden");
 
-        //assigns it id based off of it's actual id
+        //assigns its id based off of it's actual id
         snackbarNode.id = `snackbar-${this.id}`;
 
         //adds color if given
         if (this.color !== undefined) {
-            snackbarNode.style.backgroundColor = `${this.color}`;
+            snackbarNode.style.backgroundColor = this.color;
         }
 
         //sets the body onclick listener which just destroys it by default
@@ -135,6 +162,7 @@ class Snackbar {
         document.body.appendChild(snackbarNode);
         this.element = document.getElementById(`snackbar-${this.id}`);
 
+        this.state = Snackbar.HIDDEN
         return this;
     }
 
@@ -154,7 +182,10 @@ class Snackbar {
             }, this.timeout);
         }
         
-        const removeHidden = () => this.element.classList.remove("hidden");
+        const removeHidden = () => {
+            this.state = Snackbar.SHOWN
+            this.element.classList.remove("hidden");
+        }
 
         //if not already made, makes the snackbar
         if (document.getElementById(`snackbar-${this.id}`) === null) {
@@ -179,6 +210,7 @@ class Snackbar {
         }
 
         this.element.classList.add("hidden");
+        this.state = Snackbar.HIDDEN
         return this;
     }
 
@@ -196,6 +228,8 @@ class Snackbar {
             delete Snackbar.snackbars[snackbar.id];
             snackbar.id = undefined;
         }
+
+        this.state = Snackbar.DESTROYED
 
         //if it's not hidden it shouldn't just dissapear
         if (this.element.classList.contains("hidden")) {

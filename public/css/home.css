@@ -1376,7 +1376,7 @@ hr {
   order: 2;
 }
 
-.snackbar button::after {
+.snackbar button::before {
   content: '';
   height: 100%;
   width: 100%;
@@ -1390,7 +1390,7 @@ hr {
   transition: opacity 100ms ease-in;
 }
 
-.snackbar button:hover::after {
+.snackbar button:hover::before {
   opacity: 1;
 }
 

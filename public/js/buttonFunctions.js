@@ -304,6 +304,8 @@ let updateGradePage = function() {
     $(".gpa_select-selected").html("Quarter GPA: " + GPA.percent);
     $("#" + currentTerm).html("Quarter GPA: " + GPA.percent);
   }
+
+  setup_tooltips();
 }
 
 let exportTableData = async function(prefs) {
