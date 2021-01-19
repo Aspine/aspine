@@ -46,8 +46,6 @@ const undoRegistry = []
 document.onkeydown = e => {
     var evtobj = window.event || e
     if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoRegistry.length !== 0) {
-        console.log(`list: ${undoRegistry}`)
-        console.log(`state: ${undoRegistry[0].state}`)
         if (undoRegistry[0].state == Snackbar.SHOWN) {
             undoRegistry[0].destroy();
         }
