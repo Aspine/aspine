@@ -1261,14 +1261,19 @@ p#large_clock_period {
   margin-top: 2em;
 }
 .info-header a {
-  font-size: 100%;
+  font-size: 120%;
+  color: var(--green2);
   text-decoration: none;
+  margin-bottom: 2em;
 }
+
 
 hr {
   margin-top:0px;
 }
-
+#updates ul {
+  margin-bottom: 20px;
+}
 #moreVersions {
     text-align: center;
 }
