@@ -1,15 +1,15 @@
 # Aspine
 
-Who needs Aspen when you have Aspine. It serves as a one stop shop for
+Who needs Aspen when you have Aspine? It serves as a one stop shop for
 everything Aspen related, and there are rainbows!
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.cpsd.us and login with
-your Aspen credentials.
+Using Aspine is as easy as 1-2-3. Just visit <https://aspine.cpsd.us> and log 
+in with your Aspen credentials.
 
-If you have an iPhone and prefer to use an app instead of the website, Aspine is
-[on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
+If you have an iPhone and would prefer to use an app instead of the website, 
+Aspine is [on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
 
 ## Features
 
@@ -19,11 +19,11 @@ If you have an iPhone and prefer to use an app instead of the website, Aspine is
 
 ![CRLS Clock Image](images/crls-clock.png)
 
-* Grade Comparison via boxplot
+* Grade Comparison via Box Plot
 
 ![Example Boxplot Image](images/boxplot.png)
 
-* Export and import your grades
+* Export and Import your Grades
 
 !["Export Data" dialog box](images/export.png)
 
