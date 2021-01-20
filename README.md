@@ -133,15 +133,24 @@ extension may be invisible depending on your system configuration.
 
 ## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
 
-![Color Palette](images/color-palette.png)
-
+#### Light Mode
+![Color Palette](images/color-scheme-light.png)
 ```
 Primary Color: #00551D
 Secondary Colors:
  - #268A48
  - #107031
  - #003913
- - #001E0A
+```
+
+#### Dark Mode
+![Color Palette](images/color-scheme-dark.png)
+```
+Primary Color: #00CC44
+Secondary Colors:
+ - #00A336
+ - #00B83D
+ - #00FF52
 ```
 
 #### Grade Lettering and Coloring
