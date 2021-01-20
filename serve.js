@@ -162,7 +162,7 @@ app.get('/version', (req, res) => res.send(version));
 
 app.get('/updates', async (req, res) => {
     const changelog = await fs.promises.readFile(__dirname + '/CHANGELOG.md');
-    res.send(marked("" + changelog));
+    res.send(marked(changelog.toString()));
 });
 
 app.use(function(req, res, next) { // enable cors
