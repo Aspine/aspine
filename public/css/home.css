@@ -1256,3 +1256,20 @@ p#large_clock_period {
   opacity: 0;
   transition: opacity 300ms 0ms, visibility 0ms 300ms;
 }
+
+#updates-container {
+  margin-top: 2em;
+}
+.info-header a {
+  font-size: 100%;
+  text-decoration: none;
+}
+
+hr {
+  margin-top:0px;
+}
+
+#moreVersions {
+    text-align: center;
+}
+
