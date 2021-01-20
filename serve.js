@@ -260,11 +260,6 @@ app.use((req, res) => {
 });
 
 
-
-
-
-
-
 // app.post('/set-settings', async (req, res) => {
 //     // TODO: Sanitization
 //     let key = crypto.createHash('md5').update(req.session.username).digest('hex');
