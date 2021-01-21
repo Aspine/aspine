@@ -1,25 +1,25 @@
 # Aspine
 
-Who needs Aspen when you have Aspine. It serves as a one stop shop for
+Who needs Aspen when you have Aspine? It serves as a one stop shop for
 everything Aspen related, and there are rainbows!
 
 ## Getting Started
 
-Using Aspine is as easy as 1, 2, 3. Just visit aspine.cpsd.us and login with
-your Aspen credentials.
+Using Aspine is as easy as 1-2-3. Just visit <https://aspine.cpsd.us> and log 
+in with your Aspen credentials.
 
-If you have an iPhone and prefer to use an app instead of the website, Aspine is
-[on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
+If you have an iPhone and would prefer to use an app instead of the website, 
+Aspine is [on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
 
 ## Features
 
-* Aesthetic Grade Checking
+* Aesthetic grade checking
 
-* CRLS Clock
+* CRLS clock
 
 ![CRLS Clock Image](images/crls-clock.png)
 
-* Grade Comparison via boxplot
+* Grade comparison via boxplot
 
 ![Example Boxplot Image](images/boxplot.png)
 
@@ -131,17 +131,26 @@ extension may be invisible depending on your system configuration.
 - [**notrodes**](https://github.com/notrodes)
 
 
-## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
+## Color Scheme
 
-![Color Palette](images/color-palette.png)
-
+#### [Light Mode](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
+![Color Palette](images/color-scheme-light.png)
 ```
 Primary Color: #00551D
 Secondary Colors:
  - #268A48
  - #107031
  - #003913
- - #001E0A
+```
+
+#### [Dark Mode](https://coolors.co/00a336-00b83d-00cc44-00ff52-2d2e2f)
+![Color Palette](images/color-scheme-dark.png)
+```
+Primary Color: #00CC44
+Secondary Colors:
+ - #00A336
+ - #00B83D
+ - #00FF52
 ```
 
 #### Grade Lettering and Coloring
@@ -171,7 +180,7 @@ Our privacy policy can be viewed at <https://www.cpsd.us/privacy>.
 
 Copyright
 [Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors)
-2020.
+2019&ndash;21.
 
 This software is licensed under the GNU General Public License, version 3
 &mdash; see the [LICENSE.md](LICENSE.md) file for details.
