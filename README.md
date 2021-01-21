@@ -13,17 +13,17 @@ Aspine is [on the iOS App Store](https://apps.apple.com/us/app/aspine/id14987136
 
 ## Features
 
-* Aesthetic Grade Checking
+* Aesthetic grade checking
 
-* CRLS Clock
+* CRLS clock
 
 ![CRLS Clock Image](images/crls-clock.png)
 
-* Grade Comparison via Box Plot
+* Grade comparison via boxplot
 
 ![Example Boxplot Image](images/boxplot.png)
 
-* Export and Import your Grades
+* Export and import your grades
 
 !["Export Data" dialog box](images/export.png)
 
