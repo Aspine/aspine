@@ -131,9 +131,9 @@ extension may be invisible depending on your system configuration.
 - [**notrodes**](https://github.com/notrodes)
 
 
-## [Color Scheme](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
+## Color Scheme
 
-#### Light Mode
+#### [Light Mode](http://paletton.com/#uid=12W0u0kw0e-n8nFrjj8Hz9QS55d)
 ![Color Palette](images/color-scheme-light.png)
 ```
 Primary Color: #00551D
@@ -143,7 +143,7 @@ Secondary Colors:
  - #003913
 ```
 
-#### Dark Mode
+#### [Dark Mode](https://coolors.co/00a336-00b83d-00cc44-00ff52-2d2e2f)
 ![Color Palette](images/color-scheme-dark.png)
 ```
 Primary Color: #00CC44
