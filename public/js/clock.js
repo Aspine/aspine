@@ -250,12 +250,12 @@ function redraw_clock() {
     pos = pos * 2 * Math.PI;
 
     drawFace(small_ctx, small_radius);
-    // drawName(period_name);
+    drawName(period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
     drawNumber(small_ctx, small_radius, pos, number);
 
     drawFace(large_ctx, large_radius);
-    // drawName(period_name);
+    drawName(period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
     drawNumber(large_ctx, large_radius, pos, number);
 }
