@@ -200,7 +200,9 @@ function redraw_clock() {
         + now.getSeconds() * 1000
         + now.getMilliseconds();
     let pos;
-    if (![0, 6].includes(now.getDay())) {
+    // TODO 2021-01-27: this is a temporary fix until we support the semester 2
+    // schedule
+    if (false /*![0, 6].includes(now.getDay())*/) {
         // School day
         let current_period_i = 0;// Get current period from array
         while (current_period_i < schedules[current_schedule].length - 1 &&
