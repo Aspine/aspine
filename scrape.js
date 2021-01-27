@@ -23,7 +23,7 @@ const TERM_NAMES = {
     4: ["FY", "S2", "Q4"]
 };
 
-const CURRENT_QUARTER = 2;
+const CURRENT_QUARTER = 3;
 
 TERM_NAMES[0] = TERM_NAMES[CURRENT_QUARTER];
 
