@@ -1278,3 +1278,7 @@ hr {
     text-align: center;
 }
 
+#moreVersions a{
+  font-size: 120%;
+}
+

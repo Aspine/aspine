@@ -1262,6 +1262,11 @@ $.ajax("/updates").then(upt => {
     const subpoints = [...document.querySelectorAll("#updates ul")];
     console.log(subpoints);
     subpoints.slice(2).forEach(x => { x.style.setProperty("display", "none") });
+
+    //Removes first two paragraphs with "Semantic versioning info"
+    const paras = [...document.querySelectorAll("#updates p")];
+    paras.slice(0,2).forEach(x => { x.style.setProperty("display", "none") });
+
 });
 
 //#endif
