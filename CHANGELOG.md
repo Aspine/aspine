@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.2] - tagged 2021-01-31
+- Display recent changes under info tab ([#240], [#174])
+- Update dark mode in real time when the user changes their system color scheme
+  ([#237], [#235])
+- Update Aspine for quarter 3 ([#249], [#248])
+- Fix bug with highlighting in sidenav on small and medium screen sizes ([#225],
+  [#211])
+- Fix period numbering under clock ([#242], [#199], [#212])
+  + The effects of this change currently cannot be seen, as displaying periods
+    in the clock has been temporarily disabled due to the semester 2 schedule.
+- Update `README.md` ([#245])
+- Simplify command-line interface of Aspine server ([#233], [#234], [#239])
+- Performance improvements and housekeeping ([#223], [#228], [#229], [#230])
+
+
 ## [2.6.1] - tagged 2020-12-20
 - Improve session handling ([#219], [#218])
 - Fix size of district logo on login page ([#221])
@@ -143,6 +158,7 @@ and this project adheres to
 [2.5.1]: https://github.com/Aspine/aspine/releases/tag/v2.5.1
 [2.6.0]: https://github.com/Aspine/aspine/releases/tag/v2.6.0
 [2.6.1]: https://github.com/Aspine/aspine/releases/tag/v2.6.1
+[2.6.2]: https://github.com/Aspine/aspine/releases/tag/v2.6.2
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
@@ -167,13 +183,19 @@ and this project adheres to
 [#153]: https://github.com/Aspine/aspine/issues/153
 [#159]: https://github.com/Aspine/aspine/issues/159
 [#168]: https://github.com/Aspine/aspine/issues/168
+[#174]: https://github.com/Aspine/aspine/issues/174
 [#178]: https://github.com/Aspine/aspine/issues/178
 [#185]: https://github.com/Aspine/aspine/issues/185
 [#188]: https://github.com/Aspine/aspine/issues/188
 [#191]: https://github.com/Aspine/aspine/issues/191
 [#192]: https://github.com/Aspine/aspine/issues/192
+[#199]: https://github.com/Aspine/aspine/issues/199
 [#210]: https://github.com/Aspine/aspine/issues/210
+[#211]: https://github.com/Aspine/aspine/issues/211
+[#212]: https://github.com/Aspine/aspine/issues/212
 [#218]: https://github.com/Aspine/aspine/issues/218
+[#235]: https://github.com/Aspine/aspine/issues/235
+[#248]: https://github.com/Aspine/aspine/issues/248
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -217,3 +239,16 @@ and this project adheres to
 [#216]: https://github.com/Aspine/aspine/pull/216
 [#219]: https://github.com/Aspine/aspine/pull/219
 [#221]: https://github.com/Aspine/aspine/pull/221
+[#223]: https://github.com/Aspine/aspine/pull/223
+[#225]: https://github.com/Aspine/aspine/pull/225
+[#228]: https://github.com/Aspine/aspine/pull/228
+[#229]: https://github.com/Aspine/aspine/pull/229
+[#230]: https://github.com/Aspine/aspine/pull/230
+[#233]: https://github.com/Aspine/aspine/pull/233
+[#234]: https://github.com/Aspine/aspine/pull/234
+[#237]: https://github.com/Aspine/aspine/pull/237
+[#239]: https://github.com/Aspine/aspine/pull/239
+[#240]: https://github.com/Aspine/aspine/pull/240
+[#242]: https://github.com/Aspine/aspine/pull/242
+[#245]: https://github.com/Aspine/aspine/pull/245
+[#249]: https://github.com/Aspine/aspine/pull/249
