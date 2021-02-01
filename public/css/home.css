@@ -18,7 +18,6 @@
 
 * {
   margin: 0px;
-  padding: 0px;
   box-sizing: border-box;
 }
 
@@ -150,11 +149,6 @@ p {
   line-height: 1.7;
   color: var(--gray-to-white);
   margin: 0px;
-}
-
-ul, li {
-  margin: 0px;
-  list-style-type: none;
 }
 
 body {
@@ -809,6 +803,8 @@ canvas#large_clock {
 #export_modal_content ul {
   margin-left: 1em;
   color: var(--black);
+  list-style-type: none;
+  padding: 0;
 }
 
 #export_modal_content label {
