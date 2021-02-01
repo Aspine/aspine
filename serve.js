@@ -16,6 +16,9 @@ const marked = require("marked");
 // Get Aspine version number without leading 'v'
 const version = child_process.execSync('git describe')
     .toString().trim().match(/^v?(.*)/)[1];
+const changelog = marked(
+    fs.readFileSync(__dirname + '/CHANGELOG.md').toString()
+);
 
 program
     .version(version)
@@ -158,12 +161,8 @@ app.use('/fonts/material-icons/iconfont', express.static(
 // Endpoint to expose version number to client
 app.get('/version', (req, res) => res.send(version));
 
-
-
-app.get('/updates', async (req, res) => {
-    const changelog = await fs.promises.readFile(__dirname + '/CHANGELOG.md');
-    res.send(marked(changelog.toString()));
-});
+// Endpoint to expose rendered changelog to client
+app.get('/updates', (req, res) => res.send(changelog));
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
