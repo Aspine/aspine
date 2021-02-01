@@ -1250,6 +1250,23 @@ document.getElementById("default_open").click();
 
 //#ifndef lite
 $.ajax("/version").then(ver => $("#version").text(ver));
+
+$.ajax("/updates").then(upt => {
+    $("#updates").html(upt);
+    document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
+    const items = [...document.querySelectorAll("#updates h2")];
+    items.forEach(x => { x.className = "info-header"; });
+    //Hide Everything but first and second versions
+    items.slice(3).forEach(x => { x.style.setProperty("display", "none") });
+    const subpoints = [...document.querySelectorAll("#updates ul")];
+    subpoints.slice(2).forEach(x => { x.style.setProperty("display", "none") });
+
+    //Removes first two paragraphs with "Semantic versioning info"
+    const paras = [...document.querySelectorAll("#updates p")];
+    paras.slice(0,2).forEach(x => { x.style.setProperty("display", "none") });
+
+});
+
 //#endif
 
 //#ifdef lite
