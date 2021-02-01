@@ -1274,11 +1274,10 @@ hr {
 #updates ul {
   margin-bottom: 20px;
 }
-#moreVersions {
+#more-versions {
     text-align: center;
 }
 
-#moreVersions a{
+#more-versions a {
   font-size: 120%;
 }
-

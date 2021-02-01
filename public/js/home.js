@@ -1252,15 +1252,13 @@ document.getElementById("default_open").click();
 $.ajax("/version").then(ver => $("#version").text(ver));
 
 $.ajax("/updates").then(upt => {
-	$("#updates").html(upt);
-	document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
-    var items = [...document.querySelectorAll("#updates h2")];
-	items.forEach(x => { x.className = "info-header"; });
-    console.log(items);
+    $("#updates").html(upt);
+    document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
+    const items = [...document.querySelectorAll("#updates h2")];
+    items.forEach(x => { x.className = "info-header"; });
     //Hide Everything but first and second versions
     items.slice(3).forEach(x => { x.style.setProperty("display", "none") });
     const subpoints = [...document.querySelectorAll("#updates ul")];
-    console.log(subpoints);
     subpoints.slice(2).forEach(x => { x.style.setProperty("display", "none") });
 
     //Removes first two paragraphs with "Semantic versioning info"
