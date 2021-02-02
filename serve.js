@@ -50,7 +50,7 @@ app.listen(program.port, () =>
     console.log(`Aspine listening on port ${program.port}!`)
 );
 
-if (!program.insecure) {
+if (program.secure || program.dev) {
     app.all('*', (req, res, next) => {
         if (req.secure) {
             return next();
