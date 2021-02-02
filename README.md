@@ -5,10 +5,10 @@ everything Aspen related, and there are rainbows!
 
 ## Getting Started
 
-Using Aspine is as easy as 1-2-3. Just visit <https://aspine.cpsd.us> and log 
+Using Aspine is as easy as 1-2-3. Just visit <https://aspine.cpsd.us> and log
 in with your Aspen credentials.
 
-If you have an iPhone and would prefer to use an app instead of the website, 
+If you have an iPhone and would prefer to use an app instead of the website,
 Aspine is [on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
 
 ## Features
@@ -96,31 +96,20 @@ or a GUI such as Ubuntu Software Center or GNOME Software); npm may be in a
 separate package.
 
   + On macOS, node.js (including npm) is available on
-[Homebrew](https://brew.sh/) as
-[`node`](https://formulae.brew.sh/formula/node). To install Homebrew and node,
-you can run the script `install.sh` by opening a terminal, using `cd` to
-navigate to the directory where you cloned or downloaded Aspine, then typing
-`./install.sh`.
+[Homebrew](https://brew.sh/) as [`node`](https://formulae.brew.sh/formula/node).
 
   + On Windows, the node.js installer can be downloaded from
 [the website](https://nodejs.org/). Run the installer and follow the on-screen
 instructions.
 
 - Install additional dependencies through node.js (this must be done each time
-you clone or download Aspine). If you used the macOS install script, you can
-skip this step.
-
-  + On Unix-like operating systems (includes Linux-based and macOS), open a
-terminal, use `cd` to navigate to the directory where you cloned or
-downloaded Aspine, and run `npm install`.
-
-  + On Windows, double-click on the script `npminstall.bat`. The `.bat` file
-extension may be invisible depending on your system configuration.
+you clone or download Aspine) by opening a terminal in the directory where you
+cloned or downloaded Aspine and running `npm install`.
 
 - Start the Aspine server by running `npm start` in a terminal window (or
-  Command Prompt on Windows). If you are on a Unix-like system, you can run
-  `npm start &` to run the server in the background and then run
-  `killall node` when you want to kill the server.
+Command Prompt on Windows). If you are on a Unix-like system, you can run
+`npm start &` to run the server in the background and then run `killall node`
+when you want to kill the server.
 
 ## Authors
 
