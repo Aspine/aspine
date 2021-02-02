@@ -18,7 +18,8 @@
   "repository": "github:Aspine/aspine",
   "scripts": {
     "start": "node serve.js",
-    "build-lite": "bash build-lite.sh"
+    "build-lite": "bash build-lite.sh",
+    "gen-key": "bash gen-key.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
