@@ -35,6 +35,7 @@ if (process.env.NODE_ENV === "production") {
     );
 } else {
     program.option('-s, --secure', 'secure connections with TLS (HTTPS)');
+    program.option('-d, --dev', 'HTTPS designed to work with the gen-key script to make self signed certs');
     program.option('-i, --no-secure, --insecure',
         'do not secure connections with TLS (HTTPS) [default for development]'
     );
@@ -49,7 +50,7 @@ app.listen(program.port, () =>
     console.log(`Aspine listening on port ${program.port}!`)
 );
 
-if (program.secure) {
+if (!program.insecure) {
     app.all('*', (req, res, next) => {
         if (req.secure) {
             return next();
@@ -58,7 +59,11 @@ if (program.secure) {
         res.redirect('https://' + req.hostname + req.url);
     }); // at top of routing calls
 
-    const credentials = {
+    const credentials = program.dev ? {
+        key: fs.readFileSync('local.key', 'utf8'),
+        cert: fs.readFileSync('local.crt', 'utf8'),
+        ca: fs.readFileSync('local.csr', 'utf8'),
+    } : {
         key: fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8'),
         cert: fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8'),
         ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
