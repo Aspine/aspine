@@ -156,7 +156,11 @@ export async function get_schedule(
           });
           const aspenPeriod = periods[i];
 
-          return { id, name, teacher, room, aspenPeriod }
+          if (name === "Study Support") {
+            return undefined;
+          }
+
+          return { id, name, teacher, room, aspenPeriod };
         }
       }).filter(isScheduleItem)
     );
