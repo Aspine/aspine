@@ -154,7 +154,7 @@ function get_schedule(p3room, p3id) {
 
 // Takes the default names (Period 1, etc) and overrides with real class
 // names if they are available
-function get_period_name(default_name) {
+function get_period_name(default_name, day_of_week) {
     if (typeof(currentTableData) === "undefined"
     || Object.keys(currentTableData).length === 0
     || typeof(currentTableData.schedule) === "undefined"
@@ -174,9 +174,23 @@ function get_period_name(default_name) {
             current_schedule = get_schedule(period_names.black[2].room, period_names.black[2].id);
         }
     }
-    let bs_day = document.getElementById("schedule_title").innerHTML.toLowerCase();
+    let bs_day;
+    if (covid_schedule) {
+        bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
+
+        // Determine which covid schedule to use
+        if ([1, 2].includes(day_of_week)) {
+            current_schedule = "covid-mt";
+        } else if ([4, 5].includes(day_of_week)) {
+            current_schedule = "covid-rf";
+        } else {
+            current_schedule = "covid-w";
+        }
+    } else {
+        bs_day = document.getElementById("schedule_title").innerHTML
+            .toLowerCase();
+    }
     // period_names has class names now
-    let block;
     for (const { name, period } of period_names[bs_day]) {
         if (period === default_name
             || period === `BLOCK ${default_name.slice(-1)}`)
@@ -186,11 +200,11 @@ function get_period_name(default_name) {
 }
 
 function redraw_clock() {
+    const now = date_override ? new Date(date_override) : new Date();
     // Fake call to get_period_name to set current_schedule
-    // get_period_name("Period 1");
+    get_period_name("Period 1", now.getDay());
     let number = 0;
     let period_name = "";
-    const now = date_override ? new Date(date_override) : new Date();
     // Time of day
     const tod = now.getHours() * 60 * 60 * 1000
         + now.getMinutes() * 60 * 1000
@@ -223,13 +237,13 @@ function redraw_clock() {
             }
         }
         else if (tod > current_period.end) { // Between classes
-            period_name = get_period_name(current_period.name) +
-            " ➡ " + get_period_name(next_period.name);
+            period_name = get_period_name(current_period.name, now.getDay()) +
+            " ➡ " + get_period_name(next_period.name, now.getDay());
             pos = (tod - current_period.end) / (next_period.start - current_period.end);
             number = next_period.start - tod;
         }
         else { // In class
-            period_name = get_period_name(current_period.name);
+            period_name = get_period_name(current_period.name, now.getDay());
             pos = (tod - current_period.start) / (current_period.end - current_period.start);
             number = current_period.end - tod;
         }
