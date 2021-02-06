@@ -3,3 +3,4 @@ db/*.rdb
 usage_log.txt
 .DS_Store
 dist-lite/
+local.*
