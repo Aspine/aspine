@@ -1005,6 +1005,11 @@ async function scrape_schedule(username, password) {
                     return textarea.value;
                 });
                 const aspenPeriod = periods[i];
+
+                if (name === "Study Support") {
+                    return undefined;
+                }
+
                 return { id, name, teacher, room, aspenPeriod };
             }
         }).filter(isScheduleItem)
