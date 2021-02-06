@@ -222,17 +222,13 @@ function redraw_clock() {
         const current_period = schedules[current_schedule][current_period_i];
         const next_period = schedules[current_schedule][current_period_i + 1];
 
-        if (tod < current_period.start) { // Before school
-            period_name = "Before School";
-            pos = tod / current_period.start;
-            number = current_period.start - tod;
-        }
-        else if (!next_period && tod > current_period.end) { // After school
+        if (tod < current_period.start ||
+            (!next_period && tod > current_period.end)) {
             // Realtime
             period_name = "";
             pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
             number = tod % (12 * 60 * 60 * 1000);
-            if(number < 1 * 60 * 60 * 1000) {
+            if (number < 1 * 60 * 60 * 1000) {
                 number += 12 * 60 * 60 * 1000;
             }
         }

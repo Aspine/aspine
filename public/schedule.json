@@ -1,5 +1,10 @@
 {
     "regular":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -37,6 +42,11 @@
         }
     ],
     "regular-a":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -69,6 +79,11 @@
         }
     ],
     "regular-b":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -106,6 +121,11 @@
         }
     ],
     "regular-c":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -138,6 +158,11 @@
         }
     ],
     "covid":[
+		{
+			"name": "Before School",
+			"start": 27300000,
+			"end": 30300000
+		},
         {
             "name":"Period 1",
             "start": 33000000,
@@ -165,6 +190,11 @@
         }
     ],
 	"covid-mt": [
+		{
+			"name": "Before School",
+			"start": 25200000,
+			"end": 30300000
+		},
 		{
 			"name": "Period 1",
 			"start": 30900000,
@@ -209,6 +239,11 @@
 		}
 	],
 	"covid-rf": [
+		{
+			"name": "Before School",
+			"start": 25200000,
+			"end": 30300000
+		},
 		{
 			"name": "Period 3",
 			"start": 30900000,
