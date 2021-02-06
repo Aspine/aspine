@@ -17,7 +17,7 @@ logo = document.getElementById("logo");
 
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
-let current_schedule = covid_schedule ? "covid" : "regular";
+let current_schedule = covid_schedule ? "covid-mt" : "regular";
 
 // For testing.
 // If this is set to a valid date/time string, that will be used instead of the
@@ -120,10 +120,7 @@ function fitText(ctx, text, fontface, width) {
 }
 
 function update_lunch() {
-    if (covid_schedule) {
-        current_schedule = "covid";
-    }
-    else {
+    if (!covid_schedule) {
         switch(Number(document.getElementById("lunch_range").value)) {
             case 0:
             current_schedule = "regular-a";
@@ -190,7 +187,7 @@ function get_period_name(default_name) {
 
 function redraw_clock() {
     // Fake call to get_period_name to set current_schedule
-    get_period_name("Period 1");
+    // get_period_name("Period 1");
     let number = 0;
     let period_name = "";
     const now = date_override ? new Date(date_override) : new Date();
@@ -200,9 +197,7 @@ function redraw_clock() {
         + now.getSeconds() * 1000
         + now.getMilliseconds();
     let pos;
-    // TODO 2021-01-27: this is a temporary fix until we support the semester 2
-    // schedule
-    if (false /*![0, 6].includes(now.getDay())*/) {
+    if (![0, 6].includes(now.getDay())) {
         // School day
         let current_period_i = 0;// Get current period from array
         while (current_period_i < schedules[current_schedule].length - 1 &&
