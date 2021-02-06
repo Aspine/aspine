@@ -1,5 +1,10 @@
 {
     "regular":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -37,6 +42,11 @@
         }
     ],
     "regular-a":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -69,6 +79,11 @@
         }
     ],
     "regular-b":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -106,6 +121,11 @@
         }
     ],
     "regular-c":[
+		{
+			"name": "Before School",
+			"start": 2430000,
+			"end": 2790000
+		},
         {
             "name":"Period 1",
             "start": 29100000,
@@ -138,6 +158,11 @@
         }
     ],
     "covid":[
+		{
+			"name": "Before School",
+			"start": 27300000,
+			"end": 30300000
+		},
         {
             "name":"Period 1",
             "start": 33000000,
@@ -163,5 +188,91 @@
             "start": 46800000,
             "end": 49800000
         }
-    ]
+    ],
+	"covid-mt": [
+		{
+			"name": "Before School",
+			"start": 25200000,
+			"end": 30300000
+		},
+		{
+			"name": "Period 1",
+			"start": 30900000,
+			"end": 35700000
+		},
+		{
+			"name": "Period 2",
+			"start": 36300000,
+			"end": 41100000
+		},
+		{
+			"name": "Study Support",
+			"start": 41700000,
+			"end": 44100000
+		},
+		{
+			"name": "Lunch",
+			"start": 44100000,
+			"end": 47700000
+		},
+		{
+			"name": "Period 3",
+			"start": 47700000,
+			"end": 50700000
+		},
+		{
+			"name": "Period 4",
+			"start": 51000000,
+			"end": 54000000
+		}
+	],
+	"covid-w": [
+		{
+			"name": "Community Meeting",
+			"start": 34500000,
+			"end": 36000000
+		},
+		{
+			"name": "Advisory",
+			"start": 49800000,
+			"end": 54000000
+		}
+	],
+	"covid-rf": [
+		{
+			"name": "Before School",
+			"start": 25200000,
+			"end": 30300000
+		},
+		{
+			"name": "Period 3",
+			"start": 30900000,
+			"end": 35700000
+		},
+		{
+			"name": "Period 4",
+			"start": 36300000,
+			"end": 41100000
+		},
+		{
+			"name": "Study Support",
+			"start": 41700000,
+			"end": 44100000
+		},
+		{
+			"name": "Lunch",
+			"start": 44100000,
+			"end": 47700000
+		},
+		{
+			"name": "Period 1",
+			"start": 47700000,
+			"end": 50700000
+		},
+		{
+			"name": "Period 2",
+			"start": 51000000,
+			"end": 54000000
+		}
+	]
 }
