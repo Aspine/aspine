@@ -984,8 +984,8 @@ async function scrape_schedule(username, password) {
         matrix[0].map((col, i) => matrix.map(row => row[i]));
     // Transpose algorithm: https://stackoverflow.com/a/46805290
 
-    const [periods, mon_html, tues_html, wed_html, thurs_html, fri_html] = transpose([...rows].map(row =>
-        [1, 2, 3, 4, 5, 6].map(n => {
+    const [periods, silver_html, black_html] = transpose([...rows].map(row =>
+        [1, 2, 3].map(n => {
             const a = row.querySelector(`td:nth-child(${n})`);
             if (!a) return "";
             const b = a.querySelector("td, th");
@@ -994,7 +994,7 @@ async function scrape_schedule(username, password) {
         })
     ));
     const isScheduleItem = x => x !== undefined;
-    const [mon, tues, wed, thurs, fri] = [mon_html, tues_html, wed_html, thurs_html, fri_html].map(arr =>
+    const [black, silver] = [black_html, silver_html].map(arr =>
         arr.map((x, i) => {
             if (x) {
                 const lines = x.split("<br>");
@@ -1015,7 +1015,7 @@ async function scrape_schedule(username, password) {
         }).filter(isScheduleItem)
     );
 
-    return { mon, tues, wed, thurs, fri };
+    return { black, silver };
 }
 
 // Returns body of fetch

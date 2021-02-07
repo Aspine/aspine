@@ -984,7 +984,7 @@ function responseCallbackPartial(response) {
     }
     */
 
-    scheduleTable.setData(currentTableData.schedule.mon);
+    scheduleTable.setData(currentTableData.schedule.black);
 
     $("#classesTable").show();
 
@@ -1004,54 +1004,14 @@ function scheduleCallback(response) {
     //the following lines are used to set up the schedule table correctly
 
     // Get lists of properly formatted black/silver periods
-    const [monPeriods, tuesPeriods, wedPeriods, thursPeriods, friPeriods] = ["mon", "tues", "wed", "thurs", "fri"].map(day =>
-        currentTableData.schedule[day].slice().map(x =>
+    const [blackPeriods, silverPeriods] = ["black", "silver"].map(bs =>
+        currentTableData.schedule[bs].slice().map(x =>
             x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1)
         ).filter(Boolean)
     );
 
     const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 
-    for (i in monPeriods) {
-        if (currentTableData.schedule.mon[i]) {
-            currentTableData.schedule.mon[i].period = monPeriods[i];
-            currentTableData.schedule.mon[i].class = currentTableData.schedule.mon[i].name + "<br>" + currentTableData.schedule.mon[i].teacher;
-            currentTableData.schedule.mon[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-        }
-    }
-
-    for (i in tuesPeriods) {
-        if (currentTableData.schedule.tues[i]) {
-            currentTableData.schedule.tues[i].period = tuesPeriods[i];
-            currentTableData.schedule.tues[i].class = currentTableData.schedule.tues[i].name + "<br>" + currentTableData.schedule.tues[i].teacher;
-            currentTableData.schedule.tues[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-        }
-    }
-
-    for (i in wedPeriods) {
-        if (currentTableData.schedule.wed[i]) {
-            currentTableData.schedule.wed[i].period = wedPeriods[i];
-            currentTableData.schedule.wed[i].class = currentTableData.schedule.wed[i].name + "<br>" + currentTableData.schedule.wed[i].teacher;
-            currentTableData.schedule.wed[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-        }
-    }
-
-    for (i in thursPeriods) {
-        if (currentTableData.schedule.thurs[i]) {
-            currentTableData.schedule.thurs[i].period = thursPeriods[i];
-            currentTableData.schedule.thurs[i].class = currentTableData.schedule.thurs[i].name + "<br>" + currentTableData.schedule.thurs[i].teacher;
-            currentTableData.schedule.thurs[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
-        }
-    }
-
-    for (i in friPeriods) {
-        if (currentTableData.schedule.fri[i]) {
-            currentTableData.schedule.fri[i].period = friPeriods[i];
-            currentTableData.schedule.fri[i].class = currentTableData.schedule.fri[i].name + "<br>" + currentTableData.schedule.fri[i].teacher;
-            currentTableData.schedule.fri[i].color = colors[i] ? colors[i] : colors[colors.length - 1];
-        }
-    }
-    /*
     for (i in blackPeriods) {
         if (currentTableData.schedule.black[i]) {
             currentTableData.schedule.black[i].period = blackPeriods[i];
@@ -1065,9 +1025,9 @@ function scheduleCallback(response) {
             currentTableData.schedule.silver[i].class = currentTableData.schedule.silver[i].name + "<br>" + currentTableData.schedule.silver[i].teacher;
             currentTableData.schedule.silver[i].color = colors[colors.length - 1 - i] ? colors[colors.length - 1 - i] : colors[0];
         }
-    }*/
+    }
 
-    scheduleTable.setData(currentTableData.schedule.mon);
+    scheduleTable.setData(currentTableData.schedule.black);
     redraw_clock();
 }
 
@@ -1104,21 +1064,21 @@ function recent_toggle() {
 */
 
 function schedule_toggle(day) {
-    if (day === "mon") {
-        scheduleTable.setData(currentTableData.schedule.mon);
+    schedule = "covid-mt";
+    if (day === "thurs" || day === "fri") {
+        schedule = "covid-rf";
+    } else {
+        schedule = "covid-w";
     }
-    if (day === "tues") {
-        scheduleTable.setData(currentTableData.schedule.tues);
+
+    let color;
+    if (day === "mon" || day === "thurs") {
+        color = "silver";
+    } else if (day === "tues" || day === "fri") {
+        color = "black";
     }
-    if (day === "wed") {
-        scheduleTable.setData(currentTableData.schedule.wed);
-    }
-    if (day === "thurs") {
-        scheduleTable.setData(currentTableData.schedule.thurs);
-    }
-    if (day === "fri") {
-        scheduleTable.setData(currentTableData.schedule.fri);
-    }
+
+    scheduleTable.setData(currentTableData.schedule[color]);
     redraw_clock();
 
     /*if (document.getElementById("schedule_toggle").checked) {
