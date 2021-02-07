@@ -1380,6 +1380,12 @@ let anyEdited = function() {
  * and not all of the terms' data have been put into currentTableData)
  */
 let isAccessible = function(term, includedTerms) {
+  // Always keep the current term as 'accessible', even if there are no grades
+  // on Aspen
+  if (term === "current") {
+    return { accessible: true, reason: "" };
+  }
+
   // Boolean storing whether or not this term is 'accessible'
   let accessible = true;
   // Reason for term being inaccessible
@@ -1387,21 +1393,21 @@ let isAccessible = function(term, includedTerms) {
   // If no GPA is available for the term, it is inaccessible
   // (the term was not included in Aspen's overview)
   if (!currentTableData.terms[term].GPA.percent) {
-      accessible = false;
-      reason = "This term is not available on Aspen.";
+    accessible = false;
+    reason = "This term is not available on Aspen.";
   }
   // If currentTableData is imported, we cannot scrape Aspen
   // for more data, so any terms not included in the import
   // are inaccessible
   if (
-      currentTableData.imported &&
-      (
-        (includedTerms && !includedTerms[term]) ||
-        !currentTableData.terms[term].classes
-      )
+    currentTableData.imported &&
+    (
+      (includedTerms && !includedTerms[term]) ||
+      !currentTableData.terms[term].classes
+    )
   ) {
-      accessible = false;
-      reason = "This term is not included in the imported data.";
+    accessible = false;
+    reason = "This term is not included in the imported data.";
   }
 
   return {
