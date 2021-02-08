@@ -42,6 +42,46 @@ function schedulesCallback(response) {
     redraw_clock_with_timestamp();
 }
 
+function update_formattedSchedule() {
+    let day_of_week;
+    if (selected_day_of_week < 0) {
+        const now = date_override ? new Date(date_override) : new Date();
+        day_of_week = now.getDay();
+    } else {
+        day_of_week = selected_day_of_week;
+    }
+    const bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
+
+    currentTableData.formattedSchedule = schedules[current_schedule]
+        .map(({ name }, i) => {
+            let room = "";
+            let class_name = get_period_name(name, day_of_week);
+            for (entry of currentTableData.schedule[bs_day]) {
+                if (entry.class.startsWith(class_name)) {
+                    class_name = entry.class;
+                    room = entry.room;
+                    break;
+                }
+            }
+
+            // The index (1 to 8) of the color to use for this class
+            const color_number = i < 8 ? i + 1 : 8;
+            let color;
+            if (bs_day === "black") {
+                color = `var(--schedule${color_number}`;
+            } else {
+                color = `var(--schedule${9 - color_number})`;
+            }
+
+            return {
+                period: name,
+                room: room,
+                class: class_name,
+                color: color,
+            };
+        });
+}
+
 //#ifndef lite
 $.ajax({
     url: "schedule.json",
@@ -180,13 +220,13 @@ function get_period_name(default_name, day_of_week) {
     if (covid_schedule) {
         bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
 
-        // Determine which covid schedule to use
-        if ([1, 2].includes(day_of_week)) {
-            current_schedule = "covid-mt";
+        // Determine which covid schedule to use (default to Mon/Tue)
+        if (day_of_week === 3) {
+            current_schedule = "covid-w";
         } else if ([4, 5].includes(day_of_week)) {
             current_schedule = "covid-rf";
         } else {
-            current_schedule = "covid-w";
+            current_schedule = "covid-mt";
         }
     } else {
         bs_day = document.getElementById("schedule_title").innerHTML
