@@ -284,14 +284,16 @@
       <span class="slider round"></span>
       <p id="schedule_title" class="unselectable">Black</p>
     </label>-->
-    <select id="day-select" onchange="schedule_toggle(value);">
-      <option value="-1">Select Day</option>
-      <option value="1">Monday (Silver)</option>
-      <option value="2">Tuesday (Black)</option>
-      <option value="3">Wednesday</option>
-      <option value="4">Thursday (Silver)</option>
-      <option value="5">Friday (Black)</option>
-    </select>
+    <div class="day_custom-select">
+      <select id="day_select" onchange="schedule_toggle(value);">
+        <option value="-1">Select Day</option>
+        <option value="1">Monday (Silver)</option>
+        <option value="2">Tuesday (Black)</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday (Silver)</option>
+        <option value="5">Friday (Black)</option>
+      </select>
+    </div>
     <div id="scheduleTable"></div>
   </div>
   <div id="clock" class="tabcontent">

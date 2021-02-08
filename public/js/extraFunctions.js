@@ -1131,7 +1131,7 @@ let tableData_option_onclick = function() {
 
 let initialize_tableData_dropdown = function() {
   let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "pdf_custom-select": */
+  /* Look for any elements with the class "tableData_custom-select": */
   x = document.getElementsByClassName("tableData_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
@@ -1164,6 +1164,50 @@ let initialize_tableData_dropdown = function() {
       $('.tableData_select-selected').toggleClass("activated-selected-item");
       $('.tableData_select-items div').toggleClass("activated-select-items");
     });
+  }
+}
+
+let initialize_dayOfWeek_dropdown = function() {
+  let x, i, j, selElmnt, a, b, c;
+  /* Look for any elements with the class "day_custom-select": */
+  x = document.getElementsByClassName("day_custom-select");
+  for (i = 0; i < x.length; i++) {
+    selElmnt = x[i].getElementsByTagName("select")[0];
+    /* For each element, create a new DIV that will act as the selected item: */
+    a = document.createElement("DIV");
+    a.setAttribute("class", "day_select-selected");
+    // a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    /* For each element, create a new DIV that will contain the option list: */
+    b = document.createElement("DIV");
+    b.setAttribute("class", "day_select-items select-hide");
+    for (j = 1; j < selElmnt.length; j++) {
+      /* For each option in the original select element,
+      create a new DIV that will act as an option item: */
+      let bs;
+      if (j === 1 || j === 4) {
+        bs = "silver";
+      } else if (j === 2 || j === 5) {
+        bs = "black";
+      }
+      c = document.createElement("DIV");
+      c.id = `day_select-items-${selElmnt.options[j].value}`;
+      c.innerHTML = selElmnt.options[j].innerHTML;
+      c.addEventListener("click", tableData_option_onclick);
+      b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function(e) {
+      /* When the select box is clicked, close any other select boxes,
+      and open/close the current select box: */
+      e.stopPropagation();
+      closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+      $('.tableData_select-selected').toggleClass("activated-selected-item");
+      $('.tableData_select-items div').toggleClass("activated-select-items");
+    });
+    document.addEventListener("click", closeAllSelect);
   }
 }
 

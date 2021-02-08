@@ -999,6 +999,8 @@ function responseCallbackPartial(response) {
 function scheduleCallback(response) {
     if (!currentTableData.schedule) currentTableData.schedule = response;
 
+    initialize_dayOfWeek_dropdown();
+
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
 
