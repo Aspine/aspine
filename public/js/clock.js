@@ -281,13 +281,13 @@ function redraw_clock() {
             }
         }
         else if (tod > current_period.end) { // Between classes
-            period_name = get_period_name(current_period.name, now.getDay()) +
-            " ➡ " + get_period_name(next_period.name, now.getDay());
+            period_name = get_period_name(current_period.name, day_of_week) +
+            " ➡ " + get_period_name(next_period.name, day_of_week);
             pos = (tod - current_period.end) / (next_period.start - current_period.end);
             number = next_period.start - tod;
         }
         else { // In class
-            period_name = get_period_name(current_period.name, now.getDay());
+            period_name = get_period_name(current_period.name, day_of_week);
             pos = (tod - current_period.start) / (current_period.end - current_period.start);
             number = current_period.end - tod;
         }
