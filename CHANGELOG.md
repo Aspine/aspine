@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.3] - tagged 2021-02-07
+- Change schedule tab to follow semester 2 schedule and replace black/silver
+  slider with day-of-week picker ([#257], [#256])
+- Update clock to follow semester 2 schedule ([#255], [#247])
+- Stop the current quarter from being grayed out when teachers have not entered
+  any grades into Aspen ([#258], [#254])
+- Tooling changes for developers ([#251], [#252])
+
 ## [2.6.2] - tagged 2021-01-31
 - Display recent changes under info tab ([#240], [#174])
 - Update dark mode in real time when the user changes their system color scheme
@@ -195,7 +203,10 @@ and this project adheres to
 [#212]: https://github.com/Aspine/aspine/issues/212
 [#218]: https://github.com/Aspine/aspine/issues/218
 [#235]: https://github.com/Aspine/aspine/issues/235
+[#247]: https://github.com/Aspine/aspine/issues/247
 [#248]: https://github.com/Aspine/aspine/issues/248
+[#254]: https://github.com/Aspine/aspine/issues/254
+[#256]: https://github.com/Aspine/aspine/issues/256
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -252,3 +263,8 @@ and this project adheres to
 [#242]: https://github.com/Aspine/aspine/pull/242
 [#245]: https://github.com/Aspine/aspine/pull/245
 [#249]: https://github.com/Aspine/aspine/pull/249
+[#251]: https://github.com/Aspine/aspine/pull/251
+[#252]: https://github.com/Aspine/aspine/pull/252
+[#255]: https://github.com/Aspine/aspine/pull/255
+[#257]: https://github.com/Aspine/aspine/pull/257
+[#258]: https://github.com/Aspine/aspine/pull/258
