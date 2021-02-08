@@ -941,7 +941,6 @@ function responseCallback(response, includedTerms) {
         initialize_tableData_dropdown();
     }
 
-    // scheduleTable.setData(tableData.schedule.black);
     recentActivity.setData(currentTableData.recent.recentActivityArray);
     recentAttendance.setData(currentTableData.recent.recentAttendanceArray);
 
@@ -984,7 +983,7 @@ function responseCallbackPartial(response) {
     }
     */
 
-    scheduleTable.setData(currentTableData.schedule.black);
+    // scheduleTable.setData(currentTableData.schedule.black);
 
     $("#classesTable").show();
 
@@ -1027,7 +1026,8 @@ function scheduleCallback(response) {
         }
     }
 
-    scheduleTable.setData(currentTableData.schedule.black);
+    update_formattedSchedule(new Date().getDay());
+    scheduleTable.setData(currentTableData.formattedSchedule);
     redraw_clock();
 }
 
@@ -1063,16 +1063,20 @@ function recent_toggle() {
 }
 */
 
-function schedule_toggle() {
-    if (document.getElementById("schedule_toggle").checked) {
-        scheduleTable.setData(currentTableData.schedule.silver);
-        document.getElementById("schedule_title").innerHTML = "Silver";
-        redraw_clock();
-    } else {
-        scheduleTable.setData(currentTableData.schedule.black);
-        document.getElementById("schedule_title").innerHTML = "Black";
-        redraw_clock();
+function schedule_toggle(day) {
+    if (covid_schedule) {
+        selected_day_of_week = parseInt(day);
     }
+    else {
+        if (document.getElementById("schedule_toggle").checked) {
+            document.getElementById("schedule_title").innerHTML = "Silver";
+        } else {
+            document.getElementById("schedule_title").innerHTML = "Black";
+        }
+    }
+    redraw_clock();
+    update_formattedSchedule();
+    scheduleTable.setData(currentTableData.formattedSchedule);
 }
 
 function openTab(evt, tab_name) {
