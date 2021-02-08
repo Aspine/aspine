@@ -509,6 +509,7 @@ button:hover {
   height: 45px;
 }
 
+/* Hide the original select menu */
 .day_custom-select select{
   display: none;
 }
@@ -517,7 +518,7 @@ button:hover {
   background-color: var(--green);
 }
 
-/* Style the arrow inside the select element: */
+/* Style the arrow inside the select element */
 .day_select-selected:after {
   position: absolute;
   content: "";
@@ -529,13 +530,13 @@ button:hover {
   border-color: white transparent transparent transparent;
 }
 
-/* Point the arrow upwards when the select box is open (active): */
+/* Point the arrow upwards when the select box is open */
 .day_select-selected.day_select-arrow-active:after {
   border-color: transparent transparent white transparent;
   top: 10px;
 }
 
-/* style the items (options), including the selected item: */
+/* Style the options, including the selected option */
 .day_select-items div,.day_select-selected {
   color: white;
   padding: 10px 16px;
@@ -544,7 +545,7 @@ button:hover {
   cursor: pointer;
 }
 
-/* Style items (options): */
+/* Style options */
 .day_select-items {
   position: absolute;
   background-color: var(--green);
@@ -554,14 +555,14 @@ button:hover {
   z-index: 99;
 }
 
-/* Hide the items when the select box is closed: */
+/* Hide the items when the select box is closed */
 .day_select-hide {
   display: none;
 }
 
+/* Change the background color on hover */
 .day_select-items div:hover, .same-as-selected {
   background-color: var(--green1);
-  color: white;
 }
 
 div.tabcontent, div.tab {

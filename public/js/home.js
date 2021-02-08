@@ -956,6 +956,7 @@ function responseCallback(response, includedTerms) {
         success: scheduleCallback
     });
 
+    initialize_dayOfWeek_dropdown();
     setup_tooltips();
 }
 
@@ -998,8 +999,6 @@ function responseCallbackPartial(response) {
 // Callback for response from /schedule
 function scheduleCallback(response) {
     if (!currentTableData.schedule) currentTableData.schedule = response;
-
-    initialize_dayOfWeek_dropdown();
 
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly

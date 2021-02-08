@@ -1167,48 +1167,40 @@ let initialize_tableData_dropdown = function() {
   }
 }
 
+// Initialize the dropdown menu by creating divs around each option
 let initialize_dayOfWeek_dropdown = function() {
-  let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "day_custom-select": */
-  x = document.getElementsByClassName("day_custom-select");
-  for (i = 0; i < x.length; i++) {
-    selElmnt = x[i].getElementsByTagName("select")[0];
-    /* For each element, create a new DIV that will act as the selected item: */
-    a = document.createElement("DIV");
-    a.setAttribute("class", "day_select-selected");
-    // a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-    x[i].appendChild(a);
-    /* For each element, create a new DIV that will contain the option list: */
-    b = document.createElement("DIV");
-    b.setAttribute("class", "day_select-items select-hide");
-    for (j = 1; j < selElmnt.length; j++) {
-      /* For each option in the original select element,
-      create a new DIV that will act as an option item: */
-      let bs;
-      if (j === 1 || j === 4) {
-        bs = "silver";
-      } else if (j === 2 || j === 5) {
-        bs = "black";
-      }
-      c = document.createElement("DIV");
-      c.id = `day_select-items-${selElmnt.options[j].value}`;
-      c.innerHTML = selElmnt.options[j].innerHTML;
-      c.addEventListener("click", tableData_option_onclick);
-      b.appendChild(c);
-    }
-    x[i].appendChild(b);
-    a.addEventListener("click", function(e) {
-      /* When the select box is clicked, close any other select boxes,
-      and open/close the current select box: */
-      e.stopPropagation();
-      closeAllSelect(this);
-      this.nextSibling.classList.toggle("select-hide");
-      this.classList.toggle("select-arrow-active");
-      $('.tableData_select-selected').toggleClass("activated-selected-item");
-      $('.tableData_select-items div').toggleClass("activated-select-items");
-    });
-    document.addEventListener("click", closeAllSelect);
+  let i, selElmnt, a, b, c;
+  // Find the day select menu
+  selElmnt = document.getElementById("day_custom-select").getElementsByTagName("select")[0];
+  // Create a new div for the select menu and assign it a class
+  a = document.createElement("DIV");
+  a.setAttribute("class", "day_select-selected");
+  document.getElementById("day_custom-select").appendChild(a);
+  a.innerHTML = "Select Day";
+  // Create a new div to store the option list
+  b = document.createElement("DIV");
+  b.setAttribute("class", "day_select-items select-hide");
+  // Loop through each of the options and add a div for each one
+  for (i = 1; i < selElmnt.length; i++) {
+    // Possibly, somewhere in here we can add an onclick attribute for each option
+    c = document.createElement("DIV");
+    c.id = `day_select-items-${selElmnt.options[i].value}`;
+    c.innerHTML = selElmnt.options[i].innerHTML;
+    c.addEventListener("click", tableData_option_onclick);
+    b.appendChild(c);
   }
+  document.getElementById("day_custom-select").appendChild(b);
+  // Close all other select boxes when one is clicked
+  a.addEventListener("click", function(e) {
+    e.stopPropagation();
+    closeAllSelect(this);
+    this.nextSibling.classList.toggle("select-hide");
+    this.classList.toggle("select-arrow-active");
+    $('.tableData_select-selected').toggleClass("activated-selected-item");
+    $('.tableData_select-items div').toggleClass("activated-select-items");
+  });
+  // Close the select menu when you click outside of it
+  document.addEventListener("click", closeAllSelect);
 }
 
 // To add a tooltip to anything, follow these 3 easy steps
