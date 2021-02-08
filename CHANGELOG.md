@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.4] - tagged 2021-02-08
+- Hotfix for schedule after changes on Aspen
+- Update dependencies
+
 ## [2.6.3] - tagged 2021-02-07
 - Change schedule tab to follow semester 2 schedule and replace black/silver
   slider with day-of-week picker ([#257], [#256])
@@ -167,6 +171,8 @@ and this project adheres to
 [2.6.0]: https://github.com/Aspine/aspine/releases/tag/v2.6.0
 [2.6.1]: https://github.com/Aspine/aspine/releases/tag/v2.6.1
 [2.6.2]: https://github.com/Aspine/aspine/releases/tag/v2.6.2
+[2.6.3]: https://github.com/Aspine/aspine/releases/tag/v2.6.3
+[2.6.4]: https://github.com/Aspine/aspine/releases/tag/v2.6.4
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71

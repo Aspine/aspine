@@ -1261,9 +1261,9 @@ $.ajax("/updates").then(upt => {
     const items = [...document.querySelectorAll("#updates h2")];
     items.forEach(x => { x.className = "info-header"; });
     //Hide Everything but first and second versions
-    items.slice(3).forEach(x => { x.style.setProperty("display", "none") });
+    items.slice(4).forEach(x => { x.style.setProperty("display", "none") });
     const subpoints = [...document.querySelectorAll("#updates ul")];
-    subpoints.slice(2).forEach(x => { x.style.setProperty("display", "none") });
+    subpoints.slice(3).forEach(x => { x.style.setProperty("display", "none") });
 
     //Removes first two paragraphs with "Semantic versioning info"
     const paras = [...document.querySelectorAll("#updates p")];
