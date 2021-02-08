@@ -1064,31 +1064,23 @@ function recent_toggle() {
 */
 
 function schedule_toggle(day) {
-    schedule = "covid-mt";
-    if (day === "thurs" || day === "fri") {
-        schedule = "covid-rf";
-    } else {
-        schedule = "covid-w";
-    }
+    if (covid_schedule) {
+        selected_day_of_week = parseInt(day);
 
-    let color;
-    if (day === "mon" || day === "thurs") {
-        color = "silver";
-    } else if (day === "tues" || day === "fri") {
-        color = "black";
+        const bs_day = [1, 4].includes(day) ? "silver" : "black";
+        scheduleTable.setData(currentTableData.schedule[bs_day]);
+        redraw_clock();
     }
-
-    scheduleTable.setData(currentTableData.schedule[color]);
-    redraw_clock();
-
-    /*if (document.getElementById("schedule_toggle").checked) {
-        scheduleTable.setData(currentTableData.schedule.silver);
-        document.getElementById("schedule_title").innerHTML = "Silver";
-    } else {
-        scheduleTable.setData(currentTableData.schedule.black);
-        document.getElementById("schedule_title").innerHTML = "Black";
+    else {
+        if (document.getElementById("schedule_toggle").checked) {
+            scheduleTable.setData(currentTableData.schedule.silver);
+            document.getElementById("schedule_title").innerHTML = "Silver";
+        } else {
+            scheduleTable.setData(currentTableData.schedule.black);
+            document.getElementById("schedule_title").innerHTML = "Black";
+        }
+        redraw_clock();
     }
-    redraw_clock();*/
 }
 
 function openTab(evt, tab_name) {

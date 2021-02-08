@@ -18,6 +18,8 @@ logo = document.getElementById("logo");
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
 let current_schedule = covid_schedule ? "covid-mt" : "regular";
+// For covid-19 schedule
+let selected_day_of_week = -1;
 
 // For testing.
 // If this is set to a valid date/time string, that will be used instead of the
@@ -201,8 +203,14 @@ function get_period_name(default_name, day_of_week) {
 
 function redraw_clock() {
     const now = date_override ? new Date(date_override) : new Date();
+    let day_of_week;
+    if (selected_day_of_week < 0) {
+        day_of_week = now.getDay();
+    } else {
+        day_of_week = selected_day_of_week;
+    }
     // Fake call to get_period_name to set current_schedule
-    get_period_name("Period 1", now.getDay());
+    get_period_name("Period 1", day_of_week);
     let number = 0;
     let period_name = "";
     // Time of day
