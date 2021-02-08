@@ -234,8 +234,7 @@ function get_period_name(default_name, day_of_week) {
     }
     // period_names has class names now
     for (const { name, period } of period_names[bs_day]) {
-        if (period === default_name
-            || period === `BLOCK ${default_name.slice(-1)}`)
+        if (period.slice(-1) === default_name.slice(-1))
             return name;
     }
     return default_name;
