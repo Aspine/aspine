@@ -1177,7 +1177,8 @@ let initialize_dayOfWeek_dropdown = function() {
   a.setAttribute("class", "day_select-selected");
   a.setAttribute("id", "day_select_div");
   document.getElementById("day_custom-select").appendChild(a);
-  a.innerHTML = "Select Day";
+  let weekdays = ["Select Day", "Monday (Silver)", "Tuesday (Black)", "Wednesday", "Thursday (Silver)", "Friday (Black)", "Select Day"];
+  a.innerHTML = weekdays[day_of_week];
   // Create a new div to store the option list
   b = document.createElement("DIV");
   b.setAttribute("class", "day_select-items select-hide");
@@ -1214,6 +1215,8 @@ let dayOfWeek_onclick = function() {
       document.getElementById("day_select_div").innerHTML = this.innerHTML;
       // Hide the other dropdown items when one is selected
       document.getElementsByClassName("day_select-items")[0].classList.add("select-hide");
+      // Update selected_day_of_week
+      selected_day_of_week = i;
       break;
     }
   }
