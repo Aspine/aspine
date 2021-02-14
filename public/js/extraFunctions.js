@@ -1175,6 +1175,7 @@ let initialize_dayOfWeek_dropdown = function() {
   // Create a new div for the select menu and assign it a class
   a = document.createElement("DIV");
   a.setAttribute("class", "day_select-selected");
+  a.setAttribute("id", "day_select_div");
   document.getElementById("day_custom-select").appendChild(a);
   a.innerHTML = "Select Day";
   // Create a new div to store the option list
@@ -1182,11 +1183,10 @@ let initialize_dayOfWeek_dropdown = function() {
   b.setAttribute("class", "day_select-items select-hide");
   // Loop through each of the options and add a div for each one
   for (i = 1; i < selElmnt.length; i++) {
-    // Possibly, somewhere in here we can add an onclick attribute for each option
     c = document.createElement("DIV");
     c.id = `day_select-items-${selElmnt.options[i].value}`;
     c.innerHTML = selElmnt.options[i].innerHTML;
-    c.addEventListener("click", tableData_option_onclick);
+    c.addEventListener("click", dayOfWeek_onclick);
     b.appendChild(c);
   }
   document.getElementById("day_custom-select").appendChild(b);
@@ -1196,11 +1196,27 @@ let initialize_dayOfWeek_dropdown = function() {
     closeAllSelect(this);
     this.nextSibling.classList.toggle("select-hide");
     this.classList.toggle("select-arrow-active");
-    $('.tableData_select-selected').toggleClass("activated-selected-item");
-    $('.tableData_select-items div').toggleClass("activated-select-items");
   });
   // Close the select menu when you click outside of it
   document.addEventListener("click", closeAllSelect);
+}
+
+// Toggle the schedule when an element in the dropdown is selected
+let dayOfWeek_onclick = function() {
+  let select = document.getElementById("day_select");
+  // Iterate through the select menu and look for the selected option
+  for (let i = 0; i < select.length; i++) {
+    if (select.options[i].innerHTML === this.innerHTML) {
+      // Toggle the schedule for the selected day
+      select.selectedIndex = i;
+      select.addEventListener("change", schedule_toggle(i));
+      // Change the HTML of the select menu to match the day shown
+      document.getElementById("day_select_div").innerHTML = this.innerHTML;
+      // Hide the other dropdown items when one is selected
+      document.getElementsByClassName("day_select-items")[0].classList.add("select-hide");
+      break;
+    }
+  }
 }
 
 // To add a tooltip to anything, follow these 3 easy steps
