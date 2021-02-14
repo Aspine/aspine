@@ -1178,7 +1178,12 @@ let initialize_dayOfWeek_dropdown = function() {
   a.setAttribute("id", "day_select_div");
   document.getElementById("day_custom-select").appendChild(a);
   let weekdays = ["Select Day", "Monday (Silver)", "Tuesday (Black)", "Wednesday", "Thursday (Silver)", "Friday (Black)", "Select Day"];
-  a.innerHTML = weekdays[day_of_week];
+  // Deal with slow loading / weird edge cases
+  if (day_of_week < 0 || day_of_week === undefined) {
+    a.innerHTML = "Select Day";
+  } else {
+    a.innerHTML = weekdays[day_of_week];
+  }
   // Create a new div to store the option list
   b = document.createElement("DIV");
   b.setAttribute("class", "day_select-items select-hide");
