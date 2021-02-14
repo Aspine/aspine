@@ -1196,7 +1196,7 @@ let initialize_dayOfWeek_dropdown = function() {
     e.stopPropagation();
     closeAllSelect(this);
     this.nextSibling.classList.toggle("select-hide");
-    this.classList.toggle("select-arrow-active");
+    this.classList.toggle("day_select-arrow-active");
   });
   // Close the select menu when you click outside of it
   document.addEventListener("click", closeAllSelect);
@@ -1215,6 +1215,8 @@ let dayOfWeek_onclick = function() {
       document.getElementById("day_select_div").innerHTML = this.innerHTML;
       // Hide the other dropdown items when one is selected
       document.getElementsByClassName("day_select-items")[0].classList.add("select-hide");
+      // Flip the dropdown arrow
+      document.getElementById("day_select_div").classList.toggle("day_select-arrow-active");
       // Update selected_day_of_week
       selected_day_of_week = i;
       break;
