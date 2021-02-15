@@ -956,6 +956,7 @@ function responseCallback(response, includedTerms) {
         success: scheduleCallback
     });
 
+    initialize_dayOfWeek_dropdown();
     setup_tooltips();
 }
 

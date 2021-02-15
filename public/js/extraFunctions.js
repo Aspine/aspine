@@ -1131,7 +1131,7 @@ let tableData_option_onclick = function() {
 
 let initialize_tableData_dropdown = function() {
   let x, i, j, selElmnt, a, b, c;
-  /* Look for any elements with the class "pdf_custom-select": */
+  /* Look for any elements with the class "tableData_custom-select": */
   x = document.getElementsByClassName("tableData_custom-select");
   for (i = 0; i < x.length; i++) {
     selElmnt = x[i].getElementsByTagName("select")[0];
@@ -1164,6 +1164,71 @@ let initialize_tableData_dropdown = function() {
       $('.tableData_select-selected').toggleClass("activated-selected-item");
       $('.tableData_select-items div').toggleClass("activated-select-items");
     });
+  }
+}
+
+// Initialize the dropdown menu by creating divs around each option
+let initialize_dayOfWeek_dropdown = function() {
+  let i, selElmnt, a, b, c;
+  // Find the day select menu
+  selElmnt = document.getElementById("day_custom-select").getElementsByTagName("select")[0];
+  // Create a new div for the select menu and assign it a class
+  a = document.createElement("DIV");
+  a.setAttribute("class", "day_select-selected");
+  a.setAttribute("id", "day_select_div");
+  document.getElementById("day_custom-select").appendChild(a);
+  let weekdays = ["Select Day", "Monday (Silver)", "Tuesday (Black)", "Wednesday", "Thursday (Silver)", "Friday (Black)", "Select Day"];
+  // Deal with slow loading / weird edge cases
+  if (day_of_week < 0 || day_of_week === undefined) {
+    a.innerHTML = "Select Day";
+  } else {
+    a.innerHTML = weekdays[day_of_week];
+  }
+  // Create a new div to store the option list
+  b = document.createElement("DIV");
+  b.setAttribute("class", "day_select-items select-hide");
+  // Loop through each of the options and add a div for each one
+  for (i = 1; i < selElmnt.length; i++) {
+    c = document.createElement("DIV");
+    c.id = `day_select-items-${selElmnt.options[i].value}`;
+    c.innerHTML = selElmnt.options[i].innerHTML;
+    c.addEventListener("click", dayOfWeek_onclick);
+    b.appendChild(c);
+  }
+  document.getElementById("day_custom-select").appendChild(b);
+  // Close all other select boxes when one is clicked
+  a.addEventListener("click", function(e) {
+    e.stopPropagation();
+    closeAllSelect(this);
+    this.nextSibling.classList.toggle("select-hide");
+    this.classList.toggle("day_select-arrow-active");
+  });
+  // Close the select menu when you click outside of it, and flip the dropdown arrow
+  document.addEventListener("click", function() {
+    document.getElementsByClassName("day_select-items")[0].classList.add("select-hide");
+    document.getElementById("day_select_div").classList.remove("day_select-arrow-active");
+  });
+}
+
+// Toggle the schedule when an element in the dropdown is selected
+let dayOfWeek_onclick = function() {
+  let select = document.getElementById("day_select");
+  // Iterate through the select menu and look for the selected option
+  for (let i = 0; i < select.length; i++) {
+    if (select.options[i].innerHTML === this.innerHTML) {
+      // Toggle the schedule for the selected day
+      select.selectedIndex = i;
+      select.addEventListener("change", schedule_toggle(i));
+      // Change the HTML of the select menu to match the day shown
+      document.getElementById("day_select_div").innerHTML = this.innerHTML;
+      // Hide the other dropdown items when one is selected
+      document.getElementsByClassName("day_select-items")[0].classList.add("select-hide");
+      // Flip the dropdown arrow
+      document.getElementById("day_select_div").classList.remove("day_select-arrow-active");
+      // Update selected_day_of_week
+      selected_day_of_week = i;
+      break;
+    }
   }
 }
 

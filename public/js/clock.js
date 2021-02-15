@@ -20,6 +20,7 @@ const covid_schedule = true;
 let current_schedule = covid_schedule ? "covid-mt" : "regular";
 // For covid-19 schedule
 let selected_day_of_week = -1;
+let day_of_week;
 
 // For testing.
 // If this is set to a valid date/time string, that will be used instead of the
@@ -43,7 +44,6 @@ function schedulesCallback(response) {
 }
 
 function update_formattedSchedule() {
-    let day_of_week;
     if (selected_day_of_week < 0) {
         const now = date_override ? new Date(date_override) : new Date();
         day_of_week = now.getDay();
