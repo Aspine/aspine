@@ -81,6 +81,13 @@ export interface PDFFile {
   content: string;
 }
 
+export interface Stats {
+  high: number;
+  low: number;
+  median: number;
+  mean: number;
+}
+
 export enum Quarter {
   Current = 0,
   Q1,

@@ -196,9 +196,17 @@ app.use(session({
 }));
 
 app.post('/stats', async (req, res) => {
-    console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
+    console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id} \n------------------`);
 
-    res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
+    try {
+        res.send(await new_scraper.get_stats(
+            req.session.username, req.session.password, req.body.assignment_id,
+            req.body.class_id, req.body.quarter_id
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send({});
+    }
 });
 
 app.post('/data', async (req, res) => {

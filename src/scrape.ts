@@ -21,6 +21,7 @@ import type {
   Recent,
   AttendanceEvent,
   ActivityEvent,
+  Stats,
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
@@ -166,6 +167,132 @@ export async function get_schedule(
     );
 
     return { black, silver };
+  });
+}
+
+export async function get_stats(
+  username: string, password: string, assignment_id: string, class_id: string,
+  quarter_id: string
+): Promise<Stats | {}> {
+  return await get_session(username, password, async ({ session_id }) => {
+    // The REST API does not expose assignment statistics (as far as we know),
+    // so we need to use the regular Aspen desktop site. Aspen is picky about
+    // the order in which requests are made, so we need to carry out some
+    // preliminaries:
+
+    // Get list of classes
+    const class_list_page = await (await fetch(
+      "https://aspen.cpsd.us/aspen/portalClassList.do?navkey=academics.classes.list",
+      {
+        "headers": {
+          "Cookie": `JSESSIONID=${session_id}`,
+        },
+      })).text();
+
+    // Get updated Apache token
+    const [, apache_token] =
+      /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
+        class_list_page
+      ) as RegExpExecArray;
+
+    // Change term in classes list
+    await fetch("https://aspen.cpsd.us/aspen/portalClassList.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis`,
+      },
+      method: "POST",
+      body: new URLSearchParams({
+        "org.apache.struts.taglib.html.TOKEN": apache_token,
+        "userEvent": "950",
+        "termFilter": quarter_id,
+      }),
+    });
+
+    // Get class details
+    await fetch("https://aspen.cpsd.us/aspen/portalClassList.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+      method: "POST",
+      body: new URLSearchParams({
+        "org.apache.struts.taglib.html.TOKEN": apache_token,
+        "userEvent": "2100",
+        "userParam": class_id,
+      }),
+    });
+
+    // Get list of assignments
+    await fetch(
+      "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd", {
+        headers: {
+          "Cookie": `deploymentId=x2sis; JSESSIONID=${session_id}`,
+        },
+      }
+    );
+
+    // Change term in assignments list
+    await fetch("https://aspen.cpsd.us/aspen/portalAssignmentList.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`
+      },
+      method: "POST",
+      body: new URLSearchParams({
+        "org.apache.struts.taglib.html.TOKEN": apache_token,
+        "userEvent": "2210",
+        "gradeTermOid": quarter_id,
+      }),
+    });
+
+    // Get assignment statistics
+    const stats_page = await (await fetch("https://aspen.cpsd.us/aspen/portalAssignmentList.do", {
+      headers: {
+        "Cookie": `JSESSIONID=${session_id}`,
+      },
+      method: "POST",
+      body: new URLSearchParams({
+        "org.apache.struts.taglib.html.TOKEN": apache_token,
+        "userEvent": "2100",
+        "userParam": assignment_id,
+      }),
+    })).text();
+
+    const { window: { document } } = new JSDOM(stats_page);
+
+    const rows = document.querySelectorAll('#mainTable td[width="50%"]:nth-of-type(2) tr:nth-child(n+3):nth-child(-n+6)');
+
+    if (rows.length < 4) {
+      return {};
+    }
+
+    const statistics: Partial<Stats> = {};
+
+    for (const row of rows) {
+      const stat_type_raw =
+        row.querySelector("td:first-child")?.textContent?.trim() ?? "";
+      const stat_value =
+        row.querySelector("td:last-child")?.textContent?.trim() ?? "";
+
+      let stat_type: keyof Stats;
+      switch (stat_type_raw) {
+        case "High":
+          stat_type = "high";
+          break;
+        case "Low":
+          stat_type = "low";
+          break;
+        case "Median":
+          stat_type = "median";
+          break;
+        case "Average":
+          stat_type = "mean";
+          break;
+        default:
+          continue;
+      }
+      statistics[stat_type] = parseFloat(stat_value);
+    }
+
+    return statistics;
   });
 }
 
