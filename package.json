@@ -27,7 +27,6 @@
     "@fortawesome/fontawesome-free": "^5.15.2",
     "animate.css": "^4.1.1",
     "body-parser": "^1.19.0",
-    "cheerio": "^1.0.0-rc.5",
     "commander": "^6.2.1",
     "compression": "^1.7.4",
     "d3-array": "^2.11.0",

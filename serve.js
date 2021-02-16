@@ -1,7 +1,6 @@
 const express = require('express');
 const { program } = require('commander');
-const scraper = require('./scrape.js');
-const new_scraper = require('./js/scrape.js');
+const scraper = require('./js/scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
@@ -199,7 +198,7 @@ app.post('/stats', async (req, res) => {
     console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id} \n------------------`);
 
     try {
-        res.send(await new_scraper.get_stats(
+        res.send(await scraper.get_stats(
             req.session.username, req.session.password, req.body.assignment_id,
             req.body.class_id, req.body.quarter_id
         ));
@@ -217,17 +216,15 @@ app.post('/data', async (req, res) => {
     // });
 
     let response;
-    //res.send(await new_scraper.get_student(req.session.username, req.session.password));
-    //
+
     // Get data from scraper:
-    //
     if (req.session.nologin) {
         res.send({ nologin: true });
     }
     else {
         // TODO add nologin field for consistency
         try {
-            res.send(await new_scraper.get_student(
+            res.send(await scraper.get_student(
                 req.session.username, req.session.password,
                 parseInt(req.body.quarter)
             ));
@@ -240,7 +237,7 @@ app.post('/data', async (req, res) => {
 
 app.post('/schedule', async (req, res) => {
     try {
-        res.send(await new_scraper.get_schedule(
+        res.send(await scraper.get_schedule(
             req.session.username, req.session.password
         ));
     } catch (e) {
@@ -251,7 +248,7 @@ app.post('/schedule', async (req, res) => {
 
 app.post('/pdf', async (req, res) => {
     try {
-        res.send(await new_scraper.get_pdf_files(
+        res.send(await scraper.get_pdf_files(
             req.session.username, req.session.password
         ));
     } catch (e) {
