@@ -55,9 +55,4 @@ commit, this can be done using `git tag -f $TAG $REF` where `$TAG` is the name
 of the tag and `$REF` is the ref to which the tag should now point.
 The newly moved tag can be published with `git push -f --tags`.
 
-## Updating the current quarter constant
-
-Whenever the quarter changes, be sure to update the constant `CURRENT_QUARTER`
-in `scrape.js`. Removing the need for such a constant is an open issue ([#82]).
-
 [#82]: https://github.com/Aspine/aspine/issues/82
