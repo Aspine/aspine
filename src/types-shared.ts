@@ -4,6 +4,7 @@ export interface StudentData {
   overview?: OverviewItem[];
   username: string;
   quarter: Quarter;
+  quarter_oid: string;
 }
 
 export interface Class {
@@ -12,6 +13,7 @@ export interface Class {
   // Maps category names to decimals (stored as strings)
   categories: { [key: string]: string };
   assignments: Assignment[];
+  oid: string;
 }
 
 export interface Assignment {

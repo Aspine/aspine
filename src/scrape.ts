@@ -60,10 +60,12 @@ export async function get_student(
         grade: details.grades.get(quarter) || "",
         categories: categories,
         assignments: assignments[i],
+        oid: details.oid,
       };
     }).filter(isClass);
+    const quarter_oid = quarter_oids.get(quarter) || "current";
 
-    return { classes, recent, overview, username, quarter };
+    return { classes, recent, overview, username, quarter, quarter_oid };
   });
 }
 
