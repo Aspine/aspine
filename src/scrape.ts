@@ -558,30 +558,50 @@ async function get_assignments(
       }
     )).json()
   ));
-  return [...past_due, ...upcoming].map(({
-    name, categoryOid, assignedDate, dueDate, remark, oid,
-    scoreElements: [{ score, pointMax }],
-  }) => {
-    // Get category name
-    let category = "";
-    for (const [cat, { oid }] of class_details.categories) {
-      if (categoryOid === oid) {
-        category = cat;
+  return [...past_due, ...upcoming]
+    .map(({
+      name, categoryOid, assignedDate, dueDate, remark, oid,
+      scoreElements: [{ score, pointMax }],
+    }) => {
+      // Get category name
+      let category = "";
+      for (const [cat, { oid }] of class_details.categories) {
+        if (categoryOid === oid) {
+          category = cat;
+        }
       }
-    }
 
-    return {
-      name: name,
-      category: category,
-      date_assigned: new Date(assignedDate).toLocaleDateString("en-US"),
-      date_due: new Date(dueDate).toLocaleDateString("en-US"),
-      feedback: remark || "",
-      assignment_id: oid,
-      special: "",
-      score: score,
-      max_score: pointMax,
-    };
-  });
+      return {
+        name: name,
+        category: category,
+        date_assigned: new Date(assignedDate),
+        date_due: new Date(dueDate),
+        feedback: remark || "",
+        assignment_id: oid,
+        special: "",
+        score: score,
+        max_score: pointMax,
+      };
+    })
+    .sort(({ date_due: d1, name: n1 }, { date_due: d2, name: n2 }) => {
+      // Sort assignments in reverse chronological order by due date
+      if (d1 > d2) return -1;
+      if (d1 < d2) return 1;
+      // If same due date, sort by name (case-insensitive)
+      const n1u = n1.toUpperCase();
+      const n2u = n2.toUpperCase();
+      if (n1u < n2u) return -1;
+      if (n1u > n2u) return 1;
+
+      // Same due date and same name (up to capitalization differences)
+      return 0;
+    })
+    // Convert Date objects to strings
+    .map(({ date_assigned: da, date_due: dd, ...rest }) => ({
+      date_assigned: da.toLocaleDateString("en-US"),
+      date_due: dd.toLocaleDateString("en-US"),
+      ...rest
+    }));
 }
 
 function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
