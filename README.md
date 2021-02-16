@@ -118,6 +118,11 @@ when you want to kill the server.
 - [**psvenk**](https://github.com/psvenk)
 - [**Ken Kalin**](https://github.com/kdk1616)
 - [**notrodes**](https://github.com/notrodes)
+- [**andOrlando**](https://github.com/andOrlando)
+- [**Jade Buckwalter**](https://github.com/jadebuckwalter)
+- [**Tavi Pollard**](https://github.com/tektaxi)
+- [**Mohan Hathi**](https://github.com/MohanMaker)
+- [**githubturtle09**](https://github.com/githubturtle09)
 
 
 ## Color Scheme
