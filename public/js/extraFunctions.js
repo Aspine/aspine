@@ -1341,7 +1341,7 @@ let toggle_fullscreen_pdf = function() {
 }
 
 
-function parseTableData(classes) {
+function parseTableData({ classes, quarter_oid }) {
   for (let i = 0; i < classes.length; i++) {
 
     //initialize every the edited key for every class and set it to false
@@ -1418,7 +1418,8 @@ function parseTableData(classes) {
   return {
     classes,
     GPA,
-    calcGPA
+    calcGPA,
+    quarter_oid,
   };
 }
 let anyEdited = function() {
