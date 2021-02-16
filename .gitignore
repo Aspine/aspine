@@ -4,3 +4,5 @@ usage_log.txt
 .DS_Store
 dist-lite/
 local.*
+/js/
+.env

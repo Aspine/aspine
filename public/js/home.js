@@ -85,21 +85,6 @@ function darkMode() {
             'dark' : 'light');
 }
 
-window.getStats = async function(session_id, apache_token, assignment_id) {
-    return new Promise(function(resolve, reject) {
-        $.ajax({
-            url: "/stats",
-            method: "POST",
-            data: {
-                session_id: session_id,
-                apache_token: apache_token,
-                assignment_id: assignment_id
-            },
-            success: response => resolve(response)
-        });
-    });
-};
-
 initialize_jquery_prototype()
 
 $('#stats_plot').width($(window).width() * 7 / 11);
@@ -397,8 +382,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
                 showModal("stats");
 
-                const { session_id, apache_token } =
-                    currentTableData.currentTermData.classes[selected_class_i].tokens;
                 const {
                     assignment_id,
                     name: assignment,
@@ -406,16 +389,25 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     max_score,
                     date_assigned,
                     date_due,
-                    feedback: assignment_feedback
+                    feedback: assignment_feedback,
                 } = cell.getRow().getData();
 
-                let stats = await window.getStats(session_id, apache_token, assignment_id);
-                if (!Array.isArray(stats)) {
+                let { high, low, median, mean } = await $.ajax({
+                    url: "/stats",
+                    method: "POST",
+                    data: {
+                        assignment_id: assignment_id,
+                        class_id: currentTableData.currentTermData
+                            .classes[selected_class_i].oid,
+                        quarter_id: currentTableData.currentTermData
+                            .quarter_oid,
+                    },
+                });
+                if ([high, low, median, mean].some(x => x === undefined)) {
                     noStats();
                     return;
                 }
-                stats = stats.map(x => parseFloat(x));
-                const [high, low, median, mean,] = stats;
+
                 const q1 = (low + median) / 2;
                 const q3 = (high + median) / 2;
 
@@ -860,8 +852,8 @@ function responseCallback(response, includedTerms) {
     if (typeof currentTableData.currentTermData === 'undefined') {
         currentTableData.currentTermData = {};
     }
-    currentTableData.currentTermData = parseTableData(response.classes);
-    currentTableData.terms[currentTerm] = parseTableData(response.classes);
+    currentTableData.currentTermData = parseTableData(response);
+    currentTableData.terms[currentTerm] = parseTableData(response);
 
     //populates the event for each row in the recentAttendance table
     for (let i = 0; i < currentTableData.recent.recentAttendanceArray.length; i++) {
@@ -965,10 +957,11 @@ function responseCallbackPartial(response) {
 
     currentTableData.currentTermData = currentTableData.terms[currentTerm];
 
-    let temp_term_data = parseTableData(response.classes);
+    let temp_term_data = parseTableData(response);
     currentTableData.terms[currentTerm].classes = temp_term_data.classes;
     currentTableData.terms[currentTerm].GPA = temp_term_data.GPA;
     currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
+    currentTableData.terms[currentTerm].quarter_oid = temp_term_data.quarter_oid;
 
     /*
     if (currentTerm === 'current') {

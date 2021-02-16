@@ -1,6 +1,6 @@
 const express = require('express');
 const { program } = require('commander');
-const scraper = require('./scrape.js');
+const scraper = require('./js/scrape.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
@@ -195,9 +195,17 @@ app.use(session({
 }));
 
 app.post('/stats', async (req, res) => {
-    console.log(`\n\nNEW STATS REQUEST: ${req.body.session_id}, ${req.body.apache_token}, ${req.body.assignment_id} \n------------------`);
+    console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id} \n------------------`);
 
-    res.send(await scraper.scrape_assignmentDetails(req.body.session_id, req.body.apache_token, req.body.assignment_id));
+    try {
+        res.send(await scraper.get_stats(
+            req.session.username, req.session.password, req.body.assignment_id,
+            req.body.class_id, req.body.quarter_id
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send({});
+    }
 });
 
 app.post('/data', async (req, res) => {
@@ -208,27 +216,45 @@ app.post('/data', async (req, res) => {
     // });
 
     let response;
-    //res.send(await scraper.scrape_student(req.session.username, req.session.password));
-    //
+
     // Get data from scraper:
-    //
     if (req.session.nologin) {
         res.send({ nologin: true });
     }
     else {
         // TODO add nologin field for consistency
-        res.send(await scraper.scrape_student(
-            req.session.username, req.session.password, req.body.quarter
-        ));
+        try {
+            res.send(await scraper.get_student(
+                req.session.username, req.session.password,
+                parseInt(req.body.quarter)
+            ));
+        } catch (e) {
+            console.error(e);
+            res.send({ recent: { login_fail: true } });
+        }
     }
 });
 
 app.post('/schedule', async (req, res) => {
-    res.send(await scraper.scrape_schedule(req.session.username, req.session.password));
+    try {
+        res.send(await scraper.get_schedule(
+            req.session.username, req.session.password
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send({ login_fail: true });
+    }
 });
 
 app.post('/pdf', async (req, res) => {
-    res.send(await scraper.scrape_pdf_files(req.session.username, req.session.password));
+    try {
+        res.send(await scraper.get_pdf_files(
+            req.session.username, req.session.password
+        ));
+    } catch (e) {
+        console.error(e);
+        res.send([]);
+    }
 });
 
 app.get('/', async (req, res) => {
