@@ -697,7 +697,7 @@ function initialize_resize_hamburger() {
   }
 
   // REASON IT ADDS ITEMS IN REVERSE:
-  // Otherwise the items would basically go from right to left (in tab) 
+  // Otherwise the items would basically go from right to left (in tab)
   // To down to up, when I'd like it to be up to down.
   const switch_right_items = function() {
     // Checks if right-items (more specifically buttons) are hidden
@@ -725,7 +725,7 @@ function initialize_resize_hamburger() {
   }
 
   const switch_hamburger = function() {
-    
+
     // Hides or unhides the hamburger
     if ($('#hamburger_button').hasClass("hide")) {
       $('#hamburger_button').removeClass("hide")
@@ -839,6 +839,7 @@ let initialize_pdf_dropdown = function() {
       create a new DIV that will act as an option item: */
       c = document.createElement("DIV");
       c.innerHTML = selElmnt.options[j].innerHTML;
+      c.setAttribute("data-value", selElmnt.options[j].value);
       c.addEventListener("click", function(e) {
         /* When an item is clicked, update the original select box,
         and the selected item: */
@@ -846,7 +847,7 @@ let initialize_pdf_dropdown = function() {
         s = this.parentNode.parentNode.getElementsByTagName("select")[0];
         h = this.parentNode.previousSibling;
         for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML === this.innerHTML) {
+          if (s.options[i].value === this.getAttribute("data-value")) {
             if (i === 0) {
               pdf_index = i;
               generate_pdf(i);
@@ -1246,10 +1247,10 @@ function setup_tooltips() {
 
       // Creates the tooltip
       const node = document.createElement("SPAN")
-      
+
       // Gives it the class
       node.classList.add("tooltiptext")
-      
+
       // Adds the text from the tooltip attribute of the parent to the tooltip
       node.appendChild(document.createTextNode(child.getAttribute("tooltip")))
 

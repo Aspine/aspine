@@ -79,12 +79,8 @@ export async function get_pdf_files(
     const pdf_files = [];
     // Get PDF files sequentially to avoid rejection of requests
     for (const { id, filename } of await list_pdf_files(session)) {
-      // Get a unique identifier for each file, so that the frontend recognizes
-      // the files as distinct (TODO fix frontend bug)
-      const [, truncated_id] = /RDR0+(.+)/.exec(id) as RegExpExecArray;
-
       pdf_files.push({
-        title: `${filename} (${truncated_id})`,
+        title: filename,
         content: await download_pdf(session, id),
       });
     }
