@@ -234,15 +234,15 @@ function get_period_name(default_name, day_of_week) {
     }
     // period_names has class names now
     for (const { name, period } of period_names[bs_day]) {
-        if (default_name.slice(-1) === "l") {
-            if (period.slice(0) === default_name.slice(0)) {
-                return name;
-            }
-        } else {
-            if (period.slice(-1) === default_name.slice(-1)) {
-                return name;
-            }
-        }
+        if (period === default_name)
+            return name;
+        // "BLOCK 1", "BLOCK 2", etc.
+        if (period === `BLOCK ${default_name.slice(-1)}`)
+            return name;
+        // For periods 1, 2, 3, 4 stored as strings containing "01", etc.
+        let match;
+        if ((match = period.match(/0\d/)) && default_name.includes(match[0]))
+            return name;
     }
     return default_name;
 }
