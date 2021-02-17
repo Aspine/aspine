@@ -5,6 +5,7 @@ const pathLib = require("path");
 const readline = require("readline");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
+const marked = require("marked");
 
 const dep_mappings = require('./frontend-dependencies');
 
@@ -117,6 +118,13 @@ async function processJS(file) {
         const version = (await exec('git describe')).stdout.toString().trim()
           .match(/^v?(.*)/)[1];
         await out.write(JSON.stringify(version) + "\n");
+        continue;
+      }
+      if (line === "//#include CHANGELOG") {
+        const changelog = marked(
+          (await fsp.readFile(__dirname + '/CHANGELOG.md')).toString()
+        );
+        await out.write(JSON.stringify(changelog) + "\n");
         continue;
       }
       // All other include directives

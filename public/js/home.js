@@ -1246,10 +1246,7 @@ document.getElementById("default_open").click();
 // Pointfree style does not work here because jQuery's .text behaves both as
 // an attribute and as a function.
 
-//#ifndef lite
-$.ajax("/version").then(ver => $("#version").text(ver));
-
-$.ajax("/updates").then(upt => {
+function updatesCallback(upt) {
     $("#updates").html(upt);
     document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
 
@@ -1272,14 +1269,19 @@ $.ajax("/updates").then(upt => {
     document.querySelectorAll("#updates p:nth-of-type(n-2)").forEach(x => {
         x.style.setProperty("display", "none");
     });
-});
+}
 
+//#ifndef lite
+$.ajax("/version").then(ver => $("#version").text(ver));
+$.ajax("/updates").then(updatesCallback);
 //#endif
-
 //#ifdef lite
 /*
 $("#version").text(
 //#include VERSION
+);
+updatesCallback(
+//#include CHANGELOG
 );
 */
 //#endif
