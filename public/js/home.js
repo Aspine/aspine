@@ -1279,7 +1279,7 @@ $.ajax("/updates").then(upt => {
 //#ifdef lite
 /*
 $("#version").text(
-//#include version
+//#include VERSION
 );
 */
 //#endif
