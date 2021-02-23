@@ -1,3 +1,8 @@
+// Show "incorrect username or password" on failed login
+if ((new URLSearchParams(window.location.search)).get("fail") === "1") {
+  document.querySelector("#login-fail").style.setProperty("display", "unset");
+}
+
 // Remember me - load username from localStorage
 window.addEventListener("load", () => {
   localStorage.removeItem("password");

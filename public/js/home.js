@@ -789,7 +789,7 @@ function responseCallback(response, includedTerms) {
         return;
     }
     if (response.recent.login_fail) {
-        location.href = '/logout';
+        location.href = "/logout?fail=1";
     }
 
     if (response.classes.length === 0) {

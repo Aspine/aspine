@@ -280,7 +280,10 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', async (req, res) => {
     req.session.destroy();
-    res.redirect('/login');
+    if (req.query.fail === '1')
+        res.redirect('/login?fail=1');
+    else
+        res.redirect('/login');
 });
 
 
