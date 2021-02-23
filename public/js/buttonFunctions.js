@@ -295,7 +295,7 @@ let exportTableData = async function(prefs) {
 //#ifdef lite
 /*
   obj.version = (
-//#include version
+//#include VERSION
   );
 */
 //#endif
@@ -382,7 +382,7 @@ let importTableData = async function(obj) {
 //#ifdef lite
 /*
   let version = (
-//#include version
+//#include VERSION
   );
 */
 //#endif

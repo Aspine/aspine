@@ -91,7 +91,7 @@ $.ajax({
 //#ifdef lite
 /*
 schedulesCallback(
-//#include dist-lite/schedule.json
+//#include public/schedule.json
 );
 */
 //#endif
