@@ -233,6 +233,11 @@ iframe {
   overflow: hidden;
 }
 
+#login-fail {
+  color: red;
+  display: none;
+}
+
 #bottom-text {
   text-align: left;
   margin: 5px 14px;
