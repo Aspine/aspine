@@ -311,15 +311,14 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             title: "Category",
             field: "category",
             editor: "select",
-            editorParams: function(cell) {
-                let catCategories = [];
-
-                for (let category of Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories))
-                    catCategories.push(`${category} (${category * 100}%)`);
-                return {values: catCategories};
-            },
-            formatter: rowFormatter,
-            headerSort: false,
+            editorParams: cell => ({
+                values: Object.entries(
+                    currentTableData.currentTermData
+                    .classes[selected_class_i].categories
+                ).map(([cat, weight]) =>
+                    `${cat} (${parseFloat(weight) * 100}%)`
+                )
+            }),
         },
         {
             title: "Score",
