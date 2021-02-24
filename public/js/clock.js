@@ -241,8 +241,11 @@ function get_period_name(default_name, day_of_week) {
             return name;
         // For periods 1, 2, 3, 4 stored as strings containing "01", etc.
         let match;
-        if ((match = period.match(/0\d/)) && default_name.includes(match[0]))
-            return name;
+        if ((match = period.match(/0\d/))) {
+            if (default_name.includes(match[0].slice(-1))) {
+                return name;
+            }
+        }
     }
     return default_name;
 }
