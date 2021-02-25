@@ -53,8 +53,7 @@ and this project adheres to
 - Simplify command-line interface of Aspine server ([#233], [#234], [#239])
 - Performance improvements and housekeeping ([#223], [#228], [#229], [#230])
 
-
-## [2.6.1] - tagged 2020-12-20
+## [2.6.1] - tagged 2020-12-20, production 2020-12-22
 - Improve session handling ([#219], [#218])
 - Fix size of district logo on login page ([#221])
 
