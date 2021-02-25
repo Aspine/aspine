@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - tagged 2021-02-24
+- Migrate to a new API for getting data from Aspen ([#220], [#184]). This is a
+  **major** change and fixes many issues in Aspine, such as:
+  + Show all assignments for each class, not just the first page on Aspen
+    ([#170])
+  + Display all reports in the Reports tab ([#90])
+  + Fix a bug where some classes showed the wrong assignments when switching
+    terms ([#113])
+  + Clean up properly after sessions on Aspen ([#163])
+  + Make the backend type-safe (works toward [#153])
+- Notify the user upon an invalid login ([#272], [#226])
+- Style the day-of-week picker in the schedule tab ([#262])
+- In the info tab, show release notes back to the latest minor version instead
+  of hard-coding "past three versions" ([#270], [#264])
+- Fix bugs with period name detection in the schedule and clock ([#268], [#267],
+  [#274])
+- Fix bug where editing the category of an assignment showed "NaN%" ([#273])
+- Rewrite the build script for
+  [Aspine Lite](https://github.com/Aspine/aspine#aspine-lite) in JavaScript
+  ([#271], [#250])
+
 ## [2.6.4] - tagged 2021-02-08
 - Hotfix for schedule after changes on Aspen
 - Update dependencies
@@ -173,6 +194,7 @@ and this project adheres to
 [2.6.2]: https://github.com/Aspine/aspine/releases/tag/v2.6.2
 [2.6.3]: https://github.com/Aspine/aspine/releases/tag/v2.6.3
 [2.6.4]: https://github.com/Aspine/aspine/releases/tag/v2.6.4
+[2.7.0]: https://github.com/Aspine/aspine/releases/tag/v2.7.0
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
@@ -183,8 +205,10 @@ and this project adheres to
 [#84]: https://github.com/Aspine/aspine/issues/84
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
+[#90]: https://github.com/Aspine/aspine/issues/90
 [#96]: https://github.com/Aspine/aspine/issues/96
 [#112]: https://github.com/Aspine/aspine/issues/112
+[#113]: https://github.com/Aspine/aspine/issues/113
 [#122]: https://github.com/Aspine/aspine/issues/122
 [#131]: https://github.com/Aspine/aspine/issues/131
 [#135]: https://github.com/Aspine/aspine/issues/135
@@ -196,9 +220,12 @@ and this project adheres to
 [#152]: https://github.com/Aspine/aspine/issues/152
 [#153]: https://github.com/Aspine/aspine/issues/153
 [#159]: https://github.com/Aspine/aspine/issues/159
+[#163]: https://github.com/Aspine/aspine/issues/163
 [#168]: https://github.com/Aspine/aspine/issues/168
+[#170]: https://github.com/Aspine/aspine/issues/170
 [#174]: https://github.com/Aspine/aspine/issues/174
 [#178]: https://github.com/Aspine/aspine/issues/178
+[#184]: https://github.com/Aspine/aspine/issues/184
 [#185]: https://github.com/Aspine/aspine/issues/185
 [#188]: https://github.com/Aspine/aspine/issues/188
 [#191]: https://github.com/Aspine/aspine/issues/191
@@ -208,11 +235,15 @@ and this project adheres to
 [#211]: https://github.com/Aspine/aspine/issues/211
 [#212]: https://github.com/Aspine/aspine/issues/212
 [#218]: https://github.com/Aspine/aspine/issues/218
+[#226]: https://github.com/Aspine/aspine/issues/226
 [#235]: https://github.com/Aspine/aspine/issues/235
 [#247]: https://github.com/Aspine/aspine/issues/247
 [#248]: https://github.com/Aspine/aspine/issues/248
+[#250]: https://github.com/Aspine/aspine/issues/250
 [#254]: https://github.com/Aspine/aspine/issues/254
 [#256]: https://github.com/Aspine/aspine/issues/256
+[#264]: https://github.com/Aspine/aspine/issues/264
+[#267]: https://github.com/Aspine/aspine/issues/267
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -255,6 +286,7 @@ and this project adheres to
 [#215]: https://github.com/Aspine/aspine/pull/215
 [#216]: https://github.com/Aspine/aspine/pull/216
 [#219]: https://github.com/Aspine/aspine/pull/219
+[#220]: https://github.com/Aspine/aspine/pull/220
 [#221]: https://github.com/Aspine/aspine/pull/221
 [#223]: https://github.com/Aspine/aspine/pull/223
 [#225]: https://github.com/Aspine/aspine/pull/225
@@ -274,3 +306,10 @@ and this project adheres to
 [#255]: https://github.com/Aspine/aspine/pull/255
 [#257]: https://github.com/Aspine/aspine/pull/257
 [#258]: https://github.com/Aspine/aspine/pull/258
+[#262]: https://github.com/Aspine/aspine/pull/262
+[#268]: https://github.com/Aspine/aspine/pull/268
+[#270]: https://github.com/Aspine/aspine/pull/270
+[#271]: https://github.com/Aspine/aspine/pull/271
+[#272]: https://github.com/Aspine/aspine/pull/272
+[#273]: https://github.com/Aspine/aspine/pull/273
+[#274]: https://github.com/Aspine/aspine/pull/274
