@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.7.0] - tagged 2021-02-24
+## [2.7.0] - tagged 2021-02-24, production 2021-02-26
 - Migrate to a new API for getting data from Aspen ([#220], [#184]). This is a
   **major** change and fixes many issues in Aspine, such as:
   + Show all assignments for each class, not just the first page on Aspen
