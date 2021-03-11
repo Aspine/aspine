@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import fetch, { FetchError } from "node-fetch";
 import { URLSearchParams } from "url";
 import { JSDOM } from "jsdom";
 
@@ -25,6 +25,7 @@ import type {
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
+import { AspineErrorCode } from "./types";
 import { Quarter } from "./types-shared";
 
 export async function get_student(
@@ -663,10 +664,26 @@ async function get_session<T>(
   username: string, password: string,
   callback: (session: Session) => Promise<T>
 ): Promise<T> {
-  // Get a session from Aspen by visiting the login page
-  const login_page = await (await fetch(
-    "https://aspen.cpsd.us/aspen/logon.do"
-  )).text();
+  // Get a session from Aspen by visiting the login page, and check if Aspen is
+  // currently down
+  let login_page;
+  {
+    let resp;
+    try {
+      resp = await fetch("https://aspen.cpsd.us/aspen/logon.do");
+    } catch (e) {
+      if (e instanceof FetchError) {
+        throw new Error(AspineErrorCode.ASPENDOWN);
+      } else {
+        throw e;
+      }
+    }
+    if (!resp.ok) {
+      throw new Error(AspineErrorCode.ASPENDOWN);
+    }
+    login_page = await resp.text();
+  }
+
   const [, session_id] = /sessionId='(.+)';/.exec(
     login_page
   ) as RegExpExecArray;
@@ -693,7 +710,7 @@ async function get_session<T>(
     }
   )).text();
   if (login_response.includes("Invalid login.")) {
-    throw new Error("Invalid login");
+    throw new Error(AspineErrorCode.LOGINFAIL);
   }
 
   const result = await callback({ session_id, apache_token });
@@ -714,7 +731,7 @@ async function get_session<T>(
 if (require.main === module) {
   get_student(process.env.USERNAME || "", process.env.PASSWORD || "", 1).then(
     console.log, e => {
-      if (e.message === "Invalid login") {
+      if (e.message === AspineErrorCode.LOGINFAIL) {
         console.error(`Error: ${e.message}`);
       } else {
         console.error(e);

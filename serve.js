@@ -8,10 +8,11 @@ const fs = require('fs');
 const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
-const marked = require("marked");
+const marked = require('marked');
 
 const scraper = require('./js/scrape');
 const dep_mappings = require('./frontend-dependencies');
+const { AspineErrorCode } = require('./js/types');
 
 // -------------------------------------------
 
@@ -154,7 +155,11 @@ app.post('/data', async (req, res) => {
             ));
         } catch (e) {
             console.error(e);
-            res.send({ recent: { login_fail: true } });
+            if (e.message === AspineErrorCode.LOGINFAIL) {
+                res.send({ recent: { login_fail: true } });
+            } else if (e.message === AspineErrorCode.ASPENDOWN) {
+                // TODO send to the frontend somehow that Aspen is down
+            }
         }
     }
 });
