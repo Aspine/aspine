@@ -233,7 +233,7 @@ iframe {
   overflow: hidden;
 }
 
-#login-fail {
+#error {
   color: red;
   display: none;
 }

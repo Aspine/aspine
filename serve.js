@@ -12,7 +12,6 @@ const marked = require('marked');
 
 const scraper = require('./js/scrape');
 const dep_mappings = require('./frontend-dependencies');
-const { AspineErrorCode } = require('./js/types');
 
 // -------------------------------------------
 
@@ -155,11 +154,7 @@ app.post('/data', async (req, res) => {
             ));
         } catch (e) {
             console.error(e);
-            if (e.message === AspineErrorCode.LOGINFAIL) {
-                res.send({ recent: { login_fail: true } });
-            } else if (e.message === AspineErrorCode.ASPENDOWN) {
-                // TODO send to the frontend somehow that Aspen is down
-            }
+            res.send({ error: e.message });
         }
     }
 });
@@ -209,8 +204,9 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', async (req, res) => {
     req.session.destroy();
-    if (req.query.fail === '1')
-        res.redirect('/login?fail=1');
+    let err;
+    if ((err = req.query.error))
+        res.redirect(`/login?error=${err}`);
     else
         res.redirect('/login');
 });

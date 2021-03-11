@@ -34,6 +34,6 @@ export interface Category {
 }
 
 export enum AspineErrorCode {
-  LOGINFAIL = "Invalid login",
-  ASPENDOWN = "Aspen down",
+  LOGINFAIL = "loginfail",
+  ASPENDOWN = "aspendown",
 }
