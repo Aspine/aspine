@@ -629,7 +629,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
 
 				data.Snackbar = undoSnackbar;
 				data.selected_class_i = selected_class_i;
-				undoData.push(data);
+				undoData.unshift(data);
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"
