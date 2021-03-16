@@ -41,15 +41,17 @@ var newAssignmentIDCounter = 0;
 
 // Registry for undos, contains assignment ID and the snackbar that corresponds to it
 // contains all the undo snackbars
-const undoRegistry = []
+const undoData = []
 
 document.onkeydown = e => {
     var evtobj = window.event || e
-    if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoRegistry.length !== 0) {
-        if (undoRegistry[0].state == Snackbar.SHOWN) {
-            undoRegistry[0].destroy();
-        }
-        undoRegistry[0].buttonClick();
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoData.length !== 0) {
+		if (undoData[0].Snackbar !== undefined) {
+			undoData[0].Snackbar.destroy();
+			undoData[0].Snackbar = undefined;
+		}
+		replaceAssignmentFromID({assignment_id: undoData[0].assignment_id, placeholder: true}, undoData[0], undoData[0].selected_class_i);
+		undoData.shift();
     }
 }
 
@@ -602,8 +604,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             align: "center",
             cellClick: function(e, cell) {
                 
-                const data = cell.getRow().getData()
+                const data = cell.getRow().getData();
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
+
 
                 const undoSnackbar = new Snackbar(`You deleted ${data["name"]}`, {
                     color: "var(--red1)",
@@ -611,17 +614,22 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     buttonText: "Undo", 
                     //buttonclick replaces the assignment with a placeholder that just contains the assignemnt ID
                     buttonClick: () => {
-                        replaceAssignmentFromID({ assignment_id: data["assignment_id"], placeholder: true }, data, selected_class_i)
-                        undoRegistry.splice(undoRegistry.indexOf(undoSnackbar), 1)
+						//gets index for splicing and comparing
+						index = undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id);
+						arrData = undoData[index]; //undo data at the index
+						arrData.Snackbar = undefined; //removes snackbar before putting data back
+						replaceAssignmentFromID({assignment_id: arrData.assignment_id, placeholder: true}, arrData, arrData.selected_class_i);
+						undoData.splice(index, 1);
                     },
                     timeout: 7500,
-                    //on either timeout or bodyclick (basically just when its dismissed) deletes the placeholder assignment
-                    timeoutFunction: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
-                    bodyClick: () => removeAssignmentFromID(data["assignment_id"], selected_class_i),
+					//on either a timeout or a bodyclick removes the snackbar link
+					timeoutFunction: () => undoData[undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id)].Snackbar = undefined,
+					bodyClick: () => undoData[undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id)].Snackbar = undefined,
                 }).show();
 
-                undoRegistry.push(undoSnackbar)
-
+				data.Snackbar = undoSnackbar;
+				data.selected_class_i = selected_class_i;
+				undoData.push(data);
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"
