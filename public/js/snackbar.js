@@ -7,7 +7,7 @@
 class Snackbar {
 
     /**
-     * snackbars contains key value pairs of snackbar IDs and snackbar references respectively 
+     * snackbars contains key value pairs of snackbar IDs and snackbar references respectively
      *  if you ever need to get a snackbar from an ID
      * snackbarIDs makes sure the IDs are unique
      */
@@ -17,7 +17,7 @@ class Snackbar {
     /**
      * state IDs
      * DESTROYED means it doesn't exist in html
-     * HIDDEN means it exists but is hdiden
+     * HIDDEN means it exists but is hidden
      * SHOWN means it exists and is shown
      */
     static DESTROYED = 0
@@ -33,7 +33,7 @@ class Snackbar {
      * destroyWhenButtonClicked : Boolean - Whether or not it should destroy itself when the button is clicked, defaults to true
      * bodyClick: Function - Sets the body's onclick logic
      * destroyWhenBodyClicked : Boolean - Whether or not it should destroy itself when the body is clicked, defaults to true
-     * timeout: Int - Time in ms  
+     * timeout: Int - Time in ms
      * timeoutFunction: Function - What to run on timeout (doesn't run if hidden or destroyed)
      * timeoutMode: can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
@@ -181,7 +181,7 @@ class Snackbar {
                 this.timeoutInProgress = undefined; //resets the timeoutInProgress variable at the end of the timeout
             }, this.timeout);
         }
-        
+
         const removeHidden = () => {
             this.state = Snackbar.SHOWN
             this.element.classList.remove("hidden");
@@ -199,7 +199,7 @@ class Snackbar {
         }
     }
 
-    /** 
+    /**
      * hides the snackbar
      * returns the snackbar object
      */

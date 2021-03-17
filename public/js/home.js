@@ -603,7 +603,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-                
+
                 const data = cell.getRow().getData();
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
 
@@ -611,7 +611,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const undoSnackbar = new Snackbar(`You deleted ${data["name"]}`, {
                     color: "var(--red1)",
                     textColor: "var(--white)",
-                    buttonText: "Undo", 
+                    buttonText: "Undo",
                     //buttonclick replaces the assignment with a placeholder that just contains the assignemnt ID
                     buttonClick: () => {
 						//gets index for splicing and comparing
