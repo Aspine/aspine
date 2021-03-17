@@ -787,8 +787,9 @@ function responseCallback(response, includedTerms) {
         showModal("import");
         return;
     }
-    if (response.recent.login_fail) {
-        location.href = "/logout?fail=1";
+    if (response.error) {
+        location.href = `/logout?error=${response.error}`;
+        return;
     }
 
     if (response.classes.length === 0) {

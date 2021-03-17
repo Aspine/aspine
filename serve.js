@@ -8,7 +8,7 @@ const fs = require('fs');
 const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
-const marked = require("marked");
+const marked = require('marked');
 
 const scraper = require('./js/scrape');
 const dep_mappings = require('./frontend-dependencies');
@@ -154,7 +154,7 @@ app.post('/data', async (req, res) => {
             ));
         } catch (e) {
             console.error(e);
-            res.send({ recent: { login_fail: true } });
+            res.send({ error: e.message });
         }
     }
 });
@@ -204,8 +204,9 @@ app.post('/login', async (req, res) => {
 
 app.get('/logout', async (req, res) => {
     req.session.destroy();
-    if (req.query.fail === '1')
-        res.redirect('/login?fail=1');
+    let err;
+    if ((err = req.query.error))
+        res.redirect(`/login?error=${err}`);
     else
         res.redirect('/login');
 });

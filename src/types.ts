@@ -32,3 +32,8 @@ export interface Category {
   weight: number;
   oid: string;
 }
+
+export enum AspineErrorCode {
+  LOGINFAIL = "loginfail",
+  ASPENDOWN = "aspendown",
+}
