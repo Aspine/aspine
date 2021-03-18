@@ -51,6 +51,10 @@ export async function get_student(
       if (!details.grades.has(quarter)) {
         return undefined;
       }
+      // exclude classes that don't recieve grades in Aspen
+      if (["Study Support", "Advisory", "Community Meeting", "PE Athletics", "PE 10-12 Wellness Elective"].includes(details.name)) {
+        return undefined;
+      }
 
       let categories: { [key: string]: string } = {};
       for (const [cat, { weight} ] of details.categories) {
