@@ -232,6 +232,28 @@ function get_period_name(default_name, day_of_week) {
         bs_day = document.getElementById("schedule_title").innerHTML
             .toLowerCase();
     }
+
+    if (default_name === "Study Support") {
+        // Number of period whose study support block is today
+        let block = 0;
+        switch (day_of_week) {
+            case 1:
+            case 2:
+                block = day_of_week;
+                break;
+            case 4:
+            case 5:
+                block = day_of_week - 1;
+                break;
+        }
+        for (const { name, period } of period_names[bs_day]) {
+            if (period.includes(block)) {
+                return name;
+            }
+        }
+        return default_name;
+    }
+
     // period_names has class names now
     for (const { name, period } of period_names[bs_day]) {
         if (period === default_name)
