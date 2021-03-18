@@ -16,3 +16,9 @@ if ((err = (new URLSearchParams(window.location.search)).get("error"))) {
     elem.textContent = message;
   }
 }
+
+// Remove vestiges of client-side "remember me" from localStorage
+window.addEventListener("load", () => {
+  localStorage.removeItem("username");
+  localStorage.removeItem("password");
+});
