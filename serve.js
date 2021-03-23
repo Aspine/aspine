@@ -108,9 +108,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
 app.use(session({
-    cookie: { maxAge: 28800000 },
-    store: new MemoryStore({ checkPeriod: 28800000 }),
-    // Sessions expire every 8 hours (28800000 ms)
+    // Sessions expire every 8 hours
+    cookie: { maxAge: 8 * 60 * 60 * 1000 },
+    // Check for expired sessions once per hour
+    store: new MemoryStore({ checkPeriod: 60 * 60 * 1000 }),
     resave: false,
     saveUninitialized: false,
     secret: crypto.randomBytes(64).toString('hex'),
@@ -195,6 +196,10 @@ app.post('/login', async (req, res) => {
     if (req.body.username && req.body.password) {
         req.session.username = req.body.username;
         req.session.password = req.body.password;
+        // Keep session for up to 30 days if "remember me" is enabled
+        if (req.body.rememberme) {
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+        }
     }
     else {
         req.session.nologin = true;
