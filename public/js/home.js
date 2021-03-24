@@ -43,17 +43,21 @@ var newAssignmentIDCounter = 0;
 // contains all the undo snackbars
 const undoData = []
 
-document.onkeydown = e => {
+window.addEventListener("keydown", e => {
     var evtobj = window.event || e
     if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoData.length !== 0) {
 		if (undoData[0].Snackbar !== undefined) {
 			undoData[0].Snackbar.destroy();
 			undoData[0].Snackbar = undefined;
 		}
-		replaceAssignmentFromID({assignment_id: undoData[0].assignment_id, placeholder: true}, undoData[0], undoData[0].selected_class_i);
+        replaceAssignmentFromID(
+            { assignment_id: undoData[0].assignment_id, placeholder: true },
+            undoData[0],
+            undoData[0].selected_class_i
+        );
 		undoData.shift();
     }
-}
+});
 
 
 let tempCell;
@@ -386,9 +390,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
-                    .assignments.filter(value => {
-                        return !(value["placeholder"] || false)
-                    })[cell.getRow().getPosition()].synthetic
+                    .assignments.filter(value =>
+                        !value["placeholder"]
+                    )[cell.getRow().getPosition()].synthetic
             ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
             width: 40,
             align: "center",
@@ -603,33 +607,53 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-
                 const data = cell.getRow().getData();
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
 
+                const undoSnackbar = new Snackbar(
+                    `You deleted ${data["name"]}`, {
+                        color: "var(--red1)",
+                        textColor: "var(--white)",
+                        buttonText: "Undo",
 
-                const undoSnackbar = new Snackbar(`You deleted ${data["name"]}`, {
-                    color: "var(--red1)",
-                    textColor: "var(--white)",
-                    buttonText: "Undo",
-                    //buttonclick replaces the assignment with a placeholder that just contains the assignemnt ID
-                    buttonClick: () => {
-						//gets index for splicing and comparing
-						index = undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id);
-						arrData = undoData[index]; //undo data at the index
-						arrData.Snackbar = undefined; //removes snackbar before putting data back
-						replaceAssignmentFromID({assignment_id: arrData.assignment_id, placeholder: true}, arrData, arrData.selected_class_i);
-						undoData.splice(index, 1);
-                    },
-                    timeout: 7500,
-					//on either a timeout or a bodyclick removes the snackbar link
-					timeoutFunction: () => undoData[undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id)].Snackbar = undefined,
-					bodyClick: () => undoData[undoData.map(arrData => arrData.assignment_id).indexOf(data.assignment_id)].Snackbar = undefined,
-                }).show();
+                        // Replace the assignment with a placeholder that just
+                        // contains the assignment ID
+                        buttonClick: () => {
+                            // Get index for splicing and comparing
+                            index = undoData.findIndex(a =>
+                                a.assignment_id === data.assignment_id);
+                            arrData = undoData[index];
+                            // Remove snackbar before putting data back
+                            arrData.Snackbar = undefined;
+                            replaceAssignmentFromID({
+                                assignment_id: arrData.assignment_id,
+                                placeholder: true,
+                            }, arrData, arrData.selected_class_i);
+                            undoData.splice(index, 1);
+                        },
+                        timeout: 7500,
 
-				data.Snackbar = undoSnackbar;
-				data.selected_class_i = selected_class_i;
-				undoData.unshift(data);
+                        // On either a timeout or a bodyclick removes the
+                        // snackbar link
+                        timeoutFunction: () => {
+                            undoData[
+                                undoData.map(arrData => arrData.assignment_id)
+                                .indexOf(data.assignment_id)
+                            ].Snackbar = undefined;
+                        },
+
+                        bodyClick: () => {
+                            undoData[
+                                undoData.map(arrData => arrData.assignment_id)
+                                .indexOf(data.assignment_id)
+                            ].Snackbar = undefined;
+                        },
+                    }
+                ).show();
+
+                data.Snackbar = undoSnackbar;
+                data.selected_class_i = selected_class_i;
+                undoData.unshift(data);
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"
