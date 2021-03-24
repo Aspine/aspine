@@ -43,6 +43,14 @@ function schedulesCallback(response) {
     redraw_clock_with_timestamp();
 }
 
+// Takes a time from schedule.json and formats it to hours:minutes
+function formatTime(time) {
+    let minutes = time / 60000;
+    let hours = Math.floor(minutes / 60);
+    minutes = minutes - (hours * 60);
+    return (hours % 12 === 0 ? 12 : hours % 12) + ":" + (minutes < 10 ? "0" + minutes : minutes);
+}
+
 function update_formattedSchedule() {
     if (selected_day_of_week < 0) {
         const now = date_override ? new Date(date_override) : new Date();
@@ -54,9 +62,13 @@ function update_formattedSchedule() {
 
     currentTableData.formattedSchedule = schedules[current_schedule]
         .map(({ name }, i) => {
-            let room = "";
+            let room, time = "";
             let class_name = get_period_name(name, day_of_week);
             for (entry of currentTableData.schedule[bs_day]) {
+                time = schedules[current_schedule][i].name !== "After School" ? 
+                    formatTime(schedules[current_schedule][i].start) + "-" + 
+                    formatTime(schedules[current_schedule][i].end) : formatTime
+                    (schedules[current_schedule][i].start);
                 if (entry.class.startsWith(class_name)) {
                     class_name = entry.class;
                     room = entry.room;
@@ -76,6 +88,7 @@ function update_formattedSchedule() {
             return {
                 period: name,
                 room: room,
+                time: time,
                 class: class_name,
                 color: color,
             };

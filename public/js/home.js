@@ -605,6 +605,12 @@ let scheduleTable = new Tabulator("#scheduleTable", {
             formatter: "html",
         },
         {
+            title: "Time",
+            field: "time",
+            width: 150,
+            headerSort: false,
+        },
+        {
             title: "Room",
             field: "room",
             width: 150,
@@ -613,6 +619,7 @@ let scheduleTable = new Tabulator("#scheduleTable", {
         {
             title: "Class",
             field: "class",
+            width: 400,
             headerSort: false,
             formatter: "html",
         },
