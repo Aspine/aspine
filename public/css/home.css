@@ -62,6 +62,7 @@ body {
   --purple: #e9a1ff;
 
   --orange: #f6b93b;
+  --orange1: #ff6b00;
 
   --red: #ff0000;
   --red1: #a70000;
@@ -105,6 +106,7 @@ body.dark {
   --purple: #e9a1ff;
 
   --orange: #f6b93b;
+  --orange1: #ff6b00;
 
   --red: #ff0000;
   --red1: #ff8585;
