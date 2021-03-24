@@ -61,20 +61,20 @@ function update_formattedSchedule() {
     const bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
 
     currentTableData.formattedSchedule = schedules[current_schedule]
-        .map(({ name }, i) => {
-            let room, time = "";
+        .map(({ name, start, end }, i) => {
+            let room = "";
             let class_name = get_period_name(name, day_of_week);
             for (entry of currentTableData.schedule[bs_day]) {
-                time = schedules[current_schedule][i].name !== "After School" ? 
-                    formatTime(schedules[current_schedule][i].start) + "-" + 
-                    formatTime(schedules[current_schedule][i].end) : formatTime
-                    (schedules[current_schedule][i].start);
                 if (entry.class.startsWith(class_name)) {
                     class_name = entry.class;
                     room = entry.room;
                     break;
                 }
             }
+
+            let time = formatTime(start);
+            if (name !== "After School")
+                time += "-" + formatTime(end);
 
             // The index (1 to 8) of the color to use for this class
             const color_number = i < 8 ? i + 1 : 8;
