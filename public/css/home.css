@@ -52,6 +52,7 @@ body {
 
   --black: #000000;
   --transparent-black: rgba(0, 0, 0, 0.6);
+  --transparent-black-lite: rgba(0, 0, 0, 0.2);
 
   --blue: #2196F3;
   --blue1: #9ebcea;
@@ -63,6 +64,7 @@ body {
   --orange: #f6b93b;
 
   --red: #ff0000;
+  --red1: #a70000;
 
   --schedule1: #63c082;
   --schedule2: #72c68e;
@@ -105,6 +107,7 @@ body.dark {
   --orange: #f6b93b;
 
   --red: #ff0000;
+  --red1: #ff8585;
 
   --schedule1: #00290e;
   --schedule2: #003d14;
@@ -1339,4 +1342,76 @@ hr {
 
 #more-versions a {
   font-size: 120%;
+}
+
+.snackbar {
+  display: flex;
+  height: 44px;
+  width: auto;
+  max-width: calc(100% - 30px);
+  background-color: var(--gray);
+  position: fixed;
+  left: 0;
+  bottom: 10px;
+  margin: 0px 15px;
+  box-shadow: 2px 2px 5px var(--transparent-black);
+
+  transform: translateY(0px);
+  transition: transform 250ms;
+}
+
+.snackbar.hidden {
+  transform: translateY(54px);
+  transition: transform 250ms;
+}
+
+.snackbar button {
+  height: 32px;
+  margin: 6px 6px 6px 3px;
+  position: relative;
+  border: none;
+  background-color: var(--gray);
+  cursor: pointer;
+  white-space: nowrap;
+  order: 2;
+}
+
+.snackbar button::before {
+  content: '';
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color:var(--transparent-black-lite);
+  z-index: 1;
+  opacity: 0;
+
+  transition: opacity 100ms ease-in;
+}
+
+.snackbar button:hover::before {
+  opacity: 1;
+}
+
+.snackbar button:focus {
+  outline: none;
+}
+
+.snackbar span {
+  width: auto;
+  vertical-align: middle;
+  line-height: 44px;
+  padding: 0px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  order: 1;
+}
+
+.snackbar button span {
+  line-height: 32px;
+  font-weight: normal;
+  font-size: 16px;
+  font-family: 'Poppins-Regular';
 }

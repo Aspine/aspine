@@ -36,6 +36,30 @@ let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
+// Counter for creating new assignments
+var newAssignmentIDCounter = 0;
+
+// Registry for undos, contains assignment ID and the snackbar that corresponds to it
+// contains all the undo snackbars
+const undoData = []
+
+window.addEventListener("keydown", e => {
+    var evtobj = window.event || e
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoData.length !== 0) {
+		if (undoData[0].Snackbar !== undefined) {
+			undoData[0].Snackbar.destroy();
+			undoData[0].Snackbar = undefined;
+		}
+        replaceAssignmentFromID(
+            { assignment_id: undoData[0].assignment_id, placeholder: true },
+            undoData[0],
+            undoData[0].selected_class_i
+        );
+		undoData.shift();
+    }
+});
+
+
 let tempCell;
 // When the user clicks anywhere outside of a modal or dropdown, close it
 window.addEventListener("click", function(event) {
@@ -366,7 +390,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 isNaN(cell.getRow().getData().score)
                 || currentTableData.currentTermData
                     .classes[selected_class_i]
-                    .assignments[cell.getRow().getPosition()].synthetic
+                    .assignments.filter(value =>
+                        !value["placeholder"]
+                    )[cell.getRow().getPosition()].synthetic
             ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
             width: 40,
             align: "center",
@@ -581,7 +607,53 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             width: 40,
             align: "center",
             cellClick: function(e, cell) {
-                cell.getRow().delete();
+                const data = cell.getRow().getData();
+                replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
+
+                const undoSnackbar = new Snackbar(
+                    `You deleted ${data["name"]}`, {
+                        color: "var(--red1)",
+                        textColor: "var(--white)",
+                        buttonText: "Undo",
+
+                        // Replace the assignment with a placeholder that just
+                        // contains the assignment ID
+                        buttonClick: () => {
+                            // Get index for splicing and comparing
+                            index = undoData.findIndex(a =>
+                                a.assignment_id === data.assignment_id);
+                            arrData = undoData[index];
+                            // Remove snackbar before putting data back
+                            arrData.Snackbar = undefined;
+                            replaceAssignmentFromID({
+                                assignment_id: arrData.assignment_id,
+                                placeholder: true,
+                            }, arrData, arrData.selected_class_i);
+                            undoData.splice(index, 1);
+                        },
+                        timeout: 7500,
+
+                        // On either a timeout or a bodyclick removes the
+                        // snackbar link
+                        timeoutFunction: () => {
+                            undoData[
+                                undoData.map(arrData => arrData.assignment_id)
+                                .indexOf(data.assignment_id)
+                            ].Snackbar = undefined;
+                        },
+
+                        bodyClick: () => {
+                            undoData[
+                                undoData.map(arrData => arrData.assignment_id)
+                                .indexOf(data.assignment_id)
+                            ].Snackbar = undefined;
+                        },
+                    }
+                ).show();
+
+                data.Snackbar = undoSnackbar;
+                data.selected_class_i = selected_class_i;
+                undoData.unshift(data);
             },
             headerSort: false,
             cssClass: "icon-col allow-overflow"

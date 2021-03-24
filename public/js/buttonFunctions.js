@@ -1,24 +1,46 @@
 let newAssignment = function() {
-
   currentTableData.currentTermData.classes[selected_class_i].edited = true;
 
   if (!isNaN(selected_class_i)) {
-
-    currentTableData.currentTermData.classes[selected_class_i].assignments.unshift({
-      "name": "Assignment",
-      "category": Object.keys(currentTableData.currentTermData.classes[selected_class_i].categories)[currentFilterRow >= 0 ? currentFilterRow : 0],
-      "score": 10,
-      "max_score": 10,
-      "percentage": 100,
-      "color": "green",
-      "synthetic": "true",
-    });
+    currentTableData.currentTermData.classes[selected_class_i].assignments
+      .unshift({
+        "assignment_id": newAssignmentIDCounter.toString(),
+        "name": "Assignment",
+        "category": Object.keys(
+          currentTableData.currentTermData.classes[selected_class_i].categories
+        )[currentFilterRow >= 0 ? currentFilterRow : 0],
+        "score": 10,
+        "max_score": 10,
+        "percentage": 100,
+        "color": "green",
+        "synthetic": "true",
+      });
+    newAssignmentIDCounter++;
 
     updateGradePage();
-
   }
 }
 
+function replaceAssignmentFromID(oldData, newData, classID) {
+  const assignments = currentTableData.currentTermData.classes[classID]
+    .assignments;
+
+  const index = assignments.findIndex(({ assignment_id }) =>
+    assignment_id === oldData.assignment_id
+  );
+  assignments[index] = newData;
+  updateGradePage();
+}
+
+function removeAssignmentFromID(id, classID) {
+  const assignments = currentTableData.currentTermData.classes[classID]
+    .assignments;
+  const newArray = assignments.filter(({ assignment_id }) =>
+    assignment_id !== id
+  );
+  assignments.length = 0;
+  assignments.push(...newArray);
+}
 
 let editAssignment = function(data) {
 
@@ -128,7 +150,10 @@ let updateGradePage = function() {
   classesTable.replaceData(currentTableData.currentTermData.classes);
   categoriesTable.setData(currentTableData.currentTermData.classes[selected_class_i].categoryDisplay);
 
-  assignmentsTable.replaceData(currentTableData.currentTermData.classes[selected_class_i].assignments);
+  assignmentsTable.replaceData(currentTableData.currentTermData
+    .classes[selected_class_i].assignments
+    .filter(({ placeholder }) => !placeholder)
+  );
 
   currentTableData.currentTermData.calcGPA = computeGPA(currentTableData.currentTermData.classes);
   currentTableData.terms[currentTerm].calcGPA = computeGPA(currentTableData.currentTermData.classes);
@@ -281,6 +306,8 @@ let updateGradePage = function() {
     $(".gpa_select-selected").html("Quarter GPA: " + GPA.percent);
     $("#" + currentTerm).html("Quarter GPA: " + GPA.percent);
   }
+
+  setup_tooltips();
 }
 
 let exportTableData = async function(prefs) {
