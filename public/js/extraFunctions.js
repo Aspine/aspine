@@ -226,6 +226,8 @@ function getColor(gradeToBeColored) {
     return "var(--blue)";
   } else if (parseFloat(gradeToBeColored) >= 69.5) {
     return "var(--orange)";
+  } else if (parseFloat(gradeToBeColored) >= 59.5) {
+    return "var(--orange1)";
   } else if (parseFloat(gradeToBeColored) >= 0) {
     return "var(--red)";
   } else {
