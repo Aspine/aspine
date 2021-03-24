@@ -43,6 +43,16 @@ function schedulesCallback(response) {
     redraw_clock_with_timestamp();
 }
 
+// Takes a time from schedule.json and formats it as a string
+function formatTime(time) {
+    const hours = Math.floor(time / 1000 / 60 / 60);
+    const minutes = time / 1000 / 60 % 60;
+    return new Date(2000, 1, 1, hours, minutes).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "numeric",
+    });
+}
+
 function update_formattedSchedule() {
     if (selected_day_of_week < 0) {
         const now = date_override ? new Date(date_override) : new Date();
@@ -53,7 +63,7 @@ function update_formattedSchedule() {
     const bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
 
     currentTableData.formattedSchedule = schedules[current_schedule]
-        .map(({ name }, i) => {
+        .map(({ name, start, end }, i) => {
             let room = "";
             let class_name = get_period_name(name, day_of_week);
             for (entry of currentTableData.schedule[bs_day]) {
@@ -63,6 +73,10 @@ function update_formattedSchedule() {
                     break;
                 }
             }
+
+            let time = formatTime(start);
+            if (name !== "After School")
+                time += "–" + formatTime(end);
 
             // The index (1 to 8) of the color to use for this class
             const color_number = i < 8 ? i + 1 : 8;
@@ -76,6 +90,7 @@ function update_formattedSchedule() {
             return {
                 period: name,
                 room: room,
+                time: time,
                 class: class_name,
                 color: color,
             };
