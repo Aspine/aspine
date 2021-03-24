@@ -12,7 +12,7 @@ let newAssignment = function() {
         "score": 10,
         "max_score": 10,
         "percentage": 100,
-        "color": "green",
+        "color": "var(--green)",
         "synthetic": "true",
       });
     newAssignmentIDCounter++;
