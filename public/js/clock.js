@@ -43,12 +43,14 @@ function schedulesCallback(response) {
     redraw_clock_with_timestamp();
 }
 
-// Takes a time from schedule.json and formats it to hours:minutes
+// Takes a time from schedule.json and formats it as a string
 function formatTime(time) {
-    let minutes = time / 60000;
-    let hours = Math.floor(minutes / 60);
-    minutes = minutes - (hours * 60);
-    return (hours % 12 === 0 ? 12 : hours % 12) + ":" + (minutes < 10 ? "0" + minutes : minutes);
+    const hours = Math.floor(time / 1000 / 60 / 60);
+    const minutes = time / 1000 / 60 % 60;
+    return new Date(2000, 1, 1, hours, minutes).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "numeric",
+    });
 }
 
 function update_formattedSchedule() {
@@ -74,7 +76,7 @@ function update_formattedSchedule() {
 
             let time = formatTime(start);
             if (name !== "After School")
-                time += "-" + formatTime(end);
+                time += "–" + formatTime(end);
 
             // The index (1 to 8) of the color to use for this class
             const color_number = i < 8 ? i + 1 : 8;
