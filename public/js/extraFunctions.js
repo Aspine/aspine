@@ -221,17 +221,15 @@ function getColor(gradeToBeColored) {
   }
 
   if (parseFloat(gradeToBeColored) >= 89.5) {
-    return "#1E8541";
+    return "var(--green1)";
   } else if (parseFloat(gradeToBeColored) >= 79.5) {
-    return "#6666FF";
+    return "var(--blue)";
   } else if (parseFloat(gradeToBeColored) >= 69.5) {
-    return "#ff9900";
-  } else if (parseFloat(gradeToBeColored) >= 59.5) {
-    return "orange";
+    return "var(--orange)";
   } else if (parseFloat(gradeToBeColored) >= 0) {
-    return "red";
+    return "var(--red)";
   } else {
-    return "black";
+    return "var(--black)";
   }
 }
 
