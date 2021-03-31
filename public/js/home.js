@@ -611,7 +611,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 replaceAssignmentFromID(data, {assignment_id: data["assignment_id"], placeholder: true}, selected_class_i);
 
                 const undoSnackbar = new Snackbar(
-                    `You deleted ${data["name"]}`, {
+                    `You deleted "${data["name"]}"`, {
                         color: "var(--red1)",
                         textColor: "var(--white)",
                         buttonText: "Undo",
