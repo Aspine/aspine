@@ -23,7 +23,7 @@
   "repository": "github:Aspine/aspine",
   "scripts": {
     "start": "tsc && node serve.js",
-    "build-lite": "bash build-lite.sh",
+    "build-lite": "node build-lite.js",
     "gen-key": "bash gen-key.sh",
     "tsc": "tsc",
     "scrape": "tsc && node -r dotenv/config js/scrape.js"
