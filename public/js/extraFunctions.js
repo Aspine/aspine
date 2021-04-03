@@ -918,7 +918,7 @@ let listener = function(event) {
           $.ajax({
             url: "/data",
             method: "POST",
-            data: { quarter: (i - 1) },
+            data: { quarter: i - 1, year: "current" },
             dataType: "json json",
             success: responseCallbackPartial
           });
@@ -1060,21 +1060,31 @@ let setup_quarter_dropdown = function() {
   document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
 
   $(".gpa_select-items").children().each(function(i, elem) {
-      if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
-          if (i === 0) {
-              $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
-              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-          } else {
-              if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
-                  $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
-                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent;
-              } else {
-                  $(this).append("Q" + i + " GPA: None");
-                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None";
-              }
-          }
-      }
+    // Don't try to get quarter data for the 5th element in the list because
+    // that's not a quarter...
+    if (i === 5) return;
+    if (i === 0) {
+      this.textContent = `Current Quarter GPA: ${
+        currentTableData.terms["current"].GPA.percent
+      }`;
+      document.getElementById('gpa_select').options[0].textContent
+        = document.getElementById('gpa_select').options[1].textContent
+        = `Current Quarter GPA: ${
+          currentTableData.terms["current"].GPA.percent
+        }`;
+    } else if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
+      this.textContent = `Q${i} GPA: ${
+        currentTableData.terms["q" + i].GPA.percent
+      }`;
+      document.getElementById('gpa_select').options[i + 1].textContent
+        = `Q${i} GPA: ${
+          currentTableData.terms["q" + i].GPA.percent
+        }`;
+    } else {
+      this.textContent = `Q${i} GPA: None`;
+      document.getElementById('gpa_select').options[i + 1].textContent
+        = `Q${i} GPA: None`;
+    }
   });
 };
 

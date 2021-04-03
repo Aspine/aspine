@@ -162,7 +162,7 @@ app.post('/data', async (req, res) => {
         try {
             res.send(await scraper.get_student(
                 req.session.username, req.session.password,
-                parseInt(req.body.quarter)
+                parseInt(req.body.quarter), req.body.year
             ));
         } catch (e) {
             console.error(e);

@@ -29,7 +29,10 @@ let currentTerm = "current";
  *  @property {"current" | "previous" | "imported"} [type]
  */
 /** @type {TableDataObject[]}*/
-let tableData = [{ name: "Current Year", type: "current" }];
+let tableData = [
+    { name: "Current Year", type: "current" },
+    { name: "Previous Year", type: "previous" },
+];
 let currentTableDataIndex = 0;
 /**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];
@@ -1308,7 +1311,7 @@ $("#import_button").click(async () => {
 $.ajax({
     url: "/data",
     method: "POST",
-    data: { quarter: 0 },
+    data: { quarter: 0, year: "current" },
     dataType: "json json",
 }).then(responseCallback);
 //#endif
