@@ -988,17 +988,18 @@ function responseCallback(response, includedTerms) {
         computeGPA(currentTableData.terms.current.classes);
 
     currentTableData.overview = response.overview;
-
-    currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
-
+    currentTableData.cumGPA =
+        response.cumGPA || cumGPA(currentTableData.overview);
     if (currentTableData.cumGPA.percent == NaN) {
         currentTableData.cumGPA.percent = "";
     }
-    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+    document.getElementById("cum_gpa").innerHTML =
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
-        currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview, i);
+        currentTableData.terms["q" + i].GPA =
+            computeGPAQuarter(currentTableData.overview, i);
     }
 
     //Stuff to do now that tableData is initialized
@@ -1044,6 +1045,21 @@ function responseCallbackPartial(response) {
     currentTableData.terms[currentTerm].GPA = temp_term_data.GPA;
     currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
     currentTableData.terms[currentTerm].quarter_oid = temp_term_data.quarter_oid;
+
+    currentTableData.overview = response.overview;
+    currentTableData.cumGPA =
+        response.cumGPA || cumGPA(currentTableData.overview);
+    if (currentTableData.cumGPA.percent == NaN) {
+        currentTableData.cumGPA.percent = "";
+    }
+    document.getElementById("cum_gpa").innerHTML =
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+
+    // Calculate GPA for each quarter
+    for (let i = 1; i <= 4; i++) {
+        currentTableData.terms["q" + i].GPA =
+            computeGPAQuarter(currentTableData.overview, i);
+    }
 
     /*
     if (currentTerm === 'current') {

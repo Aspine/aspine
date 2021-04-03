@@ -886,7 +886,7 @@ let initialize_pdf_dropdown = function() {
 
 }
 
-let listener = function(event) {
+let listener = function(event, callback = () => {}) {
   let _this = event.target;
   /* When an item is clicked, update the original select box,
   and the selected item: */
@@ -906,6 +906,20 @@ let listener = function(event) {
         if (i === 0) $("#mostRecentDiv").show();
         else $("#mostRecentDiv").hide();
 
+        if (typeof currentTableData.terms === 'undefined') {
+          currentTableData.terms = {
+            current: {},
+            q1: {},
+            q2: {},
+            q3: {},
+            q4: {},
+          };
+        }
+
+        if (typeof currentTableData.currentTermData === 'undefined') {
+          currentTableData.currentTermData = {};
+        }
+
         if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
           // if (anyEdited()) {
           // $(".gpa_select-selected").css('padding', "5px 16px 5px 16px");
@@ -915,12 +929,16 @@ let listener = function(event) {
 
           term_dropdown_active = false;
 
+          const year = currentTableDataIndex === 0 ? "current" : "previous";
           $.ajax({
             url: "/data",
             method: "POST",
-            data: { quarter: i - 1, year: "current" },
+            data: { quarter: i - 1, year: year },
             dataType: "json json",
-            success: responseCallbackPartial
+            success: response => {
+              responseCallbackPartial(response);
+              callback(response);
+            },
           });
 
           $("#loader").show();
@@ -929,12 +947,12 @@ let listener = function(event) {
           $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = _this.innerHTML;
+          y = _this.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          _this.setAttribute("class", "same-as-selected");
           break;
 
         } else {
@@ -958,12 +976,12 @@ let listener = function(event) {
           //categoriesTable.setData(tableData[i].categoryDisplay);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = _this.innerHTML;
+          y = _this.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          _this.setAttribute("class", "same-as-selected");
           break;
         }
       }
@@ -1054,38 +1072,42 @@ let initialize_quarter_dropdown = function(includedTerms) {
 };
 
 let setup_quarter_dropdown = function() {
-  $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-  $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-  document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
-  document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  // Set up "current quarter" entry
+  if (currentTableData.type === "previous") {
+    document.querySelector("#current").textContent
+      = document.querySelector("#gpa_select").options[0].textContent
+      = document.querySelector("#gpa_select").options[1].textContent
+      = "Current Quarter";
+  } else {
+    document.querySelector("#current").textContent
+      = document.querySelector("#gpa_select").options[0].textContent
+      = document.querySelector("#gpa_select").options[1].textContent
+      = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  }
 
   $(".gpa_select-items").children().each(function(i, elem) {
     // Don't try to get quarter data for the 5th element in the list because
     // that's not a quarter...
     if (i === 5) return;
-    if (i === 0) {
-      this.textContent = `Current Quarter GPA: ${
-        currentTableData.terms["current"].GPA.percent
-      }`;
-      document.getElementById('gpa_select').options[0].textContent
-        = document.getElementById('gpa_select').options[1].textContent
-        = `Current Quarter GPA: ${
-          currentTableData.terms["current"].GPA.percent
-        }`;
-    } else if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
-      this.textContent = `Q${i} GPA: ${
-        currentTableData.terms["q" + i].GPA.percent
-      }`;
-      document.getElementById('gpa_select').options[i + 1].textContent
-        = `Q${i} GPA: ${
-          currentTableData.terms["q" + i].GPA.percent
-        }`;
+    // We already set up the "current quarter"
+    if (i === 0) return;
+
+    if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
+      document.querySelector("#gpa_select").options[i + 1].textContent
+        = this.textContent
+        = `Q${i} GPA: ${currentTableData.terms["q" + i].GPA.percent}`;
     } else {
-      this.textContent = `Q${i} GPA: None`;
-      document.getElementById('gpa_select').options[i + 1].textContent
+      document.querySelector("#gpa_select").options[i + 1].textContent
+        = this.textContent
         = `Q${i} GPA: None`;
     }
   });
+
+  // Set text for currently selected quarter to be that of the corresponding
+  // option
+  document.querySelector(".gpa_select-selected").textContent
+    = document.querySelector("#gpa_select")
+      .options[termConverter.indexOf(currentTerm) + 1].textContent;
 };
 
 let tableData_option_onclick = function() {
@@ -1117,15 +1139,26 @@ let tableData_option_onclick = function() {
     }
   }
 
-  // Re-initialize the quarter dropdown with the data from
-  // currentTableData
-  initialize_quarter_dropdown()
-  setup_quarter_dropdown();
+  if (currentTableData.type === "previous") {
+    // Switch to Q1
+    // (because there is no "current quarter" in the previous year)
+    listener({ target: document.getElementById("q1") }, () => {
+      // Re-initialize the quarter dropdown with the data from
+      // currentTableData
+      // (this needs to be done *after* the data have been loaded)
+      initialize_quarter_dropdown();
+      setup_quarter_dropdown();
+    });
+    document.getElementsByClassName("gpa_select-selected")[0].click();
+  } else {
+    classesTable.setData(currentTableData.currentTermData.classes);
+    scheduleTable.setData(currentTableData.schedule.black);
 
-
-
-  classesTable.setData(currentTableData.currentTermData.classes);
-  scheduleTable.setData(currentTableData.schedule.black);
+    // Re-initialize the quarter dropdown with the data from
+    // currentTableData
+    initialize_quarter_dropdown();
+    setup_quarter_dropdown();
+  }
 
   // Reset clock
   period_names = {black:[], silver:[]};
@@ -1457,6 +1490,18 @@ let anyEdited = function() {
  * and not all of the terms' data have been put into currentTableData)
  */
 let isAccessible = function(term, includedTerms) {
+  // For the previous year, all four quarters should be accessible
+  if (currentTableData.type === "previous") {
+    if (term.startsWith("q")) {
+      return { accessible: true, reason: "" };
+    } else {
+      return {
+        accessible: false,
+        reason: "There is no current quarter for the previous year.",
+      };
+    }
+  }
+
   // Always keep the current term as 'accessible', even if there are no grades
   // on Aspen
   if (term === "current") {
