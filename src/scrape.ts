@@ -26,16 +26,19 @@ import type {
 
 // Using `import type` with an enum disallows accessing the enum variants
 import { AspineErrorCode } from "./types";
-import { Quarter } from "./types-shared";
+import { Quarter, Year } from "./types-shared";
 
 export async function get_student(
-  username: string, password: string, quarter: Quarter = Quarter.Current
+  username: string, password: string, quarter: Quarter = Quarter.Current,
+  year: Year = Year.Current
 ): Promise<StudentData> {
   return await get_session(username, password, async session => {
     const { student_name, student_oid } = await get_student_info(session);
-    const quarter_oids = await get_quarter_oids(session);
+    const quarter_oids = await get_quarter_oids(session, year);
 
-    const academics = await get_academics(session, student_oid, quarter_oids);
+    const academics = await get_academics(
+      session, student_oid, quarter_oids, year
+    );
     const class_details = await Promise.all(academics.map(async class_info =>
       get_class_details(session, class_info)));
     const overview = assemble_overview(class_details);
@@ -100,7 +103,7 @@ export async function get_schedule(
   username: string, password: string
 ): Promise<Schedule> {
   return await get_session(username, password, async session => {
-    const current_quarter = await get_current_quarter(session);
+    const current_quarter = await get_current_quarter(session, Year.Current);
     const initial_page = await (await fetch(
       "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list", {
         headers: {
@@ -341,8 +344,14 @@ async function get_recent(session: Session): Promise<Recent> {
  * request to get the OID of one class.
  */
 async function get_current_quarter(
-  session: Session, class_info?: ClassInfo
+  session: Session, year: Year, class_info?: ClassInfo
 ): Promise<Quarter> {
+  // If not current year, the "current" quarter is undefined and we can just
+  // let it be Q1
+  if (year != Year.Current) {
+    return Quarter.Q1;
+  }
+
   let oid: string;
   if (class_info) {
     ({ oid } = class_info);
@@ -352,7 +361,7 @@ async function get_current_quarter(
       "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?fieldSetOid=fsnX2Cls++++++&" +
       new URLSearchParams({
         "selectedStudent": student_oid,
-        "customParams": "selectedYear|current;selectedTerm|all",
+        "customParams": `selectedYear|${year};selectedTerm|all`,
       }), {
         headers: {
           "Cookie": `JSESSIONID=${session.session_id}`,
@@ -407,7 +416,7 @@ async function get_student_info({ session_id }: Session): Promise<{
 }
 
 async function get_quarter_oids(
-  session: Session
+  session: Session, year: Year
 ): Promise<Map<Quarter, string>> {
   const mapping = new Map<Quarter, string>();
   const terms: { gradeTermId: string, oid: string }[] = await (await fetch(
@@ -425,7 +434,7 @@ async function get_quarter_oids(
     }
   }
   mapping.set(Quarter.Current,
-    mapping.get(await get_current_quarter(session)) || "current");
+    mapping.get(await get_current_quarter(session, year)) || "current");
   return mapping;
 }
 
@@ -434,13 +443,13 @@ async function get_quarter_oids(
  */
 async function get_academics(
   { session_id }: Session, student_oid: string,
-  quarter_oids: Map<Quarter, string>
+  quarter_oids: Map<Quarter, string>, year: Year
 ): Promise<ClassInfo[]> {
   const get_classes = async (quarter_oid: string) => await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?fieldSetOid=fsnX2Cls++++++&" +
     new URLSearchParams({
       "selectedStudent": student_oid,
-      "customParams": `selectedYear|current;selectedTerm|${quarter_oid}`,
+      "customParams": `selectedYear|${year};selectedTerm|${quarter_oid}`,
     }), {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
@@ -736,7 +745,9 @@ async function get_session<T>(
 
 // Code for testing purposes
 if (require.main === module) {
-  get_student(process.env.USERNAME || "", process.env.PASSWORD || "", 1).then(
+  get_student(
+    process.env.USERNAME || "", process.env.PASSWORD || "", 1, Year.Previous
+  ).then(
     console.log, e => {
       if (e.message === AspineErrorCode.LOGINFAIL) {
         console.error(`Error: ${e.message}`);

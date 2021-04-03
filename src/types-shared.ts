@@ -97,3 +97,8 @@ export enum Quarter {
   Q3,
   Q4,
 }
+
+export enum Year {
+  Current = "current",
+  Previous = "previous",
+}
