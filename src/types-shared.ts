@@ -31,7 +31,7 @@ export interface Assignment {
 export interface OverviewItem {
   class: string;
   teacher: string;
-  term: string;
+  term: TermSpec;
   q1: string;
   q2: string;
   q3: string;
@@ -102,3 +102,7 @@ export enum Year {
   Current = "current",
   Previous = "previous",
 }
+
+// TODO support week specifiers (W1 to W14) which may be used for RSTA
+// Exploratory; use Aspen schedule to find mapping
+export type TermSpec = "FY" | "S1" | "S2" | "Q1" | "Q2" | "Q3" | "Q4";

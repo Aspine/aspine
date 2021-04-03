@@ -8,7 +8,6 @@ import type {
   ClassInfo,
   ClassDetails,
   Category,
-  TermSpec,
 } from "./types";
 
 import type {
@@ -23,6 +22,7 @@ import type {
   AttendanceEvent,
   ActivityEvent,
   Stats,
+  TermSpec,
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
@@ -59,7 +59,7 @@ export async function get_student(
       // For previous-year data, every class is listed under every quarter, so
       // we need to do an additional check using the "term" attribute
       if (year !== Year.Current && !await match_termspec(
-        session, details.term as TermSpec, quarter, year
+        session, details.term, quarter, year
       )) {
         return undefined;
       }
