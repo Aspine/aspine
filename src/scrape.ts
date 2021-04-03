@@ -8,6 +8,7 @@ import type {
   ClassInfo,
   ClassDetails,
   Category,
+  TermSpec,
 } from "./types";
 
 import type {
@@ -49,11 +50,20 @@ export async function get_student(
     const isClass = function(x: Class | undefined): x is Class {
       return x !== undefined;
     };
-    const classes = class_details.map((details, i) => {
+    const classes = (await Promise.all(class_details.map(async (details, i) => {
       // Don't include a class if it does not exist in this quarter
       if (!details.grades.has(quarter)) {
         return undefined;
       }
+
+      // For previous-year data, every class is listed under every quarter, so
+      // we need to do an additional check using the "term" attribute
+      if (year !== Year.Current && !await match_termspec(
+        session, details.term as TermSpec, quarter, year
+      )) {
+        return undefined;
+      }
+
       // exclude classes that don't recieve grades in Aspen
       if ([
         "Study Support", "Advisory", "Community Meeting", "PE Athletics",
@@ -73,7 +83,7 @@ export async function get_student(
         assignments: assignments[i],
         oid: details.oid,
       };
-    }).filter(isClass);
+    }))).filter(isClass);
     const quarter_oid = quarter_oids.get(quarter) || "current";
 
     return { classes, recent, overview, username, quarter, quarter_oid };
@@ -670,6 +680,37 @@ async function download_pdf(
       },
     }
   )).buffer()).toString("binary");
+}
+
+/**
+ * Check if a quarter (e.g., Quarter.Q1) matches a term specification (e.g.,
+ * "S1")
+ */
+async function match_termspec(
+  session: Session, termspec: TermSpec, quarter: Quarter, year: Year
+): Promise<boolean> {
+  // Make sure that `quarter` is Q1, Q2, Q3, or Q4 and not Current
+  if (quarter === Quarter.Current) {
+    quarter = await get_current_quarter(session, year);
+  }
+  switch (termspec) {
+    case "FY":
+      return true;
+    case "S1":
+      return [Quarter.Q1, Quarter.Q2].includes(quarter);
+    case "S2":
+      return [Quarter.Q3, Quarter.Q4].includes(quarter);
+    case "Q1":
+      return quarter === Quarter.Q1;
+    case "Q2":
+      return quarter === Quarter.Q2;
+    case "Q3":
+      return quarter === Quarter.Q3;
+    case "Q4":
+      return quarter === Quarter.Q4;
+    default: // Fallback in case Aspen gives some other termspec
+      return true;
+  }
 }
 
 /**

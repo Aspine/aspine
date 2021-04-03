@@ -33,6 +33,10 @@ export interface Category {
   oid: string;
 }
 
+// TODO support week specifiers (W1 to W14) which may be used for RSTA
+// Exploratory; use Aspen schedule to find mapping
+export type TermSpec = "FY" | "S1" | "S2" | "Q1" | "Q2" | "Q3" | "Q4";
+
 export enum AspineErrorCode {
   LOGINFAIL = "loginfail",
   ASPENDOWN = "aspendown",
