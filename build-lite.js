@@ -6,6 +6,7 @@ const readline = require("readline");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const marked = require("marked");
+const TOML = require("@iarna/toml");
 
 const dep_mappings = require('./frontend-dependencies');
 
@@ -125,6 +126,13 @@ async function processJS(file) {
           (await fsp.readFile(__dirname + '/CHANGELOG.md')).toString()
         );
         await out.write(JSON.stringify(changelog) + "\n");
+        continue;
+      }
+      if (line === "//#include SCHEDULE") {
+        const schedule = TOML.parse(
+          await fsp.readFile(__dirname + '/public/schedule.toml')
+        );
+        await out.write(JSON.stringify(schedule) + "\n");
         continue;
       }
       // All other include directives
