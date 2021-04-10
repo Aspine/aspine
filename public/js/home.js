@@ -429,6 +429,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                             .classes[selected_class_i].oid,
                         quarter_id: currentTableData.currentTermData
                             .quarter_oid,
+                        year: currentTableData.type,
                     },
                 });
                 if ([high, low, median, mean].some(x => x === undefined)) {

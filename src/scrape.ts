@@ -191,7 +191,7 @@ export async function get_schedule(
 
 export async function get_stats(
   username: string, password: string, assignment_id: string, class_id: string,
-  quarter_id: string
+  quarter_id: string, year: Year
 ): Promise<Stats | {}> {
   return await get_session(username, password, async ({ session_id }) => {
     // The REST API does not expose assignment statistics (as far as we know),
@@ -224,6 +224,7 @@ export async function get_stats(
         "org.apache.struts.taglib.html.TOKEN": apache_token,
         "userEvent": "950",
         "termFilter": quarter_id,
+        "yearFilter": year,
       }),
     });
 

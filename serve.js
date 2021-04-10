@@ -131,12 +131,12 @@ app.use(session({
 }));
 
 app.post('/stats', async (req, res) => {
-    console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id} \n------------------`);
+    console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id}, ${req.body.year} \n------------------`);
 
     try {
         res.send(await scraper.get_stats(
             req.session.username, req.session.password, req.body.assignment_id,
-            req.body.class_id, req.body.quarter_id
+            req.body.class_id, req.body.quarter_id, req.body.year
         ));
     } catch (e) {
         console.error(e);
