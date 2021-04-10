@@ -1,8 +1,7 @@
 // State
 
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
-let pdf_index = 0;
-let pdfrendering = false;
+
 let modals = {
     "stats": document.getElementById('stats_modal'),
     "corrections": document.getElementById('corrections_modal'),
@@ -1104,18 +1103,7 @@ function scheduleCallback(response) {
     redraw_clock();
 }
 
-function pdfCallback(response) {
-    $("#loader").hide();
-    // console.log(response);
-    currentTableData.pdf_files = response;
 
-    initialize_pdf_dropdown();
-    $("#pdf_loading_text").hide();
-
-    if (typeof currentTableData.pdf_files !== 'undefined') {
-        generate_pdf(pdf_index);
-    }
-}
 // Currently no need for toggle; there are no recent assignments
 /*
 function recent_toggle() {
@@ -1192,33 +1180,7 @@ function openTab(evt, tab_name) {
     }
 
     if (tab_name === "reports") {
-        if (!currentTableData.pdf_files) {
-            $("#loader").show();
-            //sets the margins for the pdf viewer
-            setup_tooltips();
-            $.ajax({
-                url: "/pdf",
-                method: "POST",
-                dataType: "json json",
-                success: pdfCallback
-            });
-        } else if (typeof currentTableData.pdf_files !== 'undefined') {
-            generate_pdf(pdf_index);
-        }
-        // Redraw PDF to fit new viewport dimensions when transitioning
-        // in or out of fullscreen
-        let elem = document.getElementById("reports");
-        let handlefullscreenchange = function() {
-            console.log("fullscreen change");
-            window.setTimeout(generate_pdf(currentPdfIndex), 1000);
-        };
-        if (elem.onfullscreenchange !== undefined) {
-            elem.onfullscreenchange = handlefullscreenchange;
-        } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
-            elem.mozonfullscreenchange = handlefullscreenchange;
-        } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
-            elem.MSonfullscreenchange = handlefullscreenchange;
-        }
+        main_pdf();
     }
 
     if (tab_name === "schedule" && !currentTableData.schedule) {
