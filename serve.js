@@ -37,22 +37,26 @@ if (process.env.NODE_ENV === "production") {
     );
 } else {
     program.option('-s, --secure', 'secure connections with TLS (HTTPS)');
-    program.option('-d, --dev', 'HTTPS designed to work with the gen-key script to make self signed certs');
+    program.option('-d, --dev',
+        'HTTPS designed to work with the gen-key script to make self signed '
+        + 'certs'
+    );
     program.option('-i, --no-secure, --insecure',
         'do not secure connections with TLS (HTTPS) [default for development]'
     );
 }
 
 program.parse();
+const options = program.opts();
 
 // ------------ Web Server -------------------
 const app = express();
 app.use(compression());
-app.listen(program.port, () =>
-    console.log(`Aspine listening on port ${program.port}!`)
+app.listen(options.port, () =>
+    console.log(`Aspine listening on port ${options.port}!`)
 );
 
-if (program.secure || program.dev) {
+if (options.secure || options.dev) {
     app.all('*', (req, res, next) => {
         if (req.secure) {
             return next();
@@ -61,7 +65,7 @@ if (program.secure || program.dev) {
         res.redirect('https://' + req.hostname + req.url);
     }); // at top of routing calls
 
-    const credentials = program.dev ? {
+    const credentials = options.dev ? {
         key: fs.readFileSync('local.key', 'utf8'),
         cert: fs.readFileSync('local.crt', 'utf8'),
         ca: fs.readFileSync('local.csr', 'utf8'),
@@ -71,8 +75,8 @@ if (program.secure || program.dev) {
         ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
     };
 
-    https.createServer(credentials, app).listen(program.portHttps, () =>
-        console.log(`HTTPS Server running on port ${program.portHttps}`)
+    https.createServer(credentials, app).listen(options.portHttps, () =>
+        console.log(`HTTPS Server running on port ${options.portHttps}`)
     );
 }
 
