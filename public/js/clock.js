@@ -29,6 +29,18 @@ let date_override = undefined;
 
 function schedulesCallback(response) {
     schedules = response;
+    // Convert all start and end times to JavaScript Date objects
+    for (const [, schedule] of Object.entries(schedules)) {
+        for (entry of schedule) {
+            const regexp = /(\d+):(\d+):(\d+)\.(\d+)/;
+            // Convert each entry to a JavaScript Date object
+            // (get hours, minutes, seconds, milliseconds)
+            entry.start = new Date(2000, 0, 1,
+                ...regexp.exec(entry.start).slice(1));
+            entry.end = new Date(2000, 0, 1,
+                ...regexp.exec(entry.end).slice(1));
+        }
+    }
 
     let last_interval = 0;
     const redraw_clock_with_timestamp = timestamp => {
@@ -41,16 +53,6 @@ function schedulesCallback(response) {
     }
 
     redraw_clock_with_timestamp();
-}
-
-// Takes a time from schedule.json and formats it as a string
-function formatTime(time) {
-    const hours = Math.floor(time / 1000 / 60 / 60);
-    const minutes = time / 1000 / 60 % 60;
-    return new Date(2000, 1, 1, hours, minutes).toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "numeric",
-    });
 }
 
 function update_formattedSchedule() {
@@ -74,9 +76,16 @@ function update_formattedSchedule() {
                 }
             }
 
-            let time = formatTime(start);
-            if (name !== "After School")
-                time += "–" + formatTime(end);
+            let timeString = start.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "numeric",
+            });
+            if (name !== "After School") {
+                timeString += "–" + end.toLocaleTimeString([], {
+                    hour: "numeric",
+                    minute: "numeric",
+                });
+            }
 
             // The index (1 to 8) of the color to use for this class
             const color_number = i < 8 ? i + 1 : 8;
@@ -90,7 +99,7 @@ function update_formattedSchedule() {
             return {
                 period: name,
                 room: room,
-                time: time,
+                time: timeString,
                 class: class_name,
                 color: color,
             };
@@ -106,7 +115,7 @@ $.ajax({
 //#ifdef lite
 /*
 schedulesCallback(
-//#include public/schedule.json
+//#include SCHEDULE
 );
 */
 //#endif
@@ -129,33 +138,23 @@ function drawFace(ctx, radius) {
     ctx.drawImage(logo, -radius, -radius, 2 * radius, 2 * radius);
 }
 
-function drawNumber(ctx, radius, pos, number) {
+function drawTime(ctx, radius, pos, time) {
     ctx.fillStyle = 'white';
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     ctx.font = "85px arial";
-    // Get time in seconds
-    let time = number / 1000;
-    // Get first and second digit
 
-    // hours
-    let d1 = Math.floor(time / 60 / 60);
-    // minutes
-    let d2 = Math.floor(time / 60 % 60);
-    // seconds
-    let d3 = Math.floor(time % 60);
-
-    if(d1 < 10) {
-        d1 = `0${d1}`;
-    }
-    if(d2 < 10) {
-        d2 = `0${d2}`;
-    }
-    if(d3 < 10) {
-        d3 = `0${d3}`;
-    }
-
-    ctx.fillText(`${d1}:${d2}:${d3}`, 0, 0);
+    // Use 12-hour time without AM/PM
+    const hours = String.prototype.padStart.call(
+        time.getHours() % 12, 2, "0"
+    );
+    const minutes = String.prototype.padStart.call(
+        time.getMinutes(), 2, "0"
+    );
+    const seconds = String.prototype.padStart.call(
+        time.getSeconds(), 2, "0"
+    );
+    ctx.fillText(`${hours}:${minutes}:${seconds}`, 0, 0);
 }
 
 function drawName(name) {
@@ -297,13 +296,12 @@ function redraw_clock() {
     }
     // Fake call to get_period_name to set current_schedule
     get_period_name("Period 1", day_of_week);
-    let number = 0;
+    // Time to show on clock
+    let time = new Date(2000, 0, 1, 0, 0, 0, 0);
     let period_name = "";
     // Time of day
-    const tod = now.getHours() * 60 * 60 * 1000
-        + now.getMinutes() * 60 * 1000
-        + now.getSeconds() * 1000
-        + now.getMilliseconds();
+    const tod = new Date(2000, 0, 1, now.getHours(), now.getMinutes(),
+        now.getSeconds(), now.getMilliseconds());
     let pos;
     if (![0, 6].includes(now.getDay())) {
         // School day
@@ -321,30 +319,26 @@ function redraw_clock() {
             // Realtime
             period_name = "";
             pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
-            number = tod % (12 * 60 * 60 * 1000);
-            if (number < 1 * 60 * 60 * 1000) {
-                number += 12 * 60 * 60 * 1000;
-            }
-        }
-        else if (tod > current_period.end) { // Between classes
+            time = tod;
+        } else if (tod > current_period.end) { // Between classes
             period_name = get_period_name(current_period.name, day_of_week) +
             " ➡ " + get_period_name(next_period.name, day_of_week);
             pos = (tod - current_period.end) / (next_period.start - current_period.end);
-            number = next_period.start - tod;
-        }
-        else { // In class
+            time = new Date(
+                time.getTime() + next_period.start.getTime() - tod.getTime()
+            );
+        } else { // In class
             period_name = get_period_name(current_period.name, day_of_week);
             pos = (tod - current_period.start) / (current_period.end - current_period.start);
-            number = current_period.end - tod;
+            time = new Date(
+                time.getTime() + current_period.end.getTime() - tod.getTime()
+            );
         }
     } else {
         // Realtime
         period_name = "";
         pos = tod % (12 * 60 * 60 * 1000) / (12 * 60 * 60 * 1000);
-        number = tod % (12 * 60 * 60 * 1000);
-        if(number < 1 * 60 * 60 * 1000) {
-            number += 12 * 60 * 60 * 1000;
-        }
+        time = tod;
     }
 
     // conver 0-1 to 0-2pi
@@ -353,10 +347,10 @@ function redraw_clock() {
     drawFace(small_ctx, small_radius);
     drawName(period_name);
     drawHand(small_ctx, small_radius, pos, small_radius * .94, small_radius * .095);
-    drawNumber(small_ctx, small_radius, pos, number);
+    drawTime(small_ctx, small_radius, pos, time);
 
     drawFace(large_ctx, large_radius);
     drawName(period_name);
     drawHand(large_ctx, large_radius, pos, large_radius * .94, large_radius * .095);
-    drawNumber(large_ctx, large_radius, pos, number);
+    drawTime(large_ctx, large_radius, pos, time);
 }

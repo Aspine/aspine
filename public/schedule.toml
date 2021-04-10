@@ -1,0 +1,305 @@
+# Regular schedule
+# In effect until March 13, 2020
+[[regular]]
+name = "Before School"
+start = 06:45:00.000
+end = 07:45:00.000
+
+[[regular]]
+name = "Period 1"
+start = 08:05:00.000
+end = 09:25:00.000
+
+[[regular]]
+name = "CM/OTI"
+start = 09:29:00.000
+end = 09:44:00.000
+
+[[regular]]
+name = "Period 2"
+start = 09:48:00.000
+end = 11:08:00.000
+
+[[regular]]
+name = "Lunch A"
+start = 11:12:00.000
+end = 11:42:00.000
+
+[[regular]]
+name = "Lunch B"
+start = 11:54:00.000
+end = 12:24:00.000
+
+[[regular]]
+name = "Lunch C"
+start = 12:36:00.000
+end = 13:06:00.000
+
+[[regular]]
+name = "Period 4"
+start = 13:10:00.000
+end = 14:30:00.000
+
+[[regular]]
+name = "After School"
+start = 14:30:00.000
+end = 14:30:00.001
+
+# Lunch A variant
+[[regular]]
+name = "Before School"
+start = 06:45:00.000
+end = 07:45:00.000
+
+[[regular]]
+name = "Period 1"
+start = 08:05:00.000
+end = 09:25:00.000
+
+[[regular]]
+name = "CM/OTI"
+start = 09:29:00.000
+end = 09:44:00.000
+
+[[regular]]
+name = "Period 2"
+start = 09:48:00.000
+end = 11:08:00.000
+
+[[regular]]
+name = "Lunch"
+start = 11:12:00.000
+end = 11:42:00.000
+
+[[regular]]
+name = "Period 3"
+start = 11:46:00.000
+end = 13:06:00.000
+
+[[regular]]
+name = "Period 4"
+start = 13:10:00.000
+end = 14:30:00.000
+
+[[regular]]
+name = "After School"
+start = 14:30:00.000
+end = 14:30:00.001
+
+# Lunch B variant
+[[regular]]
+name = "Before School"
+start = 06:45:00.000
+end = 07:45:00.000
+
+[[regular]]
+name = "Period 1"
+start = 08:05:00.000
+end = 09:25:00.000
+
+[[regular]]
+name = "CM/OTI"
+start = 09:29:00.000
+end = 09:44:00.000
+
+[[regular]]
+name = "Period 2"
+start = 09:48:00.000
+end = 11:08:00.000
+
+[[regular]]
+name = "Period 3"
+start = 11:12:00.000
+end = 11:52:00.000
+
+[[regular]]
+name = "Lunch B"
+start = 11:54:00.000
+end = 12:24:00.000
+
+[[regular]]
+name = "Period 3"
+start = 12:26:00.000
+end = 13:06:00.000
+
+[[regular]]
+name = "Period 4"
+start = 13:10:00.000
+end = 14:30:00.000
+
+[[regular]]
+name = "After School"
+start = 14:30:00.000
+end = 14:30:00.001
+
+# Lunch C variant
+[[regular]]
+name = "Before School"
+start = 06:45:00.000
+end = 07:45:00.000
+
+[[regular]]
+name = "Period 1"
+start = 08:05:00.000
+end = 09:25:00.000
+
+[[regular]]
+name = "CM/OTI"
+start = 09:29:00.000
+end = 09:44:00.000
+
+[[regular]]
+name = "Period 2"
+start = 09:48:00.000
+end = 11:08:00.000
+
+[[regular]]
+name = "Period 3"
+start = 11:12:00.000
+end = 12:32:00.000
+
+[[regular]]
+name = "Lunch C"
+start = 12:36:00.000
+end = 13:06:00.000
+
+[[regular]]
+name = "Period 4"
+start = 13:10:00.000
+end = 14:30:00.000
+
+[[regular]]
+name = "After School"
+start = 14:30:00.000
+end = 14:30:00.001
+
+# Covid-19 schedule (Fall 2020)
+# In effect from September 21, 2020, to February 4, 2021
+[[covid]]
+name = "Before School"
+start = 07:35:00.000
+end = 08:25:00.000
+
+[[covid]]
+name = "Period 1"
+start = 09:10:00.000
+end = 10:00:00.000
+
+[[covid]]
+name = "Period 2"
+start = 10:10:00.000
+end = 11:00:00.000
+
+[[covid]]
+name = "Period 3"
+start = 11:10:00.000
+end = 12:00:00.000
+
+[[covid]]
+name = "Lunch"
+start = 12:00:00.000
+end = 13:00:00.000
+
+[[covid]]
+name = "Period 4"
+start = 13:00:00.000
+end = 13:50:00.000
+
+[[covid]]
+name = "After School"
+start = 13:50:00.000
+end = 13:50:00.001
+
+# Covid-19 Monday/Tuesday schedule (Spring 2021)
+# In effect since February 4, 2021
+[[covid-mt]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-mt]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:55:00.000
+
+[[covid-mt]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:25:00.000
+
+[[covid-mt]]
+name = "Study Support"
+start = 11:35:00.000
+end = 12:15:00.000
+
+[[covid-mt]]
+name = "Lunch"
+start = 12:15:00.000
+end = 13:15:00.000
+
+[[covid-mt]]
+name = "Period 3"
+start = 13:15:00.000
+end = 14:05:00.000
+
+[[covid-mt]]
+name = "Period 4"
+start = 14:10:00.000
+end = 15:00:00.000
+
+[[covid-mt]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+
+# Wednesday schedule
+[[covid-w]]
+name = "Community Meeting"
+start = 09:35:00.000
+end = 10:00:00.000
+
+[[covid-w]]
+name = "Advisory"
+start = 13:50:00.000
+end = 15:00:00.000
+
+# Thursday/Friday schedule (same as M/T but with 3-4-1-2 order of periods)
+[[covid-rf]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-rf]]
+name = "Period 3"
+start = 08:35:00.000
+end = 09:55:00.000
+
+[[covid-rf]]
+name = "Period 4"
+start = 10:05:00.000
+end = 11:25:00.000
+
+[[covid-rf]]
+name = "Study Support"
+start = 11:35:00.000
+end = 12:15:00.000
+
+[[covid-rf]]
+name = "Lunch"
+start = 12:15:00.000
+end = 13:15:00.000
+
+[[covid-rf]]
+name = "Period 1"
+start = 13:15:00.000
+end = 14:05:00.000
+
+[[covid-rf]]
+name = "Period 2"
+start = 14:10:00.000
+end = 15:00:00.000
+
+[[covid-rf]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001

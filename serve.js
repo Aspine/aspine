@@ -9,6 +9,7 @@ const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
 const marked = require('marked');
+const TOML = require('@iarna/toml');
 
 const scraper = require('./js/scrape');
 const dep_mappings = require('./frontend-dependencies');
@@ -20,6 +21,9 @@ const version = child_process.execSync('git describe')
     .toString().trim().match(/^v?(.*)/)[1];
 const changelog = marked(
     fs.readFileSync(__dirname + '/CHANGELOG.md').toString()
+);
+const schedule = TOML.parse(
+    fs.readFileSync(__dirname + '/public/schedule.toml')
 );
 
 program
@@ -96,6 +100,9 @@ app.get('/version', (req, res) => res.send(version));
 
 // Endpoint to expose rendered changelog to client
 app.get('/updates', (req, res) => res.send(changelog));
+
+// Endpoint to expose specification of schedules to client
+app.get('/schedule.json', (req, res) => res.send(schedule));
 
 app.use(function(req, res, next) { // enable cors
   res.header("Access-Control-Allow-Origin", "*");
