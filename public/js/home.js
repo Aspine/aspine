@@ -1118,7 +1118,7 @@ function scheduleCallback(response) {
         }
     }
 
-    update_formattedSchedule(new Date().getDay());
+    update_formattedSchedule();
     scheduleTable.setData(currentTableData.formattedSchedule);
     redraw_clock();
 }

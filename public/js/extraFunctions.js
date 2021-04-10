@@ -1150,6 +1150,12 @@ let tableData_option_onclick = function() {
       setup_quarter_dropdown();
     });
     document.getElementsByClassName("gpa_select-selected")[0].click();
+
+    // Transfer schedule and reports from current year to previous year
+    if (!currentTableData.schedule)
+      currentTableData.schedule = tableData[0].schedule;
+    if (!currentTableData.pdf_files)
+      currentTableData.pdf_files = tableData[0].pdf_files;
   } else {
     classesTable.setData(currentTableData.currentTermData.classes);
     scheduleTable.setData(currentTableData.schedule.black);
@@ -1158,7 +1164,19 @@ let tableData_option_onclick = function() {
     // currentTableData
     initialize_quarter_dropdown();
     setup_quarter_dropdown();
+
+    // Transfer schedule and reports from previous year to current year
+    // (if they were first loaded while on previous year)
+    if (!currentTableData.schedule)
+      currentTableData.schedule = tableData[1].schedule;
+    if (!currentTableData.pdf_files)
+      currentTableData.pdf_files = tableData[1].pdf_files;
   }
+
+  // Keep Schedule tab in sync
+  update_formattedSchedule();
+  scheduleTable.setData(currentTableData.formattedSchedule);
+  redraw_clock();
 
   // Reset clock
   period_names = {black:[], silver:[]};
