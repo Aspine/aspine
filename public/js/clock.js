@@ -32,13 +32,13 @@ function schedulesCallback(response) {
     // Convert all start and end times to JavaScript Date objects
     for (const [, schedule] of Object.entries(schedules)) {
         for (entry of schedule) {
+            const regexp = /(\d+):(\d+):(\d+)\.(\d+)/;
             // Convert each entry to a JavaScript Date object
-            let [, hours, minutes, seconds, ms]
-                = /(\d+):(\d+):(\d+)\.(\d+)/.exec(entry.start);
-            entry.start = new Date(2000, 0, 1, hours, minutes, seconds, ms);
-            [, hours, minutes, seconds, ms]
-                = /(\d+):(\d+):(\d+)\.(\d+)/.exec(entry.end);
-            entry.end = new Date(2000, 0, 1, hours, minutes, seconds, ms);
+            // (get hours, minutes, seconds, milliseconds)
+            entry.start = new Date(2000, 0, 1,
+                ...regexp.exec(entry.start).slice(1));
+            entry.end = new Date(2000, 0, 1,
+                ...regexp.exec(entry.end).slice(1));
         }
     }
 
