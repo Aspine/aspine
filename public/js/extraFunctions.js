@@ -1168,14 +1168,15 @@ let tableData_option_onclick = function() {
       currentTableData.schedule = tableData[0].schedule;
     if (!currentTableData.pdf_files)
       currentTableData.pdf_files = tableData[0].pdf_files;
-  } else {
-    classesTable.setData(currentTableData.currentTermData.classes);
-    scheduleTable.setData(currentTableData.schedule.black);
-
-    // Re-initialize the quarter dropdown with the data from
-    // currentTableData
-    initialize_quarter_dropdown();
-    setup_quarter_dropdown();
+  } else if (currentTableData.type === "current") {
+    // Switch to current quarter
+    // (we can assume that it is already loaded for the current year)
+    listener({ target: document.getElementById("current") }, () => {
+      // Re-initialize the quarter dropdown with the data from
+      // currentTableData
+      initialize_quarter_dropdown();
+      setup_quarter_dropdown();
+    });
 
     // Transfer schedule and reports from previous year to current year
     // (if they were first loaded while on previous year)
@@ -1183,6 +1184,23 @@ let tableData_option_onclick = function() {
       currentTableData.schedule = tableData[1].schedule;
     if (!currentTableData.pdf_files)
       currentTableData.pdf_files = tableData[1].pdf_files;
+  } else {
+    // Get the first term included in the imported data
+    let firstTerm = "current";
+    for (term of termConverter) {
+      if (currentTableData.terms[term] && currentTableData.terms[term].GPA) {
+        firstTerm = term;
+        break;
+      }
+    }
+
+    // Switch to this term
+    listener({ target: document.getElementById(firstTerm) }, () => {
+      // Re-initialize the quarter dropdown with the data from
+      // currentTableData
+      initialize_quarter_dropdown();
+      setup_quarter_dropdown();
+    });
   }
 
   // Keep Schedule tab in sync
