@@ -711,9 +711,6 @@ let classesTable = new Tabulator("#classesTable", {
                 let rowColor = cell.getRow().getData().color;
                 let value = cell.getValue();
 
-                if (vip_username_list.includes(currentTableData.username)) {
-                    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-                }
                 if (rowColor === "black") {
                     return value;
                 } else {

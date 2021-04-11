@@ -1,9 +1,3 @@
-
-let vip_username_list = ["8006214", "8001874"];
-// Cole: 8006697
-// Tyler: 8006696
-// Max: 2109723
-
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
     return this.toString().split(".")[1].length || 0;
@@ -216,10 +210,6 @@ function getLetterGrade(gradeToBeLettered) {
 }
 
 function getColor(gradeToBeColored) {
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "#1E8541";
-  }
-
   if (parseFloat(gradeToBeColored) >= 89.5) {
     return "var(--green1)";
   } else if (parseFloat(gradeToBeColored) >= 79.5) {
@@ -237,10 +227,6 @@ function getColor(gradeToBeColored) {
 
 let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
 function getLightColor(gradeToBeColored) {
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "#1E8541";
-  }
-
   if (parseFloat(gradeToBeColored) >= 89.5) {
     return lightColors[0];
   } else if (parseFloat(gradeToBeColored) >= 79.5) {
@@ -259,10 +245,6 @@ function getLightColor(gradeToBeColored) {
 let rowFormatter = function(cell) {
   let rowColor = cell.getRow().getData().color;
   let value = cell.getValue();
-
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-  }
 
   if (rowColor === "black") {
     return value;
@@ -293,11 +275,6 @@ let classFormatter = function(cell, formatterParams) {
   let classColor = classColors[classIndex(rowClass)];
   let value = cell.getValue();
 
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-
-  }
-
   if (classColor === "black") {
     return value;
   } else {
@@ -313,10 +290,6 @@ let weightFormatter = function(cell, formatterParams) {
     value = value.substring(0, value.indexOf(".") + 2) + "%";
   }
 
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-  }
-
   if (rowColor === "black") {
     return value;
   } else {
@@ -328,18 +301,10 @@ let rowGradeFormatter = function(cell, formatterParams) {
   let numberGrade = parseFloat(cell.getValue());
   let rowColor = cell.getRow().getData().color;
 
-
-
   if (isNaN(numberGrade)) {
     return "No Grade";
-
   } else {
     let value = parseFloat(cell.getValue()) + "% " + getLetterGrade(cell.getValue());
-
-    if (vip_username_list.includes(currentTableData.username)) {
-      return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-    }
-
     if (numberGrade > 100) {
       return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
     } else {
@@ -383,12 +348,7 @@ let gradeFormatter = function(cell, formatterParams) {
       return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
 
     } else {
-      if (vip_username_list.includes(currentTableData.username)) {
-        return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + fake + "</span>";
-      }
-
       return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
-
     }
     //return "<span style='color:" + getColor(parseFloat(real)) + "; font-weight:bold;'>" + real + "</span>" + "<br>" + "<span style='color:" + getColor(parseFloat(calculated_grade)) + "; font-weight:bold;'>" + fake + "</span>";
 
