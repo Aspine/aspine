@@ -321,40 +321,20 @@
       <select id="pdf_select">
       </select>
 
-      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()" style="position: relative;" tooltip="Go Fullscreen" tooltip-margin="-92px">
-        <i class="fa fa-expand-alt" aria-hidden="true"></i>
-      </span>
+      <i id="expand-pdf-icon" class="hover pointer fa fa-expand-alt" onclick="toggle_fullscreen_pdf()" aria-hidden="true" tooltip="Go Fullscreen" tooltip-margin="-92px"></i>
 
-      <span class="right hover pointer" onclick="download_pdf()" aria-label="Download PDF" style="position: relative;" tooltip="Download PDF">
-        <i class="fa fa-download" aria-hidden="true"></i>
-      </span>
+      <i class="hover pointer fa fa-download" onclick="download_pdf()" aria-label="Download PDF" tooltip="Download PDF"></i>
 
-      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;">
-        |
-      </span>
-
-      <span class="right hover pointer" onclick="zoom_in_pdf()" aria-label="Zoom in">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-      </span>
-      <span class="right hover pointer" onclick="render_page_pdf(currentPageNum)">
+      <span class="hover pointer"  >
+        <i class="fa fa-plus" onclick="zoom_in_pdf()" aria-label="Zoom in"></i>
         ZOOM
-      </span>
-      <span class="right hover pointer" onclick="zoom_out_pdf()" aria-label="Zoom out">
-        <i class="fa fa-minus" aria-hidden="true"></i>
+        <i class="fa fa-minus" onclick="zoom_out_pdf()" aria-label="Zoom out"></i>
       </span>
 
-      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;" aria-hidden="true">
-        |
-      </span>
-
-      <span class="right hover pointer" onclick="next_page_pdf()" aria-label="Next page">
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </span>
-      <span class="right" id="page-indicator" style="cursor:default">
+      <span class="hover pointer" >
+        <i class="fa fa-chevron-right" onclick="next_page_pdf()" aria-label="Next page"></i>
         PAGE
-      </span>
-      <span class="right hover pointer" onclick="prev_page_pdf()" aria-label="Previous page">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        <i class="fa fa-chevron-left" onclick="prev_page_pdf()" aria-label="Previous page"></i>
       </span>
     </div>
     <div id="pdf-container">

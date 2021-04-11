@@ -71,7 +71,6 @@ window.addEventListener("click", function(event) {
     // (e.g. on a mobile device)
     if (!event.target.classList.contains("hastooltip")) {
         closeAllSelect();
-        pdf_closeAllSelect();
         tableData_closeAllSelect();
     }
 });

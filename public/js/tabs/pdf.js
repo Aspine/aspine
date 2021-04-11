@@ -17,7 +17,7 @@ function pdfCallback(response) {
 }
 
 // Cannot be async
-function main_pdf(currentTableData)
+function main_pdf()
 {
 	// Show progress spinner
 	document.getElementById('loader').style.display = 'block';
@@ -41,11 +41,9 @@ function generate_pdf()
 	if (!pdfrendering) {
 		pdfrendering = true;
 		let adjustedHeight = $(window).height() - 280;
-		if (document.fullscreenElement !== null) {
-			$('#pdf-container').css('height', adjustedHeight + 'px');
-		} else {
-			$('#pdf-container').css('height', $(window).height() + 'px');
-		}
+		document.getElementById('pdf-container').style.height = document.fullscreenElement !== null ?
+			adjustedHeight + 'px' : 
+			$(window).height() + 'px';
 		// TODO use lazy loading with this
 		let pdfInitParams = {data: pages[currentPdfIndex].content};
 		// Store the index of the current PDF in `currentPdfIndex`
@@ -161,7 +159,7 @@ function queue_render_page_pdf(pageNumber)
 function prev_page_pdf() {
 	if (currentPageNum > 1) {
 		currentPageNum--;
-		queue_render_page_pdf(currentPageNum);
+		render_page_pdf(currentPageNum);
 	}
 }
 
@@ -169,7 +167,7 @@ function prev_page_pdf() {
 function next_page_pdf() {
 	if (currentPageNum < pdf.numPages) {
 		currentPageNum++;
-		queue_render_page_pdf(currentPageNum);
+		render_page_pdf(currentPageNum);
 	}
 }
 
@@ -183,7 +181,6 @@ async function render_page_pdf(pdf, pageNumber)
 		document.getElementById('pdf-container').offsetWidth;
 
 	let canvas = document.getElementById('pdf-canvas');
-	let context = canvas.getContext('2d');
 
 	// Get default width of page then scale and make viewport
 	page = await page;
@@ -195,8 +192,8 @@ async function render_page_pdf(pdf, pageNumber)
 	canvas.height = viewport.height;
 
 	let renderContext = {
-		canvasContext: context,
-		viewport: viewport
+		canvasContext: canvas.getContext('2d'),
+		viewport
 	};
 
 	let renderTask = page.render(renderContext);
@@ -220,33 +217,6 @@ async function download_pdf()
 		type: "application/octet-stream"
 	}), `${currentTableData.pdf_files[currentPdfIndex].title}.pdf`);
 }
-
-// function pdf_closeAllSelect(elmnt)
-// {
-// 	/* A function that will close all select boxes in the document,
-// 	except the current select box: */
-// 	let x, y, i, arrNo = [];
-// 	x = document.getElementsByClassName("pdf_select-items");
-// 	y = document.getElementsByClassName("pdf_select-selected");
-// 	for (i = 0; i < y.length; i++)
-// 	{
-// 		if (elmnt === y[i])
-// 		{
-// 			arrNo.push(i)
-// 		}
-// 		else
-// 		{
-// 			y[i].classList.remove("pdf_select-arrow-active");
-// 		}
-// 	}
-// 	for (i = 0; i < x.length; i++)
-// 	{
-// 		if (arrNo.indexOf(i))
-// 		{
-// 			x[i].classList.add("pdf_select-hide");
-// 		}
-// 	}
-// }
 
 //pdf dropdown stuff
 function initialize_pdf_dropdown(pdfFiles) {
