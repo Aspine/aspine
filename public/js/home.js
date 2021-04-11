@@ -1047,7 +1047,8 @@ function responseCallbackPartial(response) {
     currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
     currentTableData.terms[currentTerm].quarter_oid = temp_term_data.quarter_oid;
 
-    currentTableData.overview = response.overview;
+    if (!currentTableData.overview)
+        currentTableData.overview = response.overview;
     currentTableData.cumGPA =
         response.cumGPA || cumGPA(currentTableData.overview);
     if (currentTableData.cumGPA.percent == NaN) {
