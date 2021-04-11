@@ -1180,7 +1180,7 @@ function openTab(evt, tab_name) {
     }
 
     if (tab_name === "reports") {
-        main_pdf();
+        main_pdf(currentTableData);
     }
 
     if (tab_name === "schedule" && !currentTableData.schedule) {

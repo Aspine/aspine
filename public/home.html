@@ -25,6 +25,7 @@
         href="fonts/material-icons/iconfont/material-icons.css"
         media="print" onload="this.media='all'">
   <script src="vendor/tabulator/tabulator.min.js" defer></script>
+  <script src="js/tabs/pdf.js" defer></script>
   <script src="js/extraFunctions.js" defer></script>
   <script src="js/buttonFunctions.js" defer></script>
   <script src="vendor/jquery/jquery.min.js" defer></script>
@@ -44,7 +45,6 @@
   <script src="vendor/d3/d3-scale.min.js" defer></script>
   <script src="vendor/d3/d3-selection.min.js" defer></script>
   <script src="vendor/d3/d3-boxplot.min.js" defer></script>
-  <script src="js/tabs/pdf.mjs" defer></script>
 </head>
 <body>
   <div id="sidenav-overlay"></div>
@@ -317,7 +317,7 @@
   </div>
   <div id="reports" class="tabcontent">
     <div class="pdf_topnav">
-      <div class="pdf_custom-select">
+      <div id="pdf_custom-select">
         <select id="pdf_select">
         </select>
       </div>
