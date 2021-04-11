@@ -1151,56 +1151,56 @@ let tableData_option_onclick = function() {
     }
   }
 
-  if (currentTableData.type === "previous") {
-    // Switch to Q1
-    // (because there is no "current quarter" in the previous year)
-    listener({ target: document.getElementById("q1") }, () => {
-      // Re-initialize the quarter dropdown with the data from
-      // currentTableData
-      // (this needs to be done *after* the data have been loaded)
-      initialize_quarter_dropdown();
-      setup_quarter_dropdown();
-    });
-    document.getElementsByClassName("gpa_select-selected")[0].click();
+  // Get the term that we want to select (the currently selected term might no
+  // longer exist due to switching currentTableData)
+  let selTerm = "current";
+  switch (currentTableData.type) {
+    case "current":
+      // Assume that the current quarter of the current year has already been
+      // loaded (because we are coming back to the current year from another
+      // year)
+      selTerm = "current";
+      break;
+    case "previous":
+      // Q1 must be available; there is no "current quarter" in the previous
+      // year
+      selTerm = "q1";
+      break;
+    case "imported":
+      // Get the first term included in the imported data
+      for (term of termConverter) {
+        if (currentTableData.terms[term] && currentTableData.terms[term].GPA) {
+          selTerm = term;
+          break;
+        }
+      }
+      break;
+    default:
+      console.error(`Invalid currentTableData type ${currentTableData.type}`);
+  }
+  // Switch to this term
+  listener({ target: document.getElementById(selTerm) }, () => {
+    // Re-initialize the quarter dropdown with the data from
+    // currentTableData
+    // (this needs to be done *after* the data have been loaded, in the case
+    // that the data have not yet been loaded)
+    initialize_quarter_dropdown();
+    setup_quarter_dropdown();
+  });
 
+  if (currentTableData.type === "previous") {
     // Transfer schedule and reports from current year to previous year
     if (!currentTableData.schedule)
       currentTableData.schedule = tableData[0].schedule;
     if (!currentTableData.pdf_files)
       currentTableData.pdf_files = tableData[0].pdf_files;
   } else if (currentTableData.type === "current") {
-    // Switch to current quarter
-    // (we can assume that it is already loaded for the current year)
-    listener({ target: document.getElementById("current") }, () => {
-      // Re-initialize the quarter dropdown with the data from
-      // currentTableData
-      initialize_quarter_dropdown();
-      setup_quarter_dropdown();
-    });
-
     // Transfer schedule and reports from previous year to current year
     // (if they were first loaded while on previous year)
     if (!currentTableData.schedule)
       currentTableData.schedule = tableData[1].schedule;
     if (!currentTableData.pdf_files)
       currentTableData.pdf_files = tableData[1].pdf_files;
-  } else {
-    // Get the first term included in the imported data
-    let firstTerm = "current";
-    for (term of termConverter) {
-      if (currentTableData.terms[term] && currentTableData.terms[term].GPA) {
-        firstTerm = term;
-        break;
-      }
-    }
-
-    // Switch to this term
-    listener({ target: document.getElementById(firstTerm) }, () => {
-      // Re-initialize the quarter dropdown with the data from
-      // currentTableData
-      initialize_quarter_dropdown();
-      setup_quarter_dropdown();
-    });
   }
 
   // Keep Schedule tab in sync
