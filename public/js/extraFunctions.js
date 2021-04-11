@@ -886,17 +886,18 @@ let initialize_pdf_dropdown = function() {
 
 }
 
-let listener = function(event, callback = () => {}) {
-  let _this = event.target;
+// Switch terms
+// callback is a function to run once the data have been loaded
+let listener = function({ target }, callback = () => {}) {
   /* When an item is clicked, update the original select box,
   and the selected item: */
 
   if (term_dropdown_active) {
     let y, i, k, s, h;
-    s = _this.parentNode.parentNode.getElementsByTagName("select")[0];
-    h = _this.parentNode.previousSibling;
+    s = target.parentNode.parentNode.getElementsByTagName("select")[0];
+    h = target.parentNode.previousSibling;
     for (i = 0; i < s.length; i++) {
-      if (s.options[i].innerHTML === _this.innerHTML) {
+      if (s.options[i].innerHTML === target.innerHTML) {
         if (i === 0) {
           currentTerm = termConverter[i];
         } else {
@@ -937,7 +938,7 @@ let listener = function(event, callback = () => {}) {
             dataType: "json json",
             success: response => {
               responseCallbackPartial(response);
-              callback(response);
+              callback();
             },
           });
 
@@ -947,12 +948,12 @@ let listener = function(event, callback = () => {}) {
           $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
 
           s.selectedIndex = i;
-          h.innerHTML = _this.innerHTML;
-          y = _this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = target.innerHTML;
+          y = target.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          _this.setAttribute("class", "same-as-selected");
+          target.setAttribute("class", "same-as-selected");
           break;
 
         } else {
@@ -976,12 +977,14 @@ let listener = function(event, callback = () => {}) {
           //categoriesTable.setData(tableData[i].categoryDisplay);
 
           s.selectedIndex = i;
-          h.innerHTML = _this.innerHTML;
-          y = _this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = target.innerHTML;
+          y = target.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          _this.setAttribute("class", "same-as-selected");
+          target.setAttribute("class", "same-as-selected");
+
+          callback();
           break;
         }
       }
