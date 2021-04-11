@@ -897,7 +897,10 @@ let listener = function({ target }, callback = () => {}) {
     s = target.parentNode.parentNode.getElementsByTagName("select")[0];
     h = target.parentNode.previousSibling;
     for (i = 0; i < s.length; i++) {
-      if (s.options[i].innerHTML === target.innerHTML) {
+      // Make sure to get just the option text, without any tooltips or
+      // tooltip text
+      if (s.options[i].childNodes[0].nodeValue
+          === target.childNodes[0].nodeValue) {
         if (i === 0) {
           currentTerm = termConverter[i];
         } else {
