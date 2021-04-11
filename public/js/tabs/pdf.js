@@ -4,43 +4,22 @@ let pdfrendering = false;
 function pdfCallback(response)
 {
 	$("#loader").hide();
-	// console.log(response);
-	// currentTableData.pdf_files = response;
-
-	// initialize_pdf_dropdown();
 	$("#pdf_loading_text").hide();
-
-	console.log(response);
-
 	if (typeof response !== 'undefined')
-	{
 		generate_pdf(pdf_index, response);
-	}
+	initialize_pdf_dropdown(response);
 }
 
 // Cannot be async
 function main_pdf(currentTableData)
 {
-	// if (typeof currentTableData.pdf_files === 'undefined')
-	// {
-		// Show progress spinner
-		document.getElementById('loader').style.display = 'block';
-		//sets the margins for the pdf viewer
-		setup_tooltips();
-		fetch(new Request('/pdf',{method: 'POST'}))
-			.then(data => data.json())
-			.then(json => pdfCallback(json));
-		// $.ajax({
-		//     url: "/pdf",
-		//     method: "POST",
-		//     dataType: "json json",
-		//     success: pdfCallback
-		// });
-	// }
-	// else
-	// {
-	// 	generate_pdf(pdf_index, currentTableData.pdf_files);
-	// }
+	// Show progress spinner
+	document.getElementById('loader').style.display = 'block';
+	//sets the margins for the pdf viewer
+	setup_tooltips();
+	fetch(new Request('/pdf',{method: 'POST'}))
+		.then(data => data.json())
+		.then(json => pdfCallback(json));
 	// Redraw PDF to fit new viewport dimensions when transitioning
 	// in or out of fullscreen
 	let elem = document.getElementById("reports");
@@ -330,96 +309,11 @@ function pdf_closeAllSelect(elmnt)
 }
 
 //pdf dropdown stuff
-function initialize_pdf_dropdown()
-{
-
-	//let o = new Option(tableData.pdf_files[i].title, i);
-	///// jquerify the DOM object 'o' so we can use the html method
-	//$(o).html(tableData.pdf_files[i].title);
-	//$("#pdf-select").append(o);
-
-	for (let i = 1; i < currentTableData.pdf_files.length + 1; i++)
-	{
-		if (i === 1)
-		{
-			let o = new Option(currentTableData.pdf_files[i - 1].title, 0);
-			/// jquerify the DOM object 'o' so we can use the html method
-			$(o).html(currentTableData.pdf_files[i - 1].title);
-			$("#pdf_select").append(o);
-		}
-
-		let o = new Option(currentTableData.pdf_files[i - 1].title, i);
-		/// jquerify the DOM object 'o' so we can use the html method
-		$(o).html(currentTableData.pdf_files[i - 1].title);
-		$("#pdf_select").append(o);
-
+function initialize_pdf_dropdown(pdfFiles) {
+	console.log(pdfFiles);
+	const pdfSelector = document.getElementById('pdf_select');
+	for (let i = 0; i < pdfFiles.length; i++) {
+	  pdfSelector
+	  	.append(new Option(pdfFiles[i].title, i));
 	}
-
-	let j, b, c;
-	/* Look for any elements with the class "pdf_custom-select": */
-	let selElmnt = document.getElementById('pdf_select');
-	// For each element, create a new DIV that will act as the selected item:
-	let newOption = document.createElement("DIV");
-	newOption.setAttribute("class", "pdf_select-selected");
-	newOption.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-	document.getElementById('pdf_custom-select').appendChild(newOption);
-	// For each element, create a new DIV that will contain the option list: */
-	b = document.createElement("DIV");
-	b.setAttribute("class", "pdf_select-items pdf_select-hide");
-	for (j = 1; j < selElmnt.length; j++)
-	{
-		/* For each option in the original select element,
-		create a new DIV that will act as an option item: */
-		c = document.createElement("DIV");
-		c.innerHTML = selElmnt.options[j].innerHTML;
-		c.setAttribute("data-value", selElmnt.options[j].value);
-		c.addEventListener("click", function (e)
-		{
-			/* When an item is clicked, update the original select box,
-			and the selected item: */
-			let y, i, k, s, h;
-			s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-			h = this.parentNode.previousSibling;
-			for (i = 0; i < s.length; i++)
-			{
-				if (s.options[i].value === this.getAttribute("data-value"))
-				{
-					if (i === 0)
-					{
-						pdf_index = i;
-						generate_pdf(i);
-
-					}
-					else
-					{
-						pdf_index = i - 1;
-						generate_pdf(i - 1);
-					}
-					s.selectedIndex = i;
-					h.innerHTML = this.innerHTML;
-					y = this.parentNode.getElementsByClassName("pdf_same-as-selected");
-					for (k = 0; k < y.length; k++)
-					{
-						y[k].removeAttribute("class");
-					}
-					this.setAttribute("class", "pdf_same-as-selected");
-					break;
-				}
-			}
-			h.click();
-		});
-		b.appendChild(c);
-	}
-	customSelect[i].appendChild(b);
-	a.addEventListener("click", function (e)
-	{
-		/* When the select box is clicked, close any other select boxes,
-		and open/close the current select box: */
-		e.stopPropagation();
-		pdf_closeAllSelect(this);
-		closeAllSelect();
-		tableData_closeAllSelect();
-		this.nextSibling.classList.toggle("pdf_select-hide");
-		this.classList.toggle("pdf_select-arrow-active");
-	});
 }
