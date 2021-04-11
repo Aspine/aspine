@@ -1046,8 +1046,16 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1] || "cum";
     }
-    const term = termConverter[parseInt(c.id[1]) || 0];
-    const isAccessibleObj = isAccessible(term, includedTerms);
+
+    let accessible, reason;
+    if (c.id === "cum") {
+      accessible = true;
+      reason = "";
+    } else {
+      const term = termConverter[parseInt(c.id[1]) || 0];
+      ({ accessible, reason } = isAccessible(term, includedTerms));
+    }
+
     $(c)
       .removeClass("inaccessible")
       .remove(".tooltiptext")
@@ -1055,15 +1063,13 @@ let initialize_quarter_dropdown = function(includedTerms) {
       .removeAttr("tabindex");
     c.removeEventListener("click", listener);
 
-    if (isAccessibleObj.accessible) {
+    if (accessible) {
       c.addEventListener("click", listener);
-    }
-    else {
+    } else {
       $(c)
         .addClass("inaccessible")
-        .attr("tooltip", isAccessibleObj.reason)
+        .attr("tooltip", reason)
         .attr("tabindex", 0);
-
       setup_tooltips();
     }
 
