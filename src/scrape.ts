@@ -22,20 +22,24 @@ import type {
   AttendanceEvent,
   ActivityEvent,
   Stats,
+  TermSpec,
 } from "./types-shared";
 
 // Using `import type` with an enum disallows accessing the enum variants
 import { AspineErrorCode } from "./types";
-import { Quarter } from "./types-shared";
+import { Quarter, Year } from "./types-shared";
 
 export async function get_student(
-  username: string, password: string, quarter: Quarter = Quarter.Current
+  username: string, password: string, quarter: Quarter = Quarter.Current,
+  year: Year = Year.Current
 ): Promise<StudentData> {
   return await get_session(username, password, async session => {
     const { student_name, student_oid } = await get_student_info(session);
-    const quarter_oids = await get_quarter_oids(session);
+    const quarter_oids = await get_quarter_oids(session, year);
 
-    const academics = await get_academics(session, student_oid, quarter_oids);
+    const academics = await get_academics(
+      session, student_oid, quarter_oids, year
+    );
     const class_details = await Promise.all(academics.map(async class_info =>
       get_class_details(session, class_info)));
     const overview = assemble_overview(class_details);
@@ -46,11 +50,20 @@ export async function get_student(
     const isClass = function(x: Class | undefined): x is Class {
       return x !== undefined;
     };
-    const classes = class_details.map((details, i) => {
+    const classes = (await Promise.all(class_details.map(async (details, i) => {
       // Don't include a class if it does not exist in this quarter
       if (!details.grades.has(quarter)) {
         return undefined;
       }
+
+      // For previous-year data, every class is listed under every quarter, so
+      // we need to do an additional check using the "term" attribute
+      if (year !== Year.Current && !await match_termspec(
+        session, details.term, quarter, year
+      )) {
+        return undefined;
+      }
+
       // exclude classes that don't recieve grades in Aspen
       if ([
         "Study Support", "Advisory", "Community Meeting", "PE Athletics",
@@ -70,7 +83,7 @@ export async function get_student(
         assignments: assignments[i],
         oid: details.oid,
       };
-    }).filter(isClass);
+    }))).filter(isClass);
     const quarter_oid = quarter_oids.get(quarter) || "current";
 
     return { classes, recent, overview, username, quarter, quarter_oid };
@@ -100,7 +113,7 @@ export async function get_schedule(
   username: string, password: string
 ): Promise<Schedule> {
   return await get_session(username, password, async session => {
-    const current_quarter = await get_current_quarter(session);
+    const current_quarter = await get_current_quarter(session, Year.Current);
     const initial_page = await (await fetch(
       "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list", {
         headers: {
@@ -178,7 +191,7 @@ export async function get_schedule(
 
 export async function get_stats(
   username: string, password: string, assignment_id: string, class_id: string,
-  quarter_id: string
+  quarter_id: string, year: Year
 ): Promise<Stats | {}> {
   return await get_session(username, password, async ({ session_id }) => {
     // The REST API does not expose assignment statistics (as far as we know),
@@ -211,6 +224,7 @@ export async function get_stats(
         "org.apache.struts.taglib.html.TOKEN": apache_token,
         "userEvent": "950",
         "termFilter": quarter_id,
+        "yearFilter": year,
       }),
     });
 
@@ -341,8 +355,14 @@ async function get_recent(session: Session): Promise<Recent> {
  * request to get the OID of one class.
  */
 async function get_current_quarter(
-  session: Session, class_info?: ClassInfo
+  session: Session, year: Year, class_info?: ClassInfo
 ): Promise<Quarter> {
+  // If not current year, the "current" quarter is undefined and we can just
+  // let it be Q1
+  if (year != Year.Current) {
+    return Quarter.Q1;
+  }
+
   let oid: string;
   if (class_info) {
     ({ oid } = class_info);
@@ -352,7 +372,7 @@ async function get_current_quarter(
       "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?fieldSetOid=fsnX2Cls++++++&" +
       new URLSearchParams({
         "selectedStudent": student_oid,
-        "customParams": "selectedYear|current;selectedTerm|all",
+        "customParams": `selectedYear|${year};selectedTerm|all`,
       }), {
         headers: {
           "Cookie": `JSESSIONID=${session.session_id}`,
@@ -407,7 +427,7 @@ async function get_student_info({ session_id }: Session): Promise<{
 }
 
 async function get_quarter_oids(
-  session: Session
+  session: Session, year: Year
 ): Promise<Map<Quarter, string>> {
   const mapping = new Map<Quarter, string>();
   const terms: { gradeTermId: string, oid: string }[] = await (await fetch(
@@ -425,7 +445,7 @@ async function get_quarter_oids(
     }
   }
   mapping.set(Quarter.Current,
-    mapping.get(await get_current_quarter(session)) || "current");
+    mapping.get(await get_current_quarter(session, year)) || "current");
   return mapping;
 }
 
@@ -434,13 +454,13 @@ async function get_quarter_oids(
  */
 async function get_academics(
   { session_id }: Session, student_oid: string,
-  quarter_oids: Map<Quarter, string>
+  quarter_oids: Map<Quarter, string>, year: Year
 ): Promise<ClassInfo[]> {
   const get_classes = async (quarter_oid: string) => await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?fieldSetOid=fsnX2Cls++++++&" +
     new URLSearchParams({
       "selectedStudent": student_oid,
-      "customParams": `selectedYear|current;selectedTerm|${quarter_oid}`,
+      "customParams": `selectedYear|${year};selectedTerm|${quarter_oid}`,
     }), {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
@@ -664,6 +684,37 @@ async function download_pdf(
 }
 
 /**
+ * Check if a quarter (e.g., Quarter.Q1) matches a term specification (e.g.,
+ * "S1")
+ */
+async function match_termspec(
+  session: Session, termspec: TermSpec, quarter: Quarter, year: Year
+): Promise<boolean> {
+  // Make sure that `quarter` is Q1, Q2, Q3, or Q4 and not Current
+  if (quarter === Quarter.Current) {
+    quarter = await get_current_quarter(session, year);
+  }
+  switch (termspec) {
+    case "FY":
+      return true;
+    case "S1":
+      return [Quarter.Q1, Quarter.Q2].includes(quarter);
+    case "S2":
+      return [Quarter.Q3, Quarter.Q4].includes(quarter);
+    case "Q1":
+      return quarter === Quarter.Q1;
+    case "Q2":
+      return quarter === Quarter.Q2;
+    case "Q3":
+      return quarter === Quarter.Q3;
+    case "Q4":
+      return quarter === Quarter.Q4;
+    default: // Fallback in case Aspen gives some other termspec
+      return true;
+  }
+}
+
+/**
  * Log in to Aspen using a given username and password and execute the given
  * callback within that session, throwing an error upon an invalid login.
  */
@@ -736,7 +787,9 @@ async function get_session<T>(
 
 // Code for testing purposes
 if (require.main === module) {
-  get_student(process.env.USERNAME || "", process.env.PASSWORD || "", 1).then(
+  get_student(
+    process.env.USERNAME || "", process.env.PASSWORD || "", 1, Year.Previous
+  ).then(
     console.log, e => {
       if (e.message === AspineErrorCode.LOGINFAIL) {
         console.error(`Error: ${e.message}`);

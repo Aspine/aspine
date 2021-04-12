@@ -1,4 +1,4 @@
-import { Quarter } from "./types-shared";
+import { Quarter, TermSpec } from "./types-shared";
 
 export interface Session {
   session_id: string;
@@ -14,7 +14,7 @@ export interface ClassInfo {
   name: string;
   grades: Map<Quarter, string>;
   teacher: string;
-  term: string;
+  term: TermSpec;
   oid: string;
 }
 

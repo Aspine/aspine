@@ -341,7 +341,10 @@ let exportTableData = async function(prefs) {
           return currentTableData.terms[term];
         }
         // Term is selected by user and its data have not been downloaded
-        else if (prefs.terms[term] && !currentTableData.imported) {
+        else if (
+          prefs.terms[term] && !currentTableData.imported /* backwards compat */
+          && currentTableData.type !== "imported"
+        ) {
           try {
             $("#export_status").html(
               `Downloading quarter "${term}" from Aspen&hellip;`
@@ -349,7 +352,10 @@ let exportTableData = async function(prefs) {
             const response = await $.ajax({
               url: "/data",
               method: "POST",
-              data: { quarter: parseInt(term.match(/\d+/)[0]) },
+              data: {
+                quarter: parseInt(term.match(/\d+/)[0]),
+                year: "current",
+              },
               dataType: "json json"
             });
             currentTerm = term;
@@ -434,10 +440,10 @@ let importTableData = async function(obj) {
     + `https://github.com/Aspine/aspine/releases</a>.`;
   }
 
-  currentTableDataIndex++;
+  currentTableDataIndex = tableData.length;
   tableData[currentTableDataIndex] = {};
   currentTableData = tableData[currentTableDataIndex];
-  currentTableData.imported = true;
+  currentTableData.type = "imported";
   currentTableData.name = obj.name;
 
   let includedTerms = {};
@@ -507,6 +513,16 @@ let importTableData = async function(obj) {
       tableData[0].name;
     $("#tableData_select-items-0")[0].textContent =
       tableData[0].name;
+
+    // Remove "Previous Year" option
+    $("#tableData_select option[value='1']")[0].remove();
+    $("#tableData_select-items-1").remove();
+  } else if (currentTableDataIndex === 1) {
+    // Modify the text of the existing "Previous Year" option
+    $("#tableData_select option[value='1']")[1].textContent =
+      tableData[1].name;
+    $("#tableData_select-items-1")[1].textContent =
+      tableData[1].name;
   }
 
   $(`#tableData_select-items-${currentTableDataIndex}`).click();

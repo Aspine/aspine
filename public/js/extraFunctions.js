@@ -886,17 +886,21 @@ let initialize_pdf_dropdown = function() {
 
 }
 
-let listener = function(event) {
-  let _this = event.target;
+// Switch terms
+// callback is a function to run once the data have been loaded
+let listener = function({ target }, callback = () => {}) {
   /* When an item is clicked, update the original select box,
   and the selected item: */
 
   if (term_dropdown_active) {
     let y, i, k, s, h;
-    s = _this.parentNode.parentNode.getElementsByTagName("select")[0];
-    h = _this.parentNode.previousSibling;
+    s = target.parentNode.parentNode.getElementsByTagName("select")[0];
+    h = target.parentNode.previousSibling;
     for (i = 0; i < s.length; i++) {
-      if (s.options[i].innerHTML === _this.innerHTML) {
+      // Make sure to get just the option text, without any tooltips or
+      // tooltip text
+      if (s.options[i].childNodes[0].nodeValue
+          === target.childNodes[0].nodeValue) {
         if (i === 0) {
           currentTerm = termConverter[i];
         } else {
@@ -905,6 +909,28 @@ let listener = function(event) {
 
         if (i === 0) $("#mostRecentDiv").show();
         else $("#mostRecentDiv").hide();
+
+        if (typeof currentTableData.terms === 'undefined') {
+          currentTableData.terms = {
+            current: {},
+            q1: {},
+            q2: {},
+            q3: {},
+            q4: {},
+          };
+
+          // For the previous year (where there is no "current" quarter),
+          // prepopulate the GPA object with dummy data
+          if (currentTableData.type === "previous") {
+            currentTableData.terms.current.GPA = {
+              percent: NaN, outOfFour: NaN, outOfFive: NaN,
+            };
+          }
+        }
+
+        if (typeof currentTableData.currentTermData === 'undefined') {
+          currentTableData.currentTermData = {};
+        }
 
         if (typeof currentTableData.terms[currentTerm].classes === 'undefined') {
           // if (anyEdited()) {
@@ -915,12 +941,16 @@ let listener = function(event) {
 
           term_dropdown_active = false;
 
+          const year = currentTableDataIndex === 0 ? "current" : "previous";
           $.ajax({
             url: "/data",
             method: "POST",
-            data: { quarter: (i - 1) },
+            data: { quarter: i - 1, year: year },
             dataType: "json json",
-            success: responseCallbackPartial
+            success: response => {
+              responseCallbackPartial(response);
+              callback();
+            },
           });
 
           $("#loader").show();
@@ -929,12 +959,12 @@ let listener = function(event) {
           $("#categoriesTable").hide(); //;.setData(tableData[i].assignments);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = target.innerHTML;
+          y = target.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          target.setAttribute("class", "same-as-selected");
           break;
 
         } else {
@@ -958,12 +988,14 @@ let listener = function(event) {
           //categoriesTable.setData(tableData[i].categoryDisplay);
 
           s.selectedIndex = i;
-          h.innerHTML = this.innerHTML;
-          y = this.parentNode.getElementsByClassName("same-as-selected");
+          h.innerHTML = target.innerHTML;
+          y = target.parentNode.getElementsByClassName("same-as-selected");
           for (k = 0; k < y.length; k++) {
             y[k].removeAttribute("class");
           }
-          this.setAttribute("class", "same-as-selected");
+          target.setAttribute("class", "same-as-selected");
+
+          callback();
           break;
         }
       }
@@ -1028,8 +1060,16 @@ let initialize_quarter_dropdown = function(includedTerms) {
       c.innerHTML = selElmnt.options[j].innerHTML;
       c.id = termConverter[j - 1] || "cum";
     }
-    const term = termConverter[parseInt(c.id[1]) || 0];
-    const isAccessibleObj = isAccessible(term, includedTerms);
+
+    let accessible, reason;
+    if (c.id === "cum") {
+      accessible = true;
+      reason = "";
+    } else {
+      const term = termConverter[parseInt(c.id[1]) || 0];
+      ({ accessible, reason } = isAccessible(term, includedTerms));
+    }
+
     $(c)
       .removeClass("inaccessible")
       .remove(".tooltiptext")
@@ -1037,15 +1077,13 @@ let initialize_quarter_dropdown = function(includedTerms) {
       .removeAttr("tabindex");
     c.removeEventListener("click", listener);
 
-    if (isAccessibleObj.accessible) {
+    if (accessible) {
       c.addEventListener("click", listener);
-    }
-    else {
+    } else {
       $(c)
         .addClass("inaccessible")
-        .attr("tooltip", isAccessibleObj.reason)
+        .attr("tooltip", reason)
         .attr("tabindex", 0);
-
       setup_tooltips();
     }
 
@@ -1054,28 +1092,45 @@ let initialize_quarter_dropdown = function(includedTerms) {
 };
 
 let setup_quarter_dropdown = function() {
-  $(".gpa_select-selected").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-  $("#current").html("Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent);
-  document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
-  document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  // Set up "current quarter" entry
+  if (!isNaN(currentTableData.terms.current.GPA.percent)) {
+    document.querySelector("#current").textContent
+      = document.querySelector("#init_gpa").textContent
+      = document.querySelector("#current_gpa").textContent
+      = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+  } else {
+    document.querySelector("#current").textContent
+      = document.querySelector("#init_gpa").textContent
+      = document.querySelector("#current_gpa").textContent
+      = "Current Quarter GPA: None";
+  }
 
-  $(".gpa_select-items").children().each(function(i, elem) {
-      if (i < 5) {//Don't try to get quarter data for the 5th element in the list because that's not a quarter...
-          if (i === 0) {
-              $(this).html("Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent);
-              document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-              document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + currentTableData.terms["current"].GPA.percent;
-          } else {
-              if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
-                  $(this).html("Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent);
-                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent;
-              } else {
-                  $(this).append("Q" + i + " GPA: None");
-                  document.getElementById('gpa_select').options[i + 1].innerHTML ="Q" + i + " GPA: None";
-              }
-          }
-      }
-  });
+  // Set up the four quarters
+  for (const term of termConverter) {
+    // We already set up the current quarter; this is only for Q1 to Q4
+    if (!/q\d/.test(term))
+      continue;
+    if (!isNaN(currentTableData.terms[term].GPA.percent)) {
+      document.querySelector(`#${term}`).textContent
+        = document.querySelector(`#${term}_gpa`).textContent
+        = `Q${term[1]} GPA: ${currentTableData.terms[term].GPA.percent}`;
+    } else {
+      document.querySelector(`#${term}`).textContent
+        = document.querySelector(`#${term}_gpa`).textContent
+        = `Q${term[1]} GPA: None`;
+    }
+  }
+
+  // Set up cumulative GPA
+  document.querySelector("#cum").textContent
+    = document.querySelector("#cum_gpa").textContent
+    = `Cumulative GPA: ${currentTableData.cumGPA.percent}`;
+
+  // Set text for currently selected quarter to be that of the corresponding
+  // option
+  document.querySelector(".gpa_select-selected").textContent
+    = document.querySelector("#gpa_select")
+      .options[termConverter.indexOf(currentTerm) + 1].textContent;
 };
 
 let tableData_option_onclick = function() {
@@ -1107,21 +1162,70 @@ let tableData_option_onclick = function() {
     }
   }
 
-  // Re-initialize the quarter dropdown with the data from
-  // currentTableData
-  initialize_quarter_dropdown()
-  setup_quarter_dropdown();
+  // Get the term that we want to select (the currently selected term might no
+  // longer exist due to switching currentTableData)
+  let selTerm = "current";
+  switch (currentTableData.type) {
+    case "current":
+      // Assume that the current quarter of the current year has already been
+      // loaded (because we are coming back to the current year from another
+      // year)
+      selTerm = "current";
+      break;
+    case "previous":
+      // Q1 must be available; there is no "current quarter" in the previous
+      // year
+      selTerm = "q1";
+      break;
+    case "imported":
+      // Get the first term included in the imported data
+      for (term of termConverter) {
+        if (currentTableData.terms[term]
+            && currentTableData.terms[term].GPA
+            && !isNaN(currentTableData.terms[term].GPA.percent)) {
+          selTerm = term;
+          break;
+        }
+      }
+      break;
+    default:
+      console.error(`Invalid currentTableData type ${currentTableData.type}`);
+  }
+  // Switch to this term
+  listener({ target: document.getElementById(selTerm) }, () => {
+    // Re-initialize the quarter dropdown with the data from
+    // currentTableData
+    // (this needs to be done *after* the data have been loaded, in the case
+    // that the data have not yet been loaded)
+    initialize_quarter_dropdown();
+    setup_quarter_dropdown();
+  });
 
+  if (currentTableData.type === "previous") {
+    // Transfer schedule and reports from current year to previous year
+    if (!currentTableData.schedule)
+      currentTableData.schedule = tableData[0].schedule;
+    if (!currentTableData.pdf_files)
+      currentTableData.pdf_files = tableData[0].pdf_files;
+  } else if (currentTableData.type === "current") {
+    // Transfer schedule and reports from previous year to current year
+    // (if they were first loaded while on previous year)
+    if (!currentTableData.schedule)
+      currentTableData.schedule = tableData[1].schedule;
+    if (!currentTableData.pdf_files)
+      currentTableData.pdf_files = tableData[1].pdf_files;
+  }
 
-
-  classesTable.setData(currentTableData.currentTermData.classes);
-  scheduleTable.setData(currentTableData.schedule.black);
+  // Keep Schedule tab in sync
+  update_formattedSchedule();
+  scheduleTable.setData(currentTableData.formattedSchedule);
+  redraw_clock();
 
   // Reset clock
   period_names = {black:[], silver:[]};
 
   // Hide Reports tab for imported data
-  if (currentTableData.imported) {
+  if (currentTableData.imported || currentTableData.type === "imported") {
     $("#reports_open").hide();
   }
   else {
@@ -1447,6 +1551,18 @@ let anyEdited = function() {
  * and not all of the terms' data have been put into currentTableData)
  */
 let isAccessible = function(term, includedTerms) {
+  // For the previous year, all four quarters should be accessible
+  if (currentTableData.type === "previous") {
+    if (term.startsWith("q")) {
+      return { accessible: true, reason: "" };
+    } else {
+      return {
+        accessible: false,
+        reason: "There is no current quarter for the previous year.",
+      };
+    }
+  }
+
   // Always keep the current term as 'accessible', even if there are no grades
   // on Aspen
   if (term === "current") {
@@ -1467,7 +1583,10 @@ let isAccessible = function(term, includedTerms) {
   // for more data, so any terms not included in the import
   // are inaccessible
   if (
-    currentTableData.imported &&
+    (
+      currentTableData.imported || /* backwards compatibility */
+      currentTableData.type === "imported"
+    ) &&
     (
       (includedTerms && !includedTerms[term]) ||
       !currentTableData.terms[term].classes

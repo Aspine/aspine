@@ -26,10 +26,13 @@ let currentTerm = "current";
  *	@property {Schedule} [schedule]
  *	@property {Terms} [terms]
  *  @property {?string} [username]
- *  @property {boolean} [imported=true]
+ *  @property {"current" | "previous" | "imported"} [type]
  */
 /** @type {TableDataObject[]}*/
-let tableData = [{ name: "Current Year" }];
+let tableData = [
+    { name: "Current Year", type: "current" },
+    { name: "Previous Year", type: "previous" },
+];
 let currentTableDataIndex = 0;
 /**@type {TableDataObject}*/
 let currentTableData = tableData[currentTableDataIndex];
@@ -426,6 +429,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                             .classes[selected_class_i].oid,
                         quarter_id: currentTableData.currentTermData
                             .quarter_oid,
+                        year: currentTableData.type,
                     },
                 });
                 if ([high, low, median, mean].some(x => x === undefined)) {
@@ -985,17 +989,18 @@ function responseCallback(response, includedTerms) {
         computeGPA(currentTableData.terms.current.classes);
 
     currentTableData.overview = response.overview;
-
-    currentTableData.cumGPA = response.cumGPA || cumGPA(currentTableData.overview);
-
+    currentTableData.cumGPA =
+        response.cumGPA || cumGPA(currentTableData.overview);
     if (currentTableData.cumGPA.percent == NaN) {
         currentTableData.cumGPA.percent = "";
     }
-    document.getElementById("cum_gpa").innerHTML = "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+    document.getElementById("cum_gpa").innerHTML =
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
-        currentTableData.terms["q" + i].GPA = computeGPAQuarter(currentTableData.overview, i);
+        currentTableData.terms["q" + i].GPA =
+            computeGPAQuarter(currentTableData.overview, i);
     }
 
     //Stuff to do now that tableData is initialized
@@ -1041,6 +1046,22 @@ function responseCallbackPartial(response) {
     currentTableData.terms[currentTerm].GPA = temp_term_data.GPA;
     currentTableData.terms[currentTerm].calcGPA = temp_term_data.calcGPA;
     currentTableData.terms[currentTerm].quarter_oid = temp_term_data.quarter_oid;
+
+    if (!currentTableData.overview)
+        currentTableData.overview = response.overview;
+    currentTableData.cumGPA =
+        response.cumGPA || cumGPA(currentTableData.overview);
+    if (currentTableData.cumGPA.percent == NaN) {
+        currentTableData.cumGPA.percent = "";
+    }
+    document.getElementById("cum_gpa").innerHTML =
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+
+    // Calculate GPA for each quarter
+    for (let i = 1; i <= 4; i++) {
+        currentTableData.terms["q" + i].GPA =
+            computeGPAQuarter(currentTableData.overview, i);
+    }
 
     /*
     if (currentTerm === 'current') {
@@ -1099,7 +1120,7 @@ function scheduleCallback(response) {
         }
     }
 
-    update_formattedSchedule(new Date().getDay());
+    update_formattedSchedule();
     scheduleTable.setData(currentTableData.formattedSchedule);
     redraw_clock();
 }
@@ -1308,7 +1329,7 @@ $("#import_button").click(async () => {
 $.ajax({
     url: "/data",
     method: "POST",
-    data: { quarter: 0 },
+    data: { quarter: 0, year: "current" },
     dataType: "json json",
 }).then(responseCallback);
 //#endif
