@@ -39,8 +39,11 @@ async function generate_pdf() {
 	let pdfEmbed = document.getElementById('pdf-embed');
 	pdfEmbed.width = pdfEmbed.parentElement.offsetWidth;
 
+	// This is a weird hack to make loading multiple binary files possible
+	// TODO is there a better way to create Blobs from Buffer?
 	let base64 = btoa(String.fromCharCode(...pages[currentPdfIndex].content.data));
 	let file = await (await fetch(`data:application/pdf;base64, ${base64}`)).blob();
+	
 	pdfEmbed.data = window.URL.createObjectURL(file);
 }
 
