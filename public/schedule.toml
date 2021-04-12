@@ -1,5 +1,7 @@
-# Regular schedule
+# Regular schedule {{{
 # In effect until March 13, 2020
+
+# Lunch-agnostic {{{
 [[regular]]
 name = "Before School"
 start = 06:45:00.000
@@ -44,8 +46,9 @@ end = 14:30:00.000
 name = "After School"
 start = 14:30:00.000
 end = 14:30:00.001
+# }}}
 
-# Lunch A variant
+# Lunch A variant {{{
 [[regular]]
 name = "Before School"
 start = 06:45:00.000
@@ -85,8 +88,9 @@ end = 14:30:00.000
 name = "After School"
 start = 14:30:00.000
 end = 14:30:00.001
+# }}}
 
-# Lunch B variant
+# Lunch B variant {{{
 [[regular]]
 name = "Before School"
 start = 06:45:00.000
@@ -131,8 +135,9 @@ end = 14:30:00.000
 name = "After School"
 start = 14:30:00.000
 end = 14:30:00.001
+# }}}
 
-# Lunch C variant
+# Lunch C variant {{{
 [[regular]]
 name = "Before School"
 start = 06:45:00.000
@@ -172,8 +177,11 @@ end = 14:30:00.000
 name = "After School"
 start = 14:30:00.000
 end = 14:30:00.001
+# }}}
 
-# Covid-19 schedule (Fall 2020)
+# }}}
+
+# Covid-19 schedule (Fall 2020) {{{
 # In effect from September 21, 2020, to February 4, 2021
 [[covid]]
 name = "Before School"
@@ -209,9 +217,12 @@ end = 13:50:00.000
 name = "After School"
 start = 13:50:00.000
 end = 13:50:00.001
+# }}}
 
-# Covid-19 Monday/Tuesday schedule (Spring 2021)
+# Covid-19 schedule (Spring 2021) {{{
 # In effect since February 4, 2021
+
+# Monday/Tuesday schedule {{{
 [[covid-mt]]
 name = "Before School"
 start = 07:00:00.000
@@ -251,8 +262,9 @@ end = 15:00:00.000
 name = "After School"
 start = 15:00:00.000
 end = 15:00:00.001
+# }}}
 
-# Wednesday schedule
+# Wednesday schedule {{{
 [[covid-w]]
 name = "Community Meeting"
 start = 09:35:00.000
@@ -262,8 +274,10 @@ end = 10:00:00.000
 name = "Advisory"
 start = 13:50:00.000
 end = 15:00:00.000
+# }}}
 
-# Thursday/Friday schedule (same as M/T but with 3-4-1-2 order of periods)
+# Thursday/Friday schedule {{{
+# (same as M/T but with 3-4-1-2 order of periods)
 [[covid-rf]]
 name = "Before School"
 start = 07:00:00.000
@@ -303,3 +317,8 @@ end = 15:00:00.000
 name = "After School"
 start = 15:00:00.000
 end = 15:00:00.001
+# }}}
+
+# }}}
+
+# vim: set fdm=marker:
