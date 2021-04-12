@@ -2,7 +2,6 @@
 
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
-let pdfrendering = false;
 let modals = {
     "stats": document.getElementById('stats_modal'),
     "corrections": document.getElementById('corrections_modal'),

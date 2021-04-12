@@ -322,3 +322,250 @@ let getCategoryDisplay = function (gradeInfo, computingClassData) {
 
     return categoryDisplay;
 }
+
+//in a function because when extraFunctions first runs, jquery isn't initialized
+function initialize_jquery_prototype() {
+  jQuery.prototype.replace_text = function(input) {
+    this.contents().filter(function() {return (this.nodeType == 3);}).replaceWith(input)
+  }
+}
+
+function getGPA(gradeToBeGPA) {
+
+  let parsed = parseFloat(gradeToBeGPA);
+  if (parsed >= 97) {
+    return 4.0;
+  } else if (parsed >= 93) {
+    return 4.0;
+  } else if (parsed >= 90) {
+    return 3.7;
+  } else if (parsed >= 87) {
+    return 3.3;
+  } else if (parsed >= 83) {
+    return 3.0;
+  } else if (parsed >= 80) {
+    return 2.7;
+  } else if (parsed >= 77) {
+    return 2.3;
+  } else if (parsed >= 73) {
+    return 2.0;
+  } else if (parsed >= 70) {
+    return 1.7;
+  } else if (parsed >= 67) {
+    return 1.3;
+  } else if (parsed >= 63) {
+    return 1.0;
+  } else if (parsed >= 60) {
+    return 0.7;
+  } else {
+    return 0.0;
+  }
+}
+
+function GPAType() {
+  let selectElem = $("#gpa_select");
+  let selectedElem = $(".gpa_select-selected");
+  let selection = $("#gpa_select option")[selectElem.prop("selectedIndex")].value;
+
+  let quarterName = "";
+  let quarterData;
+
+  if (selection == 0) {
+    quarterName = "Current Quarter";
+    quarterData = currentTableData.terms.current;
+  }
+  else {
+    quarterName = "Q" + selection;
+    quarterData = currentTableData.terms["q" + selection];
+  }
+
+  if (selectedElem.html().includes("GPA")) {
+    if (quarterData.GPA.outOfFour != quarterData.calcGPA.outOfFour) {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFour.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFour.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFour.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter Unweighted: " + currentTableData.terms.current.GPA.outOfFour.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " Unweighted: " + currentTableData.terms["q" + i].GPA.outOfFour.toFixed(2)
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " Unweighted: " + quarterData.GPA.outOfFour.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative Unweighted: " + currentTableData.cumGPA.outOfFour.toFixed(2)
+      );
+    }
+  }
+  else if (selectedElem.html().includes("Unweighted")) {
+    if (quarterData.GPA.outOfFive != quarterData.calcGPA.outOfFive) {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.outOfFive.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.outOfFive.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.outOfFive.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter Weighted: " + currentTableData.terms.current.GPA.outOfFive.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " Weighted: " + currentTableData.terms["q" + i].GPA.outOfFive.toFixed(2)
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " Weighted: " + quarterData.GPA.outOfFive.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative Weighted: " + currentTableData.cumGPA.outOfFive.toFixed(2)
+      );
+    }
+  }
+  else if (selectedElem.html().includes("Weighted")) {
+    if (quarterData.GPA.percent != quarterData.calcGPA.percent) {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + currentTableData.terms.current.calcGPA.percent.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2) +
+          (currentTableData.terms["q" + i].calcGPA ? (
+            "<br> Calculated: " + currentTableData.terms["q" + i].calcGPA.percent.toFixed(2)
+          ) : "")
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2) +
+        "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+      );
+    }
+    else {
+      $("#current, #current_gpa, #init_gpa").replace_text(
+        "Current Quarter GPA: " + currentTableData.terms.current.GPA.percent.toFixed(2)
+      );
+      for (let i = 1; i <= 4; i++) {
+        $(`#q${i}, #q${i}_gpa`).replace_text(
+          "Q" + i + " GPA: " + currentTableData.terms["q" + i].GPA.percent.toFixed(2)
+        );
+      }
+      selectedElem.replace_text(
+        quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
+      );
+      $("#cum, #cum_gpa").replace_text(
+        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+      );
+    }
+  }
+}
+
+function getLetterGrade(gradeToBeLettered) {
+  let parsed = parseFloat(gradeToBeLettered);
+  if (parsed >= 96.5) {
+    return "A+";
+  } else if (parsed >= 92.5) {
+    return "A";
+  } else if (parsed >= 89.5) {
+    return "A-";
+  } else if (parsed >= 86.5) {
+    return "B+";
+  } else if (parsed >= 82.5) {
+    return "B";
+  } else if (parsed >= 79.5) {
+    return "B-";
+  } else if (parsed >= 76.5) {
+    return "C+";
+  } else if (parsed >= 72.5) {
+    return "C";
+  } else if (parsed >= 69.5) {
+    return "C-";
+  } else if (parsed >= 66.5) {
+    return "D+";
+  } else if (parsed >= 62.5) {
+    return "D";
+  } else if (parsed >= 59.5) {
+    return "D-";
+  } else {
+    return "F";
+  }
+}
+
+function getColor(gradeToBeColored) {
+  if (vip_username_list.includes(currentTableData.username)) {
+    return "#1E8541";
+  }
+
+  if (parseFloat(gradeToBeColored) >= 89.5) {
+    return "var(--green1)";
+  } else if (parseFloat(gradeToBeColored) >= 79.5) {
+    return "var(--blue)";
+  } else if (parseFloat(gradeToBeColored) >= 69.5) {
+    return "var(--orange)";
+  } else if (parseFloat(gradeToBeColored) >= 59.5) {
+    return "var(--orange1)";
+  } else if (parseFloat(gradeToBeColored) >= 0) {
+    return "var(--red)";
+  } else {
+    return "var(--black)";
+  }
+}
+
+let lightColors = ["#3d995c", "#a3a3f5", "#eba947", "#ebb147", "#eb4747"];
+function getLightColor(gradeToBeColored) {
+  if (vip_username_list.includes(currentTableData.username)) {
+    return "#1E8541";
+  }
+
+  if (parseFloat(gradeToBeColored) >= 89.5) {
+    return lightColors[0];
+  } else if (parseFloat(gradeToBeColored) >= 79.5) {
+    return lightColors[1];
+  } else if (parseFloat(gradeToBeColored) >= 69.5) {
+    return lightColors[2];
+  } else if (parseFloat(gradeToBeColored) >= 59.5) {
+    return lightColors[3];
+  } else if (parseFloat(gradeToBeColored) >= 0) {
+    return lightColors[4];
+  } else {
+    return "black";
+  }
+}
