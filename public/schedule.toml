@@ -220,7 +220,7 @@ end = 13:50:00.001
 # }}}
 
 # Covid-19 schedule (Spring 2021) {{{
-# In effect since February 4, 2021
+# In effect from February 4 to May 7, 2021
 
 # Monday/Tuesday schedule {{{
 [[covid-mt]]
@@ -317,6 +317,273 @@ end = 15:00:00.000
 name = "After School"
 start = 15:00:00.000
 end = 15:00:00.001
+# }}}
+
+# }}}
+
+# Covid-19 schedule (May/June 2021) {{{
+# In effect since May 10, 2021
+
+# Non-Wednesday schedule, lunch-agnostic {{{
+[[covid-may]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:45:00.000
+
+[[covid-may]]
+name = "Period 2"
+start = 09:50:00.000
+end = 11:00:00.000
+
+[[covid-may]]
+name = "Lunch A / Period 3"
+start = 11:00:00.000
+end = 11:30:00.000
+
+[[covid-may]]
+name = "Period 3"
+start = 11:35:00.000
+end = 12:15:00.000
+
+[[covid-may]]
+name = "Lunch B / Period 3"
+start = 12:15:00.000
+end = 12:45:00.000
+
+[[covid-may]]
+name = "Period 4"
+start = 12:50:00.000
+end = 14:00:00.000
+
+[[covid-may]]
+name = "Study Support"
+start = 14:05:00.000
+end = 15:00:00.000
+
+[[covid-may]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch A {{{
+[[covid-may-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may-a]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:45:00.000
+
+[[covid-may-a]]
+name = "Period 2"
+start = 09:50:00.000
+end = 11:00:00.000
+
+[[covid-may-a]]
+name = "Lunch"
+start = 11:00:00.000
+end = 11:30:00.000
+
+[[covid-may-a]]
+name = "Period 3"
+start = 11:35:00.000
+end = 12:45:00.000
+
+[[covid-may-a]]
+name = "Period 4"
+start = 12:50:00.000
+end = 14:00:00.000
+
+[[covid-may-a]]
+name = "Study Support"
+start = 14:05:00.000
+end = 15:00:00.000
+
+[[covid-may-a]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch B {{{
+[[covid-may-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may-b]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:45:00.000
+
+[[covid-may-b]]
+name = "Period 2"
+start = 09:50:00.000
+end = 11:00:00.000
+
+[[covid-may-b]]
+name = "Period 3"
+start = 11:00:00.000
+end = 12:15:00.000
+
+[[covid-may-b]]
+name = "Lunch"
+start = 12:15:00.000
+end = 12:45:00.000
+
+[[covid-may-b]]
+name = "Period 4"
+start = 12:50:00.000
+end = 14:00:00.000
+
+[[covid-may-b]]
+name = "Study Support"
+start = 14:05:00.000
+end = 15:00:00.000
+
+[[covid-may-b]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, lunch-agnostic {{{
+[[covid-may-w]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may-w]]
+name = "Community Meeting"
+start = 08:35:00.000
+end = 09:00:00.000
+
+[[covid-may-w]]
+name = "Period 1"
+start = 09:05:00.000
+end = 09:50:00.000
+
+[[covid-may-w]]
+name = "Period 2"
+start = 09:55:00.000
+end = 10:45:00.000
+
+[[covid-may-w]]
+name = "Lunch A / Period 3"
+start = 10:45:00.000
+end = 11:15:00.000
+
+[[covid-may-w]]
+name = "Period 3"
+start = 11:20:00.000
+end = 11:40:00.000
+
+[[covid-may-w]]
+name = "Lunch B / Period 3"
+start = 11:40:00.000
+end = 12:10:00.000
+
+[[covid-may-w]]
+name = "Period 4"
+start = 12:15:00.000
+end = 13:05:00.000
+
+[[covid-may-w]]
+name = "Advisory"
+start = 13:10:00.000
+end = 14:35:00.000
+# }}}
+
+# Wednesday schedule, Lunch A {{{
+[[covid-may-w-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may-w-a]]
+name = "Community Meeting"
+start = 08:35:00.000
+end = 09:00:00.000
+
+[[covid-may-w-a]]
+name = "Period 1"
+start = 09:05:00.000
+end = 09:50:00.000
+
+[[covid-may-w-a]]
+name = "Period 2"
+start = 09:55:00.000
+end = 10:45:00.000
+
+[[covid-may-w-a]]
+name = "Lunch"
+start = 10:45:00.000
+end = 11:15:00.000
+
+[[covid-may-w-a]]
+name = "Period 3"
+start = 11:20:00.000
+end = 12:10:00.000
+
+[[covid-may-w-a]]
+name = "Period 4"
+start = 12:15:00.000
+end = 13:05:00.000
+
+[[covid-may-w-a]]
+name = "Advisory"
+start = 13:10:00.000
+end = 14:35:00.000
+# }}}
+
+# Wednesday schedule, Lunch B {{{
+[[covid-may-w-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[covid-may-w-b]]
+name = "Community Meeting"
+start = 08:35:00.000
+end = 09:00:00.000
+
+[[covid-may-w-b]]
+name = "Period 1"
+start = 09:05:00.000
+end = 09:50:00.000
+
+[[covid-may-w-b]]
+name = "Period 2"
+start = 09:55:00.000
+end = 10:45:00.000
+
+[[covid-may-w-b]]
+name = "Period 3"
+start = 10:45:00.000
+end = 11:40:00.000
+
+[[covid-may-w-b]]
+name = "Lunch"
+start = 11:40:00.000
+end = 12:10:00.000
+
+[[covid-may-w-b]]
+name = "Period 4"
+start = 12:15:00.000
+end = 13:05:00.000
+
+[[covid-may-w-b]]
+name = "Advisory"
+start = 13:10:00.000
+end = 14:35:00.000
 # }}}
 
 # }}}
