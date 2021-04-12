@@ -316,32 +316,26 @@
     <div id="recentAttendance" style="display: block"></div>
     <!-- recentActivity is hidden because Aspen does not display recent assignments -->
   </div>
+
   <div id="reports" class="tabcontent">
-    <div class="pdf_topnav">
-      <select id="pdf_select">
-      </select>
-
+    <div id="pdf_topnav">
+      <select id="pdf_select"></select>
       <i id="expand-pdf-icon" class="hover pointer fa fa-expand-alt" onclick="toggle_fullscreen_pdf()" aria-hidden="true" tooltip="Go Fullscreen" tooltip-margin="-92px"></i>
-
       <i class="hover pointer fa fa-download" onclick="download_pdf()" aria-label="Download PDF" tooltip="Download PDF"></i>
-
       <span class="hover pointer"  >
-        <i class="fa fa-plus" onclick="zoom_in_pdf()" aria-label="Zoom in"></i>
+        <button onclick="zoom_in_pdf()" aria-label="Zoom in">+</button>
         ZOOM
-        <i class="fa fa-minus" onclick="zoom_out_pdf()" aria-label="Zoom out"></i>
+        <button onclick="zoom_out_pdf()" aria-label="Zoom out">-</button>
       </span>
-
       <span class="hover pointer" >
-        <i class="fa fa-chevron-right" onclick="next_page_pdf()" aria-label="Next page"></i>
-        PAGE
-        <i class="fa fa-chevron-left" onclick="prev_page_pdf()" aria-label="Previous page"></i>
+        <button onclick="next_page_pdf()" aria-label="Next page">&gt;</button>
+        <p id="page-indicator">PAGE</p>
+        <button onclick="prev_page_pdf()" aria-label="Previous page">&lt;</button>
       </span>
     </div>
-    <div id="pdf-container">
-      <h1 id="pdf_loading_text"> Loading... </h1>
-      <canvas id="pdf-canvas" width="400" height="400"></canvas>
-    </div>
+    <canvas id="pdf-canvas"></canvas>
   </div>
+
   <div id="information" class="tabcontent">
     <div id="instructions-header" style="text-align: left">
       <h2 class="info-header">Overview</h2>

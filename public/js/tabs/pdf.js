@@ -41,9 +41,9 @@ function generate_pdf()
 	if (!pdfrendering) {
 		pdfrendering = true;
 		let adjustedHeight = $(window).height() - 280;
-		document.getElementById('pdf-container').style.height = document.fullscreenElement !== null ?
-			adjustedHeight + 'px' : 
-			$(window).height() + 'px';
+		// document.getElementById('pdf-container').style.height = document.fullscreenElement !== null ?
+		// 	adjustedHeight + 'px' : 
+		// 	$(window).height() + 'px';
 		// TODO use lazy loading with this
 		let pdfInitParams = {data: pages[currentPdfIndex].content};
 		// Store the index of the current PDF in `currentPdfIndex`
@@ -171,14 +171,14 @@ function next_page_pdf() {
 	}
 }
 
-async function render_page_pdf(pdf, pageNumber)
-{
+async function render_page_pdf(pdf, pageNumber) {
 	let page = pdf.getPage(pageNumber);
 
 	// Update page indicator text
-	$("#page-indicator").text(`PAGE ${pageNumber} OF ${pdf.numPages}`);
+	document.getElementById('
+	page-indicator').innerText = `PAGE ${pageNumber} OF ${pdf.numPages}`;
 	let modifier = window.innerWidth >= 900 ? 900 :
-		document.getElementById('pdf-container').offsetWidth;
+		document.getElementById('reports').offsetWidth;
 
 	let canvas = document.getElementById('pdf-canvas');
 
@@ -200,10 +200,10 @@ async function render_page_pdf(pdf, pageNumber)
 	await renderTask.promise;
 	pdfrendering = false;
 	// Another page rendering is pending
-	if (pendingPageNum !== null) {
-		render_page_pdf(pendingPageNum);
-		pendingPageNum = null;
-	}
+	// if (pendingPageNum !== null) {
+	// 	render_page_pdf(pendingPageNum);
+	// 	pendingPageNum = null;
+	// }
 }
 
 async function download_pdf()

@@ -1,7 +1,20 @@
-/* Add a black background color to the top navigation */
-.pdf_topnav {
-    /* display: flex;
-    background-color: #333; */
-    /* overflow: visible; */
-    /* height: 41px; */
-  }
+#pdf_topnav {
+  display: flex;
+  justify-content: center;
+}
+
+#pdf_topnav span {
+  padding: 5px;
+  border-color: var(--black);
+  border-left: solid;
+}
+
+#pdf_topnav button {
+  border: none;
+  font-family:'Courier New', Courier, monospace;
+  font-size: 20px;
+}
+
+#page-indicator {
+  display: inline;
+}
