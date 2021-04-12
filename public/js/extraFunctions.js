@@ -1093,35 +1093,38 @@ let initialize_quarter_dropdown = function(includedTerms) {
 
 let setup_quarter_dropdown = function() {
   // Set up "current quarter" entry
-  if (currentTableData.type === "previous") {
+  if (!isNaN(currentTableData.terms.current.GPA.percent)) {
     document.querySelector("#current").textContent
-      = document.querySelector("#gpa_select").options[0].textContent
-      = document.querySelector("#gpa_select").options[1].textContent
-      = "Current Quarter";
+      = document.querySelector("#init_gpa").textContent
+      = document.querySelector("#current_gpa").textContent
+      = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
   } else {
     document.querySelector("#current").textContent
-      = document.querySelector("#gpa_select").options[0].textContent
-      = document.querySelector("#gpa_select").options[1].textContent
-      = "Current Quarter GPA: " + currentTableData.currentTermData.GPA.percent;
+      = document.querySelector("#init_gpa").textContent
+      = document.querySelector("#current_gpa").textContent
+      = "Current Quarter GPA: None";
   }
 
-  $(".gpa_select-items").children().each(function(i, elem) {
-    // Don't try to get quarter data for the 5th element in the list because
-    // that's not a quarter...
-    if (i === 5) return;
-    // We already set up the "current quarter"
-    if (i === 0) return;
-
-    if (!isNaN(currentTableData.terms["q" + i].GPA.percent)) {
-      document.querySelector("#gpa_select").options[i + 1].textContent
-        = this.textContent
-        = `Q${i} GPA: ${currentTableData.terms["q" + i].GPA.percent}`;
+  // Set up the four quarters
+  for (const term of termConverter) {
+    // We already set up the current quarter; this is only for Q1 to Q4
+    if (!/q\d/.test(term))
+      continue;
+    if (!isNaN(currentTableData.terms[term].GPA.percent)) {
+      document.querySelector(`#${term}`).textContent
+        = document.querySelector(`#${term}_gpa`).textContent
+        = `Q${term[1]} GPA: ${currentTableData.terms[term].GPA.percent}`;
     } else {
-      document.querySelector("#gpa_select").options[i + 1].textContent
-        = this.textContent
-        = `Q${i} GPA: None`;
+      document.querySelector(`#${term}`).textContent
+        = document.querySelector(`#${term}_gpa`).textContent
+        = `Q${term[1]} GPA: None`;
     }
-  });
+  }
+
+  // Set up cumulative GPA
+  document.querySelector("#cum").textContent
+    = document.querySelector("#cum_gpa").textContent
+    = `Cumulative GPA: ${currentTableData.cumGPA.percent}`;
 
   // Set text for currently selected quarter to be that of the corresponding
   // option
