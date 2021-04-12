@@ -918,6 +918,14 @@ let listener = function({ target }, callback = () => {}) {
             q3: {},
             q4: {},
           };
+
+          // For the previous year (where there is no "current" quarter),
+          // prepopulate the GPA object with dummy data
+          if (currentTableData.type === "previous") {
+            currentTableData.terms.current.GPA = {
+              percent: NaN, outOfFour: NaN, outOfFive: NaN,
+            };
+          }
         }
 
         if (typeof currentTableData.currentTermData === 'undefined') {
@@ -1169,7 +1177,9 @@ let tableData_option_onclick = function() {
     case "imported":
       // Get the first term included in the imported data
       for (term of termConverter) {
-        if (currentTableData.terms[term] && currentTableData.terms[term].GPA) {
+        if (currentTableData.terms[term]
+            && currentTableData.terms[term].GPA
+            && !isNaN(currentTableData.terms[term].GPA.percent)) {
           selTerm = term;
           break;
         }
