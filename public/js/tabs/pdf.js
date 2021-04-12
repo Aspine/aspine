@@ -10,7 +10,6 @@ let pendingPageNum = null;
 function pdfCallback(response) {
 	pages = response;
 	$("#loader").hide();
-	$("#pdf_loading_text").hide();
 	if (typeof response !== 'undefined')
 		generate_pdf();
 	initialize_pdf_dropdown(response);
@@ -23,7 +22,7 @@ function main_pdf()
 	document.getElementById('loader').style.display = 'block';
 	//sets the margins for the pdf viewer
 	setup_tooltips();
-	fetch(new Request('/pdf',{method: 'POST'}))
+	fetch(new Request('/pdf',{method: 'POST', headers: {'Content-Type': 'text/plain'}}))
 		.then(data => data.json())
 		.then(json => pdfCallback(json));
 	// Redraw PDF to fit new viewport dimensions when transitioning
@@ -36,24 +35,13 @@ function main_pdf()
 /**
  * @param {number} index
  */
-function generate_pdf()
-{
-	if (!pdfrendering) {
-		pdfrendering = true;
-		let adjustedHeight = $(window).height() - 280;
-		// document.getElementById('pdf-container').style.height = document.fullscreenElement !== null ?
-		// 	adjustedHeight + 'px' : 
-		// 	$(window).height() + 'px';
-		// TODO use lazy loading with this
-		let pdfInitParams = {data: pages[currentPdfIndex].content};
-		// Store the index of the current PDF in `currentPdfIndex`
-		let loadingTask = pdfjsLib.getDocument(pdfInitParams);
-		loadingTask.promise.then(pdf_ =>
-		{
-			currentPageNum = 1;
-			render_page_pdf(pdf_, 1);
-		}, reason => console.error(reason));
-	}
+async function generate_pdf() {
+	let pdfEmbed = document.getElementById('pdf-embed');
+	pdfEmbed.width = pdfEmbed.parentElement.offsetWidth;
+
+	let base64 = btoa(String.fromCharCode(...pages[currentPdfIndex].content.data));
+	let file = await (await fetch(`data:application/pdf;base64, ${base64}`)).blob();
+	pdfEmbed.data = window.URL.createObjectURL(file);
 }
 
 // function zoom_in_pdf() {
@@ -175,8 +163,8 @@ async function render_page_pdf(pdf, pageNumber) {
 	let page = pdf.getPage(pageNumber);
 
 	// Update page indicator text
-	document.getElementById('
-	page-indicator').innerText = `PAGE ${pageNumber} OF ${pdf.numPages}`;
+	document.getElementById('page-indicator').innerText =
+		`PAGE ${pageNumber} OF ${pdf.numPages}`;
 	let modifier = window.innerWidth >= 900 ? 900 :
 		document.getElementById('reports').offsetWidth;
 
@@ -209,13 +197,13 @@ async function render_page_pdf(pdf, pageNumber) {
 async function download_pdf()
 {
 	// Get current PDF file's raw data
-	const data = await pages[currentPdfIndex].getData();
+	const data = await pages[currentPdfIndex].content;
 	// Use application/octet-stream MIME type to force a download (instead of
 	// having it open in a browser PDF viewer)
 	saveAs(new Blob([data],
 	{
 		type: "application/octet-stream"
-	}), `${currentTableData.pdf_files[currentPdfIndex].title}.pdf`);
+	}), pages[currentPdfIndex].title);
 }
 
 //pdf dropdown stuff
@@ -223,8 +211,7 @@ function initialize_pdf_dropdown(pdfFiles) {
 	// console.log(pdfFiles);
 	const pdfSelector = document.getElementById('pdf_select');
 	for (let i = 0; i < pdfFiles.length; i++) {
-	  pdfSelector
-	  	.append(new Option(pdfFiles[i].title, i));
+	  pdfSelector.append(new Option(pdfFiles[i].title, i));
 	}
 
 	pdfSelector.addEventListener('click', evt => {

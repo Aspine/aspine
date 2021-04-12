@@ -653,14 +653,14 @@ function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
  */
 async function download_pdf(
   { session_id }: Session, id: string
-): Promise<string> {
-  return (await (await fetch(
+): Promise<ArrayBuffer> {
+  return (await fetch(
     `https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).buffer()).toString("binary");
+  )).buffer();
 }
 
 /**

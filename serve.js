@@ -184,9 +184,12 @@ app.post('/schedule', async (req, res) => {
 
 app.post('/pdf', async (req, res) => {
     try {
-        res.send(await scraper.get_pdf_files(
+        let files = await scraper.get_pdf_files(
             req.session.username, req.session.password
-        ));
+        );
+        console.log(files);
+        res.contentType('application/json')
+        res.send(files);
     } catch (e) {
         console.error(e);
         res.send([]);

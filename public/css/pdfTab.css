@@ -3,6 +3,11 @@
   justify-content: center;
 }
 
+#pdf_topnav i {
+  font-size: 27px;
+  padding: 4px;
+}
+
 #pdf_topnav span {
   padding: 5px;
   border-color: var(--black);
@@ -13,6 +18,7 @@
   border: none;
   font-family:'Courier New', Courier, monospace;
   font-size: 20px;
+  color: var(--black);
 }
 
 #page-indicator {

@@ -698,7 +698,6 @@ let initialize_quarter_dropdown = function(includedTerms) {
       and open/close the current select box: */
       e.stopPropagation();
       closeAllSelect(this);
-      pdf_closeAllSelect();
       tableData_closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");

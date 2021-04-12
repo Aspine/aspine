@@ -320,7 +320,7 @@
   <div id="reports" class="tabcontent">
     <div id="pdf_topnav">
       <select id="pdf_select"></select>
-      <i id="expand-pdf-icon" class="hover pointer fa fa-expand-alt" onclick="toggle_fullscreen_pdf()" aria-hidden="true" tooltip="Go Fullscreen" tooltip-margin="-92px"></i>
+      <!-- <i id="expand-pdf-icon" class="hover pointer fa fa-expand-alt" onclick="toggle_fullscreen_pdf()" aria-hidden="true" tooltip="Go Fullscreen" tooltip-margin="-92px"></i>
       <i class="hover pointer fa fa-download" onclick="download_pdf()" aria-label="Download PDF" tooltip="Download PDF"></i>
       <span class="hover pointer"  >
         <button onclick="zoom_in_pdf()" aria-label="Zoom in">+</button>
@@ -331,9 +331,9 @@
         <button onclick="next_page_pdf()" aria-label="Next page">&gt;</button>
         <p id="page-indicator">PAGE</p>
         <button onclick="prev_page_pdf()" aria-label="Previous page">&lt;</button>
-      </span>
+      </span> -->
     </div>
-    <canvas id="pdf-canvas"></canvas>
+    <object id="pdf-embed" data="images/banjo_fiddle.pdf" type="application/pdf" height=400px>alt : <a href="data/test.pdf">test.pdf</a></object>
   </div>
 
   <div id="information" class="tabcontent">

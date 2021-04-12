@@ -80,7 +80,7 @@ export interface ScheduleItem {
 
 export interface PDFFile {
   title: string;
-  content: string;
+  content: ArrayBuffer;
 }
 
 export interface Stats {
