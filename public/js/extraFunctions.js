@@ -859,7 +859,6 @@ let initialize_tableData_dropdown = function() {
       /* When the select box is clicked, close any other select boxes,
       and open/close the current select box: */
       e.stopPropagation();
-      pdf_closeAllSelect(this);
       closeAllSelect();
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
@@ -984,64 +983,6 @@ function setup_tooltips() {
     }
   }
 }
-
-let toggle_fullscreen_icon = function() {
-  if ($('#expand-pdf-icon i').hasClass('fa-expand-alt')) {
-    $('#expand-pdf-icon i').removeClass("fa-expand-alt").addClass("fa-compress-alt");
-    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -92px;", "margin-left: -95px;")).replace_text("Exit Fullscreen")
-
-  } else {
-    $('#expand-pdf-icon i').removeClass("fa-compress-alt").addClass("fa-expand-alt");
-    $('#expand-pdf-icon .tooltiptext').attr('style', $('#expand-pdf-icon .tooltiptext').attr('style').replace("margin-left: -95px;", "margin-left: -92px;")).replace_text("Go Fullscreen")
-
-  }
-}
-
-let toggle_fullscreen_pdf = function() {
-  let elem = document.getElementById('reports');
-
-  console.log("Fullscreen Activate");
-  if (!document.isFullScreen && !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-      toggle_fullscreen_icon();
-
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
-      elem.mozRequestFullScreen();
-      toggle_fullscreen_icon();
-
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-      let new_height = $(window).height();
-      elem.webkitRequestFullscreen();
-      toggle_fullscreen_icon();
-
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-      elem.msRequestFullscreen();
-      toggle_fullscreen_icon();
-
-    }
-  } else {
-
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-      toggle_fullscreen_icon();
-
-    } else if (document.mozCancelFullScreen) { /* Firefox */
-      document.mozCancelFullScreen();
-      toggle_fullscreen_icon();
-
-    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-      document.webkitExitFullscreen();
-      toggle_fullscreen_icon();
-
-    } else if (document.msExitFullscreen) { /* IE/Edge */
-      document.msExitFullscreen();
-      toggle_fullscreen_icon();
-
-    }
-  }
-}
-
 
 function parseTableData({ classes, quarter_oid }) {
   for (let i = 0; i < classes.length; i++) {

@@ -187,7 +187,6 @@ app.post('/pdf', async (req, res) => {
         let files = await scraper.get_pdf_files(
             req.session.username, req.session.password
         );
-        console.log(files);
         res.contentType('application/json')
         res.send(files);
     } catch (e) {
