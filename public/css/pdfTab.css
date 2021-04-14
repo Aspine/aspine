@@ -1,26 +1,18 @@
-#pdf_topnav {
-  display: flex;
-  justify-content: center;
-}
-
-#pdf_topnav i {
-  font-size: 27px;
-  padding: 4px;
-}
-
-#pdf_topnav span {
-  padding: 5px;
-  border-color: var(--black);
-  border-left: solid;
-}
-
-#pdf_topnav button {
-  border: none;
-  font-family:'Courier New', Courier, monospace;
-  font-size: 20px;
+#pdf_select {
+  background-color: var(--white);
   color: var(--black);
+  cursor: pointer;
+
+  border-color: var(--white);
+  border-radius: 5px;
+  appearance: none;
 }
 
-#page-indicator {
-  display: inline;
+#pdf_select::after {
+  content: '>';
 }
+/* #pdf_select:focus
+#pdf_select:hover {
+  outline: none;
+  border: 1px;
+} */
