@@ -368,6 +368,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             field: "percentage",
             formatter: rowGradeFormatter,
             headerSort: false,
+            width: window.matchMedia("(max-width: 576px)").matches ? 120 : "",
         },
         {
             title: "Corrections",
@@ -676,6 +677,12 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
     ],
 });
+
+if (window.matchMedia("(max-width: 576px)").matches) {
+    assignmentsTable.deleteColumn("category");
+    assignmentsTable.deleteColumn("score");
+    assignmentsTable.deleteColumn("max_score");
+}
 
 //create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator("#scheduleTable", {
