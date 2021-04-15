@@ -192,20 +192,10 @@ function update_lunch() {
 }
 
 // Takes an object with "room" and "id"
-function get_schedule(p3room, p3id) {
-    let floor = Math.floor(p3room / 1000);
-    let zone = Math.floor((p3room % 1000) / 100);
-    let subject = p3id.charAt(0);
-    if((floor === 2 || floor === 2) && subject !== 'S') {
-        document.getElementById("lunch_range").value = 1;
-        return "regular-b";
-    }
-    if((zone < 6 && (floor === 4 || floor === 5)) || (zone === 6 && (floor === 2 || floor === 3)) /* || Biology ): */) {
-        document.getElementById("lunch_range").value = 2;
-        return "regular-c";
-    }
-    document.getElementById("lunch_range").value = 0;
-    return "regular-a";
+function get_lunch(p3room, p3id) {
+    // Temporarily hard-code lunch A
+    // TODO guess lunch based on period 3 class
+    return "a";
 }
 
 // Takes the default names (Period 1, etc) and overrides with real class
@@ -226,9 +216,19 @@ function get_period_name(default_name, day_of_week) {
         period_names.silver = currentTableData.schedule.silver;
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
-        if (!covid_schedule && period_names.black[2]) {
-            current_schedule = get_schedule(period_names.black[2].room, period_names.black[2].id);
+        for (const { period, room, id } of period_names.black) {
+            if (/03/.test(period)) {
+                // Get base of schedule name (excluding lunch-specific suffix)
+                const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
+
+                current_schedule = `${base}-${get_lunch(room, id)}`;
+                break;
+            }
         }
+        update_formattedSchedule();
+        scheduleTable.setData(currentTableData.formattedSchedule);
+        // TODO account for possibility that black and silver have different
+        // lunches
     }
     let bs_day;
     if (covid_schedule) {
