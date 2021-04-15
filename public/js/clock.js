@@ -17,7 +17,7 @@ logo = document.getElementById("logo");
 
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
-let current_schedule = covid_schedule ? "covid-mt" : "regular";
+let current_schedule = covid_schedule ? "covid-may" : "regular";
 // For covid-19 schedule
 let selected_day_of_week = -1;
 let day_of_week;
@@ -173,19 +173,22 @@ function fitText(ctx, text, fontface, width) {
 }
 
 function update_lunch() {
-    if (!covid_schedule) {
-        switch(Number(document.getElementById("lunch_range").value)) {
-            case 0:
-            current_schedule = "regular-a";
+    // Get base of schedule name (excluding lunch-specific suffix)
+    const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
+    switch (parseInt(document.querySelector("#lunch_range").value)) {
+        case 0:
+            current_schedule = `${base}-a`;
             break;
-            case 1:
-            current_schedule = "regular-b";
+        case 1:
+            current_schedule = `${base}-b`;
             break;
-            case 2:
-            current_schedule = "regular-c";
-        }
+        case 2:
+            current_schedule = `${base}-c`;
+            break;
     }
     redraw_clock();
+    update_formattedSchedule();
+    scheduleTable.setData(currentTableData.formattedSchedule);
 }
 
 // Takes an object with "room" and "id"
@@ -229,15 +232,17 @@ function get_period_name(default_name, day_of_week) {
     }
     let bs_day;
     if (covid_schedule) {
+        // TODO properly handle black/silver on Wednesdays
         bs_day = [1, 4].includes(day_of_week) ? "silver" : "black";
 
-        // Determine which covid schedule to use (default to Mon/Tue)
+        // Split schedule name into base and lunch suffix
+        const [, base, suffix] = /^(.+?)(-[abc])?$/.exec(current_schedule);
+
+        // Determine which covid schedule to use
         if (day_of_week === 3) {
-            current_schedule = "covid-w";
-        } else if ([4, 5].includes(day_of_week)) {
-            current_schedule = "covid-rf";
+            current_schedule = `covid-may-w${suffix || ""}`;
         } else {
-            current_schedule = "covid-mt";
+            current_schedule = `covid-may${suffix || ""}`;
         }
     } else {
         bs_day = document.getElementById("schedule_title").innerHTML
