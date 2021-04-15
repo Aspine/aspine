@@ -980,9 +980,9 @@ p#large_clock_period {
   top: -44px;
   height: 0px;
   pointer-events: none;
-  letter-spacing: 3.15em;
+  letter-spacing: 7em;
   text-align: center;
-  left: 40px;
+  left: 87.5px;
 }
 
 .unselectable {
