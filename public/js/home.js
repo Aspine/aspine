@@ -751,6 +751,7 @@ let classesTable = new Tabulator("#classesTable", {
             align: "left",
             formatter: gradeFormatter,
             headerSort: false,
+            width: window.matchMedia("(max-width: 576px)").matches ? 100 : "",
         },
         {
             title: "Export Table Data",
