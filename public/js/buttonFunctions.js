@@ -315,18 +315,7 @@ let exportTableData = async function(prefs) {
 
   let obj = {};
 
-//#ifndef lite
-  obj.version = await $.ajax("/version");
-//#endif
-
-//#ifdef lite
-/*
-  obj.version = (
-//#include VERSION
-  );
-*/
-//#endif
-
+  obj.version = document.querySelector("#version").textContent;
   obj.username = currentTableData.username;
   obj.overview = currentTableData.overview;
 
@@ -349,15 +338,16 @@ let exportTableData = async function(prefs) {
             $("#export_status").html(
               `Downloading quarter "${term}" from Aspen&hellip;`
             );
-            const response = await $.ajax({
-              url: "/data",
+            const response = await (await fetch("/data", {
               method: "POST",
-              data: {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
                 quarter: parseInt(term.match(/\d+/)[0]),
                 year: "current",
-              },
-              dataType: "json json"
-            });
+              }),
+            })).json();
             currentTerm = term;
             responseCallbackPartial(response);
             $("#export_status").html("");
@@ -407,18 +397,7 @@ let exportTableData = async function(prefs) {
  * @returns {Promise<string>}
  */
 let importTableData = async function(obj) {
-
-//#ifndef lite
-  let version = await $.ajax("/version");
-//#endif
-
-//#ifdef lite
-/*
-  let version = (
-//#include VERSION
-  );
-*/
-//#endif
+  const version = document.querySelector("#version").textContent;
 
   let _ov, _v;
   if (

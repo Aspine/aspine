@@ -205,15 +205,15 @@ let listener = function({ target }, callback = () => {}) {
           term_dropdown_active = false;
 
           const year = currentTableDataIndex === 0 ? "current" : "previous";
-          $.ajax({
-            url: "/data",
+          fetch("/data", {
             method: "POST",
-            data: { quarter: i - 1, year: year },
-            dataType: "json json",
-            success: response => {
-              responseCallbackPartial(response);
-              callback();
+            headers: {
+              "Content-Type": "application/json",
             },
+            body: JSON.stringify({ quarter: i - 1, year: year }),
+          }).then(async res => {
+            responseCallbackPartial(await res.json());
+            callback();
           });
 
           $("#loader").show();

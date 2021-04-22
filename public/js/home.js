@@ -419,18 +419,22 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     feedback: assignment_feedback,
                 } = cell.getRow().getData();
 
-                let { high, low, median, mean } = await $.ajax({
-                    url: "/stats",
-                    method: "POST",
-                    data: {
-                        assignment_id: assignment_id,
-                        class_id: currentTableData.currentTermData
+                let { high, low, median, mean } = await (await fetch(
+                    "/stats", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            assignment_id: assignment_id,
+                            class_id: currentTableData.currentTermData
                             .classes[selected_class_i].oid,
-                        quarter_id: currentTableData.currentTermData
+                            quarter_id: currentTableData.currentTermData
                             .quarter_oid,
-                        year: currentTableData.type,
-                    },
-                });
+                            year: currentTableData.type,
+                        }),
+                    }
+                )).json();
                 if ([high, low, median, mean].some(x => x === undefined)) {
                     noStats();
                     return;
@@ -1024,12 +1028,9 @@ function responseCallback(response, includedTerms) {
     //initializes hamburger resize
     initialize_resize_hamburger()
 
-    $.ajax({
-        url: "/schedule",
+    fetch("/schedule", {
         method: "POST",
-        dataType: "json json",
-        success: scheduleCallback
-    });
+    }).then(async res => scheduleCallback(await res.json()));
 
     initialize_dayOfWeek_dropdown();
     setup_tooltips();
@@ -1216,12 +1217,9 @@ function openTab(evt, tab_name) {
             $("#loader").show();
             //sets the margins for the pdf viewer
             setup_tooltips();
-            $.ajax({
-                url: "/pdf",
+            fetch("/pdf", {
                 method: "POST",
-                dataType: "json json",
-                success: pdfCallback
-            });
+            }).then(async res => pdfCallback(await res.json()));
         } else if (typeof currentTableData.pdf_files !== 'undefined') {
             generate_pdf(pdf_index);
         }
@@ -1242,12 +1240,9 @@ function openTab(evt, tab_name) {
     }
 
     if (tab_name === "schedule" && !currentTableData.schedule) {
-        $.ajax({
-            url: "/schedule",
+        fetch("/schedule", {
             method: "POST",
-            dataType: "json json",
-            success: scheduleCallback
-        });
+        }).then(async res => scheduleCallback(await res.json()));
     }
 
     classesTable.redraw();
@@ -1325,12 +1320,13 @@ $("#import_button").click(async () => {
 });
 
 //#ifndef lite
-$.ajax({
-    url: "/data",
+fetch("/data", {
     method: "POST",
-    data: { quarter: 0, year: "current" },
-    dataType: "json json",
-}).then(responseCallback);
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ quarter: 0, year: "current" }),
+}).then(async res => responseCallback(await res.json()));
 //#endif
 
 //#ifdef lite
@@ -1341,17 +1337,13 @@ responseCallback({ nologin: true });
 
 document.getElementById("default_open").click();
 
-// Populate the version number at the bottom of the page.
-// Pointfree style does not work here because jQuery's .text behaves both as
-// an attribute and as a function.
-
-function updatesCallback(upt) {
-    $("#updates").html(upt);
-    document.getElementById("changelog").outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
+function updatesCallback(updates, current_version) {
+    document.querySelector("#updates").innerHTML = updates;
+    document.querySelector("#changelog").outerHTML =
+        "<h2 class='info-header'>Version History/What's New:</h2>";
 
     // Hide all versions prior to the current minor version
     const items = document.querySelectorAll("#updates h2:nth-of-type(n+2)");
-    const current_version = document.querySelector("#version").textContent;
     const [, curMajor, curMinor] = current_version.match(/^v?(\d+)\.(\d+)/);
     items.forEach(x => {
         const [, major, minor] = x.textContent.match(/^v?(\d+)\.(\d+)/);
@@ -1371,16 +1363,19 @@ function updatesCallback(upt) {
 }
 
 //#ifndef lite
-$.ajax("/version").then(ver => $("#version").text(ver));
-$.ajax("/updates").then(updatesCallback);
+fetch("/version").then(async res => {
+    const version = await res.text();
+    document.querySelector("#version").textContent = version;
+    updatesCallback(await (await fetch("/updates")).text(), version);
+});
 //#endif
 //#ifdef lite
 /*
-$("#version").text(
+document.querySelector("#version").textContent = (
 //#include VERSION
 );
-updatesCallback(
+updatesCallback((
 //#include CHANGELOG
-);
+), document.querySelector("#version").textContent);
 */
 //#endif
