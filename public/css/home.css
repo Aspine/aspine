@@ -832,7 +832,8 @@ canvas#large_clock {
   width: 250px
 }
 
-#stats_modal_table {
+#stats_modal_table, 
+#no_stats_modal_table {
   font-family: sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -840,14 +841,17 @@ canvas#large_clock {
 }
 
 #stats_modal_table td,
-#stats_modal_table th {
+#stats_modal_table th,
+#no_stats_modal_table td,
+#no_stats_modal_table th {
   border: 1px solid var(--white3);
   text-align: left;
   padding: 8px;
   color: var(--black);
 }
 
-#stats_modal_table th {
+#stats_modal_table th,
+#no_stats_modal_table th {
   min-width: 30%;
   max-width: 50%;
 }

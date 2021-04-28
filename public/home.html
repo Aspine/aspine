@@ -139,8 +139,27 @@
     <div id="stats_modal_content" class="modal-content">
       <span class="close" onclick="hideModal('stats')">&times;</span>
       <div id="there_are_no_stats">
-        <p id="no_stats_caption">No Statistics information for this assignment.</p>
+        <h3 id="no_stats_modal_title">Assignment: </h3>
+        <table id="no_stats_modal_table">
+          <tr>
+            <th>Your Score</th>
+            <td id="no_stats_modal_score"></td>
+          </tr>
+          <tr>
+            <th>Date Assigned</th>
+            <td id="no_stats_modal_date_assigned"></td>
+          </tr>
+          <tr>
+            <th>Date Due</th>
+            <td id="no_stats_modal_date_due"></td>
+          </tr>
+          <tr>
+            <th>Assignment Feedback</th>
+            <td id="no_stats_modal_feedback"></td>
+          </tr>
+        </table><br>
       </div>
+      <p id="no_stats_caption">No Statistics information for this assignment.</p>
       <div id="there_are_stats">
         <h3 id="stats_modal_title">Modal Title..</h3>
         <div id="notgraph">

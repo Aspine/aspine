@@ -136,7 +136,8 @@ window.addEventListener('resize', function() {
 */
 let noStats = function() {
     $("#there_are_stats").hide();
-    $("#there_are_no_stats").show();
+    $("#there_are_no_stats").hide();
+    $("#no_stats_caption").show();
     document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
     document.getElementById("stats_modal_content").style.height = "5rem";
 };
@@ -367,6 +368,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
             field: "percentage",
             formatter: rowGradeFormatter,
             headerSort: false,
+            width: window.matchMedia("(max-width: 576px)").matches ? 120 : "",
         },
         {
             title: "Corrections",
@@ -436,7 +438,14 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     }
                 )).json();
                 if ([high, low, median, mean].some(x => x === undefined)) {
-                    noStats();
+                    $("#no_stats_modal_title").text(`Assignment: ${assignment}`);
+                    $("#no_stats_modal_score").text(`${score} / ${max_score}`);
+                    $("#no_stats_modal_date_assigned").text(date_assigned);
+                    $("#no_stats_modal_date_due").text(date_due);
+                    $("#no_stats_modal_feedback").text(assignment_feedback || "None");
+                    $("#there_are_no_stats").show();
+                    document.getElementById("no_stats_caption").innerHTML = "";
+                    document.getElementById("stats_modal_content").style.height = "20rem";
                     return;
                 }
 
@@ -451,9 +460,10 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#stats_modal_date_due").text(date_due);
                 $("#stats_modal_feedback").text(assignment_feedback || "None");
 
-                $("#stats_modal_content").css("height", "600px");
+                $("#stats_modal_content").css("height", "550px");
                 $("#there_are_stats").show();
                 $("#there_are_no_stats").hide();
+                $("#no_stats_caption").hide();
 
                 let plotStats = {};
                 plotStats.fiveNums = [low, q1, median, q3, high];
@@ -668,6 +678,12 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     ],
 });
 
+if (window.matchMedia("(max-width: 576px)").matches) {
+    assignmentsTable.deleteColumn("category");
+    assignmentsTable.deleteColumn("score");
+    assignmentsTable.deleteColumn("max_score");
+}
+
 //create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator("#scheduleTable", {
     layout: "fitDataFill", //fit columns to width of table (optional)
@@ -735,6 +751,7 @@ let classesTable = new Tabulator("#classesTable", {
             align: "left",
             formatter: gradeFormatter,
             headerSort: false,
+            width: window.matchMedia("(max-width: 576px)").matches ? 100 : "",
         },
         {
             title: "Export Table Data",
