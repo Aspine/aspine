@@ -176,14 +176,16 @@ Copyright
 [Aspine contributors](https://github.com/Aspine/aspine/graphs/contributors)
 2019&ndash;21.
 
-This software is licensed under the GNU General Public License, version 3
-&mdash; see the [LICENSE.md](LICENSE.md) file for details.
+Aspine is [free/libre](https://www.gnu.org/philosophy/free-sw.html) and
+[open-source](https://opensource.org/osd) software; you can redistribute it
+and/or modify it under the terms of the GNU General Public License as published
+by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
 
-If you contribute to Aspine, please note that you are consenting to having your
-contributions released under the terms of this license. For any contributions
-dated on or after October 23, 2020, you also consent to having your
-contributions be released under any earlier or later version of the GNU General
-Public License, as published by the Free Software Foundation, if and when the
-licensing terms for Aspine are changed to allow such version(s). (For more
-information about the rationale behind this clause, please read issue
-[#38](https://github.com/Aspine/aspine/issues/38).)
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License (version 3)
+along with this program (see file `LICENSE.md`).  If not, see
+<https://www.gnu.org/licenses/>.
