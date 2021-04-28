@@ -107,10 +107,7 @@ function update_formattedSchedule() {
 }
 
 //#ifndef lite
-$.ajax({
-    url: "schedule.json",
-    method: "GET"
-}).then(schedulesCallback);
+fetch("/schedule.json").then(async res => schedulesCallback(await res.json()));
 //#endif
 //#ifdef lite
 /*
