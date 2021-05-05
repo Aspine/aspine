@@ -469,37 +469,37 @@ end = 09:00:00.000
 [[covid-may-w]]
 name = "Period 1"
 start = 09:05:00.000
-end = 09:50:00.000
+end = 09:55:00.000
 
 [[covid-may-w]]
 name = "Period 2"
-start = 09:55:00.000
-end = 10:45:00.000
+start = 10:05:00.000
+end = 10:50:00.000
 
 [[covid-may-w]]
 name = "Lunch A / Period 3"
-start = 10:45:00.000
-end = 11:15:00.000
+start = 10:50:00.000
+end = 11:20:00.000
 
 [[covid-may-w]]
 name = "Period 3"
-start = 11:20:00.000
-end = 11:40:00.000
+start = 11:25:00.000
+end = 11:45:00.000
 
 [[covid-may-w]]
 name = "Lunch B / Period 3"
-start = 11:40:00.000
-end = 12:10:00.000
+start = 11:45:00.000
+end = 12:15:00.000
 
 [[covid-may-w]]
 name = "Period 4"
-start = 12:15:00.000
-end = 13:05:00.000
+start = 12:20:00.000
+end = 13:10:00.000
 
 [[covid-may-w]]
 name = "Advisory"
-start = 13:10:00.000
-end = 14:35:00.000
+start = 13:15:00.000
+end = 14:40:00.000
 # }}}
 
 # Wednesday schedule, Lunch A {{{
@@ -516,32 +516,32 @@ end = 09:00:00.000
 [[covid-may-w-a]]
 name = "Period 1"
 start = 09:05:00.000
-end = 09:50:00.000
+end = 09:55:00.000
 
 [[covid-may-w-a]]
 name = "Period 2"
-start = 09:55:00.000
-end = 10:45:00.000
+start = 10:05:00.000
+end = 10:50:00.000
 
 [[covid-may-w-a]]
 name = "Lunch"
-start = 10:45:00.000
-end = 11:15:00.000
+start = 10:50:00.000
+end = 11:20:00.000
 
 [[covid-may-w-a]]
 name = "Period 3"
-start = 11:20:00.000
-end = 12:10:00.000
+start = 11:25:00.000
+end = 12:15:00.000
 
 [[covid-may-w-a]]
 name = "Period 4"
-start = 12:15:00.000
-end = 13:05:00.000
+start = 12:20:00.000
+end = 13:10:00.000
 
 [[covid-may-w-a]]
 name = "Advisory"
-start = 13:10:00.000
-end = 14:35:00.000
+start = 13:15:00.000
+end = 14:40:00.000
 # }}}
 
 # Wednesday schedule, Lunch B {{{
@@ -558,32 +558,32 @@ end = 09:00:00.000
 [[covid-may-w-b]]
 name = "Period 1"
 start = 09:05:00.000
-end = 09:50:00.000
+end = 09:55:00.000
 
 [[covid-may-w-b]]
 name = "Period 2"
-start = 09:55:00.000
-end = 10:45:00.000
+start = 10:05:00.000
+end = 10:50:00.000
 
 [[covid-may-w-b]]
 name = "Period 3"
-start = 10:45:00.000
-end = 11:40:00.000
+start = 10:55:00.000
+end = 11:45:00.000
 
 [[covid-may-w-b]]
 name = "Lunch"
-start = 11:40:00.000
-end = 12:10:00.000
+start = 11:45:00.000
+end = 12:15:00.000
 
 [[covid-may-w-b]]
 name = "Period 4"
-start = 12:15:00.000
-end = 13:05:00.000
+start = 12:20:00.000
+end = 13:10:00.000
 
 [[covid-may-w-b]]
 name = "Advisory"
-start = 13:10:00.000
-end = 14:35:00.000
+start = 13:15:00.000
+end = 14:40:00.000
 # }}}
 
 # }}}
