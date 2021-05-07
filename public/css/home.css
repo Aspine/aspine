@@ -507,11 +507,16 @@ button:hover {
   letter-spacing: 0.1em;
 }
 
+#schedule-selects {
+  display: flex;
+}
+
 .day_custom-select {
   position: relative;
   font-family: Arial;
   width: 300px;
   height: 45px;
+  margin-top: auto;
 }
 
 /* Hide the original select menu */
@@ -933,20 +938,21 @@ p#large_clock_period {
 }
 #lunch_range {
   -webkit-appearance: none;
-  width: 225px;
+  width: 100px;
   height: 34px;
   border-radius: 17px;
   background: var(--black);
   outline: none;
-  opacity: 0.7;
+  /*opacity: 0.7;*/
   -webkit-transition: .2s;
   transition: opacity .2s;
   padding:5px;
 }
 
-#lunch_range:hover {
+
+/*#lunch_range:hover {
   opacity: 1;
-}
+}*/
 
 #lunch_range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -980,9 +986,9 @@ p#large_clock_period {
   top: -44px;
   height: 0px;
   pointer-events: none;
-  letter-spacing: 7em;
+  letter-spacing: 2em;
   text-align: center;
-  left: 87.5px;
+  left: 25px;
 }
 
 .unselectable {
