@@ -49,6 +49,7 @@ body {
 
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #666666;
+  --gray3-to-white: #333;
 
   --black: #000000;
   --transparent-black: rgba(0, 0, 0, 0.6);
@@ -95,6 +96,7 @@ body.dark {
 
   /* Different variable for gray subtitles that turn to white for dark mode */
   --gray-to-white: #ccc;
+  --gray3-to-white: #ccc;
 
   --black: #ffffff;
 
@@ -941,7 +943,7 @@ p#large_clock_period {
   width: 100px;
   height: 34px;
   border-radius: 17px;
-  background: var(--black);
+  background: var(--gray3-to-white);
   outline: none;
   /*opacity: 0.7;*/
   -webkit-transition: .2s;
@@ -960,7 +962,7 @@ p#large_clock_period {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: var(--white);
+  background: var(--white2);
   cursor: pointer;
   /*margin: 0px 10px 0px 10px;*/
 }
