@@ -193,9 +193,21 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_lunch(p3room, p3id) {
-    // Temporarily hard-code lunch A
-    // TODO guess lunch based on period 3 class
-    return "a";
+    // War Memorial and remote teachers are lunch B
+    if (isNaN(parseInt(p3room))) {
+        return "b";
+    }
+
+    const floor = parseInt(p3room[0]);
+    const zone = parseInt(p3room[1]);
+
+    if (floor <= 4 && zone < 6) {
+        // Rindge building floors 0 to 4
+        return "a";
+    } else {
+        // Rindge building floor 5 and arts building
+        return "b";
+    }
 }
 
 // Takes the default names (Period 1, etc) and overrides with real class
@@ -221,7 +233,13 @@ function get_period_name(default_name, day_of_week) {
                 // Get base of schedule name (excluding lunch-specific suffix)
                 const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
 
-                current_schedule = `${base}-${get_lunch(room, id)}`;
+                const lunch = get_lunch(room, id);
+                current_schedule = `${base}-${lunch}`;
+
+                // Update slider
+                document.querySelector("#lunch_range").value =
+                    ["a", "b"].indexOf(lunch);
+
                 break;
             }
         }
