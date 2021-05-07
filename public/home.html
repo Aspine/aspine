@@ -287,22 +287,29 @@
       <span class="slider round"></span>
       <p id="schedule_title" class="unselectable">Black</p>
     </label>-->
-    <div class="day_custom-select" id="day_custom-select">
-      <select id="day_select">
-        <option value="-1">Select Day</option>
-        <option value="1">Monday (Silver)</option>
-        <option value="2">Tuesday (Black)</option>
-        <option value="3">Wednesday</option>
-        <option value="4">Thursday (Silver)</option>
-        <option value="5">Friday (Black)</option>
-      </select>
+    <div id="schedule-selects">
+      <div class="day_custom-select" id="day_custom-select">
+        <select id="day_select">
+          <option value="-1">Select Day</option>
+          <option value="1">Monday (Silver)</option>
+          <option value="2">Tuesday (Black)</option>
+          <option value="3">Wednesday (Alternating Silver/Black)</option>
+          <option value="4">Thursday (Silver)</option>
+          <option value="5">Friday (Black)</option>
+        </select>
+      </div>
+      <div>
+        <p>Lunch:</p>
+        <input type="range" min="0" max="1" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
+        <p id="lunch_label" class="unselectable">AB</p>
+      </div>
+      <div style="margin-left: auto; align-self: center;">
+        <a href="https://drive.google.com/file/d/1KY24FxyA_g_t3CGIeAzFD14g2t5I8HG5/view" target="_blank">More information about schedules in May/June 2021</a>
+      </div>
     </div>
     <div id="scheduleTable"></div>
   </div>
   <div id="clock" class="tabcontent">
-    <span style="display: none;"><p>Lunch:</p>
-    <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
-    <p id="lunch_label" class="unselectable">ABC</p> </span>
     <canvas id="large_clock" width="400" height="400"></canvas>
     <p id="large_clock_period"></p>
   </div>
