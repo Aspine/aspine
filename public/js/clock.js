@@ -193,6 +193,11 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_lunch(p3room, p3id) {
+    // RSTA auto garage is lunch A
+    if (p3room === "GAR") {
+        return "a";
+    }
+
     // War Memorial and remote teachers are lunch B
     if (isNaN(parseInt(p3room))) {
         return "b";
