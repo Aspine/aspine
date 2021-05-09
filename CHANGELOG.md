@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - tagged 2021-05-08
+- Add support for getting grades from previous year ([#287], [#99])
+- Add support for May-June 2021 schedule, and guess students' lunch based on
+  their third period class ([#294], [#288], [#95])
+- Modularize and refactor parts of the codebase ([#290], [#253], [#296], [#300])
+
 ## [2.7.1] - tagged 2021-04-01
 - Allow undoing the deletion of assignments using an "undo" button or
   <kbd>Ctrl</kbd>+<kbd>Z</kbd> ([#222], [#171])
@@ -208,6 +214,7 @@ and this project adheres to
 [2.6.4]: https://github.com/Aspine/aspine/releases/tag/v2.6.4
 [2.7.0]: https://github.com/Aspine/aspine/releases/tag/v2.7.0
 [2.7.1]: https://github.com/Aspine/aspine/releases/tag/v2.7.1
+[2.8.0]: https://github.com/Aspine/aspine/releases/tag/v2.8.0
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
@@ -219,7 +226,9 @@ and this project adheres to
 [#88]: https://github.com/Aspine/aspine/issues/88
 [#89]: https://github.com/Aspine/aspine/issues/89
 [#90]: https://github.com/Aspine/aspine/issues/90
+[#95]: https://github.com/Aspine/aspine/issues/95
 [#96]: https://github.com/Aspine/aspine/issues/96
+[#99]: https://github.com/Aspine/aspine/issues/99
 [#112]: https://github.com/Aspine/aspine/issues/112
 [#113]: https://github.com/Aspine/aspine/issues/113
 [#122]: https://github.com/Aspine/aspine/issues/122
@@ -255,6 +264,7 @@ and this project adheres to
 [#247]: https://github.com/Aspine/aspine/issues/247
 [#248]: https://github.com/Aspine/aspine/issues/248
 [#250]: https://github.com/Aspine/aspine/issues/250
+[#253]: https://github.com/Aspine/aspine/issues/253
 [#254]: https://github.com/Aspine/aspine/issues/254
 [#256]: https://github.com/Aspine/aspine/issues/256
 [#259]: https://github.com/Aspine/aspine/issues/259
@@ -264,6 +274,7 @@ and this project adheres to
 [#267]: https://github.com/Aspine/aspine/issues/267
 [#277]: https://github.com/Aspine/aspine/issues/277
 [#284]: https://github.com/Aspine/aspine/issues/284
+[#288]: https://github.com/Aspine/aspine/issues/288
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -339,3 +350,8 @@ and this project adheres to
 [#281]: https://github.com/Aspine/aspine/pull/281
 [#283]: https://github.com/Aspine/aspine/pull/283
 [#286]: https://github.com/Aspine/aspine/pull/286
+[#287]: https://github.com/Aspine/aspine/pull/287
+[#290]: https://github.com/Aspine/aspine/pull/290
+[#294]: https://github.com/Aspine/aspine/pull/294
+[#296]: https://github.com/Aspine/aspine/pull/296
+[#300]: https://github.com/Aspine/aspine/pull/300
