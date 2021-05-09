@@ -229,7 +229,7 @@ function get_period_name(default_name, day_of_week) {
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
         for (const { period, room, id } of period_names.black) {
-            if (/03/.test(period)) {
+            if (period.includes("03") || period.includes("BLOCK 3")) {
                 // Get base of schedule name (excluding lunch-specific suffix)
                 const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
 
