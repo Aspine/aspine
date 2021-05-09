@@ -6,7 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.8.0] - tagged 2021-05-08, production TBD
+## [2.8.1] - tagged 2021-05-08, production TBD
+- Hotfix for lunch detection after changes to Aspen and to lunch assignments
+
+## [2.8.0] - tagged 2021-05-08
 - Add support for getting grades from previous year ([#287], [#99])
 - Add support for May-June 2021 schedule, and guess students' lunch based on
   their third period class ([#294], [#288], [#95])
@@ -215,6 +218,7 @@ and this project adheres to
 [2.7.0]: https://github.com/Aspine/aspine/releases/tag/v2.7.0
 [2.7.1]: https://github.com/Aspine/aspine/releases/tag/v2.7.1
 [2.8.0]: https://github.com/Aspine/aspine/releases/tag/v2.8.0
+[2.8.1]: https://github.com/Aspine/aspine/releases/tag/v2.8.1
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#71]: https://github.com/Aspine/aspine/issues/71
