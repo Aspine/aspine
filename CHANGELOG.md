@@ -6,13 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.8.0] - tagged 2021-05-08
+## [2.8.0] - tagged 2021-05-08, production TBD
 - Add support for getting grades from previous year ([#287], [#99])
 - Add support for May-June 2021 schedule, and guess students' lunch based on
   their third period class ([#294], [#288], [#95])
 - Modularize and refactor parts of the codebase ([#290], [#253], [#296], [#300])
 
-## [2.7.1] - tagged 2021-04-01
+## [2.7.1] - tagged 2021-04-01, production 2021-04-08
 - Allow undoing the deletion of assignments using an "undo" button or
   <kbd>Ctrl</kbd>+<kbd>Z</kbd> ([#222], [#171])
 - Display period start/end times in the schedule ([#283], [#260])
