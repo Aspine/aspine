@@ -120,10 +120,6 @@ textarea {
   border: none;
 }
 
-textarea:focus, input:focus {
-  /*border-color: transparent !important;*/
-}
-
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
 input:focus::-moz-placeholder { color:transparent; }
@@ -235,7 +231,6 @@ iframe {
 
 #error {
   color: red;
-  display: none;
 }
 
 #bottom-text {
