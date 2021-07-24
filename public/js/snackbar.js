@@ -25,27 +25,30 @@ class Snackbar {
     static SHOWN = 2
 
     /**
-     * text is the main requirement, and it's just text
-     * color: String - string reference to a color or a variable, sets the background color
-     * textColor: String - string reference to a color or a variable, sets the text color
-     * buttonText: String - Sets the button text, both it and buttonClick have to be defined for the button to show
-     * buttonClick: Function - Sets the button's onclick logic, both it and buttonText have to be defined for the button to show
-     * destroyWhenButtonClicked : Boolean - Whether or not it should destroy itself when the button is clicked, defaults to true
-     * bodyClick: Function - Sets the body's onclick logic
-     * destroyWhenBodyClicked : Boolean - Whether or not it should destroy itself when the body is clicked, defaults to true
-     * timeout: Int - Time in ms
-     * timeoutFunction: Function - What to run on timeout (doesn't run if hidden or destroyed)
-     * timeoutMode: can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
+     * @constructor
+     * @param {string} text - Text is the main requirement, and it's just text
+     * @param {Object} options
+     * @param {string} options.color - reference to a color or a variable, sets the background color
+     * @param {string} options.textColor - reference to a color or a variable, sets the text color
+     * @param {string} options.buttonText - Sets the button text, both it and buttonClick have to be defined for the button to show
+     * @param {buttonCallback} options.buttonClick - Sets the button's onclick logic, both it and buttonText have to be defined for the button to show
+     * @param {boolean} [options.destroyWhenButtonClicked=true] - Whether or not it should destroy itself when the button is clicked, defaults to true
+     * @param {bodyCallback} options.bodyClick - Sets the body's onclick logic
+     * @param {boolean} [options.destroyWhenBodyClicked=true] - Whether or not it should destroy itself when the body is clicked, defaults to true
+     * @param {number} options.timeout - Time in ms
+     * @param {timeoutCallback} options.timeoutFunction - What to run on timeout (doesn't run if hidden or destroyed)
+     * @param {string} options.timeoutMode - can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
-    constructor(text, options = {}) {
+    constructor(text, options = {destroyWhenButtonClicked: true, destroyWhenBodyClicked: true}) {
+        debugger;
         this.text = text;
-        this.color = options["color"];
-        this.textColor = options["textColor"];
-        this.buttonText = options["buttonText"];
-        this.buttonClick = options["buttonClick"];
-        this.destroyWhenButtonClicked = options["destroyWhenButtonClicked"] || true;
-        this.bodyClick = options["bodyClick"];
-        this.destroyWhenBodyClicked = options["destroyWhenBodyClicked"] || true;
+        this.color = options.color;
+        this.textColor = options.textColor;
+        this.buttonText = options.buttonText;
+        this.buttonClick = options.buttonClick;
+        this.destroyWhenButtonClicked = options.destroyWhenButtonClicked;
+        this.bodyClick = options.bodyClick;
+        this.destroyWhenBodyClicked = options.destroyWhenBodyClicked;
 
         //timeout logic
         this.timeoutFunction = options["timeoutFunction"] !== undefined ? options["timeoutFunction"] : () => {};
