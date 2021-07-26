@@ -12,7 +12,7 @@ class Snackbar {
      * snackbarIDs makes sure the IDs are unique
      */
     static snackbars = {};
-    static snackbarIDs = [];
+    static snackbarIDs = new Set();
 
     /**
      * state IDs
@@ -39,34 +39,26 @@ class Snackbar {
      * @param {timeoutCallback} options.timeoutFunction - What to run on timeout (doesn't run if hidden or destroyed)
      * @param {string} options.timeoutMode - can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
-    constructor(text, options = {destroyWhenButtonClicked: true, destroyWhenBodyClicked: true}) {
+    constructor(text, options = {destroyWhenButtonClicked: true, destroyWhenBodyClicked: true, timeoutFunction: () => {}, timeoutEndFunction: "destroy" }) {
         debugger;
         this.text = text;
-        this.color = options.color;
-        this.textColor = options.textColor;
-        this.buttonText = options.buttonText;
-        this.buttonClick = options.buttonClick;
-        this.destroyWhenButtonClicked = options.destroyWhenButtonClicked;
-        this.bodyClick = options.bodyClick;
-        this.destroyWhenBodyClicked = options.destroyWhenBodyClicked;
+        Object.assign(this, options);
 
         //timeout logic
-        this.timeoutFunction = options["timeoutFunction"] !== undefined ? options["timeoutFunction"] : () => {};
-        this.timeout = options["timeout"];
         this.timeoutInProgress;
 
         //what to run on timeout
         this.timeoutEndFunction;
-        switch(options["timeoutMode"]) {
-            case "destroy":
-            case undefined:
-                this.timeoutEndFunction = () => this.destroy();
-                break;
+        switch(options.timeoutMode) {
             case "hide":
                 this.timeoutEndFunction = () => this.hide();
                 break;
             case "none":
                 this.timeoutEndFunction = () => {};
+                break;
+            case "destroy":
+            default:
+                this.timeoutEndFunction = () => this.destroy();
                 break;
         }
 
@@ -249,17 +241,14 @@ class Snackbar {
      * also creates its reference in snackbars
      */
     createID() {
-        let id = null;
+        debugger;
+        let id = 0;
+        // goes through all consecutive numbers to find an id
+        for (; id in Snackbar.snackbarIDs; id++); // checks if the id already exists, otherwise continues to iterate
 
-        //goes through all consecutive numbers to find an id
-        let iterator = 0
-        while (id === null) {
-            //checks if the id already exists, otherwise continues to iterate
-            Snackbar.snackbarIDs.includes(iterator) ? iterator++ : id = iterator;
-        }
-
-        Snackbar.snackbarIDs.push(id);
+        Snackbar.snackbarIDs.add(id);
         Snackbar.snackbars[id] = this;
+
         this.id = id;
 
         return id;
