@@ -193,26 +193,33 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_lunch(p3room, p3id) {
-    // TODO update this function for fall 2021
     // RSTA auto garage is lunch A
     if (p3room === "GAR") {
         return "a";
     }
 
-    // War Memorial and remote teachers are lunch B
+    // War Memorial is lunch C
     if (isNaN(parseInt(p3room))) {
-        return "b";
+        return "c";
     }
 
     const floor = parseInt(p3room[0]);
     const zone = parseInt(p3room[1]);
 
-    if (floor <= 4 && zone < 6) {
-        // Rindge building floors 0 to 4
+    // Arts building is lunch C
+    if (zone == 6) {
+        return "c";
+    }
+
+    // Rindge building floors 1 and 2 are lunch A
+    if (floor <= 2) {
         return "a";
-    } else {
-        // Rindge building floor 5 and arts building
+    }
+    // Rindge building floors 3, 4, 5 are lunch B if science, lunch C otherwise
+    if (p3id.startswith("S")) {
         return "b";
+    } else {
+        return "c";
     }
 }
 
@@ -244,7 +251,7 @@ function get_period_name(default_name, day_of_week) {
 
                 // Update slider
                 document.querySelector("#lunch_range").value =
-                    ["a", "b"].indexOf(lunch);
+                    ["a", "b", "c"].indexOf(lunch);
 
                 break;
             }
