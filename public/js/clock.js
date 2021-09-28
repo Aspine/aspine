@@ -215,11 +215,11 @@ function get_lunch(p3room, p3id) {
     if (floor <= 2) {
         return "a";
     }
-    // Rindge building floors 3, 4, 5 are lunch B if science, lunch C otherwise
-    if (p3id.startswith("S")) {
-        return "b";
-    } else {
+    // Rindge building floors 3, 4, 5 are lunch C if science, lunch B otherwise
+    if (p3id.startsWith("S")) {
         return "c";
+    } else {
+        return "b";
     }
 }
 
