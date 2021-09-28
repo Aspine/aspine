@@ -17,7 +17,7 @@ logo = document.getElementById("logo");
 
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
-let current_schedule = covid_schedule ? "covid-may" : "regular";
+let current_schedule = covid_schedule ? "2021fa" : "regular";
 // For covid-19 schedule
 let selected_day_of_week = -1;
 let day_of_week;
@@ -193,6 +193,7 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_lunch(p3room, p3id) {
+    // TODO update this function for fall 2021
     // RSTA auto garage is lunch A
     if (p3room === "GAR") {
         return "a";
@@ -263,9 +264,9 @@ function get_period_name(default_name, day_of_week) {
 
         // Determine which covid schedule to use
         if (day_of_week === 3) {
-            current_schedule = `covid-may-w${suffix || ""}`;
+            current_schedule = `2021fa-w${suffix || ""}`;
         } else {
-            current_schedule = `covid-may${suffix || ""}`;
+            current_schedule = `2021fa${suffix || ""}`;
         }
     } else {
         bs_day = document.getElementById("schedule_title").innerHTML
