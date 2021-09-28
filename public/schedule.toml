@@ -322,7 +322,7 @@ end = 15:00:00.001
 # }}}
 
 # Covid-19 schedule (May/June 2021) {{{
-# In effect since May 10, 2021
+# In effect from May 10 to June 14, 2021
 
 # Non-Wednesday schedule, lunch-agnostic {{{
 [[covid-may]]
@@ -584,6 +584,347 @@ end = 13:10:00.000
 name = "Advisory"
 start = 13:15:00.000
 end = 14:40:00.000
+# }}}
+
+# }}}
+
+# Fall 2021 schedule {{{
+# In effect since September 10, 2021
+
+# Non-Wednesday schedule, lunch-agnostic {{{
+[[2021fa]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2021fa]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2021fa]]
+name = "Lunch A"
+start = 11:30:00.000
+end = 12:00:00.000
+
+[[2021fa]]
+name = "Lunch B"
+start = 12:17:00.000
+end = 12:47:00.000
+
+[[2021fa]]
+name = "Lunch C"
+start = 13:00:00.000
+end = 13:30:00.000
+
+[[2021fa]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2021fa]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch A {{{
+[[2021fa-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-a]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2021fa-a]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2021fa-a]]
+name = "Lunch A"
+start = 11:30:00.000
+end = 12:00:00.000
+
+[[2021fa-a]]
+name = "Period 3"
+start = 12:05:00.000
+end = 13:30:00.000
+
+[[2021fa-a]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2021fa-a]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch B {{{
+[[2021fa-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-b]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2021fa-b]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2021fa-b]]
+name = "Period 3"
+start = 11:32:00.000
+end = 12:17:00.000
+
+[[2021fa-b]]
+name = "Lunch B"
+start = 12:17:00.000
+end = 12:47:00.000
+
+[[2021fa-b]]
+name = "Period 3"
+start = 12:50:00.000
+end = 13:30:00.000
+
+[[2021fa-b]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2021fa-b]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch C {{{
+[[2021fa-c]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-c]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2021fa-c]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2021fa-c]]
+name = "Period 3"
+start = 11:35:00.000
+end = 13:00:00.000
+
+[[2021fa-c]]
+name = "Lunch C"
+start = 13:00:00.000
+end = 13:30:00.000
+
+[[2021fa-c]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2021fa-c]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, lunch-agnostic {{{
+[[2021fa-w]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-w]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2021fa-w]]
+name = "Community Meeting"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2021fa-w]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2021fa-w]]
+name = "Lunch A"
+start = 11:50:00.000
+end = 12:20:00.000
+
+[[2021fa-w]]
+name = "Lunch B"
+start = 12:32:00.000
+end = 13:02:00.000
+
+[[2021fa-w]]
+name = "Lunch C"
+start = 13:10:00.000
+end = 13:40:00.000
+
+[[2021fa-w]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2021fa-w]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, Lunch A {{{
+[[2021fa-w-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-w-a]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2021fa-w-a]]
+name = "Community Meeting"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2021fa-w-a]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2021fa-w-a]]
+name = "Lunch A"
+start = 11:50:00.000
+end = 12:20:00.000
+
+[[2021fa-w-a]]
+name = "Period 3"
+start = 12:25:00.000
+end = 13:40:00.000
+
+[[2021fa-w-a]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2021fa-w-a]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, Lunch B {{{
+[[2021fa-w-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-w-b]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2021fa-w-b]]
+name = "Community Meeting"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2021fa-w-b]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2021fa-w-b]]
+name = "Period 3"
+start = 11:52:00.000
+end = 12:32:00.000
+
+[[2021fa-w-b]]
+name = "Lunch B"
+start = 12:32:00.000
+end = 13:02:00.000
+
+[[2021fa-w-b]]
+name = "Period 3"
+start = 13:05:00.000
+end = 13:40:00.000
+
+[[2021fa-w-b]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2021fa-w-b]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, Lunch C {{{
+[[2021fa-w-c]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2021fa-w-c]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2021fa-w-c]]
+name = "Community Meeting"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2021fa-w-c]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2021fa-w-c]]
+name = "Period 3"
+start = 11:55:00.000
+end = 13:10:00.000
+
+[[2021fa-w-c]]
+name = "Lunch C"
+start = 13:10:00.000
+end = 13:40:00.000
+
+[[2021fa-w-c]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2021fa-w-c]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
 # }}}
 
 # }}}
