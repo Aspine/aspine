@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/maxtkc/aspine/issues"
   },
-  "license": "GPL-3.0-only",
+  "license": "GPL-3.0-or-later",
   "contributors": [
     "Max Katz-Christy",
     "Cole Killian",
