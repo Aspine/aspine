@@ -17,7 +17,7 @@ logo = document.getElementById("logo");
 
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
-let current_schedule = covid_schedule ? "covid-may" : "regular";
+let current_schedule = covid_schedule ? "2021fa" : "regular";
 // For covid-19 schedule
 let selected_day_of_week = -1;
 let day_of_week;
@@ -198,19 +198,27 @@ function get_lunch(p3room, p3id) {
         return "a";
     }
 
-    // War Memorial and remote teachers are lunch B
+    // War Memorial is lunch C
     if (isNaN(parseInt(p3room))) {
-        return "b";
+        return "c";
     }
 
     const floor = parseInt(p3room[0]);
     const zone = parseInt(p3room[1]);
 
-    if (floor <= 4 && zone < 6) {
-        // Rindge building floors 0 to 4
+    // Arts building is lunch C
+    if (zone == 6) {
+        return "c";
+    }
+
+    // Rindge building floors 1 and 2 are lunch A
+    if (floor <= 2) {
         return "a";
+    }
+    // Rindge building floors 3, 4, 5 are lunch C if science, lunch B otherwise
+    if (p3id.startsWith("S")) {
+        return "c";
     } else {
-        // Rindge building floor 5 and arts building
         return "b";
     }
 }
@@ -243,7 +251,7 @@ function get_period_name(default_name, day_of_week) {
 
                 // Update slider
                 document.querySelector("#lunch_range").value =
-                    ["a", "b"].indexOf(lunch);
+                    ["a", "b", "c"].indexOf(lunch);
 
                 break;
             }
@@ -263,9 +271,9 @@ function get_period_name(default_name, day_of_week) {
 
         // Determine which covid schedule to use
         if (day_of_week === 3) {
-            current_schedule = `covid-may-w${suffix || ""}`;
+            current_schedule = `2021fa-w${suffix || ""}`;
         } else {
-            current_schedule = `covid-may${suffix || ""}`;
+            current_schedule = `2021fa${suffix || ""}`;
         }
     } else {
         bs_day = document.getElementById("schedule_title").innerHTML
