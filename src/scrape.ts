@@ -172,9 +172,26 @@ export async function get_schedule(
           const textarea = document.createElement("textarea");
           const [id, name, teacher, room] = lines.map(line => {
             textarea.innerHTML = line;
-            return textarea.value;
+            return textarea.value.trim();
           });
-          const aspenPeriod = periods[i];
+
+          let aspenPeriod = periods[i];
+
+          // Convert aspenPeriod from incorrect to correct period
+          // TODO remove this once Aspen reports periods correctly
+          let [num, per] = aspenPeriod.split("-");
+          let match;
+          if (per === "CM") {
+            per = "02B";
+          } else if ((match = per.match(/0\d/))) {
+            let perNum = parseInt(match[0].slice(-1));
+            if (perNum == 2 || perNum == 3) {
+              per = `0${perNum + 1}B`;
+            } else if (perNum >= 4) {
+              per = "PM";
+            }
+          }
+          aspenPeriod = `${num}-${per}`;
 
           if (name === "Study Support") {
             return undefined;

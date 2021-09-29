@@ -940,7 +940,7 @@ p#large_clock_period {
 }
 #lunch_range {
   -webkit-appearance: none;
-  width: 100px;
+  width: 157.5px;
   height: 34px;
   border-radius: 17px;
   background: var(--gray3-to-white);
@@ -988,9 +988,9 @@ p#large_clock_period {
   top: -44px;
   height: 0px;
   pointer-events: none;
-  letter-spacing: 2em;
+  letter-spacing: 1.75em;
   text-align: center;
-  left: 25px;
+  left: 22px;
 }
 
 .unselectable {
