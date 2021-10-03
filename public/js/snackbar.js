@@ -43,7 +43,7 @@ class Snackbar {
         this.text = text;
         Object.assign(this, options);
 
-        switch(options.timeoutMode) {
+        switch (options.timeoutMode) {
             case "hide":
                 this.timeoutEndFunction = () => this.hide();
                 break;
@@ -107,7 +107,7 @@ class Snackbar {
             //creates the text span
             const buttonTextNode = document.createElement("SPAN");
             buttonTextNode.textContent = this.buttonText;
-            // debugger;
+
             //colors the text if necessary
             if (this.textColor)
                 buttonTextNode.style.color = this.textColor;
