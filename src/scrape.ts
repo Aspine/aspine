@@ -73,7 +73,7 @@ export async function get_student(
       }
 
       let categories: { [key: string]: string } = {};
-      for (const [cat, { weight} ] of details.categories) {
+      for (const [cat, { weight } ] of details.categories) {
         categories[cat] = weight.toString();
       }
       return {
@@ -572,9 +572,18 @@ async function get_class_details(
     percentageQ1, percentageQ2, percentageQ3, percentageQ4
   } of averageSummary) {
     if (category !== "Gradebook average") {
+      let weight = parseFloat(
+        percentageQ1 || percentageQ2 || percentageQ3 || percentageQ4
+      ) / 100.0;
+
+      if (isNaN(weight)) {
+        // Weight is "N/A", meaning that there is only one category
+        // (with weight 100%)
+        weight = 1;
+      }
+
       categories.set(category, {
-        weight: parseFloat(percentageQ1 || percentageQ2 || percentageQ3 ||
-          percentageQ4) / 100.0,
+        weight: weight,
         oid: categoryOid,
       });
     }
