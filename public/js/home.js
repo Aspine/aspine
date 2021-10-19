@@ -139,7 +139,6 @@ let noStats = function() {
     $("#there_are_no_stats").hide();
     $("#no_stats_caption").show();
     document.getElementById("no_stats_caption").innerHTML = "No Statistics Data for this assignment";
-    document.getElementById("stats_modal_content").style.height = "5rem";
 };
 
 /**
@@ -445,7 +444,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     $("#no_stats_modal_feedback").text(assignment_feedback || "None");
                     $("#there_are_no_stats").show();
                     document.getElementById("no_stats_caption").innerHTML = "";
-                    document.getElementById("stats_modal_content").style.height = "auto";
                     return;
                 }
 
@@ -460,7 +458,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 $("#stats_modal_date_due").text(date_due);
                 $("#stats_modal_feedback").text(assignment_feedback || "None");
 
-                $("#stats_modal_content").css("height", "auto");
                 $("#there_are_stats").show();
                 $("#there_are_no_stats").hide();
                 $("#no_stats_caption").hide();

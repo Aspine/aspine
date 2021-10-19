@@ -800,6 +800,7 @@ canvas#large_clock {
 }
 
 #stats_modal_content {
+  min-height: 5rem;
   margin: auto;
   top: 40px;
   -webkit-animation-name: statsanimatetop !important;
