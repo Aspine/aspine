@@ -397,7 +397,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     .assignments.filter(value =>
                         !value["placeholder"]
                     )[cell.getRow().getPosition()].synthetic
-            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Statistics"></i>',
+            ) ? "" : '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Info"></i>',
             width: 40,
             align: "center",
             cellClick: async function(e, cell) {
