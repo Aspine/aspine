@@ -407,7 +407,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                         .assignments[cell.getRow().getPosition()].synthetic
                 ) return;
                 noStats();
-                document.getElementById("no_stats_caption").innerHTML = "Loading Statistics...";
+                document.getElementById("no_stats_caption").innerHTML = "Loading Assignment Info...";
                 showModal("stats");
 
                 const {
