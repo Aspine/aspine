@@ -1,7 +1,9 @@
 # Aspine
 
-Who needs Aspen when you have Aspine? It serves as a one stop shop for
-everything Aspen related, and there are rainbows!
+Aspine is a website that makes it easier for CPSD students to access and predict
+their grades. For example, a student can use Aspine to see how a better score on
+a test or an A on an upcoming project would affect their grade in a particular
+class as well as their GPA.
 
 ## Getting Started
 
@@ -9,7 +11,9 @@ Using Aspine is as easy as 1-2-3. Just visit <https://aspine.cpsd.us> and log
 in with your Aspen credentials.
 
 If you have an iPhone and would prefer to use an app instead of the website,
-Aspine is [on the iOS App Store](https://apps.apple.com/us/app/aspine/id1498713667).
+there is an [Aspine app](https://apps.apple.com/us/app/aspine/id1498713667) on
+the iOS App Store. You can also select "add to home screen" from the share sheet
+to make the Aspine website function like an app.
 
 ## Features
 
