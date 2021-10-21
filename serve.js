@@ -5,7 +5,7 @@ const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 const crypto = require('crypto');
 const fs = require('fs');
-const https = require('https');
+const http2 = require('spdy');
 const compression = require('compression');
 const child_process = require('child_process');
 const { marked } = require('marked');
@@ -79,8 +79,8 @@ if (options.secure || options.dev) {
         ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
     };
 
-    https.createServer(credentials, app).listen(options.portHttps, () =>
-        console.log(`HTTPS Server running on port ${options.portHttps}`)
+    http2.createServer(credentials, app).listen(options.portHttps, () =>
+        console.log(`HTTP/2 Server running on port ${options.portHttps}`)
     );
 }
 

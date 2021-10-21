@@ -51,6 +51,7 @@
     "memorystore": "^1.6.6",
     "node-fetch": "^2.6.7",
     "pdfjs-dist": "^2.7.570",
+    "spdy": "^4.0.2",
     "tabulator-tables": "~4.1.5",
     "tilt.js": "^1.2.1"
   },
