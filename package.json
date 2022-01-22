@@ -49,7 +49,7 @@
     "marked": "^2.0.1",
     "material-icons": "^0.6.1",
     "memorystore": "^1.6.6",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "pdfjs-dist": "^2.7.570",
     "tabulator-tables": "~4.1.5",
     "tilt.js": "^1.2.1"
