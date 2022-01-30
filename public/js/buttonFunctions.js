@@ -197,7 +197,7 @@ let updateGradePage = function() {
           "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+          "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
       else {
@@ -213,7 +213,7 @@ let updateGradePage = function() {
           quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+          "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
     }
