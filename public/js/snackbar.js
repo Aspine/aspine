@@ -12,7 +12,7 @@ class Snackbar {
      * snackbarIDs makes sure the IDs are unique
      */
     static snackbars = {};
-    static snackbarIDs = [];
+    static snackbarIDs = new Set();
 
     /**
      * state IDs
@@ -25,54 +25,40 @@ class Snackbar {
     static SHOWN = 2
 
     /**
-     * text is the main requirement, and it's just text
-     * color: String - string reference to a color or a variable, sets the background color
-     * textColor: String - string reference to a color or a variable, sets the text color
-     * buttonText: String - Sets the button text, both it and buttonClick have to be defined for the button to show
-     * buttonClick: Function - Sets the button's onclick logic, both it and buttonText have to be defined for the button to show
-     * destroyWhenButtonClicked : Boolean - Whether or not it should destroy itself when the button is clicked, defaults to true
-     * bodyClick: Function - Sets the body's onclick logic
-     * destroyWhenBodyClicked : Boolean - Whether or not it should destroy itself when the body is clicked, defaults to true
-     * timeout: Int - Time in ms
-     * timeoutFunction: Function - What to run on timeout (doesn't run if hidden or destroyed)
-     * timeoutMode: can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
+     * @constructor
+     * @param {string} text - Text is the main requirement, and it's just text
+     * @param {Object} options
+     * @param {string} [options.color="green"] - reference to a color or a variable, sets the background color
+     * @param {string} options.textColor - reference to a color or a variable, sets the text color
+     * @param {string} options.buttonText - Sets the button text, both it and buttonClick have to be defined for the button to show
+     * @param {buttonCallback} options.buttonClick - Sets the button's onclick logic, both it and buttonText have to be defined for the button to show
+     * @param {boolean} [options.destroyWhenButtonClicked=true] - Whether or not it should destroy itself when the button is clicked, defaults to true
+     * @param {bodyCallback} options.bodyClick - Sets the body's onclick logic
+     * @param {boolean} [options.destroyWhenBodyClicked=true] - Whether or not it should destroy itself when the body is clicked, defaults to true
+     * @param {number} options.timeout - Time in ms
+     * @param {timeoutCallback} options.timeoutFunction - What to run on timeout (doesn't run if hidden or destroyed)
+     * @param {string} options.timeoutMode - can be "destroy", "hide", "none" or empty. Determines what to do on timeout, destroys by default
      */
-    constructor(text, options = {}) {
+    constructor(text, options = {destroyWhenButtonClicked: true, destroyWhenBodyClicked: true, timeoutFunction: () => {}, timeoutEndFunction: "destroy" }) {
         this.text = text;
-        this.color = options["color"];
-        this.textColor = options["textColor"];
-        this.buttonText = options["buttonText"];
-        this.buttonClick = options["buttonClick"];
-        this.destroyWhenButtonClicked = options["destroyWhenButtonClicked"] || true;
-        this.bodyClick = options["bodyClick"];
-        this.destroyWhenBodyClicked = options["destroyWhenBodyClicked"] || true;
+        Object.assign(this, options);
 
-        //timeout logic
-        this.timeoutFunction = options["timeoutFunction"] !== undefined ? options["timeoutFunction"] : () => {};
-        this.timeout = options["timeout"];
-        this.timeoutInProgress;
-
-        //what to run on timeout
-        this.timeoutEndFunction;
-        switch(options["timeoutMode"]) {
-            case "destroy":
-            case undefined:
-                this.timeoutEndFunction = () => this.destroy();
-                break;
+        switch (options.timeoutMode) {
             case "hide":
                 this.timeoutEndFunction = () => this.hide();
                 break;
             case "none":
                 this.timeoutEndFunction = () => {};
                 break;
+            case "destroy":
+            default:
+                this.timeoutEndFunction = () => this.destroy();
+                break;
         }
-
-        //creates this.id
-        this.id;
 
         //sets state to destroyed
         this.state = Snackbar.DESTROYED
-
+        this.id = this.createID();
     }
 
     /**
@@ -81,16 +67,6 @@ class Snackbar {
      * returns the snackbar object
      */
     make() {
-        //stops if the element already exists
-        if (typeof document.getElementById(`sidenav-${this.id}`) === undefined) {
-            return;
-        }
-
-        //gives it an ID if it doesn't already have one
-        //this can happen if the snackbar object still exists but has been destroyed
-        if (this.id === undefined) {
-            this.createID();
-        }
 
         //creates the snackbar and gives it classes
         const snackbarNode = document.createElement("DIV");
@@ -101,11 +77,10 @@ class Snackbar {
         snackbarNode.id = `snackbar-${this.id}`;
 
         //adds color if given
-        if (this.color !== undefined) {
+        if (this.color)
             snackbarNode.style.backgroundColor = this.color;
-        }
 
-        //sets the body onclick listener which just destroys it by default
+        // sets the body onclick listener which just destroys it by default
         const bodyOnClickFunction = this.bodyClick !== undefined ? () => this.bodyClick() : () => {};
         const destroyFromBody = this.destroyWhenBodyClicked ? () => this.destroy() : () => {};
         snackbarNode.addEventListener("click", () => {
@@ -118,15 +93,14 @@ class Snackbar {
         textNode.textContent = this.text;
 
         //colors the text if necessary
-        if (this.textColor !== undefined) {
+        if (this.textColor)
             textNode.style.color = this.textColor;
-        }
 
         //adds the text node
         snackbarNode.appendChild(textNode);
 
         //makes the button if given button parameters
-        if (this.buttonText !== undefined && this.buttonClick != undefined) {
+        if (this.buttonText  && this.buttonClick) {
             //creates the button and adds class
             const buttonNode = document.createElement("BUTTON");
 
@@ -135,18 +109,16 @@ class Snackbar {
             buttonTextNode.textContent = this.buttonText;
 
             //colors the text if necessary
-            if (this.textColor !== undefined) {
+            if (this.textColor)
                 buttonTextNode.style.color = this.textColor;
-            }
 
-            if (this.color !== undefined) {
+            if (this.color)
                 buttonNode.style.backgroundColor = this.color;
-            }
 
-            //adds the text node
+            // adds the text node
             buttonNode.appendChild(buttonTextNode);
 
-            //sets the button onclick listener which runs the given funtion and destroys the snackar by default
+            // sets the button onclick listener which runs the given funtion and destroys the snackar by default
             const destroyFromButton = this.destroyWhenButtonClicked ? () => this.destroy() : () => {};
             buttonNode.addEventListener("click", event => {
                 this.buttonClick();
@@ -244,20 +216,15 @@ class Snackbar {
     /**
      * creates and reserves the ID for this snackbar
      * also creates its reference in snackbars
+     * @returns {number} new id
      */
     createID() {
-        let id = null;
+        let id = 0;
+        // goes through all consecutive numbers to find an id
+        for (; id in Snackbar.snackbarIDs; id++); // checks if the id already exists, otherwise continues to iterate
 
-        //goes through all consecutive numbers to find an id
-        let iterator = 0
-        while (id === null) {
-            //checks if the id already exists, otherwise continues to iterate
-            Snackbar.snackbarIDs.includes(iterator) ? iterator++ : id = iterator;
-        }
-
-        Snackbar.snackbarIDs.push(id);
+        Snackbar.snackbarIDs.add(id);
         Snackbar.snackbars[id] = this;
-        this.id = id;
 
         return id;
     }

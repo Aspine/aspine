@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.8.1] - tagged 2021-05-08, production TBD
+## [2.8.2] - tagged 2021-10-05, production 2021-10-06
+- Add support for fall 2021 schedule ([#311], [#308])
+- Hide PE RSTA on grades tab ([#310])
+- Small edits to `login.js` ([#305])
+- Clarify software license to be GPL version 3 or later ([#282], [#38])
+
+## [2.8.1] - tagged 2021-05-08, production 2021-05-12
 - Hotfix for lunch detection after changes to Aspen and to lunch assignments
 
 ## [2.8.0] - tagged 2021-05-08
@@ -219,8 +225,10 @@ and this project adheres to
 [2.7.1]: https://github.com/Aspine/aspine/releases/tag/v2.7.1
 [2.8.0]: https://github.com/Aspine/aspine/releases/tag/v2.8.0
 [2.8.1]: https://github.com/Aspine/aspine/releases/tag/v2.8.1
+[2.8.2]: https://github.com/Aspine/aspine/releases/tag/v2.8.2
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
+[#38]: https://github.com/Aspine/aspine/issues/38
 [#71]: https://github.com/Aspine/aspine/issues/71
 [#72]: https://github.com/Aspine/aspine/issues/72
 [#74]: https://github.com/Aspine/aspine/issues/74
@@ -279,6 +287,7 @@ and this project adheres to
 [#277]: https://github.com/Aspine/aspine/issues/277
 [#284]: https://github.com/Aspine/aspine/issues/284
 [#288]: https://github.com/Aspine/aspine/issues/288
+[#308]: https://github.com/Aspine/aspine/issues/308
 [#98]: https://github.com/Aspine/aspine/pull/98
 [#101]: https://github.com/Aspine/aspine/pull/101
 [#103]: https://github.com/Aspine/aspine/pull/103
@@ -352,6 +361,7 @@ and this project adheres to
 [#278]: https://github.com/Aspine/aspine/pull/278
 [#280]: https://github.com/Aspine/aspine/pull/280
 [#281]: https://github.com/Aspine/aspine/pull/281
+[#282]: https://github.com/Aspine/aspine/pull/282
 [#283]: https://github.com/Aspine/aspine/pull/283
 [#286]: https://github.com/Aspine/aspine/pull/286
 [#287]: https://github.com/Aspine/aspine/pull/287
@@ -359,3 +369,6 @@ and this project adheres to
 [#294]: https://github.com/Aspine/aspine/pull/294
 [#296]: https://github.com/Aspine/aspine/pull/296
 [#300]: https://github.com/Aspine/aspine/pull/300
+[#305]: https://github.com/Aspine/aspine/pull/305
+[#310]: https://github.com/Aspine/aspine/pull/310
+[#311]: https://github.com/Aspine/aspine/pull/311
