@@ -1012,7 +1012,7 @@ function responseCallback(response, includedTerms) {
         currentTableData.cumGPA.percent = "";
     }
     document.getElementById("cum_gpa").innerHTML =
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
@@ -1069,7 +1069,7 @@ function responseCallbackPartial(response) {
         currentTableData.cumGPA.percent = "";
     }
     document.getElementById("cum_gpa").innerHTML =
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {

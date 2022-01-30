@@ -384,10 +384,10 @@ let setup_quarter_dropdown = function() {
     }
   }
 
-  // Set up cumulative GPA
+  // Set up Yearly GPA
   document.querySelector("#cum").textContent
     = document.querySelector("#cum_gpa").textContent
-    = `Cumulative GPA: ${currentTableData.cumGPA.percent}`;
+    = `Yearly GPA: ${currentTableData.cumGPA.percent}`;
 
   // Set text for currently selected quarter to be that of the corresponding
   // option
