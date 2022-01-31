@@ -111,6 +111,32 @@ function darkMode() {
             'dark' : 'light');
 }
 
+// Hide or show certain columns based on the screen size
+function adjustColumns() {
+    if (window.matchMedia("(max-width: 576px)").matches) {
+        assignmentsTable.hideColumn("category");
+        assignmentsTable.hideColumn("score");
+        assignmentsTable.hideColumn("max_score");
+        categoriesTable.hideColumn("score");
+        categoriesTable.hideColumn("maxScore");
+    } else if (window.matchMedia("(max-width: 768px)").matches) {
+        assignmentsTable.hideColumn("category");
+        assignmentsTable.showColumn("score");
+        assignmentsTable.showColumn("max_score");
+        categoriesTable.hideColumn("score");
+        categoriesTable.hideColumn("maxScore");
+    } else {
+        assignmentsTable.showColumn("category");
+        assignmentsTable.showColumn("score");
+        assignmentsTable.showColumn("max_score");
+        categoriesTable.showColumn("score");
+        categoriesTable.showColumn("maxScore");
+    }
+}
+
+window.addEventListener("load", adjustColumns);
+window.addEventListener("resize", adjustColumns);
+
 initialize_jquery_prototype()
 
 $('#stats_plot').width($(window).width() * 7 / 11);
@@ -674,12 +700,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
         },
     ],
 });
-
-if (window.matchMedia("(max-width: 576px)").matches) {
-    assignmentsTable.deleteColumn("category");
-    assignmentsTable.deleteColumn("score");
-    assignmentsTable.deleteColumn("max_score");
-}
 
 //create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator("#scheduleTable", {
