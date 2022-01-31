@@ -444,6 +444,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     date_assigned,
                     date_due,
                     feedback: assignment_feedback,
+                    category,
                 } = cell.getRow().getData();
 
                 let { high, low, median, mean } = await (await fetch(
@@ -464,6 +465,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 )).json();
                 if ([high, low, median, mean].some(x => x === undefined)) {
                     $("#no_stats_modal_title").text(`Assignment: ${assignment}`);
+                    $("#no_stats_modal_category").text(category);
                     $("#no_stats_modal_score").text(`${score} / ${max_score}`);
                     $("#no_stats_modal_date_assigned").text(date_assigned);
                     $("#no_stats_modal_date_due").text(date_due);
@@ -477,6 +479,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const q3 = (high + median) / 2;
 
                 $("#stats_modal_title").text(`Assignment: ${assignment}`);
+                $("#stats_modal_category").text(category);
                 $("#stats_modal_score").text(`${score} / ${max_score}`);
                 $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
                 $("#stats_modal_mean").text(mean);
