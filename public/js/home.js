@@ -112,32 +112,43 @@ function darkMode() {
 }
 
 // Hide or show certain columns based on the screen size
-function adjustColumns() {
-    if (window.matchMedia("(max-width: 576px)").matches) {
-        assignmentsTable.hideColumn("category");
-        assignmentsTable.hideColumn("score");
-        assignmentsTable.hideColumn("max_score");
-        categoriesTable.hideColumn("score");
-        categoriesTable.hideColumn("maxScore");
-    } else if (window.matchMedia("(max-width: 768px)").matches) {
-        assignmentsTable.hideColumn("category");
-        assignmentsTable.showColumn("score");
-        assignmentsTable.showColumn("max_score");
-        categoriesTable.hideColumn("score");
-        categoriesTable.hideColumn("maxScore");
-    } else {
-        assignmentsTable.showColumn("category");
-        assignmentsTable.showColumn("score");
-        assignmentsTable.showColumn("max_score");
-        categoriesTable.showColumn("score");
-        categoriesTable.showColumn("maxScore");
+function adjustColumns(table) {
+    switch (table.element.id) {
+        case "assignmentsTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("category");
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            } else {
+                table.showColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
+            break;
+        case "categoriesTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else {
+                table.showColumn("score");
+                table.showColumn("maxScore");
+            }
+            break;
+        default:
+            console.error(`Unrecognized table with id ${table.element.id}`);
+            return;
     }
+    table.redraw();
 }
 
-window.addEventListener("load", adjustColumns);
-window.addEventListener("resize", adjustColumns);
-
-initialize_jquery_prototype()
+initialize_jquery_prototype();
 
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
@@ -261,6 +272,9 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     selectable: 1,
     layout: "fitColumns",
     layoutColumnsOnNewData: true,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [
         {title: "Category", field: "category", formatter: rowFormatter, headerSort: false},
         {title: "Weight", field: "weight", formatter: weightFormatter, headerSort: false},
@@ -351,6 +365,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     //	row.getElement().style.backgroundColor = row.getData().color;
     //},
     dataEdited: editAssignment,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [ //Define Table Columns
         {
             title: "Assignment",
@@ -828,6 +845,9 @@ let classesTable = new Tabulator("#classesTable", {
 
                 //sets up the tooltip margins for the newly created table(s)
                 setup_tooltips();
+
+                adjustColumns(assignmentsTable);
+                adjustColumns(categoriesTable);
 
                 return;
             }
