@@ -1186,11 +1186,11 @@ function schedule_toggle(day) {
 }
 
 window.onpopstate = event => {
-    openTabHelper(event.state.tab_name);
+    openTabHelper(event.state);
 }
 
 function openTab(tab_name) {
-    history.pushState({tab_name: tab_name}, '');
+    history.pushState(tab_name, '');
     openTabHelper(tab_name);
 }
 
@@ -1216,7 +1216,7 @@ function openTabHelper(tab_name) {
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
     const tab_button = document.querySelector(
-        `.tablinks[onclick*="openTab(event, '${tab_name}')"]`
+        `.tablinks[onclick*="openTab('${tab_name}')"]`
     );
     if (tab_button) {
         tab_button.classList.add("active");
