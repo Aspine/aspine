@@ -88,14 +88,14 @@
 
   <div class="tab">
     <button class="tablinks hide switch-exempt" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
-    <button class="tablinks" onclick="openTab(event, 'grades'); closeSideNav()" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'schedule'); closeSideNav()">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'recent'); closeSideNav()">Attendance</button>
+    <button class="tablinks" onclick="openTab('grades'); closeSideNav()" id="default_open">Grades</button>
+    <button class="tablinks" onclick="openTab('schedule'); closeSideNav()">Schedule</button>
+    <button class="tablinks" onclick="openTab('recent'); closeSideNav()">Attendance</button>
     <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
     <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab(event, 'reports'); closeSideNav()" id="reports_open">Reports</button>
-    <button class="tablinks" onclick="openTab(event, 'information'); closeSideNav()" id="information_open">Info</button>
+    <button class="tablinks" onclick="openTab('reports'); closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks" onclick="openTab('information'); closeSideNav()" id="information_open">Info</button>
 <!--#ifndef lite-->
     <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
 <!--#endif-->

@@ -997,7 +997,7 @@ function responseCallback(response, includedTerms) {
             currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
             currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
         } catch (err) {
-            console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+            // console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
         }
     }
 
@@ -1185,9 +1185,20 @@ function schedule_toggle(day) {
     scheduleTable.setData(currentTableData.formattedSchedule);
 }
 
-function openTab(evt, tab_name) {
+window.onpopstate = event => {
+    openTabHelper(event.state);
+}
+
+function openTab(tab_name) {
+    history.pushState(tab_name, '');
+    openTabHelper(tab_name);
+}
+
+function openTabHelper(tab_name) {
     // Declare all variables
     let i, tabcontent, tablinks;
+
+    
 
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -1205,7 +1216,7 @@ function openTab(evt, tab_name) {
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
     const tab_button = document.querySelector(
-        `.tablinks[onclick*="openTab(event, '${tab_name}')"]`
+        `.tablinks[onclick*="openTab('${tab_name}')"]`
     );
     if (tab_button) {
         tab_button.classList.add("active");
