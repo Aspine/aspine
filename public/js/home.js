@@ -1195,85 +1195,57 @@ function openTab(tab_name) {
 }
 
 function openTabHelper(tab_name) {
-    // Declare all variables
-    let i, tabcontent, tablinks;
-
-    
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
     // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    for (const active of document.getElementsByClassName("active")) {
+        active.classList.remove('active');
+        document.getElementById(active.id.substring(0, active.id.length - 5)).style.display = 'none';
     }
+
 
     // Show the current tab contents, and add an "active" class to the button
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
-    const tab_button = document.querySelector(
-        `.tablinks[onclick*="openTab('${tab_name}')"]`
-    );
-    if (tab_button) {
-        tab_button.classList.add("active");
-    }
+    document.getElementById(`${tab_name}_open`).classList.add("active");
 
-    if (tab_name === "clock") {
-        document.getElementById("small_clock").style.display = "none";
-        document.getElementById("small_clock_period").style.display = "none";
-    } else {
-        document.getElementById("small_clock").style.display = "block";
-        document.getElementById("small_clock_period").style.display = "block";
-    }
-
-    if (tab_name === "grades") {
-        //$("#mostRecentDiv").show();
-        mostRecentTable.redraw();
-    }
-
-    if (tab_name === "reports") {
-        if (!currentTableData.pdf_files) {
-            $("#loader").show();
-            //sets the margins for the pdf viewer
-            setup_tooltips();
-            fetch("/pdf", {
+    switch (tab_name) {
+        case 'grades':
+            mostRecentTable.redraw();
+            classesTable.redraw();
+            assignmentsTable.redraw();
+            break;
+        case 'reports':
+            if (!currentTableData.pdf_files) {
+                $("#loader").show();
+                //sets the margins for the pdf viewer
+                setup_tooltips();
+                fetch("/pdf", {
+                    method: "POST",
+                }).then(async res => pdfCallback(await res.json()));
+            } else if (typeof currentTableData.pdf_files !== 'undefined') {
+                generate_pdf(pdf_index);
+            }
+            // Redraw PDF to fit new viewport dimensions when transitioning
+            // in or out of fullscreen
+            let elem = document.getElementById("reports");
+            let handlefullscreenchange = function() {
+                console.log("fullscreen change");
+                window.setTimeout(generate_pdf(currentPdfIndex), 1000);
+            };
+            if (elem.onfullscreenchange !== undefined) {
+                elem.onfullscreenchange = handlefullscreenchange;
+            } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
+                elem.mozonfullscreenchange = handlefullscreenchange;
+            } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
+                elem.MSonfullscreenchange = handlefullscreenchange;
+            }
+            break;
+        case 'schedule':
+            fetch("/schedule", {
                 method: "POST",
-            }).then(async res => pdfCallback(await res.json()));
-        } else if (typeof currentTableData.pdf_files !== 'undefined') {
-            generate_pdf(pdf_index);
-        }
-        // Redraw PDF to fit new viewport dimensions when transitioning
-        // in or out of fullscreen
-        let elem = document.getElementById("reports");
-        let handlefullscreenchange = function() {
-            console.log("fullscreen change");
-            window.setTimeout(generate_pdf(currentPdfIndex), 1000);
-        };
-        if (elem.onfullscreenchange !== undefined) {
-            elem.onfullscreenchange = handlefullscreenchange;
-        } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
-            elem.mozonfullscreenchange = handlefullscreenchange;
-        } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
-            elem.MSonfullscreenchange = handlefullscreenchange;
-        }
+            }).then(async res => scheduleCallback(await res.json()));
+            scheduleTable.redraw();
+            break;
     }
-
-    if (tab_name === "schedule" && !currentTableData.schedule) {
-        fetch("/schedule", {
-            method: "POST",
-        }).then(async res => scheduleCallback(await res.json()));
-    }
-
-    classesTable.redraw();
-    assignmentsTable.redraw();
-    scheduleTable.redraw();
-    categoriesTable.redraw();
-    recentActivity.redraw();
-    recentAttendance.redraw();
 }
 
 function openSideNav() {
@@ -1358,8 +1330,6 @@ responseCallback({ nologin: true });
 */
 //#endif
 
-document.getElementById("default_open").click();
-
 function updatesCallback(updates, current_version) {
     document.querySelector("#updates").innerHTML = updates;
     document.querySelector("#changelog").outerHTML =
@@ -1402,3 +1372,5 @@ updatesCallback((
 ), document.querySelector("#version").textContent);
 */
 //#endif
+
+openTab('grades');
