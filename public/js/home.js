@@ -236,7 +236,6 @@ let recentActivity = new Tabulator("#recentActivity", {
         {title: "Class", field: "classname", formatter: classFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
-
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
