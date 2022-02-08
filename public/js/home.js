@@ -222,9 +222,17 @@ let recentActivity = new Tabulator("#recentActivity", {
     layout: "fitColumns",
     columns: [
         {title: "Date", field: "date", formatter: rowFormatter},
+<<<<<<< HEAD
         {title: "Class", field: "classname", formatter: rowFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
+=======
+        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Assignment", field: "assignmentname", formatter: rowFormatter, headerSort: false},
+        {title: "Score", field: "grade", formatter: rowFormatter, headerSort: false},
+        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
+        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
+>>>>>>> b61b7a9 (Begin reimplementing recentActivity. Uncommenting lots of code, changed the name of some properties of an object because scraper returns different names.)
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
@@ -314,9 +322,17 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
     },
     columns: [
         {title: "Date", field: "date", formatter: rowFormatter},
+<<<<<<< HEAD
         {title: "Class", field: "classname", formatter: rowFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
+=======
+        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Assignment", field: "assignmentname", formatter: rowFormatter, headerSort: false},
+        {title: "Score", field: "grade", formatter: rowFormatter, headerSort: false},
+        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
+        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
+>>>>>>> b61b7a9 (Begin reimplementing recentActivity. Uncommenting lots of code, changed the name of some properties of an object because scraper returns different names.)
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
 
@@ -1158,9 +1174,22 @@ function pdfCallback(response) {
         generate_pdf(pdf_index);
     }
 }
+<<<<<<< HEAD
 // default is set as attendance, shows assignments when toggle is checked
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
+=======
+// Currently no need for toggle; there are no recent assignments
+function recent_toggle() {
+    if (!document.getElementById("recent_toggle").checked) {
+        // recentActivity.setData(tableData.recent.recentActivityArray);
+        document.getElementById("recentActivity").style.display = "block";
+        document.getElementById("recentAttendance").style.display = "none";
+        document.getElementById("recent_title").innerHTML = "Assignments";
+        recentActivity.redraw();
+    }
+    else {
+>>>>>>> b61b7a9 (Begin reimplementing recentActivity. Uncommenting lots of code, changed the name of some properties of an object because scraper returns different names.)
         //recentActivity.setData(tableData.recent.recentAttendanceArray);
         document.getElementById("recentActivity").style.display = "none";
         document.getElementById("recentAttendance").style.display = "block";
