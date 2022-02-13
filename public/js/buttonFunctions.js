@@ -74,6 +74,7 @@ let editAssignment = function(data) {
 }
 
 let resetTableData = function() {
+  hideModal("stats");
 
   //tableData.currentTermData.classes[selected_class_i].edited = false;
   currentTableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));

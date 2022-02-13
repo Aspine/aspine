@@ -829,6 +829,7 @@ let classesTable = new Tabulator("#classesTable", {
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
+        hideModal("stats");
 
         assignmentsTable.clearFilter();
         currentFilterRow = -1;
