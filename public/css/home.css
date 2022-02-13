@@ -734,9 +734,9 @@ canvas#large_clock {
 
 .stats-window {
   display: none;
-  padding-top: 100px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   width: 100%;
-  height: 100%;
 }
 
 /* The Modal (background) */
@@ -847,7 +847,7 @@ canvas#large_clock {
   width: 250px
 }
 
-#stats_modal_table, 
+#stats_modal_table,
 #no_stats_modal_table {
   font-family: sans-serif;
   border-collapse: collapse;
