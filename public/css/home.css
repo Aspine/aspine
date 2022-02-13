@@ -734,6 +734,7 @@ canvas#large_clock {
 
 .stats-window {
   display: none;
+  padding-bottom: 5px;
   width: 100%;
 }
 
