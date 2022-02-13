@@ -734,8 +734,6 @@ canvas#large_clock {
 
 .stats-window {
   display: none;
-  padding-top: 50px;
-  padding-bottom: 50px;
   width: 100%;
 }
 
@@ -760,24 +758,8 @@ canvas#large_clock {
   color: var(--black);
   margin: auto;
   padding: 20px;
-  border: 1px solid var(--gray1);
-  width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s
-}
-
-/* Add Animation */
-@-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
-}
-
-@keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
+  border: 1px solid var(--white3);
+  width: 100%;
 }
 
 /* The Close Button */
@@ -809,11 +791,6 @@ canvas#large_clock {
 #stats_modal_content {
   min-height: 5rem;
   margin: auto;
-  top: 40px;
-  -webkit-animation-name: statsanimatetop !important;
-  -webkit-animation-duration: 0.4s !important;
-  animation-name: statsanimatetop !important;
-  animation-duration: 0.4s
 }
 
 #no_stats_caption {
@@ -869,16 +846,6 @@ canvas#large_clock {
 #no_stats_modal_table th {
   min-width: 30%;
   max-width: 50%;
-}
-
-@-webkit-keyframes statsanimatetop {
-  from {top:-300px; opacity:0}
-  to {top:140px; opacity:1}
-}
-
-@keyframes statsanimatetop {
-  from {top:-300px; opacity:0}
-  to {top:140px; opacity:1}
 }
 
 #export_modal_content, #import_modal_content {
