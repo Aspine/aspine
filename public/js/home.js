@@ -111,7 +111,44 @@ function darkMode() {
             'dark' : 'light');
 }
 
-initialize_jquery_prototype()
+// Hide or show certain columns based on the screen size
+function adjustColumns(table) {
+    switch (table.element.id) {
+        case "assignmentsTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("category");
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            } else {
+                table.showColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
+            break;
+        case "categoriesTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else {
+                table.showColumn("score");
+                table.showColumn("maxScore");
+            }
+            break;
+        default:
+            console.error(`Unrecognized table with id ${table.element.id}`);
+            return;
+    }
+    table.redraw();
+}
+
+initialize_jquery_prototype();
 
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
@@ -235,6 +272,9 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     selectable: 1,
     layout: "fitColumns",
     layoutColumnsOnNewData: true,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [
         {title: "Category", field: "category", formatter: rowFormatter, headerSort: false},
         {title: "Weight", field: "weight", formatter: weightFormatter, headerSort: false},
@@ -325,6 +365,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     //	row.getElement().style.backgroundColor = row.getData().color;
     //},
     dataEdited: editAssignment,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [ //Define Table Columns
         {
             title: "Assignment",
@@ -418,6 +461,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     date_assigned,
                     date_due,
                     feedback: assignment_feedback,
+                    category,
                 } = cell.getRow().getData();
 
                 let { high, low, median, mean } = await (await fetch(
@@ -438,6 +482,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 )).json();
                 if ([high, low, median, mean].some(x => x === undefined)) {
                     $("#no_stats_modal_title").text(`Assignment: ${assignment}`);
+                    $("#no_stats_modal_category").text(category);
                     $("#no_stats_modal_score").text(`${score} / ${max_score}`);
                     $("#no_stats_modal_date_assigned").text(date_assigned);
                     $("#no_stats_modal_date_due").text(date_due);
@@ -451,6 +496,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const q3 = (high + median) / 2;
 
                 $("#stats_modal_title").text(`Assignment: ${assignment}`);
+                $("#stats_modal_category").text(category);
                 $("#stats_modal_score").text(`${score} / ${max_score}`);
                 $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
                 $("#stats_modal_mean").text(mean);
@@ -675,12 +721,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     ],
 });
 
-if (window.matchMedia("(max-width: 576px)").matches) {
-    assignmentsTable.deleteColumn("category");
-    assignmentsTable.deleteColumn("score");
-    assignmentsTable.deleteColumn("max_score");
-}
-
 //create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator("#scheduleTable", {
     layout: "fitDataFill", //fit columns to width of table (optional)
@@ -789,6 +829,7 @@ let classesTable = new Tabulator("#classesTable", {
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
+        hideModal("stats");
 
         assignmentsTable.clearFilter();
         currentFilterRow = -1;
@@ -805,6 +846,9 @@ let classesTable = new Tabulator("#classesTable", {
 
                 //sets up the tooltip margins for the newly created table(s)
                 setup_tooltips();
+
+                adjustColumns(assignmentsTable);
+                adjustColumns(categoriesTable);
 
                 return;
             }
