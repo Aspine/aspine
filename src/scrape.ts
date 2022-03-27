@@ -358,11 +358,17 @@ async function get_recent(session: Session): Promise<Recent> {
       ].map(att => [att, x.getAttribute(att)])) as unknown as AttendanceEvent
     );
   const recentActivityArray =
-    [...document.querySelectorAll("gradebookScore")].map(x =>
-      Object.fromEntries([
+    [...document.querySelectorAll("gradebookScore")].map(x => {
+      let item = Object.fromEntries([
         "date", "classname", "grade", "assignmentname",
-      ].map(att => [att, x.getAttribute(att)])) as unknown as ActivityEvent
-    );
+      ].map(att => [att, x.getAttribute(att)])) as any;
+
+      item.score = item.grade;
+      item.assignment = item.assignmentname;
+      delete item.grade;
+      delete item.assignmentname;
+      return item as ActivityEvent;
+    });
   return { recentAttendanceArray, recentActivityArray };
 }
 
