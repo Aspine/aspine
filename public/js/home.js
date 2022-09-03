@@ -111,7 +111,44 @@ function darkMode() {
             'dark' : 'light');
 }
 
-initialize_jquery_prototype()
+// Hide or show certain columns based on the screen size
+function adjustColumns(table) {
+    switch (table.element.id) {
+        case "assignmentsTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("category");
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            } else {
+                table.showColumn("category");
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
+            break;
+        case "categoriesTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("maxScore");
+            } else {
+                table.showColumn("score");
+                table.showColumn("maxScore");
+            }
+            break;
+        default:
+            console.error(`Unrecognized table with id ${table.element.id}`);
+            return;
+    }
+    table.redraw();
+}
+
+initialize_jquery_prototype();
 
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
@@ -235,6 +272,9 @@ let categoriesTable = new Tabulator("#categoriesTable", {
     selectable: 1,
     layout: "fitColumns",
     layoutColumnsOnNewData: true,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [
         {title: "Category", field: "category", formatter: rowFormatter, headerSort: false},
         {title: "Weight", field: "weight", formatter: weightFormatter, headerSort: false},
@@ -325,6 +365,9 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     //	row.getElement().style.backgroundColor = row.getData().color;
     //},
     dataEdited: editAssignment,
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [ //Define Table Columns
         {
             title: "Assignment",
@@ -418,6 +461,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                     date_assigned,
                     date_due,
                     feedback: assignment_feedback,
+                    category,
                 } = cell.getRow().getData();
 
                 let { high, low, median, mean } = await (await fetch(
@@ -438,6 +482,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 )).json();
                 if ([high, low, median, mean].some(x => x === undefined)) {
                     $("#no_stats_modal_title").text(`Assignment: ${assignment}`);
+                    $("#no_stats_modal_category").text(category);
                     $("#no_stats_modal_score").text(`${score} / ${max_score}`);
                     $("#no_stats_modal_date_assigned").text(date_assigned);
                     $("#no_stats_modal_date_due").text(date_due);
@@ -451,6 +496,7 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
                 const q3 = (high + median) / 2;
 
                 $("#stats_modal_title").text(`Assignment: ${assignment}`);
+                $("#stats_modal_category").text(category);
                 $("#stats_modal_score").text(`${score} / ${max_score}`);
                 $("#stats_modal_lmh").text(`${low}, ${median}, ${high}`);
                 $("#stats_modal_mean").text(mean);
@@ -675,12 +721,6 @@ let assignmentsTable = new Tabulator("#assignmentsTable", {
     ],
 });
 
-if (window.matchMedia("(max-width: 576px)").matches) {
-    assignmentsTable.deleteColumn("category");
-    assignmentsTable.deleteColumn("score");
-    assignmentsTable.deleteColumn("max_score");
-}
-
 //create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator("#scheduleTable", {
     layout: "fitDataFill", //fit columns to width of table (optional)
@@ -789,6 +829,7 @@ let classesTable = new Tabulator("#classesTable", {
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
         $("#mostRecentDiv").hide();
+        hideModal("stats");
 
         assignmentsTable.clearFilter();
         currentFilterRow = -1;
@@ -805,6 +846,9 @@ let classesTable = new Tabulator("#classesTable", {
 
                 //sets up the tooltip margins for the newly created table(s)
                 setup_tooltips();
+
+                adjustColumns(assignmentsTable);
+                adjustColumns(categoriesTable);
 
                 return;
             }
@@ -997,7 +1041,7 @@ function responseCallback(response, includedTerms) {
             currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
             currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
         } catch (err) {
-            console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
+            // console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
         }
     }
 
@@ -1012,7 +1056,7 @@ function responseCallback(response, includedTerms) {
         currentTableData.cumGPA.percent = "";
     }
     document.getElementById("cum_gpa").innerHTML =
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
@@ -1069,7 +1113,7 @@ function responseCallbackPartial(response) {
         currentTableData.cumGPA.percent = "";
     }
     document.getElementById("cum_gpa").innerHTML =
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2);
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2);
 
     // Calculate GPA for each quarter
     for (let i = 1; i <= 4; i++) {
@@ -1185,84 +1229,67 @@ function schedule_toggle(day) {
     scheduleTable.setData(currentTableData.formattedSchedule);
 }
 
-function openTab(evt, tab_name) {
-    // Declare all variables
-    let i, tabcontent, tablinks;
+window.onpopstate = event => {
+    openTabHelper(event.state);
+}
 
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
+function openTab(tab_name) {
+    history.pushState(tab_name, '');
+    openTabHelper(tab_name);
+}
 
+function openTabHelper(tab_name) {
     // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    for (const active of document.getElementsByClassName("active")) {
+        active.classList.remove('active');
+        document.getElementById(active.id.substring(0, active.id.length - 5)).style.display = 'none';
     }
+
 
     // Show the current tab contents, and add an "active" class to the button
     // corresponding to the tab
     document.getElementById(tab_name).style.display = "block";
-    const tab_button = document.querySelector(
-        `.tablinks[onclick*="openTab(event, '${tab_name}')"]`
-    );
-    if (tab_button) {
-        tab_button.classList.add("active");
-    }
+    document.getElementById(`${tab_name}_open`).classList.add("active");
 
-    if (tab_name === "clock") {
-        document.getElementById("small_clock").style.display = "none";
-        document.getElementById("small_clock_period").style.display = "none";
-    } else {
-        document.getElementById("small_clock").style.display = "block";
-        document.getElementById("small_clock_period").style.display = "block";
-    }
-
-    if (tab_name === "grades") {
-        //$("#mostRecentDiv").show();
-        mostRecentTable.redraw();
-    }
-
-    if (tab_name === "reports") {
-        if (!currentTableData.pdf_files) {
-            $("#loader").show();
-            //sets the margins for the pdf viewer
-            setup_tooltips();
-            fetch("/pdf", {
+    switch (tab_name) {
+        case 'grades':
+            mostRecentTable.redraw();
+            classesTable.redraw();
+            assignmentsTable.redraw();
+            break;
+        case 'reports':
+            if (!currentTableData.pdf_files) {
+                $("#loader").show();
+                //sets the margins for the pdf viewer
+                setup_tooltips();
+                fetch("/pdf", {
+                    method: "POST",
+                }).then(async res => pdfCallback(await res.json()));
+            } else if (typeof currentTableData.pdf_files !== 'undefined') {
+                generate_pdf(pdf_index);
+            }
+            // Redraw PDF to fit new viewport dimensions when transitioning
+            // in or out of fullscreen
+            let elem = document.getElementById("reports");
+            let handlefullscreenchange = function() {
+                console.log("fullscreen change");
+                window.setTimeout(generate_pdf(currentPdfIndex), 1000);
+            };
+            if (elem.onfullscreenchange !== undefined) {
+                elem.onfullscreenchange = handlefullscreenchange;
+            } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
+                elem.mozonfullscreenchange = handlefullscreenchange;
+            } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
+                elem.MSonfullscreenchange = handlefullscreenchange;
+            }
+            break;
+        case 'schedule':
+            fetch("/schedule", {
                 method: "POST",
-            }).then(async res => pdfCallback(await res.json()));
-        } else if (typeof currentTableData.pdf_files !== 'undefined') {
-            generate_pdf(pdf_index);
-        }
-        // Redraw PDF to fit new viewport dimensions when transitioning
-        // in or out of fullscreen
-        let elem = document.getElementById("reports");
-        let handlefullscreenchange = function() {
-            console.log("fullscreen change");
-            window.setTimeout(generate_pdf(currentPdfIndex), 1000);
-        };
-        if (elem.onfullscreenchange !== undefined) {
-            elem.onfullscreenchange = handlefullscreenchange;
-        } else if (elem.mozonfullscreenchange !== undefined) { // Firefox
-            elem.mozonfullscreenchange = handlefullscreenchange;
-        } else if (elem.MSonfullscreenchange !== undefined) { // Internet Explorer
-            elem.MSonfullscreenchange = handlefullscreenchange;
-        }
+            }).then(async res => scheduleCallback(await res.json()));
+            scheduleTable.redraw();
+            break;
     }
-
-    if (tab_name === "schedule" && !currentTableData.schedule) {
-        fetch("/schedule", {
-            method: "POST",
-        }).then(async res => scheduleCallback(await res.json()));
-    }
-
-    classesTable.redraw();
-    assignmentsTable.redraw();
-    scheduleTable.redraw();
-    categoriesTable.redraw();
-    recentActivity.redraw();
-    recentAttendance.redraw();
 }
 
 function openSideNav() {
@@ -1347,8 +1374,6 @@ responseCallback({ nologin: true });
 */
 //#endif
 
-document.getElementById("default_open").click();
-
 function updatesCallback(updates, current_version) {
     document.querySelector("#updates").innerHTML = updates;
     document.querySelector("#changelog").outerHTML =
@@ -1391,3 +1416,5 @@ updatesCallback((
 ), document.querySelector("#version").textContent);
 */
 //#endif
+
+openTab('grades');

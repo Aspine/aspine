@@ -8,7 +8,7 @@ const fs = require('fs');
 const https = require('https');
 const compression = require('compression');
 const child_process = require('child_process');
-const marked = require('marked');
+const { marked } = require('marked');
 const TOML = require('@iarna/toml');
 
 const scraper = require('./js/scrape');

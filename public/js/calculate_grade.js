@@ -476,7 +476,7 @@ function GPAType() {
         "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").replace_text(
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
     else {
@@ -492,7 +492,7 @@ function GPAType() {
         quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
       );
       $("#cum, #cum_gpa").replace_text(
-        "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+        "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
       );
     }
   }

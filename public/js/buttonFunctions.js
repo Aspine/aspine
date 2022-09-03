@@ -74,6 +74,7 @@ let editAssignment = function(data) {
 }
 
 let resetTableData = function() {
+  hideModal("stats");
 
   //tableData.currentTermData.classes[selected_class_i].edited = false;
   currentTableData.terms[currentTerm] = JSON.parse(JSON.stringify(termsReset[currentTerm]));
@@ -197,7 +198,7 @@ let updateGradePage = function() {
           "<br> Calculated: " + quarterData.calcGPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+          "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
       else {
@@ -213,7 +214,7 @@ let updateGradePage = function() {
           quarterName + " GPA: " + quarterData.GPA.percent.toFixed(2)
         );
         $("#cum, #cum_gpa").html(
-          "Cumulative GPA: " + currentTableData.cumGPA.percent.toFixed(2)
+          "Yearly GPA: " + currentTableData.cumGPA.percent.toFixed(2)
         );
       }
     }

@@ -61,12 +61,12 @@
   </noscript>
 
   <div id="header">
-    <div class="logo" onclick="openTab(event, 'clock')">
+    <div class="logo" onclick="openTab('clock')" id="clock_open">
       <canvas id="small_clock" width="400" height="400"></canvas>
       <img id="logo" src="images/logo-circle198x198.png" alt="logo" hidden>
     </div>
     <p id="small_clock_period"></p>
-    <h4 id="title" onclick="openTab(event, 'grades')">Aspine</h4>
+    <h4 id="title" onclick="openTab('grades')">Aspine</h4>
   </div>
 
   <div class="dark-mode">
@@ -88,14 +88,14 @@
 
   <div class="tab">
     <button class="tablinks hide switch-exempt" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
-    <button class="tablinks" onclick="openTab(event, 'grades'); closeSideNav()" id="default_open">Grades</button>
-    <button class="tablinks" onclick="openTab(event, 'schedule'); closeSideNav()">Schedule</button>
-    <button class="tablinks" onclick="openTab(event, 'recent'); closeSideNav()">Attendance</button>
+    <button class="tablinks active" onclick="openTab('grades'); closeSideNav()" id="grades_open">Grades</button>
+    <button class="tablinks" onclick="openTab('schedule'); closeSideNav()" id="schedule_open">Schedule</button>
+    <button class="tablinks" onclick="openTab('recent'); closeSideNav()" id="recent_open">Attendance</button>
     <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
     <!-- TODO: post-covid, setting lunch should be migrated to settings -->
     <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab(event, 'reports'); closeSideNav()" id="reports_open">Reports</button>
-    <button class="tablinks" onclick="openTab(event, 'information'); closeSideNav()" id="information_open">Info</button>
+    <button class="tablinks" onclick="openTab('reports'); closeSideNav()" id="reports_open">Reports</button>
+    <button class="tablinks" onclick="openTab('information'); closeSideNav()" id="information_open">Info</button>
 <!--#ifndef lite-->
     <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
 <!--#endif-->
@@ -132,81 +132,6 @@
   -->
   <div id="loader">
     <div class="loader"></div>
-  </div>
-
-  <div id="stats_modal" class="modal">
-    <!-- Modal content -->
-    <div id="stats_modal_content" class="modal-content">
-      <span class="close" onclick="hideModal('stats')">&times;</span>
-      <div id="there_are_no_stats">
-        <h3 id="no_stats_modal_title">Assignment: </h3>
-        <table id="no_stats_modal_table">
-          <tr>
-            <th>Your Score</th>
-            <td id="no_stats_modal_score"></td>
-          </tr>
-          <tr>
-            <th>Date Assigned</th>
-            <td id="no_stats_modal_date_assigned"></td>
-          </tr>
-          <tr>
-            <th>Date Due</th>
-            <td id="no_stats_modal_date_due"></td>
-          </tr>
-          <tr>
-            <th>Assignment Feedback</th>
-            <td id="no_stats_modal_feedback"></td>
-          </tr>
-        </table><br>
-      </div>
-      <p id="no_stats_caption">No Statistics information for this assignment.</p>
-      <div id="there_are_stats">
-        <h3 id="stats_modal_title">Modal Title..</h3>
-        <div id="notgraph">
-          <svg id="stats_plot"></svg>
-          <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
-          <table id="stats_modal_table">
-            <tr>
-              <th>Your Score</th>
-              <td id="stats_modal_score"></td>
-            </tr>
-            <tr>
-              <th>Low, Median, High</th>
-              <td id="stats_modal_lmh"></td>
-            </tr>
-            <tr>
-              <th>Mean</th>
-              <td id="stats_modal_mean"></td>
-            </tr>
-            <tr>
-              <th>Date Assigned</th>
-              <td id="stats_modal_date_assigned"></td>
-            </tr>
-            <tr>
-              <th>Date Due</th>
-              <td id="stats_modal_date_due"></td>
-            </tr>
-            <tr>
-              <th>Assignment Feedback</th>
-              <td id="stats_modal_feedback"></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="corrections_modal" class="modal">
-    <!-- Modal content -->
-    <div id="corrections_modal_content" class="modal-content">
-      <span class="close" onclick="hideModal('corrections')">&times;</span>
-      <h3>Test Corrections</h3>
-      <p style='margin-bottom: 20px;'>
-        Enter the percentage of lost points which are redeemable:
-      </p>
-      <input type="text" id="corrections_modal_input">
-      <input type="button" value="Apply Corrections" onclick="correct()">
-    </div>
   </div>
 
   <div id="export_modal" class="modal" tabindex="0">
@@ -296,6 +221,90 @@
       <div id="mostRecentTable" style="display: none;"></div>
     </div>
     <div id="categoriesTable"></div>
+
+    <div id="corrections_modal" class="stats-window">
+      <!-- Modal content -->
+      <div id="corrections_modal_content" class="modal-content">
+        <span class="close" onclick="hideModal('corrections')">&times;</span>
+        <h3>Test Corrections</h3>
+        <p style='margin-bottom: 20px;'>
+          Enter the percentage of lost points which are redeemable:
+        </p>
+        <input type="text" id="corrections_modal_input">
+        <input type="button" value="Apply Corrections" onclick="correct()">
+      </div>
+    </div>
+
+    <div id="stats_modal" class="stats-window">
+      <!-- Modal content -->
+      <div id="stats_modal_content" class="modal-content">
+        <span class="close" onclick="hideModal('stats')">&times;</span>
+        <div id="there_are_no_stats">
+          <h3 id="no_stats_modal_title">Assignment: </h3>
+          <table id="no_stats_modal_table">
+            <tr>
+              <th>Category</th>
+              <td id="no_stats_modal_category"></td>
+            </tr>
+            <tr>
+              <th>Your Score</th>
+              <td id="no_stats_modal_score"></td>
+            </tr>
+            <tr>
+              <th>Date Assigned</th>
+              <td id="no_stats_modal_date_assigned"></td>
+            </tr>
+            <tr>
+              <th>Date Due</th>
+              <td id="no_stats_modal_date_due"></td>
+            </tr>
+            <tr>
+              <th>Assignment Feedback</th>
+              <td id="no_stats_modal_feedback"></td>
+            </tr>
+          </table><br>
+        </div>
+        <p id="no_stats_caption">No Statistics information for this assignment.</p>
+        <div id="there_are_stats">
+          <h3 id="stats_modal_title">Modal Title..</h3>
+          <div id="notgraph">
+            <svg id="stats_plot"></svg>
+            <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
+            <table id="stats_modal_table">
+              <tr>
+                <th>Category</th>
+                <td id="stats_modal_category"></td>
+              </tr>
+              <tr>
+                <th>Your Score</th>
+                <td id="stats_modal_score"></td>
+              </tr>
+              <tr>
+                <th>Low, Median, High</th>
+                <td id="stats_modal_lmh"></td>
+              </tr>
+              <tr>
+                <th>Mean</th>
+                <td id="stats_modal_mean"></td>
+              </tr>
+              <tr>
+                <th>Date Assigned</th>
+                <td id="stats_modal_date_assigned"></td>
+              </tr>
+              <tr>
+                <th>Date Due</th>
+                <td id="stats_modal_date_due"></td>
+              </tr>
+              <tr>
+                <th>Assignment Feedback</th>
+                <td id="stats_modal_feedback"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="assignmentsTable"></div>
   </div>
   <div id="schedule" class="tabcontent">

@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@iarna/toml": "^3.0.0",
+    "@iarna/toml": "^2.2.5",
     "animate.css": "^4.1.1",
     "body-parser": "^1.19.0",
     "commander": "^7.2.0",
@@ -46,10 +46,10 @@
     "fs-extra": "^9.1.0",
     "jquery": "^3.6.0",
     "jsdom": "^16.5.2",
-    "marked": "^2.0.1",
+    "marked": "^4.0.10",
     "material-icons": "^0.6.1",
     "memorystore": "^1.6.6",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "pdfjs-dist": "^2.7.570",
     "tabulator-tables": "~4.1.5",
     "tilt.js": "^1.2.1"
