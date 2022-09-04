@@ -246,7 +246,7 @@ function get_period_name(default_name, day_of_week) {
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
         for (const { period, room, id } of period_names.black) {
-            if (period.includes("03") || period.includes("BLOCK 3")) {
+            if (period.includes("03") || period.includes("BLOCK 3") || period.includes("3") || period.includes("Block 3")) {
                 // Get base of schedule name (excluding lunch-specific suffix)
                 const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
 
@@ -310,8 +310,12 @@ function get_period_name(default_name, day_of_week) {
         if (period === default_name)
             return name;
         // "BLOCK 1", "BLOCK 2", etc.
-        if (period === `BLOCK ${default_name.slice(-1)}`)
+        // looks for both "BLOCK" and "Block" in regex - aspen may switch between the two uses
+        if (period === `Block ${default_name.slice(-1)}` || period === `BLOCK ${default_name.slice(-1)}` || period === `block ${default_name.slice(-1)}`)
             return name;
+        if (period.includes("Falcon") && default_name.includes("Falcon")) {
+            return name;
+        }
         // For periods 1, 2, 3, 4 stored as strings containing "01", etc.
         let match;
         if ((match = period.match(/0\d/))) {
