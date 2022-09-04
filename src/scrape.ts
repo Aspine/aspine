@@ -67,7 +67,7 @@ export async function get_student(
       // exclude classes that don't recieve grades in Aspen
       if ([
         "Study Support", "Advisory", "Community Meeting", "PE Athletics",
-        "PE 10-12 Wellness Elective", "PE RSTA",
+        "PE 10-12 Wellness Elective", "PE RSTA", "Falcon Block Balance", "Falcon Pathway", 
       ].includes(details.name)) {
         return undefined;
       }
