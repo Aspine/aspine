@@ -210,7 +210,6 @@ export async function get_schedule(
         }
       }).filter(isScheduleItem)
     );
-    // console.log( { black, silver});
     return { black, silver };
   });
 }

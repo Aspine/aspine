@@ -1151,7 +1151,6 @@ function responseCallbackPartial(response) {
 function scheduleCallback(response) {
     if (!currentTableData.schedule) currentTableData.schedule = response;
 
-    // console.log(currentTableData.schedule);
     document.getElementById("scheduleTable").style.rowBackgroundColor = "black";
     //the following lines are used to set up the schedule table correctly
 
@@ -1162,8 +1161,6 @@ function scheduleCallback(response) {
         ).filter(Boolean)
     );
     
-    // console.log(blackPeriods);
-    // console.log(silverPeriods);
 
     const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 
