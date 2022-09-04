@@ -17,7 +17,7 @@ logo = document.getElementById("logo");
 
 // Controls whether to use the covid-19 schedule or the regular schedule
 const covid_schedule = true;
-let current_schedule = covid_schedule ? "2021fa" : "regular";
+let current_schedule = covid_schedule ? "2022fa" : "regular";
 // For covid-19 schedule
 let selected_day_of_week = -1;
 let day_of_week;
@@ -193,8 +193,8 @@ function update_lunch() {
 
 // Takes an object with "room" and "id"
 function get_lunch(p3room, p3id) {
-    // RSTA auto garage is lunch A
-    if (p3room === "GAR") {
+    // RSTA auto garage and Media Arts Studio are lunch A
+    if (p3room === "GAR" || p3room === "MAS") {
         return "a";
     }
 
@@ -211,15 +211,19 @@ function get_lunch(p3room, p3id) {
         return "c";
     }
 
-    // Rindge building floors 1 and 2 are lunch A
-    if (floor <= 2) {
+    // Rindge building floors 1 (RSTA), 4, and 5 are lunch A
+    if (floor === 1 || floor >= 4) {
         return "a";
     }
-    // Rindge building floors 3, 4, 5 are lunch C if science, lunch B otherwise
-    if (p3id.startsWith("S")) {
-        return "c";
-    } else {
-        return "b";
+    
+    // Rindge building floors 2 and 3 are lunch B; if science, lunch C
+    if (floor === 2 || floor === 3) {
+        if (p3id.startsWith("S")) {
+            return "c";
+        }
+        else {
+            return "b";
+        }
     }
 }
 
@@ -242,7 +246,7 @@ function get_period_name(default_name, day_of_week) {
         // Guess lunch if there is a period 3 and we are not following the
         // covid schedule
         for (const { period, room, id } of period_names.black) {
-            if (period.includes("03") || period.includes("BLOCK 3")) {
+            if (period.includes("03") || period.includes("BLOCK 3") || period.includes("3") || period.includes("Block 3")) {
                 // Get base of schedule name (excluding lunch-specific suffix)
                 const [, base] = /^(.+?)(-[abc])?$/.exec(current_schedule);
 
@@ -270,10 +274,10 @@ function get_period_name(default_name, day_of_week) {
         const [, base, suffix] = /^(.+?)(-[abc])?$/.exec(current_schedule);
 
         // Determine which covid schedule to use
-        if (day_of_week === 3) {
-            current_schedule = `2021fa-w${suffix || ""}`;
+        if (day_of_week === 4 || day_of_week === 5) {
+            current_schedule = `2022fa-tf${suffix || ""}`;
         } else {
-            current_schedule = `2021fa${suffix || ""}`;
+            current_schedule = `2022fa${suffix || ""}`;
         }
     } else {
         bs_day = document.getElementById("schedule_title").innerHTML
@@ -306,8 +310,12 @@ function get_period_name(default_name, day_of_week) {
         if (period === default_name)
             return name;
         // "BLOCK 1", "BLOCK 2", etc.
-        if (period === `BLOCK ${default_name.slice(-1)}`)
+        // looks for both "BLOCK" and "Block" in regex - aspen may switch between the two uses
+        if (period === `Block ${default_name.slice(-1)}` || period === `BLOCK ${default_name.slice(-1)}` || period === `block ${default_name.slice(-1)}`)
             return name;
+        if (period.includes("Falcon") && default_name.includes("Falcon")) {
+            return name;
+        }
         // For periods 1, 2, 3, 4 stored as strings containing "01", etc.
         let match;
         if ((match = period.match(/0\d/))) {

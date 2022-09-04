@@ -929,4 +929,347 @@ end = 15:00:00.001
 
 # }}}
 
+
+
+# Fall 2022 schedule, SY22-23 {{{
+# In effect since September 10, 2021
+
+# Monday-Wednesday schedule, lunch-agnostic {{{
+[[2022fa]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2022fa]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2022fa]]
+name = "Lunch A"
+start = 11:30:00.000
+end = 12:00:00.000
+
+[[2022fa]]
+name = "Lunch B"
+start = 12:17:00.000
+end = 12:47:00.000
+
+[[2022fa]]
+name = "Lunch C"
+start = 13:00:00.000
+end = 13:30:00.000
+
+[[2022fa]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2022fa]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Monday-Wednesday Schedule, Lunch A {{{
+[[2022fa-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-a]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2022fa-a]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2022fa-a]]
+name = "Lunch"
+start = 11:30:00.000
+end = 12:00:00.000
+
+[[2022fa-a]]
+name = "Period 3"
+start = 12:05:00.000
+end = 13:30:00.000
+
+[[2022fa-a]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2022fa-a]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch B {{{
+[[2022fa-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-b]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2022fa-b]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2022fa-b]]
+name = "Period 3"
+start = 11:32:00.000
+end = 12:17:00.000
+
+[[2022fa-b]]
+name = "Lunch"
+start = 12:17:00.000
+end = 12:47:00.000
+
+[[2022fa-b]]
+name = "Period 3"
+start = 12:50:00.000
+end = 13:30:00.000
+
+[[2022fa-b]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2022fa-b]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Non-Wednesday schedule, Lunch C {{{
+[[2022fa-c]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-c]]
+name = "Period 1"
+start = 08:35:00.000
+end = 10:00:00.000
+
+[[2022fa-c]]
+name = "Period 2"
+start = 10:05:00.000
+end = 11:30:00.000
+
+[[2022fa-c]]
+name = "Period 3"
+start = 11:35:00.000
+end = 13:00:00.000
+
+[[2022fa-c]]
+name = "Lunch"
+start = 13:00:00.000
+end = 13:30:00.000
+
+[[2022fa-c]]
+name = "Period 4"
+start = 13:35:00.000
+end = 15:00:00.000
+
+[[2022fa-c]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Thursday/Friday schedule, lunch-agnostic {{{
+[[2022fa-tf]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-tf]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2022fa-tf]]
+name = "Falcon Block"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2022fa-tf]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2022fa-tf]]
+name = "Lunch A"
+start = 11:50:00.000
+end = 12:20:00.000
+
+[[2022fa-tf]]
+name = "Lunch B"
+start = 12:32:00.000
+end = 13:02:00.000
+
+[[2022fa-tf]]
+name = "Lunch C"
+start = 13:10:00.000
+end = 13:40:00.000
+
+[[2022fa-tf]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2022fa-tf]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, Lunch A {{{
+[[2022fa-tf-a]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-tf-a]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2022fa-tf-a]]
+name = "Falcon Block"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2022fa-tf-a]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2022fa-tf-a]]
+name = "Lunch"
+start = 11:50:00.000
+end = 12:20:00.000
+
+[[2022fa-tf-a]]
+name = "Period 3"
+start = 12:25:00.000
+end = 13:40:00.000
+
+[[2022fa-tf-a]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2022fa-tf-a]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Thursday/Friday schedule, Lunch B {{{
+[[2022fa-tf-b]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-tf-b]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2022fa-tf-b]]
+name = "Falcon Block"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2022fa-tf-b]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2022fa-tf-b]]
+name = "Period 3"
+start = 11:52:00.000
+end = 12:32:00.000
+
+[[2022fa-tf-b]]
+name = "Lunch"
+start = 12:32:00.000
+end = 13:02:00.000
+
+[[2022fa-tf-b]]
+name = "Period 3"
+start = 13:05:00.000
+end = 13:40:00.000
+
+[[2022fa-tf-b]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2022fa-tf-b]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+# Wednesday schedule, Lunch C {{{
+[[2022fa-tf-c]]
+name = "Before School"
+start = 07:00:00.000
+end = 08:25:00.000
+
+[[2022fa-tf-c]]
+name = "Period 1"
+start = 08:35:00.000
+end = 09:50:00.000
+
+[[2022fa-tf-c]]
+name = "Falcon Block"
+start = 09:55:00.000
+end = 10:30:00.000
+
+[[2022fa-tf-c]]
+name = "Period 2"
+start = 10:35:00.000
+end = 11:50:00.000
+
+[[2022fa-tf-c]]
+name = "Period 3"
+start = 11:55:00.000
+end = 13:10:00.000
+
+[[2022fa-tf-c]]
+name = "Lunch"
+start = 13:10:00.000
+end = 13:40:00.000
+
+[[2022fa-tf-c]]
+name = "Period 4"
+start = 13:45:00.000
+end = 15:00:00.000
+
+[[2022fa-tf-c]]
+name = "After School"
+start = 15:00:00.000
+end = 15:00:00.001
+# }}}
+
+
+
 # vim: set fdm=marker:
