@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - tagged 2022-9-04, production TBD
+- Updated Aspine School Year 2022-2023 (#[340])
+     - Added New Schedule including Timing, Lunches, and Falcon Blocks
+     - Fixed Scraping and table population methods due to Aspen changes
+- Tables have been redesigned for a better viewing experience on mobile devices (#[330])
+- Changed wording of "Cumulative GPA" to "Yearly GPA" for clarification (#[329])
+
 ## [2.8.2] - tagged 2021-10-05, production 2021-10-06
 - Add support for fall 2021 schedule ([#311], [#308])
 - Hide PE RSTA on grades tab ([#310])
