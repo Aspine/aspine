@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.9.0] - tagged 2022-9-04, production TBD
+## [2.9.0] - tagged 2022-09-04, production 2022-09-13
 - Updated Aspine School Year 2022-2023 (#[340])
      - Added New Schedule including Timing, Lunches, and Falcon Blocks
      - Fixed Scraping and table population methods due to Aspen changes
