@@ -67,7 +67,7 @@ export async function get_student(
       // exclude classes that don't recieve grades in Aspen
       if ([
         "Study Support", "Advisory", "Community Meeting", "PE Athletics",
-        "PE 10-12 Wellness Elective", "PE RSTA",
+        "PE 10-12 Wellness Elective", "PE RSTA", "Falcon Block Balance", "Falcon Pathway", 
       ].includes(details.name)) {
         return undefined;
       }
@@ -114,6 +114,13 @@ export async function get_schedule(
 ): Promise<Schedule> {
   return await get_session(username, password, async session => {
     const current_quarter = await get_current_quarter(session, Year.Current);
+    let current_semester;
+    if (current_quarter <= 2) {
+        current_semester = 1;
+    }
+    else {
+      current_semester = 2;
+    }
     const initial_page = await (await fetch(
       "https://aspen.cpsd.us/aspen/studentScheduleContextList.do?navkey=myInfo.sch.list", {
         headers: {
@@ -123,8 +130,9 @@ export async function get_schedule(
     )).text();
     // This is a term OID that is specific to the schedule view (not the same
     // as the OIDs in the output of get_quarter_oids)
+    // currently uses semester view to scrape, quarter view behaved weirdly, can switch back easily though
     const [, term_oid] = new RegExp(
-      String.raw`<option value="(.+)">Q${current_quarter}</option>`
+      String.raw`<option value="(.+)">S${current_semester}</option>`
     ).exec(initial_page) as RegExpExecArray;
 
     const schedule_page = await (await fetch(
@@ -147,14 +155,15 @@ export async function get_schedule(
 
     // Get a matrix of the cells in the first three columns of the table, then
     // transpose it to get a list of periods, a list of silver day classes
-    // (from Monday), and a list of black day classes (from Tuesday).
+    // (from Thursday), and a list of black day classes (from Friday).
 
     const transpose = <T>(matrix: T[][]): T[][] =>
       matrix[0].map((col, i) => matrix.map(row => row[i]));
     // Transpose algorithm: https://stackoverflow.com/a/46805290
 
+    // row => [1, 5, 6] will get the periods from column 1 and all the class names from Thursday (row 5) and Friday (row 6)
     const [periods, silver_html, black_html] = transpose([...rows].map(row =>
-      [1, 2, 3].map(n =>
+      [1, 5, 6].map(n =>
         row.querySelector(`td:nth-child(${n})`)
           ?.querySelector("td, th")?.innerHTML.trim() ?? ""
       )
@@ -201,7 +210,6 @@ export async function get_schedule(
         }
       }).filter(isScheduleItem)
     );
-
     return { black, silver };
   });
 }

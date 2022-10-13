@@ -1157,6 +1157,7 @@ function scheduleCallback(response) {
             x.aspenPeriod.substring(x.aspenPeriod.indexOf("-") + 1)
         ).filter(Boolean)
     );
+    
 
     const colors = [1, 2, 3, 4, 5, 6, 7, 8].map(n => `var(--schedule${n})`);
 

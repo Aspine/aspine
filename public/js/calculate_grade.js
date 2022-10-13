@@ -121,7 +121,7 @@ function determineGradeType(assignments, categories, currentGrade) {
         //} else {
         //  type = 'totalPercent';
         //}
-        type = 'categoryPercent';
+        type = 'totalPercent';
 
         return {
             type,
