@@ -639,8 +639,7 @@ i.fa.fa-toolbox {
 }
 
 #buttonsTable .tabulator-tableHolder{
-  position: absolute;
-	left: -10000000000000000000000000px;
+  display: none;
 }
 
 #buttonsTable .tabulator-headers{
