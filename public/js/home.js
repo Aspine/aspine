@@ -758,38 +758,12 @@ let scheduleTable = new Tabulator("#scheduleTable", {
     ],
 });
 
-let classesTable = new Tabulator("#classesTable", {
+let buttonsTable = new Tabulator("#buttonsTable", {
     //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     index: "name",
     selectable: 1,
     layout: "fitColumns", //fit columns to width of table (optional)
     columns: [ // Define Table Columns
-        {
-            title: "Class",
-            field: "name",
-            formatter: cell => {
-                let rowColor = cell.getRow().getData().color;
-                let value = cell.getValue();
-
-                if (vip_username_list.includes(currentTableData.username)) {
-                    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-                }
-                if (rowColor === "black") {
-                    return value;
-                } else {
-                    return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
-                }
-            },
-            headerSort: false,
-        },
-        {
-            title: "Grade",
-            field: "grade",
-            align: "left",
-            formatter: gradeFormatter,
-            headerSort: false,
-            width: window.matchMedia("(max-width: 576px)").matches ? 100 : "",
-        },
         {
             title: "Export Table Data",
             titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>',
@@ -825,6 +799,42 @@ let classesTable = new Tabulator("#classesTable", {
             width: 76,
             headerSort: false,
             cssClass: "icon-col"
+        },
+    ],
+            }
+);
+
+let classesTable = new Tabulator("#classesTable", {
+    //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+    index: "name",
+    selectable: 1,
+    layout: "fitColumns", //fit columns to width of table (optional)
+    columns: [ // Define Table Columns
+        {
+            title: "Class",
+            field: "name",
+            formatter: cell => {
+                let rowColor = cell.getRow().getData().color;
+                let value = cell.getValue();
+
+                if (vip_username_list.includes(currentTableData.username)) {
+                    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
+                }
+                if (rowColor === "black") {
+                    return value;
+                } else {
+                    return "<span style='color:" + rowColor + "; font-weight:bold;'>" + value + "</span>";
+                }
+            },
+            headerSort: false,
+        },
+        {
+            title: "Grade",
+            field: "grade",
+            align: "left",
+            formatter: gradeFormatter,
+            headerSort: false,
+            width: window.matchMedia("(max-width: 576px)").matches ? 100 : "",
         },
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
