@@ -762,6 +762,7 @@ let buttonsTable = new Tabulator("#buttonsTable", {
     //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     index: "name",
     selectable: 1,
+    headerHozAlign:"right",
     layout: "fitColumns", //fit columns to width of table (optional)
     columns: [ // Define Table Columns
         {
