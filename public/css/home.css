@@ -638,6 +638,17 @@ i.fa.fa-toolbox {
   cursor: pointer;
 }
 
+#buttonsTable .tabulator-tableHolder{
+  position: absolute;
+	left: -10000000000000000000000000px;
+}
+
+#buttonsTable .tabulator-headers{
+  display: flex;
+  justify-content: flex-end;
+
+}
+
 #classesTable .tabulator-col,
 #classesTable .tabulator-header,
 #assignmentsTable .tabulator-col,

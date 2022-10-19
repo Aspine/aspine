@@ -234,8 +234,8 @@ iframe {
 }
 
 #bottom-text {
-  text-align: left;
-  margin: 5px 14px;
+  text-align: center;
+  margin: 0px 14px 12px;
 }
 
 #bottom-text li {
