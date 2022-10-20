@@ -140,6 +140,17 @@ function adjustColumns(table) {
                 table.showColumn("score");
                 table.showColumn("maxScore");
             }
+        case "mostRecentTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else {
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
             break;
         default:
             console.error(`Unrecognized table with id ${table.element.id}`);
