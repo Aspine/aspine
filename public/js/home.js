@@ -230,7 +230,7 @@ let recentActivity = new Tabulator("#recentActivity", {
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
-        $("#mostRecentDiv").hide();
+        document.getElementById("mostRecentDiv").style.display = "none";            
         classesTable.selectRow(1);
 
         let elem = document.getElementById("default_open");
@@ -312,7 +312,6 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
     //	height: 400,
     layout: "fitColumns",
     columns: [
-        //{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
         {title: "Date", field: "date", formatter: rowFormatter},
         {title: "Class", field: "classname", formatter: classFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
@@ -321,7 +320,7 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
-        $("#mostRecentDiv").hide();
+        document.getElementById("mostRecentDiv").style.display = "none";            
 
         classesTable.selectRow(1);
 
@@ -796,7 +795,7 @@ let buttonsTable = new Tabulator("#buttonsTable", {
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>',
+            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" onclick="openTab(\'grades\')" aria-hidden="true" tooltip="Reset"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
@@ -840,7 +839,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
-        $("#mostRecentDiv").hide();
+        document.getElementById("mostRecentDiv").style.display = "none";            
         hideModal("stats");
 
         assignmentsTable.clearFilter();
@@ -1077,7 +1076,7 @@ function responseCallback(response, includedTerms) {
 
     //Stuff to do now that tableData is initialized
 
-    $("#mostRecentDiv").show();
+    document.getElementById("mostRecentDiv").style.display = "block";            
     mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
 
     initialize_quarter_dropdown(includedTerms);
@@ -1267,6 +1266,7 @@ function openTabHelper(tab_name) {
 
     switch (tab_name) {
         case 'grades':
+            document.getElementById("mostRecentDiv").style.display = "block";
             mostRecentTable.redraw();
             classesTable.redraw();
             assignmentsTable.redraw();
