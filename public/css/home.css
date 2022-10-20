@@ -659,6 +659,10 @@ i.fa.fa-toolbox {
   height:35px;
 }
 
+#mostRecentTable .tabulator-tableHolder {
+  height: 100%;
+}
+
 #classesTable .tabulator-col,
 #classesTable .tabulator-header,
 #assignmentsTable .tabulator-col,
