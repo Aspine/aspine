@@ -320,7 +320,6 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
-        document.getElementById("mostRecentDiv").style.display = "none";            
 
         classesTable.selectRow(1);
 
