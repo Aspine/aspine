@@ -1202,21 +1202,21 @@ function pdfCallback(response) {
         generate_pdf(pdf_index);
     }
 }
-// Currently no need for toggle; there are no recent assignments
+// default is set as attendance, shows assignments when toggle is checked
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
-        // recentActivity.setData(tableData.recent.recentActivityArray);
-        document.getElementById("recentActivity").style.display = "block";
-        document.getElementById("recentAttendance").style.display = "none";
-        document.getElementById("recent_title").innerHTML = "Assignments";
-        recentActivity.redraw();
-    }
-    else {
         //recentActivity.setData(tableData.recent.recentAttendanceArray);
         document.getElementById("recentActivity").style.display = "none";
         document.getElementById("recentAttendance").style.display = "block";
         document.getElementById("recent_title").innerHTML = "Attendance";
         recentAttendance.redraw();
+    }
+    else {
+        // recentActivity.setData(tableData.recent.recentActivityArray);
+        document.getElementById("recentActivity").style.display = "block";
+        document.getElementById("recentAttendance").style.display = "none";
+        document.getElementById("recent_title").innerHTML = "Assignments";
+        recentActivity.redraw();
     }
 }
 

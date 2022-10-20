@@ -305,8 +305,11 @@ button:hover {
   background-color: var(--white3);
 }
 
-
+/* sets attendance as default instead of activity */
 #recentAttendance {
+  display: block;
+}
+#recentActivity {
   display: none;
 }
 
