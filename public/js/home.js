@@ -140,6 +140,17 @@ function adjustColumns(table) {
                 table.showColumn("score");
                 table.showColumn("maxScore");
             }
+        case "mostRecentTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else {
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
             break;
         default:
             console.error(`Unrecognized table with id ${table.element.id}`);
@@ -311,6 +322,9 @@ let categoriesTable = new Tabulator("#categoriesTable", {
 let mostRecentTable = new Tabulator("#mostRecentTable", {
     height: 450,
     layout: "fitColumns",
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [
         {title: "Date", field: "date", formatter: rowFormatter},
         {title: "Class", field: "classname", formatter: classFormatter},
@@ -859,6 +873,7 @@ let classesTable = new Tabulator("#classesTable", {
 
                 adjustColumns(assignmentsTable);
                 adjustColumns(categoriesTable);
+                adjustColumns(mostRecentTable);
 
                 return;
             }
