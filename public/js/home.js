@@ -309,7 +309,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
 });
 
 let mostRecentTable = new Tabulator("#mostRecentTable", {
-    //	height: 400,
+    height: 450,
     layout: "fitColumns",
     columns: [
         {title: "Date", field: "date", formatter: rowFormatter},
@@ -1075,8 +1075,9 @@ function responseCallback(response, includedTerms) {
 
     //Stuff to do now that tableData is initialized
 
-    document.getElementById("mostRecentDiv").style.display = "block";            
-    mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
+    document.getElementById("mostRecentDiv").style.display = "block";        
+    // this is where we decide what goes into most recent activity on grades page (how many assignments)    
+    mostRecentTable.setData(currentTableData.recent.recentActivityArray);
 
     initialize_quarter_dropdown(includedTerms);
     setup_quarter_dropdown();
@@ -1087,7 +1088,11 @@ function responseCallback(response, includedTerms) {
         initialize_tableData_dropdown();
     }
 
+    // potentially add loop here to match assignments
+    // if recent assignment id == actual assignment id, add to array
+    // loop over the whole list of assignment ids for the class to match
     recentActivity.setData(currentTableData.recent.recentActivityArray);
+
     recentAttendance.setData(currentTableData.recent.recentAttendanceArray);
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
