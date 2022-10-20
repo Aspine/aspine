@@ -1077,7 +1077,7 @@ function responseCallback(response, includedTerms) {
 
     document.getElementById("mostRecentDiv").style.display = "block";        
     // this is where we decide what goes into most recent activity on grades page (how many assignments)    
-    mostRecentTable.setData(currentTableData.recent.recentActivityArray);
+    mostRecentTable.setData(currentTableData.recent.recentActivityArray); // .slide(0, i) if we want to limit
 
     initialize_quarter_dropdown(includedTerms);
     setup_quarter_dropdown();
