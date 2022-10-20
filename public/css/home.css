@@ -648,11 +648,12 @@ i.fa.fa-toolbox {
 #buttonsTable .tabulator-headers{
   display: flex;
   justify-content: flex-end;
-
 }
 
 #mostRecentTable .tabulator-tableHolder {
-  height: 100%;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 100% !important;
 }
 
 #classesTable .tabulator-col,

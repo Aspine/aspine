@@ -320,7 +320,7 @@ let categoriesTable = new Tabulator("#categoriesTable", {
 });
 
 let mostRecentTable = new Tabulator("#mostRecentTable", {
-    height: 450,
+    height: "35vh",
     layout: "fitColumns",
     tableBuilt: function() {
         window.addEventListener("resize", () => adjustColumns(this));
