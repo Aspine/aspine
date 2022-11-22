@@ -934,12 +934,11 @@ p#large_clock_period {
   width: 157.5px;
   height: 34px;
   border-radius: 17px;
-  background: var(--gray3-to-white);
+  background: var(--gray);
   outline: none;
   /*opacity: 0.7;*/
   -webkit-transition: .2s;
   transition: opacity .2s;
-  padding:5px;
 }
 
 
@@ -950,30 +949,23 @@ p#large_clock_period {
 #lunch_range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--white2);
-  cursor: pointer;
-  /*margin: 0px 10px 0px 10px;*/
-}
-
-#lunch_range::-moz-range-thumb {
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--green);
   cursor: pointer;
-  margin: 0px 10px 0px 10px;
+}
+
+#lunch_range::-moz-range-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--green);
+  cursor: pointer;
 }
 
 #lunch_label {
-  color: var(--white);
-  text-shadow:
-  -1px -1px 5px var(--black),
-  1px -1px 5px var(--black),
-  -1px 1px 5px var(--black),
-  1px 1px 5px var(--black);
+  color: var(--black);
   position: relative;
   font-size: 25px;
   top: -44px;
