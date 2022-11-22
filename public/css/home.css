@@ -634,6 +634,7 @@ i.fa.fa-toolbox {
 .header-icon {
   color: var(--green2);
   padding-top: 8.5px;
+  padding-right: 5px;
   font-size: large;
   cursor: pointer;
 }
@@ -646,7 +647,11 @@ i.fa.fa-toolbox {
 #buttonsTable .tabulator-headers{
   display: flex;
   justify-content: flex-end;
+}
 
+#buttonsTable .tabulator-col.icon-col{
+  min-width: 100px !important;
+  vertical-align: middle;
 }
 
 #classesTable .tabulator-col,
