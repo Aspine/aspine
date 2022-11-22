@@ -767,7 +767,7 @@ let buttonsTable = new Tabulator("#buttonsTable", {
     columns: [ // Define Table Columns
         {
             title: "Export Table Data",
-            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>' + "Export Data",
+            titleFormatter: () => "Export Data" +'<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>',
             headerClick: async () => {
                 // Disable checkboxes for inaccessible terms
                 termConverter.forEach(term => {
@@ -795,7 +795,7 @@ let buttonsTable = new Tabulator("#buttonsTable", {
         },
         {
             title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>' + "Reset",
+            titleFormatter: () => "Reset" + '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>',
             headerClick: resetTableData,
             width: 76,
             headerSort: false,
