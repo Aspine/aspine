@@ -299,7 +299,6 @@ button {
   background-color: var(--white);
   color: var(--black);
   border: 0px;
-  height:35px;
 }
 
 button:hover {
@@ -646,6 +645,10 @@ i.fa.fa-toolbox {
 }
 
 #gradesButtons #left {
+  height:35px;
+}
+
+#gradesButtons button{
   height:35px;
 }
 
