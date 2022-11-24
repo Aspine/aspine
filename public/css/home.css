@@ -296,15 +296,15 @@ button {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14px;
-  border: 1px solid var(--black);
-  border-radius: 2px;
-  background-color: var(--white2);
+  background-color: var(--white);
+  color: var(--black);
+  border: 0px;
+  height:35px;
 }
 
 button:hover {
   background-color: var(--white3);
 }
-
 
 #recentAttendance {
   display: none;
@@ -313,7 +313,6 @@ button:hover {
 #categoriesTable {
   display: none;
 }
-
 
 #assignmentsTable {
   display: none;
@@ -633,25 +632,21 @@ i.fa.fa-toolbox {
 
 .header-icon {
   color: var(--green2);
-  padding-top: 8.5px;
   padding-left: 5px;
   font-size: large;
   cursor: pointer;
 }
 
-#buttonsTable .tabulator-tableHolder{
-  position: absolute;
-	left: -10000000000000000000000000px;
+#gradesButtons{
+  height:35px;
+  display:flex;
+  justify-content:space-between;
+  vertical-align:middle;
+  background-color: var(--white);
 }
 
-#buttonsTable .tabulator-headers{
-  display: flex;
-  justify-content: flex-end;
-}
-
-#buttonsTable .tabulator-col.icon-col{
-  min-width: 100px !important;
-  vertical-align: text-middle;
+#gradesButtons #left {
+  height:35px;
 }
 
 #classesTable .tabulator-col,
