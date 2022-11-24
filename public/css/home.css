@@ -936,6 +936,7 @@ canvas#small_clock {
 p#large_clock_period {
   font-size: 50px;
 }
+
 #lunch_range {
   -webkit-appearance: none;
   width: 157.5px;
@@ -948,15 +949,10 @@ p#large_clock_period {
   transition: opacity .2s;
 }
 
-
-/*#lunch_range:hover {
-  opacity: 1;
-}*/
-
 #lunch_range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 34px;
+  width: 37px;
   height: 34px;
   border-radius: 50%;
   background: var(--green);
