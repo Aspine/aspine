@@ -123,6 +123,7 @@ class Snackbar {
             buttonNode.addEventListener("click", event => {
                 this.buttonClick();
                 destroyFromButton();
+                this.destroy();
                 //stops propogation so the body event isn't called
                 event.stopPropagation();
             })
