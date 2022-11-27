@@ -1085,22 +1085,6 @@ function responseCallbackPartial(response) {
             computeGPAQuarter(currentTableData.overview, i);
     }
 
-    /*
-    if (currentTerm === 'current') {
-        $(".gpa_select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-        $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-        document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-        document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-
-    } else {
-        $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
-        $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
-        document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent;
-    }
-    */
-
-    // scheduleTable.setData(currentTableData.schedule.black);
-
     $("#classesTable").show();
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object

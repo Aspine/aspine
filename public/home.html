@@ -99,20 +99,20 @@
 <!--#ifndef lite-->
     <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
 <!--#endif-->
-    <div class="GPA gpa_custom-select custom-select tablinks-right" style="width: 270px">
-      <select id="gpa_select">
-        <option id="init_gpa" value="0">Current Quarter GPA: </option>
-        <option id="current_gpa" value="0">Current Quarter GPA: </option>
-        <option id="q1_gpa" value="1"></option>
-        <option id="q2_gpa" value="2"></option>
-        <option id="q3_gpa" value="3"></option>
-        <option id="q4_gpa" value="4"></option>
-        <option id="cum_gpa"></option>
-      </select>
-    </div>
+<div class="GPA gpa_custom-select custom-select tablinks-right" style="width: 270px">
+  <select id="gpa_select">
+    <option id="init_gpa" value="0">GPA</option>
+    <option id="current_gpa" value="0">Current Quarter GPA: </option>
+    <option id="q1_gpa" value="1"></option>
+    <option id="q2_gpa" value="2"></option>
+    <option id="q3_gpa" value="3"></option>
+    <option id="q4_gpa" value="4"></option>
+    <option id="cum_gpa"></option>
+  </select>
+</div>
     <div class="GPA tableData_custom-select custom-select tablinks-right">
       <select id="tableData_select">
-        <option value="0">Current Year</option>
+        <option value="-1">Year Select</option>
         <option value="0">Current Year</option>
         <option value="1">Previous Year</option>
         <option value="import">Import Data...</option>
