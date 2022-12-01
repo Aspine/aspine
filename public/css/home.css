@@ -952,6 +952,7 @@ p#large_clock_period {
   cursor: pointer;
 }
 
+/* changed color to green */
 #lunch_range::-moz-range-thumb {
   width: 34px;
   height: 34px;
