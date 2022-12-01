@@ -31,6 +31,10 @@ noscript p {
   max-width: 960px;
 }
 
+body.dank {
+	animation: dankmode 1s linear infinite;
+}
+
 body {
   --green: #268A48;
   --green1: #107031;
@@ -1404,4 +1408,9 @@ hr {
   font-weight: normal;
   font-size: 16px;
   font-family: 'Poppins-Regular';
+}
+
+@keyframes dankmode {
+	from {filter: hue-rotate(0deg);}
+	to {filter: hue-rotate(360deg);}
 }

@@ -806,3 +806,58 @@ let isAccessible = function(term, includedTerms) {
     reason: reason
   };
 }
+
+// nothing to see here lol
+var konami = {
+	"dankmode": {
+		sequence: ["KeyD", "KeyA", "KeyN", "KeyK", "KeyM", "KeyO", "KeyD", "KeyE"],
+		progress: 0,
+		action: () => {window.alert("Toggled DANKMODE."); document.body.classList.toggle("dank");},
+	},
+	"konami": {
+		sequence: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "KeyB", "KeyA"],
+		progress: 0,
+		action: () => {vip_username_list.push(currentTableData.username); openTab("grades");},
+	}
+};
+document.body.addEventListener('keydown', (key) => {
+	// iterate through all the keys
+	for (let name of Object.keys(konami)) {
+		let code = konami[name];
+		// if the correct key is pressed
+		if (key.code == code.sequence[code.progress]) {
+			// increment the progress
+			code.progress++;
+			// if the progress is complete
+			if (code.progress == code.sequence.length) {
+				// execute the action
+				code.action();
+				code.progress = 0;
+			}
+		} else {
+			// reset the progress
+			code.progress = 0;
+		}	
+	}
+});
+
+// used in forums.js
+function getRelativeTime(time) {
+	let now = Date.now() / 1000;
+	let diff = now - time;
+	let text = "";
+	if (diff < 60) {
+		text = "just now";
+	} else if (diff < 120) {
+		text = "1 minute ago";
+	} else if (diff < 3600) {
+		text = Math.floor(diff / 60) + " minutes ago";
+	} else if (diff < 7200) {
+		text = "1 hour ago";
+	} else if (diff < 86400) {
+		text = Math.floor(diff / 3600) + " hours ago";
+	} else {
+		text = Math.floor(diff / 86400) + " days ago";
+	}
+	return text;
+}
