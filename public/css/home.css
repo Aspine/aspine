@@ -644,11 +644,8 @@ i.fa.fa-toolbox {
   background-color: var(--white);
 }
 
-#gradesButtons #left {
-  height:35px;
-}
-
-#gradesButtons button{
+#gradesButtons button, 
+#gradesButtons #right {
   height:35px;
 }
 
