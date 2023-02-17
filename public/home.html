@@ -77,6 +77,12 @@
     </label>
   </div>
 
+	<div id="announcement-banner" style="display: none;">
+		<h3>ANNOUNCEMENT
+			<span class="close" title="go away" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span>
+		</h3>
+	</div>
+
   <!-- SIDENAV STUFF -->
   <div id="sidenav">
     <!-- switch-exempt makes the switch out of navbar pass over this -->
@@ -85,7 +91,7 @@
     </button>
     <hr/>
   </div>
-
+	
   <div class="tab">
     <button class="tablinks hide switch-exempt" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
     <button class="tablinks active" onclick="openTab('grades'); closeSideNav()" id="grades_open">Grades</button>
@@ -120,7 +126,7 @@
       </select>
     </div>
   </div>
-
+	
   <!--
   <div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">
     <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">
@@ -491,6 +497,7 @@
       </p>
     </div>
   </div>
+	<!-- hidden tab -->
   <p>Aspine version: <span id="version">(loading&hellip;)</span></p>
   <script>
     window.addEventListener('DOMContentLoaded', () => {

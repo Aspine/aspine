@@ -1,0 +1,8 @@
+{
+	"announcement": {
+		"content": "Hey, lookat that! It's a new Aspine update! You probably don't care, but for the two people that <i>do</i> care, you can check out the change logs by scrolling down in the <a onclick='openTab(\"information\");'>info tab</a>. These announcements will show up every once in a while, informing you of any upcoming events, school news, or anything else.<br>- The Aspine Devs<span style=\"float: right; font-size: 10px; margin-top: 15px;\">P.S. Admins, to edit the announcement, go to the super secret admin tab</span>",
+		"content-type": "html",
+		"shown": true
+	},
+	"note for dev team": "this system is expandable, feel free to use this file for additional features"
+}
