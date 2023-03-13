@@ -806,3 +806,28 @@ let isAccessible = function(term, includedTerms) {
     reason: reason
   };
 }
+
+
+window.getData = async function() {
+	let response = await fetch('serverdata');
+	return response.json();
+}
+
+getData().then((data) => {
+	let announcement = data.announcement;
+	
+	let banner = document.getElementById("announcement-banner");
+	banner.json = JSON.parse(JSON.stringify(announcement));
+	// check if announcement exists
+	if ((announcement.content != null) && announcement.shown) {
+		// show announcement banner
+		banner.style.display = 'inline-block';
+		if (announcement.contentType == 'text') {
+			for (let textPart of announcement.content.split("\n")) {
+				banner.appendChild(document.createTextNode(textPart));
+			}
+		} else {
+			banner.innerHTML += announcement.content;
+		}
+	}
+});

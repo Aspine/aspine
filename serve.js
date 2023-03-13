@@ -25,6 +25,10 @@ const changelog = marked(
 const schedule = TOML.parse(
     fs.readFileSync(__dirname + '/public/schedule.toml')
 );
+// environment variable, someone deal with this
+const admins = JSON.parse(process.env['admins']).map(function (username) {
+  return username.toString();
+});
 
 program
     .version(version)
@@ -195,7 +199,19 @@ app.post('/pdf', async (req, res) => {
 
 app.get('/', async (req, res) => {
     if (req.session.username || req.session.nologin) {
-        res.sendFile(__dirname + '/public/home.html');
+				if (admins.includes(req.session.username)) {
+					// edited home page for admins
+					let adminTab = fs.readFileSync(__dirname + '/public/adminTab.html', "utf8");
+					let homeHTML = fs.readFileSync(__dirname + '/public/home.html', "utf8");
+
+					// fear my bad code
+					homeHTML = homeHTML.replace("<!-- hidden tab -->", adminTab);
+					homeHTML = homeHTML.replace("Info</button>", 'Info</button>\n<button class="tablinks" onclick="openTab(\'admin\'); closeSideNav()" id="admin_open">Admin</button>');
+					res.end(homeHTML);
+				} else {
+        	res.sendFile(__dirname + '/public/home.html');	
+				}
+				
     } else {
         res.redirect('/login');
     }
@@ -227,6 +243,32 @@ app.get('/logout', async (req, res) => {
         res.redirect('/login');
 });
 
+app.get('/serverdata', async (req, res) => {
+	let serverData = JSON.parse(fs.readFileSync(__dirname + '/data.json'));
+	let responseData = {};
+	// maybe modify data before sending it
+	responseData = serverData;
+	res.status(200).send(responseData);
+});
+
+app.post('/serverdata', async (req, res) => {
+	if (admins.includes(req.session.username)) {
+		console.log("server data updated by " + req.session.username);
+		fs.writeFileSync(__dirname + '/data.json', JSON.stringify(req.body, null, "\t"));
+		res.sendStatus(200);
+	} else {
+		console.log(`attepmted server data update by ${req.session.username}, denied`);
+		res.sendStatus(403);
+	}
+});
+
+app.get('/admin', async (req, res) => {
+	if (admins.includes(req.session.username)) {
+		res.sendFile(__dirname + '/public/adminTab.html');
+	} else {
+		res.status(403).send("haha lol you arent admin L bozo<br>..or you're just not <a href=\"login\">logged in</a>");
+	}
+});
 
 app.use((req, res) => {
     res.status(404);
