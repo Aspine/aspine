@@ -236,8 +236,7 @@ let recentActivity = new Tabulator("#recentActivity", {
         {title: "Class", field: "classname", formatter: classFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
-        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
-        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
+
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
@@ -330,8 +329,6 @@ let mostRecentTable = new Tabulator("#mostRecentTable", {
         {title: "Class", field: "classname", formatter: classFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
-        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
-        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
 
