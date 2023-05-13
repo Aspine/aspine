@@ -366,7 +366,6 @@ async function get_recent(session: Session): Promise<Recent> {
       ].map(att => [att, x.getAttribute(att)])) as unknown as AttendanceEvent
     );
   const recentActivityArray =
-<<<<<<< HEAD
     [...document.querySelectorAll("gradebookScore")].map(x => {
       let item = Object.fromEntries([
         "date", "classname", "grade", "assignmentname",
@@ -378,13 +377,6 @@ async function get_recent(session: Session): Promise<Recent> {
       delete item.assignmentname;
       return item as ActivityEvent;
     });
-=======
-    [...document.querySelectorAll("gradebookScore")].map(x =>
-      Object.fromEntries([
-        "date", "classname", "grade", "assignmentname",
-      ].map(att => [att, x.getAttribute(att)])) as unknown as ActivityEvent
-    );
->>>>>>> db643de (Begin reimplementing recentActivity. Uncommenting lots of code, changed the name of some properties of an object because scraper returns different names.)
   return { recentAttendanceArray, recentActivityArray };
 }
 
