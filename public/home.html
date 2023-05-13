@@ -121,15 +121,6 @@
     </div>
   </div>
 
-  <!--
-  <div id="loader" class="modal" style="background-color: rgba(0,0,0,0.0); padding-top: 300px; display: inline-block;">
-    <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;">
-      <div id="loader_modal_content" class="model-content" style=" width: 500px; height: 150px; margin: auto;border: 2px solid black;background-color: white;">
-        <h1 style="top: 25%; position: relative;"> Loading! </h1>
-      </div>
-    </div>
-  </div>
-  -->
   <div id="loader">
     <div class="loader"></div>
   </div>
@@ -214,7 +205,18 @@
   </div>
 
   <div id="grades" class="tabcontent">
-    <div id="buttonsTable"></div>
+
+    <div id="gradesButtons">
+        <button onclick="exportData();">
+          <text>Export Data</text>
+          <i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>
+        </button>
+        <button onclick="resetTableData();">
+          <text>Reset</text>
+          <i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>
+        </button>
+    </div>
+
     <div id="classesTable"></div>
     <div id="mostRecentDiv" style="display:none">
       <!-- hide most recent activity; removed from aspen -->

@@ -758,53 +758,6 @@ let scheduleTable = new Tabulator("#scheduleTable", {
     ],
 });
 
-let buttonsTable = new Tabulator("#buttonsTable", {
-    //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-    index: "name",
-    selectable: 1,
-    headerHozAlign:"right",
-    layout: "fitColumns", //fit columns to width of table (optional)
-    columns: [ // Define Table Columns
-        {
-            title: "Export Table Data",
-            titleFormatter: () => '<i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>',
-            headerClick: async () => {
-                // Disable checkboxes for inaccessible terms
-                termConverter.forEach(term => {
-                    let isAccessibleObj = isAccessible(term);
-
-                    if (isAccessibleObj.accessible) {
-                        $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
-                        $(`#export_checkbox_terms_${term} ~ span`)
-                            .removeAttr("aria-label")
-                            .removeAttr("tabindex")
-                            .removeClass("hastooltip");
-                    } else {
-                        $(`#export_checkbox_terms_${term}`).attr("disabled", true);
-                        $(`#export_checkbox_terms_${term} ~ span`)
-                            .attr("aria-label", isAccessibleObj.reason)
-                            .attr("tabindex", 0)
-                            .addClass("hastooltip");
-                    }
-                });
-                exportModal.style.display = "inline-block";
-            },
-            width: 76,
-            headerSort: false,
-            cssClass: "icon-col"
-        },
-        {
-            title: "Reset Table Data",
-            titleFormatter: () => '<i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>',
-            headerClick: resetTableData,
-            width: 76,
-            headerSort: false,
-            cssClass: "icon-col"
-        },
-    ],
-            }
-);
-
 let classesTable = new Tabulator("#classesTable", {
     //height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
     index: "name",

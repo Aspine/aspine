@@ -507,3 +507,25 @@ let importTableData = async function(obj) {
 
   $(`#tableData_select-items-${currentTableDataIndex}`).click();
 };
+
+let exportData = function(){
+  // Disable checkboxes for inaccessible terms
+  termConverter.forEach(term => {
+      let isAccessibleObj = isAccessible(term);
+
+      if (isAccessibleObj.accessible) {
+          $(`#export_checkbox_terms_${term}`).removeAttr("disabled");
+          $(`#export_checkbox_terms_${term} ~ span`)
+              .removeAttr("aria-label")
+              .removeAttr("tabindex")
+              .removeClass("hastooltip");
+      } else {
+          $(`#export_checkbox_terms_${term}`).attr("disabled", true);
+          $(`#export_checkbox_terms_${term} ~ span`)
+              .attr("aria-label", isAccessibleObj.reason)
+              .attr("tabindex", 0)
+              .addClass("hastooltip");
+      }
+  });
+  exportModal.style.display = "inline-block";
+} 
