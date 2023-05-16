@@ -41,23 +41,6 @@ let classIndex = function(classname) {
   // why the mod 8?
 }
 
-let classFormatter = function(cell, formatterParams) {
-  let rowClass = cell.getRow().getData().classname;
-  let classColor = classColors[classIndex(rowClass)];
-  let value = cell.getValue();
-
-  if (vip_username_list.includes(currentTableData.username)) {
-    return "<span style='background: -webkit-linear-gradient(left, red, orange, green, blue, purple);-webkit-background-clip: text; -webkit-text-fill-color:transparent; font-weight:bold;'>" + value + "</span>";
-
-  }
-
-  if (classColor === "black") {
-    return value;
-  } else {
-    return "<span style='color:" + classColor + "; font-weight:bold;'>" + value + "</span>";
-  }
-}
-
 let weightFormatter = function(cell, formatterParams) {
   let value = cell.getValue();
   let rowColor = cell.getRow().getData().color;

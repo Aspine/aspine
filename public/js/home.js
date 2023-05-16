@@ -140,6 +140,17 @@ function adjustColumns(table) {
                 table.showColumn("score");
                 table.showColumn("maxScore");
             }
+        case "mostRecentTable":
+            if (window.matchMedia("(max-width: 576px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else if (window.matchMedia("(max-width: 768px)").matches) {
+                table.hideColumn("score");
+                table.hideColumn("max_score");
+            } else {
+                table.showColumn("score");
+                table.showColumn("max_score");
+            }
             break;
         default:
             console.error(`Unrecognized table with id ${table.element.id}`);
@@ -149,6 +160,7 @@ function adjustColumns(table) {
 }
 
 initialize_jquery_prototype();
+initialize_resize_hamburger();
 
 $('#stats_plot').width($(window).width() * 7 / 11);
 /*
@@ -221,15 +233,13 @@ let recentActivity = new Tabulator("#recentActivity", {
     layout: "fitColumns",
     columns: [
         {title: "Date", field: "date", formatter: rowFormatter},
-        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Class", field: "classname", formatter: rowFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
-        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
-        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
         // questionable
-        $("#mostRecentDiv").hide();
+        document.getElementById("mostRecentDiv").style.display = "none";            
         classesTable.selectRow(1);
 
         let elem = document.getElementById("default_open");
@@ -308,19 +318,18 @@ let categoriesTable = new Tabulator("#categoriesTable", {
 });
 
 let mostRecentTable = new Tabulator("#mostRecentTable", {
-    //	height: 400,
+    height: "35vh",
     layout: "fitColumns",
+    tableBuilt: function() {
+        window.addEventListener("resize", () => adjustColumns(this));
+    },
     columns: [
-        //{title:"Date", field:"date", formatter: rowFormatter, headerSort: false},
         {title: "Date", field: "date", formatter: rowFormatter},
-        {title: "Class", field: "classname", formatter: classFormatter},
+        {title: "Class", field: "classname", formatter: rowFormatter},
         {title: "Assignment", field: "assignment", formatter: rowFormatter, headerSort: false},
         {title: "Score", field: "score", formatter: rowFormatter, headerSort: false},
-        {title: "Max Score", field: "max_score", formatter: rowFormatter, headerSort: false},
-        {title: "Percentage", field: "percentage", formatter: rowGradeFormatter},
     ],
     rowClick: function(e, row) { //trigger an alert message when the row is clicked
-        $("#mostRecentDiv").hide();
 
         classesTable.selectRow(1);
 
@@ -792,7 +801,7 @@ let classesTable = new Tabulator("#classesTable", {
         },
     ],
     rowClick: function(e, row) { // trigger an alert message when the row is clicked
-        $("#mostRecentDiv").hide();
+        document.getElementById("mostRecentDiv").style.display = "none";            
         hideModal("stats");
 
         assignmentsTable.clearFilter();
@@ -813,6 +822,7 @@ let classesTable = new Tabulator("#classesTable", {
 
                 adjustColumns(assignmentsTable);
                 adjustColumns(categoriesTable);
+                adjustColumns(mostRecentTable);
 
                 return;
             }
@@ -821,7 +831,7 @@ let classesTable = new Tabulator("#classesTable", {
 });
 
 //sets up the tooltips in the classes table
-setup_tooltips()
+setup_tooltips();
 
 function correct() {
     const per = parseInt($("#corrections_modal_input").prop("value"));
@@ -984,30 +994,29 @@ function responseCallback(response, includedTerms) {
         }
     }
 
-    let activityArray = currentTableData.recent.recentActivityArray.slice();
-    for (let i = 0; i < activityArray.length; i++) {
-        try {
-            let assignmentName = activityArray[i].assignment;
-            let className = activityArray[i].classname;
-            let temp_classIndex = classIndex(className);
+    // let activityArray = currentTableData.recent.recentActivityArray;
+    // for (let i = 0; i < activityArray.length; i++) {
+    //         let assignmentName = activityArray[i].assignmentname;
+    //         let className = activityArray[i].classname;
+    //         let temp_classIndex = classIndex(className);
 
-            let assignmentIndex = currentTableData.currentTermData
-                .classes[temp_classIndex].assignments.map(x => x.name)
-                .indexOf(assignmentName);
-            console.log(assignmentIndex);
-
-            currentTableData.recent.recentActivityArray[i].assignmentName = assignmentName;
-            currentTableData.recent.recentActivityArray[i].className = className;
-            currentTableData.recent.recentActivityArray[i].temp_classIndex = temp_classIndex;
-            currentTableData.recent.recentActivityArray[i].assignmentIndex = assignmentIndex;
-
-            currentTableData.recent.recentActivityArray[i].max_score = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].max_score;
-            currentTableData.recent.recentActivityArray[i].percentage = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].percentage;
-            currentTableData.recent.recentActivityArray[i].color = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex].color;
-        } catch (err) {
-            // console.error("Please report this error on the Aspine github issue pages. ID Number 101. Error: " + err);
-        }
-    }
+    //         let assignmentIndex = currentTableData.currentTermData
+    //             .classes[temp_classIndex].assignments.map(x => x.name)
+    //             .indexOf(assignmentName);
+    //         if (assignmentIndex < 0) break;
+    //         console.log(assignmentIndex);
+    //         const helper = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex];
+    //         currentTableData.recent.recentActivityArray[i] =
+    //         {
+    //             assignmentName,
+    //             className,
+    //             temp_classIndex,
+    //             assignmentIndex,
+    //             max_score: helper.max_score,
+    //             percentage: helper.percentage,
+    //             color: helper.color
+    //         };
+    // }
 
     // Calculate GPA for current term
     currentTableData.terms.current.GPA = response.GPA ||
@@ -1030,8 +1039,9 @@ function responseCallback(response, includedTerms) {
 
     //Stuff to do now that tableData is initialized
 
-    $("#mostRecentDiv").show();
-    mostRecentTable.setData(currentTableData.recent.recentActivityArray.slice(0, 5));
+    document.getElementById("mostRecentDiv").style.display = "block";        
+    // this is where we decide what goes into most recent activity on grades page (how many assignments)    
+    mostRecentTable.setData(currentTableData.recent.recentActivityArray); // .slide(0, i) if we want to limit
 
     initialize_quarter_dropdown(includedTerms);
     setup_quarter_dropdown();
@@ -1042,13 +1052,14 @@ function responseCallback(response, includedTerms) {
         initialize_tableData_dropdown();
     }
 
+    // potentially add loop here to match assignments
+    // if recent assignment id == actual assignment id, add to array
+    // loop over the whole list of assignment ids for the class to match
     recentActivity.setData(currentTableData.recent.recentActivityArray);
+
     recentAttendance.setData(currentTableData.recent.recentAttendanceArray);
 
     classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
-
-    //initializes hamburger resize
-    initialize_resize_hamburger()
 
     fetch("/schedule", {
         method: "POST",
@@ -1158,25 +1169,23 @@ function pdfCallback(response) {
         generate_pdf(pdf_index);
     }
 }
-// Currently no need for toggle; there are no recent assignments
-/*
+// default is set as attendance, shows assignments when toggle is checked
 function recent_toggle() {
     if (!document.getElementById("recent_toggle").checked) {
-        recentActivity.setData(tableData.recent.recentActivityArray);
-        document.getElementById("recentActivity").style.display = "block";
-        document.getElementById("recentAttendance").style.display = "none";
-        document.getElementById("recent_title").innerHTML = "Assignments";
-        recentActivity.redraw();
-    }
-    else {
         //recentActivity.setData(tableData.recent.recentAttendanceArray);
         document.getElementById("recentActivity").style.display = "none";
         document.getElementById("recentAttendance").style.display = "block";
         document.getElementById("recent_title").innerHTML = "Attendance";
         recentAttendance.redraw();
     }
+    else {
+        // recentActivity.setData(tableData.recent.recentActivityArray);
+        document.getElementById("recentActivity").style.display = "block";
+        document.getElementById("recentAttendance").style.display = "none";
+        document.getElementById("recent_title").innerHTML = "Assignments";
+        recentActivity.redraw();
+    }
 }
-*/
 
 function schedule_toggle(day) {
     if (covid_schedule) {
@@ -1194,6 +1203,12 @@ function schedule_toggle(day) {
     scheduleTable.setData(currentTableData.formattedSchedule);
 }
 
+// for (const tab of document.getElementsByClassName('tablinks')) {
+//     window.addEventListener('click', event => {
+//         openTab(event.target.id);
+//     });
+// }
+
 window.onpopstate = event => {
     openTabHelper(event.state);
 }
@@ -1204,6 +1219,7 @@ function openTab(tab_name) {
 }
 
 function openTabHelper(tab_name) {
+    // Get all elements with class="tabcontent" and hide them
     // Get all elements with class="tablinks" and remove the class "active"
     for (const active of document.getElementsByClassName("active")) {
         active.classList.remove('active');
@@ -1218,6 +1234,7 @@ function openTabHelper(tab_name) {
 
     switch (tab_name) {
         case 'grades':
+            document.getElementById("mostRecentDiv").style.display = "block";
             mostRecentTable.redraw();
             classesTable.redraw();
             assignmentsTable.redraw();
@@ -1255,6 +1272,20 @@ function openTabHelper(tab_name) {
             scheduleTable.redraw();
             break;
     }
+
+    if (tab_name === "clock") {
+        document.getElementById("small_clock").style.display = "none";
+        document.getElementById("small_clock_period").style.display = "none";
+    } else {
+        document.getElementById("small_clock").style.display = "block";
+        document.getElementById("small_clock_period").style.display = "block";
+    }
+
+    recentActivity.redraw();
+    recentAttendance.redraw();
+
+    categoriesTable.redraw();
+
 }
 
 function openSideNav() {
