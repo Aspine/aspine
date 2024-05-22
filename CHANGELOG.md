@@ -6,12 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - tagged 2024-05-22
+- Fix Aspine following updates to Aspen
+
 ## [2.9.0] - tagged 2022-09-04, production 2022-09-13
-- Updated Aspine School Year 2022-2023 (#[340])
+- Updated Aspine School Year 2022-2023 ([#340])
      - Added New Schedule including Timing, Lunches, and Falcon Blocks
      - Fixed Scraping and table population methods due to Aspen changes
-- Tables have been redesigned for a better viewing experience on mobile devices (#[330])
-- Changed wording of "Cumulative GPA" to "Yearly GPA" for clarification (#[329])
+- Tables have been redesigned for a better viewing experience on mobile devices ([#330])
+- Changed wording of "Cumulative GPA" to "Yearly GPA" for clarification ([#329])
 
 ## [2.8.2] - tagged 2021-10-05, production 2021-10-06
 - Add support for fall 2021 schedule ([#311], [#308])
@@ -233,6 +236,8 @@ and this project adheres to
 [2.8.0]: https://github.com/Aspine/aspine/releases/tag/v2.8.0
 [2.8.1]: https://github.com/Aspine/aspine/releases/tag/v2.8.1
 [2.8.2]: https://github.com/Aspine/aspine/releases/tag/v2.8.2
+[2.9.0]: https://github.com/Aspine/aspine/releases/tag/v2.9.0
+[3.0.0]: https://github.com/Aspine/aspine/releases/tag/v3.0.0
 [Unreleased]: https://github.com/Aspine/aspine/tree/master
 
 [#38]: https://github.com/Aspine/aspine/issues/38
@@ -379,3 +384,6 @@ and this project adheres to
 [#305]: https://github.com/Aspine/aspine/pull/305
 [#310]: https://github.com/Aspine/aspine/pull/310
 [#311]: https://github.com/Aspine/aspine/pull/311
+[#329]: https://github.com/Aspine/aspine/pull/329
+[#330]: https://github.com/Aspine/aspine/pull/330
+[#340]: https://github.com/Aspine/aspine/pull/340
