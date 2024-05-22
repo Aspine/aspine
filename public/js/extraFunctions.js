@@ -789,3 +789,37 @@ let isAccessible = function(term, includedTerms) {
     reason: reason
   };
 }
+
+// nothing to see here lol
+var konami = {
+	"dankmode": {
+		sequence: ["KeyD", "KeyA", "KeyN", "KeyK", "KeyM", "KeyO", "KeyD", "KeyE"],
+		progress: 0,
+		action: () => {window.alert("Toggled DANKMODE."); document.body.classList.toggle("dank");},
+	},
+	"konami": {
+		sequence: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "KeyB", "KeyA"],
+		progress: 0,
+		action: () => {vip_username_list.push(currentTableData.username); openTab("grades");},
+	}
+};
+document.body.addEventListener('keydown', (key) => {
+	// iterate through all the keys
+	for (let name of Object.keys(konami)) {
+		let code = konami[name];
+		// if the correct key is pressed
+		if (key.code == code.sequence[code.progress]) {
+			// increment the progress
+			code.progress++;
+			// if the progress is complete
+			if (code.progress == code.sequence.length) {
+				// execute the action
+				code.action();
+				code.progress = 0;
+			}
+		} else {
+			// reset the progress
+			code.progress = 0;
+		}	
+	}
+});

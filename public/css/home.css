@@ -26,6 +26,15 @@ body, html {
   font-family: Poppins-Regular, sans-serif;
 }
 
+body.dank {
+	animation: dankmode 1s linear infinite;
+}
+
+@keyframes dankmode {
+	from {filter: hue-rotate(0deg);}
+	to {filter: hue-rotate(360deg);}
+}
+
 noscript p {
   margin: 0 auto;
   max-width: 960px;
