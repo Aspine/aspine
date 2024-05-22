@@ -1,0 +1,16 @@
+[Unit]
+Description= Systemctl Service for Aspine
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory= /var/www/aspine/
+ExecStart= sudo NODE_ENV=production npm start
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=aspine
+
+[Install]
+WantedBy=multi-user.target
