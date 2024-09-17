@@ -86,6 +86,7 @@ if (options.secure || options.dev) {
 
 // Expose frontend dependencies from node-modules
 // https://stackoverflow.com/a/27464258
+
 for (const [endpoint, path] of dep_mappings.files) {
     app.get(endpoint, (req, res) => {
         res.sendFile(__dirname + path);
@@ -152,7 +153,6 @@ app.post('/data', async (req, res) => {
     // });
 
     let response;
-
     // Get data from scraper:
     if (req.session.nologin) {
         res.send({ nologin: true });

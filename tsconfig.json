@@ -3,7 +3,10 @@
     "target": "ES2019",
     "module": "CommonJS",
     "strict": true,
-    "outDir": "js"
+    "outDir": "js",
+    "lib": ["dom"],
+    "esModuleInterop": true
+    
   },
   "include": [
     "src"
