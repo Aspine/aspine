@@ -1,7 +1,13 @@
+/// <reference lib="dom" />
+/// <reference lib="dom.iterable" />
 import fetch, { FetchError } from "node-fetch";
 import { URLSearchParams } from "url";
 import { JSDOM } from "jsdom";
-
+import puppeteer from 'puppeteer-extra';
+import { Buffer } from "buffer";
+import randomUseragent from 'random-useragent';
+import puppeteerStealthPlugin from 'puppeteer-extra-plugin-stealth';
+puppeteer.use(puppeteerStealthPlugin());
 import type {
   Session,
   PDFFileInfo,
@@ -28,12 +34,15 @@ import type {
 // Using `import type` with an enum disallows accessing the enum variants
 import { AspineErrorCode } from "./types";
 import { Quarter, Year } from "./types-shared";
-
+import { createValidAbsoluteUrl } from "pdfjs-dist";
+const encode = (str: string):string => Buffer.from(str, 'binary').toString('base64');
 export async function get_student(
   username: string, password: string, quarter: Quarter = Quarter.Current,
   year: Year = Year.Current
 ): Promise<StudentData> {
+  console.log('get_student')
   return await get_session(username, password, async session => {
+    
     const { student_name, student_oid } = await get_student_info(session);
     const quarter_oids = await get_quarter_oids(session, year);
 
@@ -96,6 +105,7 @@ export async function get_student(
 export async function get_pdf_files(
   username: string, password: string
 ): Promise<PDFFile[]> {
+  console.log('get pdfs')
   return await get_session(username, password, async session => {
     const pdf_files = [];
     // Get PDF files sequentially to avoid rejection of requests
@@ -112,6 +122,7 @@ export async function get_pdf_files(
 export async function get_schedule(
   username: string, password: string
 ): Promise<Schedule> {
+  console.log('get_sechedule')
   return await get_session(username, password, async session => {
     const current_quarter = await get_current_quarter(session, Year.Current);
     let current_semester;
@@ -142,7 +153,7 @@ export async function get_schedule(
         "termOid": term_oid,
       }), {
         headers: {
-          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-cambridge; showNavbar=true`,
+          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-camrbidge; showNavbar=true`,
         },
       }
     )).text();
@@ -218,6 +229,7 @@ export async function get_stats(
   username: string, password: string, assignment_id: string, class_id: string,
   quarter_id: string, year: Year, student_oid:String
 ): Promise<Stats | {}> {
+  console.log('get_stats')
   return await get_session(username, password, async ({ session_id }) => {
     // The REST API does not expose assignment statistics (as far as we know),
     // so we need to use the regular Aspen desktop site. Aspen is picky about
@@ -242,7 +254,7 @@ export async function get_stats(
     // Change term in classes list
     await fetch("https://aspen.cpsd.us/aspen/portalClassList.do", {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis`,
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge`,
       },
       method: "POST",
       body: new URLSearchParams({
@@ -270,7 +282,7 @@ export async function get_stats(
     await fetch(
       "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd", {
         headers: {
-          "Cookie": `deploymentId=x2sis; JSESSIONID=${session_id};`,
+          "Cookie": `deploymentId=ma-cambridge; JSESSIONID=${session_id};`,
         },
       }
     );
@@ -442,7 +454,12 @@ async function list_pdf_files({ session_id }: Session): Promise<PDFFileInfo[]> {
       },
     }
   )).json();
-  return pdf_files.filter(({ contentTypeId }) => contentTypeId == "cttPdf");
+  try{
+    return pdf_files.filter(({ contentTypeId }) => contentTypeId == "cttPdf");
+  } catch (e) {
+    console.log(pdf_files)
+    return [];
+  }
 }
 
 /**
@@ -451,13 +468,16 @@ async function list_pdf_files({ session_id }: Session): Promise<PDFFileInfo[]> {
 async function get_student_info({ session_id }: Session): Promise<{
   student_name: string, student_oid: string
 }> {
-  const [{ name: student_name, studentOid: student_oid }] = await (await fetch(
+  const a =  await fetch(
     "https://aspen.cpsd.us/aspen/rest/users/students", {
       headers: {
         "Cookie": `JSESSIONID=${session_id}`,
       },
     }
-  )).json();
+  )
+  console.log(a)
+  const [{ name: student_name, studentOid: student_oid }] = await (a.json());
+  console.log(student_name, student_oid);
   return { student_name, student_oid };
 }
 
@@ -756,89 +776,153 @@ async function match_termspec(
  * Log in to Aspen using a given username and password and execute the given
  * callback within that session, throwing an error upon an invalid login.
  */
-async function get_session<T>(
+export async function get_session<T>(
   username: string, password: string,
   callback: (session: Session) => Promise<T>
-): Promise<T> {
+): Promise<any> {
   // Get a session from Aspen by visiting the login page, and check if Aspen is
   // currently down
-  let login_page;
-  {
-    let resp;
-    try {
-      resp = await fetch("https://aspen.cpsd.us/aspen/logon.do");
-    } catch (e) {
-      console.log("fetch error in get_ssadsaession");
-      if (e instanceof FetchError) {
-        throw new Error(AspineErrorCode.ASPENDOWN);
-      } else {
-        throw e;
-      }
+
+  /*
+new scraping method code from aspine3 by Leo
+look at the aspine3 repo for more information: https://github.com/aspine/aspine3
+  */
+  const headless = false; // if I put /?headless=false then it will have a head, for debugging
+  const userAgent = randomUseragent.getRandom();
+  
+  const browser = await puppeteer.launch({ headless });
+	const page = await browser.newPage();
+  await page.setViewport({
+    width: 1920 + Math.floor(Math.random() * 100),
+    height: 3000 + Math.floor(Math.random() * 100),
+    deviceScaleFactor: 1,
+    hasTouch: false,
+    isLandscape: false,
+    isMobile: true,
+});
+await page.setUserAgent(userAgent);
+await page.setJavaScriptEnabled(true);
+// await page.setDefaultNavigationTimeout(0);
+  const url = 'https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML'
+  // var windowVar = localStorage.getItem('windowVar')
+  
+	try { 
+    // console.log(globalThis.window)
+    // let win = globalThis.window?.open(url, '_blank');
+    
+    // console.log(win)
+    // window.document.write('<iframe src="https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML"></iframe>');
+		// nice thing of aspen to make a page just to redirect to the write sso link
+		await page.goto(
+			'https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML'
+		);
+    
+    await page.setDefaultNavigationTimeout(60000); // increase the timeout cus aspen be slow
+    let waitForSelectorOptions = { visible: true, timeout: 3000 };
+		// because its google sso, input the email
+		await page.waitForSelector('input[type="email"]');
+		// console.log('inputting email:', username);
+		await page.type('input[type="email"]', username);
+		await page.keyboard.press('Enter');
+		// console.log('email entered');
+		// input password once it exists on the page
+    try{
+		  await page.waitForSelector('input[type="password"]', waitForSelectorOptions);
     }
-    if (!resp.ok) {
-      throw new Error(AspineErrorCode.ASPENDOWN);
+    catch (e) {
+      console.log(e)
+      // for debugging  
+      if (false){
+      let sshot = await page.screenshot();
+      function encode (input: Uint8Array) {
+        var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+    
+        while (i < input.length) {
+            chr1 = input[i++];
+            chr2 = i < input.length ? input[i++] : Number.NaN; // Not sure if the index 
+            chr3 = i < input.length ? input[i++] : Number.NaN; // checks are needed here
+    
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+    
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
+            output += keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                      keyStr.charAt(enc3) + keyStr.charAt(enc4);
+        }
+        return output;
     }
-    login_page = await resp.text();
+      // let file = new File([new Uint8Array(sshot)], 'screenshot.png', { type: 'png' });
+      let img = 'data:image/png;base64,'+encode(sshot);
+      // console.log(img)
   }
+      throw new Error(AspineErrorCode.LOGINFAIL);
 
-  const [, session_id] = /jsessionid=(.[^"]+)"/.exec(
-    login_page
-  ) as RegExpExecArray;
-  const [, apache_token] =
-  /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
-    login_page
-  ) as RegExpExecArray;
-  // Submit login username, password, and session information
-  const login_response = await (await fetch(
-    "https://aspen.cpsd.us/aspen/logon.do", {
-      headers:{
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`
-      },
-      method: "POST",
-      redirect: "manual",
-      body: new URLSearchParams({
-        "org.apache.struts.taglib.html.TOKEN": apache_token,
-        "userEvent": "930",
-        "userParam":"",
-        "operationId":"",
-        "deploymentId":	"ma-cambridge",
-        "mobile":"true",
-        "SSOLoginDone":"",
-        "username": username,
-        "password": password,
-      }),
+
     }
-  )).text();
-  console.log(login_response.length)
-  // const [, s] = /sessionId='(.+)';/.exec(
-  //   login_response
-  // ) as RegExpExecArray;
-  const get_page = await(await fetch("https://aspen.cpsd.us/aspen/home.do", {
-    headers:{
-      "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`
-    },
-    method: "GET",
-    redirect: "manual"
-  }
-  )).text();
+		// console.log('inputting password');
+		await page.type('input[type="password"]', password);
+		await page.keyboard.press('Enter');
+		// console.log('password entered');
+		// wait for it to go back to aspen
+		await page.waitForNavigation();
+    await page.waitForNetworkIdle();
+		// console.log('navigated back to aspen');
+		// only work if its cpsd.us, there are some edge cases where it was trying to load the wrong url and hanging
+		const currentUrl = page.url();
+		if (currentUrl.includes('.cpsd.us')) {
+			// console.log('got aspen');
+			const jsessionid = currentUrl.match(/jsessionid=([^&]*)/)![1];
 
-  // console.log(s)
-  if (login_response.includes("Invalid login.") || login_response.includes("Not Logged In")) {
-    throw new Error(AspineErrorCode.LOGINFAIL);
-  }
-
-  const result = await callback({ session_id, apache_token });
-
-  // await (await fetch(
-  //   "https://aspen.cpsd.us/aspen/logout.do", {
-  //     headers: {
-  //       "Cookie": " JJSESSIONID=3ISC6085H8SWzS1_wNa8F7t91ciIFilsoB6A1kIE; deploymentId=ma-cambridge; showNavbar=true",
-  //     },
-  //     redirect: "manual",
-  //   }
-  // )).text();
-  return result;
+			// store the session id as a cooky
+			await page.setCookie({
+				name: 'JSESSIONID',
+				value: jsessionid,
+				domain: '.cpsd.us',
+				path: '/',
+				//maxAge: 900 // im guessing 15 min for session length
+			}); // TODO: whenever we need to get something from aspen, if the request fails, expire the cookie
+			// console.log('set cookie')
+			// console.log('JSESSIONID:', jsessionid);
+      const page_content = await page.content();
+      const [, apache_token] =
+      /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
+        page_content
+      ) as RegExpExecArray;
+			await browser.close();
+			// console.log('browser closed');
+			// return the session
+			return callback({ session_id: jsessionid, apache_token });
+			
+		} else {
+			console.error('not a district domain: ' + currentUrl);
+			await browser.close();
+			return new Response(
+				JSON.stringify({ error: 'not a district domain (json)' }),
+				{
+					status: 400,
+					headers: { 'Content-Type': 'application/json' }
+				}
+			);
+		}
+	} catch (error) {
+		console.error('puppet not happy :c so heres the error:', error);
+		await browser.close();
+		return new Response(JSON.stringify({ error: 'something went wrong' }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
+		});
+	}
 }
+
 
 // Code for testing purposes
 if (require.main === module) {
