@@ -153,7 +153,7 @@ export async function get_schedule(
         "termOid": term_oid,
       }), {
         headers: {
-          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis; showNavbar=true`,
+          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-camrbidge; showNavbar=true`,
         },
       }
     )).text();
@@ -254,7 +254,7 @@ export async function get_stats(
     // Change term in classes list
     await fetch("https://aspen.cpsd.us/aspen/portalClassList.do", {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis`,
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge`,
       },
       method: "POST",
       body: new URLSearchParams({
@@ -282,7 +282,7 @@ export async function get_stats(
     await fetch(
       "https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd", {
         headers: {
-          "Cookie": `deploymentId=x2sis; JSESSIONID=${session_id};`,
+          "Cookie": `deploymentId=ma-cambridge; JSESSIONID=${session_id};`,
         },
       }
     );
@@ -364,7 +364,7 @@ async function get_recent(session: Session): Promise<Recent> {
     }),
     {
       headers: {
-        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).text();
@@ -422,7 +422,7 @@ async function get_current_quarter(
     [{ oid }] = await (await fetch(
       url, {
         headers: {
-          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis; showNavbar=true`,
+          "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-cambridge; showNavbar=true`,
         },
       }
     )).json();
@@ -431,7 +431,7 @@ async function get_current_quarter(
   const { currentTermIndex } = await (await fetch(
     `https://aspen.cpsd.us/aspen/rest/studentSchedule/${oid}/gradeTerms`, {
       headers: {
-        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).json();
@@ -488,7 +488,7 @@ async function get_quarter_oids(
   const terms: { gradeTermId: string, oid: string }[] = await (await fetch(
     "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list/studentGradeTerms?count=25&customParams=selectedYear%7Ccurrent;selectedTerm%7Ccurrent&fieldSetOid=fsnX2ClsMbl+++&filter=%23%23%23all&offset=1&selectedStudent=stdX2002104931&sort=default&unique=true", {
       headers: {
-        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session.session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).json();
@@ -522,7 +522,7 @@ async function get_academics(
       "selectedStudent": student_oid,
     }) + "&fieldSetOid=fsnX2ClsMbl++++++&filter=%23%23%23all&offset=1&sort=default&unique=true", {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).json() as any[];
@@ -594,7 +594,7 @@ async function get_class_details(
   const { averageSummary, attendanceSummary } = await (await fetch(
     `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_info.oid}/academics`, {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).json();
@@ -639,7 +639,7 @@ async function get_assignments(
     async x => await (await fetch(
       `https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_details.oid}/categoryDetails/${x}?gradeTermOid=${quarter_oid}`, {
         headers: {
-          "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis; showNavbar=true`,
+          "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`,
         },
       }
     )).json()
@@ -735,7 +735,7 @@ async function download_pdf(
   return (await (await fetch(
     `https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
       headers: {
-        "Cookie": `JSESSIONID=${session_id}; deploymentId=x2sis; showNavbar=true`,
+        "Cookie": `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`,
       },
     }
   )).buffer()).toString("binary");
@@ -782,6 +782,11 @@ export async function get_session<T>(
 ): Promise<any> {
   // Get a session from Aspen by visiting the login page, and check if Aspen is
   // currently down
+
+  /*
+new scraping method code from aspine3 by Leo
+look at the aspine3 repo for more information: https://github.com/aspine/aspine3
+  */
   const headless = false; // if I put /?headless=false then it will have a head, for debugging
   const userAgent = randomUseragent.getRandom();
   
@@ -816,10 +821,10 @@ await page.setJavaScriptEnabled(true);
     let waitForSelectorOptions = { visible: true, timeout: 3000 };
 		// because its google sso, input the email
 		await page.waitForSelector('input[type="email"]');
-		console.log('inputting email:', username);
+		// console.log('inputting email:', username);
 		await page.type('input[type="email"]', username);
 		await page.keyboard.press('Enter');
-		console.log('email entered');
+		// console.log('email entered');
 		// input password once it exists on the page
     try{
 		  await page.waitForSelector('input[type="password"]', waitForSelectorOptions);
@@ -857,24 +862,24 @@ await page.setJavaScriptEnabled(true);
     }
       // let file = new File([new Uint8Array(sshot)], 'screenshot.png', { type: 'png' });
       let img = 'data:image/png;base64,'+encode(sshot);
-      console.log(img)
+      // console.log(img)
   }
       throw new Error(AspineErrorCode.LOGINFAIL);
 
 
     }
-		console.log('inputting password');
+		// console.log('inputting password');
 		await page.type('input[type="password"]', password);
 		await page.keyboard.press('Enter');
-		console.log('password entered');
+		// console.log('password entered');
 		// wait for it to go back to aspen
 		await page.waitForNavigation();
     await page.waitForNetworkIdle();
-		console.log('navigated back to aspen');
+		// console.log('navigated back to aspen');
 		// only work if its cpsd.us, there are some edge cases where it was trying to load the wrong url and hanging
 		const currentUrl = page.url();
 		if (currentUrl.includes('.cpsd.us')) {
-			console.log('got aspen');
+			// console.log('got aspen');
 			const jsessionid = currentUrl.match(/jsessionid=([^&]*)/)![1];
 
 			// store the session id as a cooky
@@ -885,15 +890,15 @@ await page.setJavaScriptEnabled(true);
 				path: '/',
 				//maxAge: 900 // im guessing 15 min for session length
 			}); // TODO: whenever we need to get something from aspen, if the request fails, expire the cookie
-			console.log('set cookie')
-			console.log('JSESSIONID:', jsessionid);
+			// console.log('set cookie')
+			// console.log('JSESSIONID:', jsessionid);
       const page_content = await page.content();
       const [, apache_token] =
       /name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
         page_content
       ) as RegExpExecArray;
 			await browser.close();
-			console.log('browser closed');
+			// console.log('browser closed');
 			// return the session
 			return callback({ session_id: jsessionid, apache_token });
 			
