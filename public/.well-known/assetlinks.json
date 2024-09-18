@@ -1,1 +1,12 @@
-[{ "relation": ["delegate_permission/common.handle_all_urls"], "target" : { "namespace": "android_app", "package_name": "us.aspine.aspine", "sha256_cert_fingerprints": ["F9:AB:42:A2:AB:B2:25:15:F6:FD:09:08:5C:0D:5E:AB:F2:EC:91:2E:6E:DF:B7:05:96:02:7A:FC:2F:60:36:C9"] } }]
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "us.aspine.aspine",
+			"sha256_cert_fingerprints": [
+				"F9:AB:42:A2:AB:B2:25:15:F6:FD:09:08:5C:0D:5E:AB:F2:EC:91:2E:6E:DF:B7:05:96:02:7A:FC:2F:60:36:C9"
+			]
+		}
+	}
+]

@@ -1,17 +1,17 @@
 {
-  "short_name": "Aspine",
-  "name": "Aspine | CRLS Student Dashboard",
-  "icons": [
-    {
-      "src": "/images/logo-circle198x198.png",
-      "type": "image/png",
-      "sizes": "198x198"
-    }
-  ],
-  "start_url": "./login.html",
-  "background_color": "white",
-  "display": "standalone",
-  "scope": "./",
-  "orientation": "portrait",
-  "theme_color": "#00551C"
+	"short_name": "Aspine",
+	"name": "Aspine | CRLS Student Dashboard",
+	"icons": [
+		{
+			"src": "/images/logo-circle198x198.png",
+			"type": "image/png",
+			"sizes": "198x198"
+		}
+	],
+	"start_url": "./login.html",
+	"background_color": "white",
+	"display": "standalone",
+	"scope": "./",
+	"orientation": "portrait",
+	"theme_color": "#00551C"
 }
