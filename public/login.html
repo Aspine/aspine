@@ -1,40 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <script src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"
-          defer></script>
+	<head>
+		<script
+			src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"
+			defer
+		></script>
 
-  <title>Aspine | Login</title>
+		<title>Aspine | Login</title>
 
-  <meta name="Description" content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, predicting how future assignments and test corrections will affect your overall grade and GPA, and viewing your schedule, report cards, and the CRLS clock.">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#00551C"/>
-  <meta name="apple-itunes-app" content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8">
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" type="text/css" href="css/login.css">
-  <!-- https://www.filamentgroup.com/lab/load-css-simpler/ -->
-  <link rel="stylesheet" type="text/css"
-        href="fonts/fontawesome/css/all.min.css"
-        media="print" onload="this.media='all'">
-  <script src="vendor/jquery/jquery.min.js" defer></script>
-  <script src="vendor/tilt/tilt.jquery.min.js" defer></script>
-  <script type="text/javascript" src="js/login.js" defer></script>
-</head>
-<body>
-  <noscript>
-    <p><strong>
-      Aspine is designed to work mainly as a client-side web application
-      to maintain security and privacy, which means that most of the code is
-      JavaScript code run in your Web browser.
-      Aspine is free/libre and open source software with source code available
-      at
-      <a href="https://github.com/Aspine/aspine/">https://github.com/Aspine/aspine/</a>.
-      Please enable JavaScript in your Web browser in order to use Aspine.
-    </strong></p>
-  </noscript>
-
+		<meta
+			name="Description"
+			content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, predicting how future assignments and test corrections will affect your overall grade and GPA, and viewing your schedule, report cards, and the CRLS clock."
+		/>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#00551C" />
+		<meta
+			name="apple-itunes-app"
+			content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8"
+		/>
+		<link rel="icon" type="image/x-icon" href="favicon.ico" />
+		<link rel="manifest" href="manifest.json" />
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
+		<!-- https://www.filamentgroup.com/lab/load-css-simpler/ -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="fonts/fontawesome/css/all.min.css"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<script src="vendor/jquery/jquery.min.js" defer></script>
+		<script src="vendor/tilt/tilt.jquery.min.js" defer></script>
+		<script type="text/javascript" src="js/login.js" defer></script>
+	</head>
+	<body>
+		<noscript>
+			<p>
+				<strong>
+					Aspine is designed to work mainly as a client-side web
+					application to maintain security and privacy, which means
+					that most of the code is JavaScript code run in your Web
+					browser. Aspine is free/libre and open source software with
+					source code available at
+					<a href="https://github.com/Aspine/aspine/"
+						>https://github.com/Aspine/aspine/</a
+					>. Please enable JavaScript in your Web browser in order to
+					use Aspine.
+				</strong>
+			</p>
+		</noscript>
   <header></header>
   <nav style="position: absolute; width: 100vw; height: 50px; background-color: #3F8532af; font-size: 25px; color: #fff; padding: auto;">
     Join Cybersecurity Club! Meetings are every Monday/Friday at 3:15 PM in room 1311B. Class code: 7hm6ugw
@@ -51,79 +66,142 @@
               </picture>
             </div>
 
-            <form id="login100-form" action="/login" method="POST">
-              <span id="login100-form-title">
-                Aspine Login
-              </span>
-              <div class="text-center p-t-12">
-                <span class="txt1" style="color:#595959">
-                  Enter school email credentials. May require multiple attempts.
-                </span>
-                <br/>
-                <span id="error"></span>
-              </div>
-              <!-- Username Input -->
-              <div class="wrap-input100">
-                <input class="input100" id="input-username" type="text" name="username" placeholder="Student ID" aria-label="Aspen Student ID" autofocus>
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-id-card" aria-hidden="true"></i>
-                </span>
-              </div>
-              <!-- Password Input -->
-              <div class="wrap-input100">
-                <input class="input100" id="input-password" type="password" name="password" placeholder="Password" aria-label="Aspen Password">
-                <span class="focus-input100"></span>
-                <span class="symbol-input100">
-                  <i class="fa fa-lock" aria-hidden="true"></i>
-                </span>
-              </div>
-              <!-- Remember Me Checkbox -->
-              <div><label style="float: left;">
-                  <input id="remember-me" type="checkbox" name="rememberme" style="position: relative; top: 1px; left: 35px;">
-                  <span style="position: relative; left: 50px">Remember Me</span>
-                </label></div>
-                <!-- Login Button -->
-                <div id="container-login100-form-btn">
-                  <button id="login100-form-btn" style="background:#3F8532">
-                    Login
-                  </button>
-                </div>
-                <div class="text-center">
-                  <img id="district-logo" src="images/district-logo.png">
-                </div>
-            </form>
-          </div>
+							<form
+								id="login100-form"
+								action="/login"
+								method="POST"
+							>
+								<span id="login100-form-title">
+									Aspine Login
+								</span>
+								<div class="text-center p-t-12">
+									<span class="txt1" style="color: #595959">
+										Enter school email credentials. May
+										require multiple attempts.
+									</span>
+									<br />
+									<span id="error"></span>
+								</div>
+								<!-- Username Input -->
+								<div class="wrap-input100">
+									<input
+										class="input100"
+										id="input-username"
+										type="text"
+										name="username"
+										placeholder="Student ID"
+										aria-label="Aspen Student ID"
+										autofocus
+									/>
+									<span class="focus-input100"></span>
+									<span class="symbol-input100">
+										<i
+											class="fa fa-id-card"
+											aria-hidden="true"
+										></i>
+									</span>
+								</div>
+								<!-- Password Input -->
+								<div class="wrap-input100">
+									<input
+										class="input100"
+										id="input-password"
+										type="password"
+										name="password"
+										placeholder="Password"
+										aria-label="Aspen Password"
+									/>
+									<span class="focus-input100"></span>
+									<span class="symbol-input100">
+										<i
+											class="fa fa-lock"
+											aria-hidden="true"
+										></i>
+									</span>
+								</div>
+								<!-- Remember Me Checkbox -->
+								<div>
+									<label style="float: left">
+										<input
+											id="remember-me"
+											type="checkbox"
+											name="rememberme"
+											style="
+												position: relative;
+												top: 1px;
+												left: 35px;
+											"
+										/>
+										<span
+											style="
+												position: relative;
+												left: 50px;
+											"
+											>Remember Me</span
+										>
+									</label>
+								</div>
+								<!-- Login Button -->
+								<div id="container-login100-form-btn">
+									<button
+										id="login100-form-btn"
+										style="background: #3f8532"
+									>
+										Login
+									</button>
+								</div>
+								<div class="text-center">
+									<img
+										id="district-logo"
+										src="images/district-logo.png"
+									/>
+								</div>
+							</form>
+						</div>
 
-          <span id="bottom-text">
-            <ul>
-              <li>
-                <a href="https://github.com/Aspine/aspine/issues" target="none">Issue/Feature Requests</a>
-              </li>
-              <li>
-                <a href="https://github.com/Aspine/aspine" target="none">Our GitHub Repository</a>
-              </li>
-              <li>
-                <a href="https://www.cpsd.us/privacy" target="none">Privacy Policy</a>
-              </li>
-            </ul>
-          </span>
-        </div>
-      </div>
-    </div>
+						<span id="bottom-text">
+							<ul>
+								<li>
+									<a
+										href="https://github.com/Aspine/aspine/issues"
+										target="none"
+										>Issue/Feature Requests</a
+									>
+								</li>
+								<li>
+									<a
+										href="https://github.com/Aspine/aspine"
+										target="none"
+										>Our GitHub Repository</a
+									>
+								</li>
+								<li>
+									<a
+										href="https://www.cpsd.us/privacy"
+										target="none"
+										>Privacy Policy</a
+									>
+								</li>
+							</ul>
+						</span>
+					</div>
+				</div>
+			</div>
 
-    <script type="text/javascript" src="js/app.js"></script>
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-149290199-1');
+			<script type="text/javascript" src="js/app.js"></script>
+			<script>
+				window.addEventListener('DOMContentLoaded', () => {
+					window.dataLayer = window.dataLayer || [];
+					function gtag() {
+						dataLayer.push(arguments);
+					}
+					gtag('js', new Date());
+					gtag('config', 'UA-149290199-1');
 
-        $('.js-tilt').tilt({ scale: 1.1 });
-      });
-    </script>
-  </main>
-  <footer></footer>
-</body>
+					$('.js-tilt').tilt({ scale: 1.1 });
+				});
+			</script>
+		</main>
+		<footer></footer>
+	</body>
 </html>

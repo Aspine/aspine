@@ -1,508 +1,753 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <script src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"
-          defer></script>
+	<head>
+		<script
+			src="https://www.googletagmanager.com/gtag/js?id=UA-149290199-1"
+			defer
+		></script>
 
-  <title>Aspine | CRLS Student Dashboard</title>
+		<title>Aspine | CRLS Student Dashboard</title>
 
-  <meta name="Description" content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, predicting how future assignments and test corrections will affect your overall grade and GPA, and viewing your schedule, report cards, and the CRLS clock.">
-  <meta charset="utf-8">
-  <meta name="Aspine" content="Aspen Scraper and Beautifier">
-  <meta name="viewport" content="width=device-width, initial-scale=.75">
-  <meta name="theme-color" content="#00551C"/>
-  <meta name="apple-itunes-app" content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8">
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" type="text/css" href="css/home.css">
-  <!-- https://www.filamentgroup.com/lab/load-css-simpler/ -->
-  <link rel="stylesheet" type="text/css"
-        href="fonts/fontawesome/css/all.min.css"
-        media="print" onload="this.media='all'">
-  <link rel="stylesheet" type="text/css" href="css/tabulator.css"
-        media="print" onload="this.media='all'">
-  <link rel="stylesheet"
-        href="fonts/material-icons/iconfont/material-icons.css"
-        media="print" onload="this.media='all'">
-  <script src="vendor/tabulator/tabulator.min.js" defer></script>
-  <script src="js/extraFunctions.js" defer></script>
-  <script src="js/buttonFunctions.js" defer></script>
-  <script src="vendor/jquery/jquery.min.js" defer></script>
-  <script src="js/clock.js" defer></script>
-  <script src="js/calculate_grade.js" defer></script>
-  <script src="js/reports.js" defer></script>
-  <script src="js/home.js" defer></script>
-  <script src="js/app.js" defer></script>
-  <script src="js/snackbar.js" defer></script>
-  <script src="vendor/pdf.js/pdf.min.js" defer></script>
-  <script src="vendor/file-saver/FileSaver.min.js" defer></script>
-  <script src="vendor/d3/d3-array.min.js" defer></script>
-  <script src="vendor/d3/d3-axis.min.js" defer></script>
-  <script src="vendor/d3/d3-format.min.js" defer></script>
-  <script src="vendor/d3/d3-interpolate.min.js" defer></script>
-  <script src="vendor/d3/d3-time.min.js" defer></script>
-  <script src="vendor/d3/d3-time-format.min.js" defer></script>
-  <script src="vendor/d3/d3-scale.min.js" defer></script>
-  <script src="vendor/d3/d3-selection.min.js" defer></script>
-  <script src="vendor/d3/d3-boxplot.min.js" defer></script>
-</head>
-<body>
-  <div id="sidenav-overlay"></div>
-  <noscript>
-    <p><strong>
-      Aspine is designed to work mainly as a client-side web application
-      to maintain security and privacy, which means that most of the code is
-      JavaScript code run in your Web browser.
-      Aspine is free/libre and open source software with source code available
-      at
-      <a href="https://github.com/Aspine/aspine/">https://github.com/Aspine/aspine/</a>.
-      Please enable JavaScript in your Web browser in order to use Aspine.
-    </strong></p>
-  </noscript>
+		<meta
+			name="Description"
+			content="The Aspine CRLS Student Dashboard is perfect for keeping up with your Aspen grades, predicting how future assignments and test corrections will affect your overall grade and GPA, and viewing your schedule, report cards, and the CRLS clock."
+		/>
+		<meta charset="utf-8" />
+		<meta name="Aspine" content="Aspen Scraper and Beautifier" />
+		<meta name="viewport" content="width=device-width, initial-scale=.75" />
+		<meta name="theme-color" content="#00551C" />
+		<meta
+			name="apple-itunes-app"
+			content="app-id=1498713667, affiliate-data=myAffiliateData, app-argument=https://apps.apple.com/us/app/aspine/id1498713667?mt=8"
+		/>
+		<link rel="icon" type="image/x-icon" href="favicon.ico" />
+		<link rel="manifest" href="manifest.json" />
+		<link rel="stylesheet" type="text/css" href="css/home.css" />
+		<!-- https://www.filamentgroup.com/lab/load-css-simpler/ -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="fonts/fontawesome/css/all.min.css"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/tabulator.css"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<link
+			rel="stylesheet"
+			href="fonts/material-icons/iconfont/material-icons.css"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<script src="vendor/tabulator/tabulator.min.js" defer></script>
+		<script src="js/extraFunctions.js" defer></script>
+		<script src="js/buttonFunctions.js" defer></script>
+		<script src="vendor/jquery/jquery.min.js" defer></script>
+		<script src="js/clock.js" defer></script>
+		<script src="js/calculate_grade.js" defer></script>
+		<script src="js/reports.js" defer></script>
+		<script src="js/home.js" defer></script>
+		<script src="js/app.js" defer></script>
+		<script src="js/snackbar.js" defer></script>
+		<script src="vendor/pdf.js/pdf.min.js" defer></script>
+		<script src="vendor/file-saver/FileSaver.min.js" defer></script>
+		<script src="vendor/d3/d3-array.min.js" defer></script>
+		<script src="vendor/d3/d3-axis.min.js" defer></script>
+		<script src="vendor/d3/d3-format.min.js" defer></script>
+		<script src="vendor/d3/d3-interpolate.min.js" defer></script>
+		<script src="vendor/d3/d3-time.min.js" defer></script>
+		<script src="vendor/d3/d3-time-format.min.js" defer></script>
+		<script src="vendor/d3/d3-scale.min.js" defer></script>
+		<script src="vendor/d3/d3-selection.min.js" defer></script>
+		<script src="vendor/d3/d3-boxplot.min.js" defer></script>
+	</head>
+	<body>
+		<div id="sidenav-overlay"></div>
+		<noscript>
+			<p>
+				<strong>
+					Aspine is designed to work mainly as a client-side web
+					application to maintain security and privacy, which means
+					that most of the code is JavaScript code run in your Web
+					browser. Aspine is free/libre and open source software with
+					source code available at
+					<a href="https://github.com/Aspine/aspine/"
+						>https://github.com/Aspine/aspine/</a
+					>. Please enable JavaScript in your Web browser in order to
+					use Aspine.
+				</strong>
+			</p>
+		</noscript>
 
-  <div id="header">
-    <div class="logo" onclick="openTab('clock')" id="clock_open">
-      <canvas id="small_clock" width="400" height="400"></canvas>
-      <img id="logo" src="images/logo-circle198x198.png" alt="logo" hidden>
-    </div>
-    <p id="small_clock_period"></p>
-    <h4 id="title" onclick="openTab('grades')">Aspine</h4>
-  </div>
+		<div id="header">
+			<div class="logo" onclick="openTab('clock')" id="clock_open">
+				<canvas id="small_clock" width="400" height="400"></canvas>
+				<img
+					id="logo"
+					src="images/logo-circle198x198.png"
+					alt="logo"
+					hidden
+				/>
+			</div>
+			<p id="small_clock_period"></p>
+			<h4 id="title" onclick="openTab('grades')">Aspine</h4>
+		</div>
 
-  <div class="dark-mode">
-    <p>Dark Mode</p>
-    <label class="dark-mode-toggle">
-      <input id="dark-check" type="checkbox" onclick="darkMode()">
-      <span class="slider round"></span>
-    </label>
-  </div>
+		<div class="dark-mode">
+			<p>Dark Mode</p>
+			<label class="dark-mode-toggle">
+				<input id="dark-check" type="checkbox" onclick="darkMode()" />
+				<span class="slider round"></span>
+			</label>
+		</div>
 
-  <!-- SIDENAV STUFF -->
-  <div id="sidenav">
-    <!-- switch-exempt makes the switch out of navbar pass over this -->
-    <button onclick="closeSideNav()" class="tablinks switch-exempt" style="margin: 0px;width: 270px; height: 44px; background-color: var(--lightgray1)">
-      <i class="fa fa-times fa-2x" style="position: absolute; top: 18px; left: 18px; font-size: 1.3em; color: var(--black);"></i>
-    </button>
-    <hr/>
-  </div>
+		<!-- SIDENAV STUFF -->
+		<div id="sidenav">
+			<!-- switch-exempt makes the switch out of navbar pass over this -->
+			<button
+				onclick="closeSideNav()"
+				class="tablinks switch-exempt"
+				style="
+					margin: 0px;
+					width: 270px;
+					height: 44px;
+					background-color: var(--lightgray1);
+				"
+			>
+				<i
+					class="fa fa-times fa-2x"
+					style="
+						position: absolute;
+						top: 18px;
+						left: 18px;
+						font-size: 1.3em;
+						color: var(--black);
+					"
+				></i>
+			</button>
+			<hr />
+		</div>
 
-  <div class="tab">
-    <button class="tablinks hide switch-exempt" onclick="openSideNav()" id="hamburger_button"><i class="fa fa-bars"></i></button>
-    <button class="tablinks active" onclick="openTab('grades'); closeSideNav()" id="grades_open">Grades</button>
-    <button class="tablinks" onclick="openTab('schedule'); closeSideNav()" id="schedule_open">Schedule</button>
-    <button class="tablinks" onclick="openTab('recent'); closeSideNav()" id="recent_open">Attendance & Recent</button>
-    <!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
-    <!-- TODO: post-covid, setting lunch should be migrated to settings -->
-    <!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
-    <button class="tablinks" onclick="openTab('reports'); closeSideNav()" id="reports_open">Reports</button>
-    <button class="tablinks" onclick="openTab('information'); closeSideNav()" id="information_open">Info</button>
-<!--#ifndef lite-->
-    <button class="tablinks tablinks-right" onclick="location.href='/logout'" id="logout_button">Logout</button>
-<!--#endif-->
-    <div class="GPA gpa_custom-select custom-select tablinks-right" style="width: 270px">
-      <select id="gpa_select">
-        <option id="init_gpa" value="0">Current Quarter GPA: </option>
-        <option id="current_gpa" value="0">Current Quarter GPA: </option>
-        <option id="q1_gpa" value="1"></option>
-        <option id="q2_gpa" value="2"></option>
-        <option id="q3_gpa" value="3"></option>
-        <option id="q4_gpa" value="4"></option>
-        <option id="cum_gpa"></option>
-      </select>
-    </div>
-    <button class="tablinks tablinks-right" onclick="GPAType();">GPA Type</button>
-    <div class="GPA tableData_custom-select custom-select tablinks-right">
-      <select id="tableData_select">
-        <option value="0">Current Year</option>
-        <option value="0">Current Year</option>
-        <option value="1">Previous Year</option>
-        <option value="import">Import Data...</option>
-      </select>
-    </div>
-  </div>
+		<div class="tab">
+			<button
+				class="tablinks hide switch-exempt"
+				onclick="openSideNav()"
+				id="hamburger_button"
+			>
+				<i class="fa fa-bars"></i>
+			</button>
+			<button
+				class="tablinks active"
+				onclick="openTab('grades'); closeSideNav()"
+				id="grades_open"
+			>
+				Grades
+			</button>
+			<button
+				class="tablinks"
+				onclick="openTab('schedule'); closeSideNav()"
+				id="schedule_open"
+			>
+				Schedule
+			</button>
+			<button
+				class="tablinks"
+				onclick="openTab('recent'); closeSideNav()"
+				id="recent_open"
+			>
+				Attendance & Recent
+			</button>
+			<!--<button class="tablinks" onclick="openTab(event, 'clock')">Clock</button>-->
+			<!-- TODO: post-covid, setting lunch should be migrated to settings -->
+			<!--<button class="tablinks" onclick="openTab(event, 'calendar-tab')">Calendar</button>-->
+			<button
+				class="tablinks"
+				onclick="openTab('reports'); closeSideNav()"
+				id="reports_open"
+			>
+				Reports
+			</button>
+			<button
+				class="tablinks"
+				onclick="openTab('information'); closeSideNav()"
+				id="information_open"
+			>
+				Info
+			</button>
+			<!--#ifndef lite-->
+			<button
+				class="tablinks tablinks-right"
+				onclick="location.href='/logout'"
+				id="logout_button"
+			>
+				Logout
+			</button>
+			<!--#endif-->
+			<div
+				class="GPA gpa_custom-select custom-select tablinks-right"
+				style="width: 270px"
+			>
+				<select id="gpa_select">
+					<option id="init_gpa" value="0">
+						Current Quarter GPA:
+					</option>
+					<option id="current_gpa" value="0">
+						Current Quarter GPA:
+					</option>
+					<option id="q1_gpa" value="1"></option>
+					<option id="q2_gpa" value="2"></option>
+					<option id="q3_gpa" value="3"></option>
+					<option id="q4_gpa" value="4"></option>
+					<option id="cum_gpa"></option>
+				</select>
+			</div>
+			<button class="tablinks tablinks-right" onclick="GPAType();">
+				GPA Type
+			</button>
+			<div
+				class="GPA tableData_custom-select custom-select tablinks-right"
+			>
+				<select id="tableData_select">
+					<option value="0">Current Year</option>
+					<option value="0">Current Year</option>
+					<option value="1">Previous Year</option>
+					<option value="import">Import Data...</option>
+				</select>
+			</div>
+		</div>
 
-  <div id="loader">
-    <div class="loader"></div>
-  </div>
+		<div id="loader">
+			<div class="loader"></div>
+		</div>
 
-  <div id="export_modal" class="modal" tabindex="0">
-    <!-- Modal content -->
-    <div id="export_modal_content" class="modal-content">
-      <span class="close" onclick="hideModal('export')">&times;</span>
-      <h3 id="export_modal_title">Export Data</h3>
-      <ul>
-        <li>
-          <label for="export_checkbox_recent">
-            <input type="checkbox" id="export_checkbox_recent" checked>
-            <span>Recent Activity</span>
-          </label>
-        </li>
-        <li>
-          <label for="export_checkbox_schedule">
-            <input type="checkbox" id="export_checkbox_schedule" checked>
-            <span>Schedule</span>
-          </label>
-        </li>
-        <li>
-          <label for="export_checkbox_terms">
-            <input type="checkbox" id="export_checkbox_terms" checked>
-            <span>Grades</span>
-          </label>
-          <ul>
-            <li>
-              <label for="export_checkbox_terms_current">
-                <input type="checkbox" id="export_checkbox_terms_current" checked>
-                <span>Current Quarter</span>
-              </label>
-            </li>
-            <li>
-              <label for="export_checkbox_terms_q1">
-                <input type="checkbox" id="export_checkbox_terms_q1">
-                <span>Quarter 1</span>
-              </label>
-            </li>
-            <li>
-              <label for="export_checkbox_terms_q2">
-                <input type="checkbox" id="export_checkbox_terms_q2">
-                <span>Quarter 2</span>
-              </label>
-            </li>
-            <li>
-              <label for="export_checkbox_terms_q3">
-                <input type="checkbox" id="export_checkbox_terms_q3">
-                <span>Quarter 3</span>
-              </label>
-            </li>
-            <li>
-              <label for="export_checkbox_terms_q4">
-                <input type="checkbox" id="export_checkbox_terms_q4">
-                <span>Quarter 4</span>
-              </label>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <label for="export_checkbox_cumGPA">
-            <input type="checkbox" id="export_checkbox_cumGPA" checked>
-            <span>Cumulative (year-to-date) GPA</span>
-          </label>
-        </li>
-      </ul>
-      <p>Status: <span id="export_status"></span></p>
-      <button id="export_button">Export</button>
-    </div>
-  </div>
+		<div id="export_modal" class="modal" tabindex="0">
+			<!-- Modal content -->
+			<div id="export_modal_content" class="modal-content">
+				<span class="close" onclick="hideModal('export')">&times;</span>
+				<h3 id="export_modal_title">Export Data</h3>
+				<ul>
+					<li>
+						<label for="export_checkbox_recent">
+							<input
+								type="checkbox"
+								id="export_checkbox_recent"
+								checked
+							/>
+							<span>Recent Activity</span>
+						</label>
+					</li>
+					<li>
+						<label for="export_checkbox_schedule">
+							<input
+								type="checkbox"
+								id="export_checkbox_schedule"
+								checked
+							/>
+							<span>Schedule</span>
+						</label>
+					</li>
+					<li>
+						<label for="export_checkbox_terms">
+							<input
+								type="checkbox"
+								id="export_checkbox_terms"
+								checked
+							/>
+							<span>Grades</span>
+						</label>
+						<ul>
+							<li>
+								<label for="export_checkbox_terms_current">
+									<input
+										type="checkbox"
+										id="export_checkbox_terms_current"
+										checked
+									/>
+									<span>Current Quarter</span>
+								</label>
+							</li>
+							<li>
+								<label for="export_checkbox_terms_q1">
+									<input
+										type="checkbox"
+										id="export_checkbox_terms_q1"
+									/>
+									<span>Quarter 1</span>
+								</label>
+							</li>
+							<li>
+								<label for="export_checkbox_terms_q2">
+									<input
+										type="checkbox"
+										id="export_checkbox_terms_q2"
+									/>
+									<span>Quarter 2</span>
+								</label>
+							</li>
+							<li>
+								<label for="export_checkbox_terms_q3">
+									<input
+										type="checkbox"
+										id="export_checkbox_terms_q3"
+									/>
+									<span>Quarter 3</span>
+								</label>
+							</li>
+							<li>
+								<label for="export_checkbox_terms_q4">
+									<input
+										type="checkbox"
+										id="export_checkbox_terms_q4"
+									/>
+									<span>Quarter 4</span>
+								</label>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<label for="export_checkbox_cumGPA">
+							<input
+								type="checkbox"
+								id="export_checkbox_cumGPA"
+								checked
+							/>
+							<span>Cumulative (year-to-date) GPA</span>
+						</label>
+					</li>
+				</ul>
+				<p>Status: <span id="export_status"></span></p>
+				<button id="export_button">Export</button>
+			</div>
+		</div>
 
-  <div id="import_modal" class="modal">
-    <!-- Modal content -->
-    <div id="import_modal_content" class="modal-content">
-      <span class="close" onclick="hideModal('import')">&times;</span>
-      <h3 id="import_modal_title">Import Data</h3>
-      <input type="file" id="import_filepicker">
-      <button id="import_button">Import</button>
-      <p id="import_error"></p>
-    </div>
-  </div>
+		<div id="import_modal" class="modal">
+			<!-- Modal content -->
+			<div id="import_modal_content" class="modal-content">
+				<span class="close" onclick="hideModal('import')">&times;</span>
+				<h3 id="import_modal_title">Import Data</h3>
+				<input type="file" id="import_filepicker" />
+				<button id="import_button">Import</button>
+				<p id="import_error"></p>
+			</div>
+		</div>
 
+		<div id="grades" class="tabcontent">
+			<div id="gradesButtons">
+				<button onclick="exportData();">
+					<text>Export Data</text>
+					<i
+						class="fa fa-file-download header-icon tooltip"
+						aria-hidden="true"
+						tooltip="Export Grades"
+					></i>
+				</button>
+				<button onclick="resetTableData();">
+					<text>Reset</text>
+					<i
+						class="fa fa-sync-alt header-icon tooltip"
+						aria-hidden="true"
+						tooltip="Reset"
+					></i>
+				</button>
+			</div>
 
+			<div id="classesTable"></div>
+			<div id="mostRecentDiv" style="display: none">
+				<!-- hide most recent activity; removed from aspen -->
+				<h3 align="left">Most Recent Activity:</h3>
+				<div id="mostRecentTable"></div>
+			</div>
+			<div id="categoriesTable"></div>
 
-  <div id="grades" class="tabcontent">
+			<div id="corrections_modal" class="stats-window">
+				<!-- Modal content -->
+				<div id="corrections_modal_content" class="modal-content">
+					<span class="close" onclick="hideModal('corrections')"
+						>&times;</span
+					>
+					<h3>Test Corrections</h3>
+					<p style="margin-bottom: 20px">
+						Enter the percentage of lost points which are
+						redeemable:
+					</p>
+					<input type="text" id="corrections_modal_input" />
+					<input
+						type="button"
+						value="Apply Corrections"
+						onclick="correct()"
+					/>
+				</div>
+			</div>
 
-    <div id="gradesButtons">
-        <button onclick="exportData();">
-          <text>Export Data</text>
-          <i class="fa fa-file-download header-icon tooltip" aria-hidden="true" tooltip="Export Grades"></i>
-        </button>
-        <button onclick="resetTableData();">
-          <text>Reset</text>
-          <i class="fa fa-sync-alt header-icon tooltip" aria-hidden="true" tooltip="Reset"></i>
-        </button>
-    </div>
+			<div id="stats_modal" class="stats-window">
+				<!-- Modal content -->
+				<div id="stats_modal_content" class="modal-content">
+					<span class="close" onclick="hideModal('stats')"
+						>&times;</span
+					>
+					<div id="there_are_no_stats">
+						<h3 id="no_stats_modal_title">Assignment:</h3>
+						<table id="no_stats_modal_table">
+							<tr>
+								<th>Category</th>
+								<td id="no_stats_modal_category"></td>
+							</tr>
+							<tr>
+								<th>Your Score</th>
+								<td id="no_stats_modal_score"></td>
+							</tr>
+							<tr>
+								<th>Date Assigned</th>
+								<td id="no_stats_modal_date_assigned"></td>
+							</tr>
+							<tr>
+								<th>Date Due</th>
+								<td id="no_stats_modal_date_due"></td>
+							</tr>
+							<tr>
+								<th>Assignment Feedback</th>
+								<td id="no_stats_modal_feedback"></td>
+							</tr>
+						</table>
+						<br />
+					</div>
+					<p id="no_stats_caption">
+						No Statistics information for this assignment.
+					</p>
+					<div id="there_are_stats">
+						<h3 id="stats_modal_title">Modal Title..</h3>
+						<div id="notgraph">
+							<svg id="stats_plot"></svg>
+							<p id="stats_modal_horizontal_axis">
+								<strong>Score</strong>
+							</p>
+							<table id="stats_modal_table">
+								<tr>
+									<th>Category</th>
+									<td id="stats_modal_category"></td>
+								</tr>
+								<tr>
+									<th>Your Score</th>
+									<td id="stats_modal_score"></td>
+								</tr>
+								<tr>
+									<th>Low, Median, High</th>
+									<td id="stats_modal_lmh"></td>
+								</tr>
+								<tr>
+									<th>Mean</th>
+									<td id="stats_modal_mean"></td>
+								</tr>
+								<tr>
+									<th>Date Assigned</th>
+									<td id="stats_modal_date_assigned"></td>
+								</tr>
+								<tr>
+									<th>Date Due</th>
+									<td id="stats_modal_date_due"></td>
+								</tr>
+								<tr>
+									<th>Assignment Feedback</th>
+									<td id="stats_modal_feedback"></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <div id="classesTable"></div>
-    <div id="mostRecentDiv" style="display:none">
-      <!-- hide most recent activity; removed from aspen -->
-      <h3 align="left">Most Recent Activity:</h3>
-      <div id="mostRecentTable"></div>
-    </div>
-    <div id="categoriesTable"></div>
+			<div id="assignmentsTable"></div>
+		</div>
 
-    <div id="corrections_modal" class="stats-window">
-      <!-- Modal content -->
-      <div id="corrections_modal_content" class="modal-content">
-        <span class="close" onclick="hideModal('corrections')">&times;</span>
-        <h3>Test Corrections</h3>
-        <p style='margin-bottom: 20px;'>
-          Enter the percentage of lost points which are redeemable:
-        </p>
-        <input type="text" id="corrections_modal_input">
-        <input type="button" value="Apply Corrections" onclick="correct()">
-      </div>
-    </div>
-
-    <div id="stats_modal" class="stats-window">
-      <!-- Modal content -->
-      <div id="stats_modal_content" class="modal-content">
-        <span class="close" onclick="hideModal('stats')">&times;</span>
-        <div id="there_are_no_stats">
-          <h3 id="no_stats_modal_title">Assignment: </h3>
-          <table id="no_stats_modal_table">
-            <tr>
-              <th>Category</th>
-              <td id="no_stats_modal_category"></td>
-            </tr>
-            <tr>
-              <th>Your Score</th>
-              <td id="no_stats_modal_score"></td>
-            </tr>
-            <tr>
-              <th>Date Assigned</th>
-              <td id="no_stats_modal_date_assigned"></td>
-            </tr>
-            <tr>
-              <th>Date Due</th>
-              <td id="no_stats_modal_date_due"></td>
-            </tr>
-            <tr>
-              <th>Assignment Feedback</th>
-              <td id="no_stats_modal_feedback"></td>
-            </tr>
-          </table><br>
-        </div>
-        <p id="no_stats_caption">No Statistics information for this assignment.</p>
-        <div id="there_are_stats">
-          <h3 id="stats_modal_title">Modal Title..</h3>
-          <div id="notgraph">
-            <svg id="stats_plot"></svg>
-            <p id="stats_modal_horizontal_axis"><strong>Score</strong></p>
-            <table id="stats_modal_table">
-              <tr>
-                <th>Category</th>
-                <td id="stats_modal_category"></td>
-              </tr>
-              <tr>
-                <th>Your Score</th>
-                <td id="stats_modal_score"></td>
-              </tr>
-              <tr>
-                <th>Low, Median, High</th>
-                <td id="stats_modal_lmh"></td>
-              </tr>
-              <tr>
-                <th>Mean</th>
-                <td id="stats_modal_mean"></td>
-              </tr>
-              <tr>
-                <th>Date Assigned</th>
-                <td id="stats_modal_date_assigned"></td>
-              </tr>
-              <tr>
-                <th>Date Due</th>
-                <td id="stats_modal_date_due"></td>
-              </tr>
-              <tr>
-                <th>Assignment Feedback</th>
-                <td id="stats_modal_feedback"></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="assignmentsTable"></div>
-  </div>
-
-  <div id="schedule" class="tabcontent">
-    <!-- Rounded switch -->
-    <!-- Black/silver switch disabled due to covid-19 schedule -->
-    <!--<label class="switch">
+		<div id="schedule" class="tabcontent">
+			<!-- Rounded switch -->
+			<!-- Black/silver switch disabled due to covid-19 schedule -->
+			<!--<label class="switch">
       <input type="checkbox" id="schedule_toggle" onclick="schedule_toggle();">
       <span class="slider round"></span>
       <p id="schedule_title" class="unselectable">Black</p>
     </label>-->
-    <div id="schedule-selects">
-      <div class="day_custom-select" id="day_custom-select">
-        <select id="day_select">
-          <option value="-1">Select Day</option>
-          <option value="1">Monday (Silver)</option>
-          <option value="2">Tuesday (Black)</option>
-          <option value="3">Wednesday (Alternating Silver/Black)</option>
-          <option value="4">Thursday (Silver)</option>
-          <option value="5">Friday (Black)</option>
-        </select>
-      </div>
-      <div>
-        <p>Lunch:</p>
-        <input type="range" min="0" max="2" value="0" id="lunch_range" onchange="update_lunch()" class="unselectable">
-        <p id="lunch_label" class="unselectable">ABC</p>
-      </div>
-    </div>
-    <div id="scheduleTable"></div>
-  </div>
-  <div id="clock" class="tabcontent">
-    <canvas id="large_clock" width="400" height="400"></canvas>
-    <p id="large_clock_period"></p>
-  </div>
-  <div id="recent" class="tabcontent">
-    <label class="switch">
-      <input type="checkbox" id="recent_toggle" onclick="recent_toggle();">
-      <span class="slider round"></span>
-      <p id="recent_title" class="unselectable">Attendance</p>
-   </label>
-    <div id="recentActivity"></div>
-    <div id="recentAttendance"></div>
-  </div>
-  <div id="reports" class="tabcontent">
-    <div class="pdf_topnav">
-      <div class="pdf_custom-select">
-        <select id="pdf_select">
-        </select>
-      </div>
+			<div id="schedule-selects">
+				<div class="day_custom-select" id="day_custom-select">
+					<select id="day_select">
+						<option value="-1">Select Day</option>
+						<option value="1">Monday (Silver)</option>
+						<option value="2">Tuesday (Black)</option>
+						<option value="3">
+							Wednesday (Alternating Silver/Black)
+						</option>
+						<option value="4">Thursday (Silver)</option>
+						<option value="5">Friday (Black)</option>
+					</select>
+				</div>
+				<div>
+					<p>Lunch:</p>
+					<input
+						type="range"
+						min="0"
+						max="2"
+						value="0"
+						id="lunch_range"
+						onchange="update_lunch()"
+						class="unselectable"
+					/>
+					<p id="lunch_label" class="unselectable">ABC</p>
+				</div>
+			</div>
+			<div id="scheduleTable"></div>
+		</div>
+		<div id="clock" class="tabcontent">
+			<canvas id="large_clock" width="400" height="400"></canvas>
+			<p id="large_clock_period"></p>
+		</div>
+		<div id="recent" class="tabcontent">
+			<label class="switch">
+				<input
+					type="checkbox"
+					id="recent_toggle"
+					onclick="recent_toggle();"
+				/>
+				<span class="slider round"></span>
+				<p id="recent_title" class="unselectable">Attendance</p>
+			</label>
+			<div id="recentActivity"></div>
+			<div id="recentAttendance"></div>
+		</div>
+		<div id="reports" class="tabcontent">
+			<div class="pdf_topnav">
+				<div class="pdf_custom-select">
+					<select id="pdf_select"></select>
+				</div>
 
-      <span id="expand-pdf-icon" class="right hover pointer" onclick="toggle_fullscreen_pdf()" style="position: relative;" tooltip="Go Fullscreen" tooltip-margin="-92px">
-        <i class="fa fa-expand-alt" aria-hidden="true"></i>
-      </span>
+				<span
+					id="expand-pdf-icon"
+					class="right hover pointer"
+					onclick="toggle_fullscreen_pdf()"
+					style="position: relative"
+					tooltip="Go Fullscreen"
+					tooltip-margin="-92px"
+				>
+					<i class="fa fa-expand-alt" aria-hidden="true"></i>
+				</span>
 
-      <span class="right hover pointer" onclick="download_pdf()" aria-label="Download PDF" style="position: relative;" tooltip="Download PDF">
-        <i class="fa fa-download" aria-hidden="true"></i>
-      </span>
+				<span
+					class="right hover pointer"
+					onclick="download_pdf()"
+					aria-label="Download PDF"
+					style="position: relative"
+					tooltip="Download PDF"
+				>
+					<i class="fa fa-download" aria-hidden="true"></i>
+				</span>
 
-      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;">
-        |
-      </span>
+				<span
+					class="right"
+					style="
+						font-size: 26px;
+						position: relative;
+						padding: 0px 15px;
+						top: 3px;
+						cursor: default;
+					"
+				>
+					|
+				</span>
 
-      <span class="right hover pointer" onclick="zoom_in_pdf()" aria-label="Zoom in">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-      </span>
-      <span class="right hover pointer" onclick="render_page_pdf(currentPageNum)">
-        ZOOM
-      </span>
-      <span class="right hover pointer" onclick="zoom_out_pdf()" aria-label="Zoom out">
-        <i class="fa fa-minus" aria-hidden="true"></i>
-      </span>
+				<span
+					class="right hover pointer"
+					onclick="zoom_in_pdf()"
+					aria-label="Zoom in"
+				>
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</span>
+				<span
+					class="right hover pointer"
+					onclick="render_page_pdf(currentPageNum)"
+				>
+					ZOOM
+				</span>
+				<span
+					class="right hover pointer"
+					onclick="zoom_out_pdf()"
+					aria-label="Zoom out"
+				>
+					<i class="fa fa-minus" aria-hidden="true"></i>
+				</span>
 
-      <span class="right" style="font-size:26px;position:relative;padding: 0px 15px;top:3px; cursor:default;" aria-hidden="true">
-        |
-      </span>
+				<span
+					class="right"
+					style="
+						font-size: 26px;
+						position: relative;
+						padding: 0px 15px;
+						top: 3px;
+						cursor: default;
+					"
+					aria-hidden="true"
+				>
+					|
+				</span>
 
-      <span class="right hover pointer" onclick="next_page_pdf()" aria-label="Next page">
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </span>
-      <span class="right" id="page-indicator" style="cursor:default">
-        PAGE
-      </span>
-      <span class="right hover pointer" onclick="prev_page_pdf()" aria-label="Previous page">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-      </span>
-    </div>
-    <div id="pdf-container">
-      <h1 id="pdf_loading_text"> Loading... </h1>
-      <canvas id="pdf-canvas" width="400" height="400"></canvas>
-    </div>
-  </div>
-  <div id="information" class="tabcontent">
-    <div id="instructions-header" style="text-align: left">
-      <h2 class="info-header">Helpful Links</h2>
-        <ul>
-          <li>
-            <a href="https://classroom.google.com/c/NTM1MjUyODk2MTE1?cjc=k6pbfx5" target="none">Join Our Club</a>
-          </li>
-          <li>
-            <a href="https://github.com/Aspine/aspine/issues" target="none">Issue/Feature Requests</a>
-          </li>
-          <li>
-            <a href="https://github.com/Aspine/aspine" target="none">Our GitHub Repository</a>
-          </li>
-          <li>
-            <a href="https://www.cpsd.us/privacy" target="none">Privacy Policy</a>
-          </li>
-          <li style="margin-bottom: 1.5em">
-            <a href="https://instagram.com/crls.aspine/" target="none">Follow Our Instagram</a>
-          </li>
-        </ul>
-      <h2 class="info-header">Overview</h2>
-      <p class="info-text">
-      Aspine is a website that makes it easier for CPSD students to access and
-      predict their grades. For example, a student can use Aspine to see how a
-      better score on a test or an A on an upcoming project would affect their
-      grade in a particular class as well as their GPA.
-      </p>
-      <h2 class="info-header">Editing Assignments</h2>
-      <p class="info-text">
-      To edit assignments, select a class from the <strong>Grades</strong> tab
-      to see its grading categories and individual assignments. Selecting a
-      particular category displays the assignments in that category. Assignment
-      names, categories, scores, and maximum scores can all be modified, which
-      temporarily updates the overall grade and category subtotals based on what
-      was entered.
-      </p>
-      <h2 class="info-header">Adding Assignments</h2>
-      <p class="info-text">
-      Clicking the plus (<i class="fa fa-plus"></i>) icon adds a new assignment
-      in the currently selected category, which can be edited to reflect possible
-      upcoming assignments.
-      </p>
-      <h2 class="info-header">Test Corrections</h2>
-      <p class="info-text">
-      Clicking the hammer (<i class="fa fa-hammer"></i>) icon on an assignment
-      allows you to predict your grade if it is possible to redeem a certain
-      percentage of the points lost on that assignment. For example, if a student
-      scores 80/100 on a test and their teacher allows them to get 50% of their
-      points back, entering 50% would recalculate their grade with a score of
-      90/100 on the test.
-      </p>
-      <h2 class="info-header">Assignment Statistics</h2>
-      <p class="info-text">
-      For classes where the teachers report assignment statistics, clicking the
-      statistics (<i class="fa fa-info"></i>) icon on an
-      assignment contextualizes your score with a profile of your classmates' scores.
-      </p>
-      <h2 class="info-header">Report Cards</h2>
-      <p class="info-text">
-      Use the <strong>Reports</strong> tab to view and download your report
-      cards and progress reports.
-      </p>
-      <h2 class="info-header">Clock</h2>
-      <p class="info-text">
-      During the school day, the clock found in the upper left-hand corner displays
-      the name of your current class and the amount of time remaining in that class.
-      If viewed before the start of the school day, the clock shows the amount of
-      time left until first period starts.
-      </p>
-      <h2 class="info-header">Importing/Exporting grades</h2>
-      <p class="info-text">
-      Clicking the download (<i class="fa fa-file-download"></i>) icon exports
-      your grades in a machine-readable format stored on your computer. You can
-      import these files back into Aspine later on by clicking the <strong>Current
-      Year</strong> dropdown menu and selecting <strong>Import Data</strong>.
-      </p>
-      <h2 class="info-header">GPA Type and Switching Quarters</h2>
-      <p class="info-text">
-      Clicking on the <strong>GPA Type</strong> button toggles between displaying
-      your GPA on the 100 point scale, unweighted (4.0) scale, and weighted
-      (5.0) scale. The <strong>Current Quarter</strong> dropdown displays your
-      GPA for each quarter, which when clicked allows you to see your grades and
-      assignments for that quarter.
-      </p>
+				<span
+					class="right hover pointer"
+					onclick="next_page_pdf()"
+					aria-label="Next page"
+				>
+					<i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</span>
+				<span class="right" id="page-indicator" style="cursor: default">
+					PAGE
+				</span>
+				<span
+					class="right hover pointer"
+					onclick="prev_page_pdf()"
+					aria-label="Previous page"
+				>
+					<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</span>
+			</div>
+			<div id="pdf-container">
+				<h1 id="pdf_loading_text">Loading...</h1>
+				<canvas id="pdf-canvas" width="400" height="400"></canvas>
+			</div>
+		</div>
+		<div id="information" class="tabcontent">
+			<div id="instructions-header" style="text-align: left">
+				<h2 class="info-header">Helpful Links</h2>
+				<ul>
+					<li>
+						<a
+							href="https://classroom.google.com/c/NTM1MjUyODk2MTE1?cjc=k6pbfx5"
+							target="none"
+							>Join Our Club</a
+						>
+					</li>
+					<li>
+						<a
+							href="https://github.com/Aspine/aspine/issues"
+							target="none"
+							>Issue/Feature Requests</a
+						>
+					</li>
+					<li>
+						<a href="https://github.com/Aspine/aspine" target="none"
+							>Our GitHub Repository</a
+						>
+					</li>
+					<li>
+						<a href="https://www.cpsd.us/privacy" target="none"
+							>Privacy Policy</a
+						>
+					</li>
+					<li style="margin-bottom: 1.5em">
+						<a
+							href="https://instagram.com/crls.aspine/"
+							target="none"
+							>Follow Our Instagram</a
+						>
+					</li>
+				</ul>
+				<h2 class="info-header">Overview</h2>
+				<p class="info-text">
+					Aspine is a website that makes it easier for CPSD students
+					to access and predict their grades. For example, a student
+					can use Aspine to see how a better score on a test or an A
+					on an upcoming project would affect their grade in a
+					particular class as well as their GPA.
+				</p>
+				<h2 class="info-header">Editing Assignments</h2>
+				<p class="info-text">
+					To edit assignments, select a class from the
+					<strong>Grades</strong> tab to see its grading categories
+					and individual assignments. Selecting a particular category
+					displays the assignments in that category. Assignment names,
+					categories, scores, and maximum scores can all be modified,
+					which temporarily updates the overall grade and category
+					subtotals based on what was entered.
+				</p>
+				<h2 class="info-header">Adding Assignments</h2>
+				<p class="info-text">
+					Clicking the plus (<i class="fa fa-plus"></i>) icon adds a
+					new assignment in the currently selected category, which can
+					be edited to reflect possible upcoming assignments.
+				</p>
+				<h2 class="info-header">Test Corrections</h2>
+				<p class="info-text">
+					Clicking the hammer (<i class="fa fa-hammer"></i>) icon on
+					an assignment allows you to predict your grade if it is
+					possible to redeem a certain percentage of the points lost
+					on that assignment. For example, if a student scores 80/100
+					on a test and their teacher allows them to get 50% of their
+					points back, entering 50% would recalculate their grade with
+					a score of 90/100 on the test.
+				</p>
+				<h2 class="info-header">Assignment Statistics</h2>
+				<p class="info-text">
+					For classes where the teachers report assignment statistics,
+					clicking the statistics (<i class="fa fa-info"></i>) icon on
+					an assignment contextualizes your score with a profile of
+					your classmates' scores.
+				</p>
+				<h2 class="info-header">Report Cards</h2>
+				<p class="info-text">
+					Use the <strong>Reports</strong> tab to view and download
+					your report cards and progress reports.
+				</p>
+				<h2 class="info-header">Clock</h2>
+				<p class="info-text">
+					During the school day, the clock found in the upper
+					left-hand corner displays the name of your current class and
+					the amount of time remaining in that class. If viewed before
+					the start of the school day, the clock shows the amount of
+					time left until first period starts.
+				</p>
+				<h2 class="info-header">Importing/Exporting grades</h2>
+				<p class="info-text">
+					Clicking the download (<i class="fa fa-file-download"></i>)
+					icon exports your grades in a machine-readable format stored
+					on your computer. You can import these files back into
+					Aspine later on by clicking the
+					<strong>Current Year</strong> dropdown menu and selecting
+					<strong>Import Data</strong>.
+				</p>
+				<h2 class="info-header">GPA Type and Switching Quarters</h2>
+				<p class="info-text">
+					Clicking on the <strong>GPA Type</strong> button toggles
+					between displaying your GPA on the 100 point scale,
+					unweighted (4.0) scale, and weighted (5.0) scale. The
+					<strong>Current Quarter</strong> dropdown displays your GPA
+					for each quarter, which when clicked allows you to see your
+					grades and assignments for that quarter.
+				</p>
 
-      <hr>
-      <p class="info-text" id="updates-container"><span id="updates"></span></p>
-      <p id="more-versions">
-        <a href="https://github.com/Aspine/aspine/blob/master/CHANGELOG.md">
-          View changes made in older versions of Aspine&hellip;
-        </a>
-      </p>
-    </div>
-  </div>
-  <p>Aspine version: <span id="version">(loading&hellip;)</span></p>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-149290199-1');
-    });
-  </script>
-</body>
+				<hr />
+				<p class="info-text" id="updates-container">
+					<span id="updates"></span>
+				</p>
+				<p id="more-versions">
+					<a
+						href="https://github.com/Aspine/aspine/blob/master/CHANGELOG.md"
+					>
+						View changes made in older versions of Aspine&hellip;
+					</a>
+				</p>
+			</div>
+		</div>
+		<p>Aspine version: <span id="version">(loading&hellip;)</span></p>
+		<script>
+			window.addEventListener('DOMContentLoaded', () => {
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					dataLayer.push(arguments);
+				}
+				gtag('js', new Date());
+				gtag('config', 'UA-149290199-1');
+			});
+		</script>
+	</body>
 </html>

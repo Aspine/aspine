@@ -1,39 +1,39 @@
-import { Quarter, TermSpec } from "./types-shared";
+import { Quarter, TermSpec } from './types-shared';
 
 export interface Session {
-  session_id: string;
-  apache_token: string;
+	session_id: string;
+	apache_token: string;
 }
 
 export interface PDFFileInfo {
-  id: string;
-  filename: string;
+	id: string;
+	filename: string;
 }
 
 export interface ClassInfo {
-  name: string;
-  grades: Map<Quarter, string>;
-  teacher: string;
-  term: TermSpec;
-  oid: string;
+	name: string;
+	grades: Map<Quarter, string>;
+	teacher: string;
+	term: TermSpec;
+	oid: string;
 }
 
 export interface ClassDetails extends ClassInfo {
-  attendance: {
-    absent: number;
-    tardy: number;
-    dismissed: number;
-  };
-  // Maps category names to weights (as decimals) and OIDs
-  categories: Map<string, Category>;
+	attendance: {
+		absent: number;
+		tardy: number;
+		dismissed: number;
+	};
+	// Maps category names to weights (as decimals) and OIDs
+	categories: Map<string, Category>;
 }
 
 export interface Category {
-  weight: number;
-  oid: string;
+	weight: number;
+	oid: string;
 }
 
 export enum AspineErrorCode {
-  LOGINFAIL = "loginfail",
-  ASPENDOWN = "aspendown",
+	LOGINFAIL = 'loginfail',
+	ASPENDOWN = 'aspendown'
 }

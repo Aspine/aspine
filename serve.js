@@ -17,37 +17,44 @@ const dep_mappings = require('./frontend-dependencies');
 // -------------------------------------------
 
 // Get Aspine version number without leading 'v'
-const version = child_process.execSync('git describe')
-    .toString().trim().match(/^v?(.*)/)[1];
+const version = child_process
+	.execSync('git describe')
+	.toString()
+	.trim()
+	.match(/^v?(.*)/)[1];
 const changelog = marked(
-    fs.readFileSync(__dirname + '/CHANGELOG.md').toString()
+	fs.readFileSync(__dirname + '/CHANGELOG.md').toString()
 );
 const schedule = TOML.parse(
-    fs.readFileSync(__dirname + '/public/schedule.toml')
+	fs.readFileSync(__dirname + '/public/schedule.toml')
 );
 
 program
-    .version(version)
-    .option('-p, --port <number>', 'port to listen on', 8080)
-    .option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430);
+	.version(version)
+	.option('-p, --port <number>', 'port to listen on', 8080)
+	.option('-P, --port-https <number>', 'port to listen on for HTTPS', 4430);
 
 // Secure by default on production, insecure by default for development
-if (process.env.NODE_ENV === "production") {
-    program.option('-i, --no-secure, --insecure',
-        'do not secure connections with TLS (HTTPS)'
-    );
-    program.option('-s, --secure',
-        'secure connections with TLS (HTTPS) [default for production]'
-    );
+if (process.env.NODE_ENV === 'production') {
+	program.option(
+		'-i, --no-secure, --insecure',
+		'do not secure connections with TLS (HTTPS)'
+	);
+	program.option(
+		'-s, --secure',
+		'secure connections with TLS (HTTPS) [default for production]'
+	);
 } else {
-    program.option('-s, --secure', 'secure connections with TLS (HTTPS)');
-    program.option('-d, --dev',
-        'HTTPS designed to work with the gen-key script to make self signed '
-        + 'certs'
-    );
-    program.option('-i, --no-secure, --insecure',
-        'do not secure connections with TLS (HTTPS) [default for development]'
-    );
+	program.option('-s, --secure', 'secure connections with TLS (HTTPS)');
+	program.option(
+		'-d, --dev',
+		'HTTPS designed to work with the gen-key script to make self signed ' +
+			'certs'
+	);
+	program.option(
+		'-i, --no-secure, --insecure',
+		'do not secure connections with TLS (HTTPS) [default for development]'
+	);
 }
 
 program.parse();
@@ -57,43 +64,47 @@ const options = program.opts();
 const app = express();
 app.use(compression());
 app.listen(options.port, () =>
-    console.log(`Aspine listening on port ${options.port}!`)
+	console.log(`Aspine listening on port ${options.port}!`)
 );
 
 if (options.secure || options.dev) {
-    app.all('*', (req, res, next) => {
-        if (req.secure) {
-            return next();
-        }
-        // handle port numbers if you need non defaults
-        res.redirect('https://' + req.hostname + req.url);
-    }); // at top of routing calls
+	app.all('*', (req, res, next) => {
+		if (req.secure) {
+			return next();
+		}
+		// handle port numbers if you need non defaults
+		res.redirect('https://' + req.hostname + req.url);
+	}); // at top of routing calls
 
-    const credentials = options.dev ? {
-        key: fs.readFileSync('local.key', 'utf8'),
-        cert: fs.readFileSync('local.crt', 'utf8'),
-        ca: fs.readFileSync('local.csr', 'utf8'),
-    } : {
-        key: fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8'),
-        cert: fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8'),
-        ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8'),
-    };
+	const credentials = options.dev
+		? {
+				key: fs.readFileSync('local.key', 'utf8'),
+				cert: fs.readFileSync('local.crt', 'utf8'),
+				ca: fs.readFileSync('local.csr', 'utf8')
+			}
+		: {
+				key: fs.readFileSync('/etc/ssl/certs/private-key.pem', 'utf8'),
+				cert: fs.readFileSync('/etc/ssl/certs/public-key.pem', 'utf8'),
+				ca: fs.readFileSync('/etc/ssl/certs/CA-key.pem', 'utf8')
+			};
 
-    https.createServer(credentials, app).listen(options.portHttps, () =>
-        console.log(`HTTPS Server running on port ${options.portHttps}`)
-    );
+	https
+		.createServer(credentials, app)
+		.listen(options.portHttps, () =>
+			console.log(`HTTPS Server running on port ${options.portHttps}`)
+		);
 }
 
 // Expose frontend dependencies from node-modules
 // https://stackoverflow.com/a/27464258
 
 for (const [endpoint, path] of dep_mappings.files) {
-    app.get(endpoint, (req, res) => {
-        res.sendFile(__dirname + path);
-    });
+	app.get(endpoint, (req, res) => {
+		res.sendFile(__dirname + path);
+	});
 }
 for (const [endpoint, path] of dep_mappings.directories) {
-    app.use(endpoint, express.static(__dirname + path));
+	app.use(endpoint, express.static(__dirname + path));
 }
 
 // Endpoint to expose version number to client
@@ -105,10 +116,14 @@ app.get('/updates', (req, res) => res.send(changelog));
 // Endpoint to expose specification of schedules to client
 app.get('/schedule.json', (req, res) => res.send(schedule));
 
-app.use(function(req, res, next) { // enable cors
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.use(function (req, res, next) {
+	// enable cors
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept'
+	);
+	next();
 });
 
 app.get('/home.html', (req, res) => res.redirect('/'));
@@ -119,120 +134,134 @@ app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.urlencoded({ extended: true })); // Allows form submission
 app.use(bodyParser.json()); // json parser
-app.use(session({
-    // Sessions expire every 8 hours
-    cookie: { maxAge: 8 * 60 * 60 * 1000 },
-    // Check for expired sessions once per hour
-    store: new MemoryStore({ checkPeriod: 60 * 60 * 1000 }),
-    resave: false,
-    saveUninitialized: false,
-    secret: crypto.randomBytes(64).toString('hex'),
-    // Sessions are destroyed on restarting the server anyway (because we use
-    // MemoryStore), so the secret can be random
-}));
+app.use(
+	session({
+		// Sessions expire every 8 hours
+		cookie: { maxAge: 8 * 60 * 60 * 1000 },
+		// Check for expired sessions once per hour
+		store: new MemoryStore({ checkPeriod: 60 * 60 * 1000 }),
+		resave: false,
+		saveUninitialized: false,
+		secret: crypto.randomBytes(64).toString('hex')
+		// Sessions are destroyed on restarting the server anyway (because we use
+		// MemoryStore), so the secret can be random
+	})
+);
 
 app.post('/stats', async (req, res) => {
-    console.log(`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id}, ${req.body.year} \n------------------`);
+	console.log(
+		`\n\nNEW STATS REQUEST: ${req.body.assignment_id}, ${req.body.class_id}, ${req.body.quarter_id}, ${req.body.year} \n------------------`
+	);
 
-    try {
-        res.send(await scraper.get_stats(
-            req.session.username, req.session.password, req.body.assignment_id,
-            req.body.class_id, req.body.quarter_id, req.body.year
-        ));
-    } catch (e) {
-        console.error(e);
-        res.send({});
-    }
+	try {
+		res.send(
+			await scraper.get_stats(
+				req.session.username,
+				req.session.password,
+				req.body.assignment_id,
+				req.body.class_id,
+				req.body.quarter_id,
+				req.body.year
+			)
+		);
+	} catch (e) {
+		console.error(e);
+		res.send({});
+	}
 });
 
 app.post('/data', async (req, res) => {
-    // console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
+	// console.log(`\n\nNEW LOGIN: ${req.session.username}\n------------------`);
 
-    // fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
-    // 	  if (err) throw err;
-    // });
+	// fs.appendFile('usage_log.txt', `\n\nNEW LOGIN: ${req.session.username}\n------------------`, function (err) {
+	// 	  if (err) throw err;
+	// });
 
-    let response;
-    // Get data from scraper:
-    if (req.session.nologin) {
-        res.send({ nologin: true });
-    }
-    else {
-        // TODO add nologin field for consistency
-        try {
-            res.send(await scraper.get_student(
-                req.session.username, req.session.password,
-                parseInt(req.body.quarter), req.body.year
-            ));
-        } catch (e) {
-            console.error(e);
-            res.send({ error: e.message });
-        }
-    }
+	let response;
+	// Get data from scraper:
+	if (req.session.nologin) {
+		res.send({ nologin: true });
+	} else {
+		// TODO add nologin field for consistency
+		try {
+			res.send(
+				await scraper.get_student(
+					req.session.username,
+					req.session.password,
+					parseInt(req.body.quarter),
+					req.body.year
+				)
+			);
+		} catch (e) {
+			console.error(e);
+			res.send({ error: e.message });
+		}
+	}
 });
 
 app.post('/schedule', async (req, res) => {
-    try {
-        res.send(await scraper.get_schedule(
-            req.session.username, req.session.password
-        ));
-    } catch (e) {
-        console.error(e);
-        res.send({ login_fail: true });
-    }
+	try {
+		res.send(
+			await scraper.get_schedule(
+				req.session.username,
+				req.session.password
+			)
+		);
+	} catch (e) {
+		console.error(e);
+		res.send({ login_fail: true });
+	}
 });
 
 app.post('/pdf', async (req, res) => {
-    try {
-        res.send(await scraper.get_pdf_files(
-            req.session.username, req.session.password
-        ));
-    } catch (e) {
-        console.error(e);
-        res.send([]);
-    }
+	try {
+		res.send(
+			await scraper.get_pdf_files(
+				req.session.username,
+				req.session.password
+			)
+		);
+	} catch (e) {
+		console.error(e);
+		res.send([]);
+	}
 });
 
 app.get('/', async (req, res) => {
-    if (req.session.username || req.session.nologin) {
-        res.sendFile(__dirname + '/public/home.html');
-    } else {
-        res.redirect('/login');
-    }
+	if (req.session.username || req.session.nologin) {
+		res.sendFile(__dirname + '/public/home.html');
+	} else {
+		res.redirect('/login');
+	}
 });
 
 app.get('/login', (req, res) => res.sendFile(__dirname + '/public/login.html'));
 
 app.post('/login', async (req, res) => {
-    if (req.body.username && req.body.password) {
-        req.session.username = req.body.username;
-        req.session.password = req.body.password;
-        // Keep session for up to 30 days if "remember me" is enabled
-        if (req.body.rememberme) {
-            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
-        }
-    }
-    else {
-        req.session.nologin = true;
-    }
-    res.redirect('/');
+	if (req.body.username && req.body.password) {
+		req.session.username = req.body.username;
+		req.session.password = req.body.password;
+		// Keep session for up to 30 days if "remember me" is enabled
+		if (req.body.rememberme) {
+			req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+		}
+	} else {
+		req.session.nologin = true;
+	}
+	res.redirect('/');
 });
 
 app.get('/logout', async (req, res) => {
-    req.session.destroy();
-    let err;
-    if ((err = req.query.error))
-        res.redirect(`/login?error=${err}`);
-    else
-        res.redirect('/login');
+	req.session.destroy();
+	let err;
+	if ((err = req.query.error)) res.redirect(`/login?error=${err}`);
+	else res.redirect('/login');
 });
-
 
 app.use((req, res) => {
-    res.status(404);
-    res.sendFile(__dirname + '/public/404.html');
+	res.status(404);
+	res.sendFile(__dirname + '/public/404.html');
 });
-
 
 // app.post('/set-settings', async (req, res) => {
 //     // TODO: Sanitization
