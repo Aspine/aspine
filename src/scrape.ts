@@ -782,7 +782,7 @@ export async function get_session<T>(
 ): Promise<any> {
   // Get a session from Aspen by visiting the login page, and check if Aspen is
   // currently down
-  const headless = false; // if I put /?headless=false then it will have a head, for debugging
+  const headless = true; // if I put /?headless=false then it will have a head, for debugging
   const userAgent = randomUseragent.getRandom();
   
   const browser = await puppeteer.launch({ headless });
