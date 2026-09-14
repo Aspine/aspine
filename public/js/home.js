@@ -1,5 +1,42 @@
-// State
+/**
+ * all data provided by aspine api
+ * @typedef TableDataObject
+ * @property {GPA} [cumGPA]
+ * @property {Term} [currentTermData]
+ * @property {string} [name]
+ * @property {Overview[]} [overview]
+ * @property {RecentActivity} [recent]
+ * @property {Schedule} [schedule]
+ * @property {Terms} [terms]
+ * @property {?string} [username]
+ * @property {"current" | "previous" | "imported"} [type]
+ */
 
+/**
+ * @typedef {object} Classes
+ * @param {string} name
+ * @param {string} grade
+ * @param {object} categories
+ * @param {object[]} assignments
+ * @param {object} tokens
+ *
+ * @typedef {object} RecentActivity
+ * @param {RecentAttendance[]} recentAttendanceArray
+ * @param {RecentAssignments[]} recentActivityArray
+ * @param {string} studentName
+ *
+ * @typedef {object} scrapedStudent
+ * @param {Classes[]} response.classes
+ * @param {RecentActivity} response.recent
+ * @param {Overview[]} response.overview
+ * @param {string} response.username
+ * @param {string} response.quarter
+ *
+ * @typedef {object} noLogin
+ * @param {boolean} noLogin.nologin
+ */
+
+// state variables
 const termConverter = ['current', 'q1', 'q2', 'q3', 'q4'];
 let pdf_index = 0;
 let modals = {
@@ -14,78 +51,38 @@ let exportModal = document.getElementById('export_modal');
 let importModal = document.getElementById('import_modal');
 let term_dropdown_active = true;
 let currentTerm = 'current';
-/**
- * All the data provided by Aspine API
- *  @typedef TableDataObject
- *	@property {GPA} [cumGPA]
- *	@property {Term} [currentTermData]
- *	@property {string} [name]
- *	@property {Overview[]} [overview]
- *	@property {RecentActivity} [recent]
- *	@property {Schedule} [schedule]
- *	@property {Terms} [terms]
- *  @property {?string} [username]
- *  @property {"current" | "previous" | "imported"} [type]
- */
-/** @type {TableDataObject[]}*/
+
+/** @type {TableDataObject[]} */
 let tableData = [
 	{ name: 'Current Year', type: 'current' },
 	{ name: 'Previous Year', type: 'previous' }
 ];
 let currentTableDataIndex = 0;
-/**@type {TableDataObject}*/
+
+/** @type {TableDataObject} */
 let currentTableData = tableData[currentTableDataIndex];
 let selected_class_i;
 let termsReset = {};
 
-// Counter for creating new assignments
+// counter for creating new assignments
 var newAssignmentIDCounter = 0;
 
-// Registry for undos, contains assignment ID and the snackbar that corresponds to it
-// contains all the undo snackbars
+// registry for undos containing assignment id and corresponding snackbar
 const undoData = [];
-
-window.addEventListener('keydown', (e) => {
-	var evtobj = window.event || e;
-	if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoData.length !== 0) {
-		if (undoData[0].Snackbar !== undefined) {
-			undoData[0].Snackbar.destroy();
-			undoData[0].Snackbar = undefined;
-		}
-		replaceAssignmentFromID(
-			{ assignment_id: undoData[0].assignment_id, placeholder: true },
-			undoData[0],
-			undoData[0].selected_class_i
-		);
-		undoData.shift();
-	}
-});
-
 let tempCell;
-// When the user clicks anywhere outside of a modal or dropdown, close it
-window.addEventListener('click', function (event) {
-	Object.keys(modals).forEach((key) => {
-		if (event.target === modals[key]) {
-			hideModal(key);
-		}
-	});
-	// Do not close a dropdown if the user clicked to view a tooltip
-	// (e.g. on a mobile device)
-	if (!event.target.classList.contains('hastooltip')) {
-		closeAllSelect();
-		pdf_closeAllSelect();
-		tableData_closeAllSelect();
-	}
-});
 
-// Detect color scheme (dark or light) and set slider accordingly
-// Argument (optional) can be a "change" event from a MediaQueryList;
-// if present, e.matches is used to determine the operating system color scheme
+// index of row currently selected in categories table
+let currentFilterRow = -1;
+
+/**
+ * Determines and applies the appropriate light or dark color scheme based on user preference or system settings.
+ * @param {Event|object} e Optional event object from a media query listener.
+ */
 function loadMode(e = {}) {
 	const slider = document.getElementById('dark-check');
-	// Get the mode (dark or light) stored in localStorage, if any
+	// get the stored mode if any
 	const storedMode = localStorage.getItem('color-scheme');
-	// Check if operating system uses dark mode
+	// check if operating system uses dark mode
 	const osIsDark =
 		'matches' in e
 			? e.matches
@@ -99,13 +96,9 @@ function loadMode(e = {}) {
 	}
 }
 
-// Update color scheme on page load as well as when system color scheme changes
-window.addEventListener('load', loadMode);
-window
-	.matchMedia('(prefers-color-scheme: dark)')
-	.addEventListener('change', loadMode);
-
-// Toggle between dark and light mode
+/**
+ * Toggles the dark mode class on the document body and saves the user preference to local storage.
+ */
 function darkMode() {
 	document.body.classList.toggle('dark');
 	localStorage.setItem(
@@ -116,7 +109,10 @@ function darkMode() {
 	);
 }
 
-// Hide or show certain columns based on the screen size
+/**
+ * Hides or shows specific columns in a given table based on the current window width to ensure responsive design.
+ * @param {object} table The Tabulator table instance to adjust.
+ */
 function adjustColumns(table) {
 	switch (table.element.id) {
 		case 'assignmentsTable':
@@ -145,6 +141,7 @@ function adjustColumns(table) {
 				table.showColumn('score');
 				table.showColumn('maxScore');
 			}
+            break;
 		case 'mostRecentTable':
 			if (window.matchMedia('(max-width: 576px)').matches) {
 				table.hideColumn('score');
@@ -164,30 +161,9 @@ function adjustColumns(table) {
 	table.redraw();
 }
 
-initialize_jquery_prototype();
-initialize_resize_hamburger();
-
-$('#stats_plot').width(($(window).width() * 7) / 11);
-/*
-window.addEventListener('resize', function() {
-    console.log("Resizing");
-    if ($('#stats_plot').is(":visible")) {
-
-      Plotly.Plots.resize(document.getElementById('stats_plot'));
-      let update_size = {
-        //width: 800,  // or any new width
-        width: $('#stats_modal_content').width(),
-        height: 120  // " "
-      };
-
-      Plotly.relayout('stats_plot', update_size);
-    }
-
-    if ($('#pdf-canvas').is(":visible") && !pdfrendering && typeof tableData.pdf_files !== 'undefined') {
-      generate_pdf(pdf_index);
-    }
-});
-*/
+/**
+ * Updates the UI to indicate that there is no statistical data available for the selected assignment.
+ */
 let noStats = function () {
 	$('#there_are_stats').hide();
 	$('#there_are_no_stats').hide();
@@ -197,7 +173,7 @@ let noStats = function () {
 };
 
 /**
- * Hide a modal window
+ * Hides the specified modal window and performs any necessary cleanup operations for that specific modal.
  * @param {string} key Name of modal window.
  */
 let hideModal = function (key) {
@@ -215,15 +191,191 @@ let hideModal = function (key) {
 };
 
 /**
- * Un-hide a modal window
+ * Displays the specified modal window.
  * @param {string} key Name of modal window.
  */
 let showModal = function (key) {
 	modals[key].style.display = 'inline-block';
 };
 
+/**
+ * Applies a theoretical score correction to the selected assignment based on user input and updates the tables.
+ */
+function correct() {
+	const per = parseInt($('#corrections_modal_input').prop('value'));
+	if (per > 0 && per <= 100) {
+		const row = tempCell.getRow();
+		const { score, max_score } = row.getData();
+
+		const diff = max_score - score;
+		const pts_back = (diff * per) / 100;
+		const newScore = score + pts_back;
+		const rowPos = row.getPosition();
+		currentTableData.currentTermData.classes[selected_class_i].assignments[
+			rowPos
+		].score = newScore;
+		row.update({ score: newScore });
+		assignmentsTable.setData(
+			currentTableData.currentTermData.classes[selected_class_i]
+				.assignments
+		);
+
+		editAssignment(
+			currentTableData.currentTermData.classes[selected_class_i]
+				.assignments
+		);
+
+		assignmentsTable.redraw();
+		categoriesTable.redraw();
+		classesTable.redraw();
+	}
+	hideModal('corrections');
+}
+
+/**
+ * Toggles the recent activity view between attendance records and assignment grades.
+ */
+function recent_toggle() {
+	if (!document.getElementById('recent_toggle').checked) {
+		document.getElementById('recentActivity').style.display = 'none';
+		document.getElementById('recentAttendance').style.display = 'block';
+		document.getElementById('recent_title').innerHTML = 'Attendance';
+		recentAttendance.redraw();
+	} else {
+		document.getElementById('recentActivity').style.display = 'block';
+		document.getElementById('recentAttendance').style.display = 'none';
+		document.getElementById('recent_title').innerHTML = 'Assignments';
+		recentActivity.redraw();
+	}
+}
+
+/**
+ * Toggles the displayed schedule between different days or block types and updates the schedule table.
+ * @param {string} day The selected day identifier.
+ */
+function schedule_toggle(day) {
+	if (covid_schedule) {
+		selected_day_of_week = parseInt(day);
+	} else {
+		if (document.getElementById('schedule_toggle').checked) {
+			document.getElementById('schedule_title').innerHTML = 'Silver';
+		} else {
+			document.getElementById('schedule_title').innerHTML = 'Black';
+		}
+	}
+	redraw_clock();
+	update_formattedSchedule();
+	scheduleTable.setData(currentTableData.formattedSchedule);
+}
+
+/**
+ * Pushes a new state to the browser history and opens the specified tab.
+ * @param {string} tab_name The identifier of the tab to open.
+ */
+function openTab(tab_name) {
+	history.pushState(tab_name, '');
+	openTabHelper(tab_name);
+}
+
+/**
+ * Handles the DOM manipulation to hide inactive tabs and display the selected tab content.
+ * @param {string} tab_name The identifier of the tab to open.
+ */
+function openTabHelper(tab_name) {
+	// hide tabcontent elements and remove active class from tablinks
+	for (const active of document.getElementsByClassName('active')) {
+		active.classList.remove('active');
+		document.getElementById(
+			active.id.substring(0, active.id.length - 5)
+		).style.display = 'none';
+	}
+
+	// show current tab contents and add active class to button
+	document.getElementById(tab_name).style.display = 'block';
+	document.getElementById(`${tab_name}_open`).classList.add('active');
+
+	switch (tab_name) {
+		case 'grades':
+			document.getElementById('mostRecentDiv').style.display = 'block';
+			if (mostRecentTable.initialized) mostRecentTable.redraw();
+			if (classesTable.initialized) classesTable.redraw();
+			if (assignmentsTable.initialized) assignmentsTable.redraw();
+			break;
+		case 'reports':
+			if (!currentTableData.pdf_files) {
+				$('#loader').show();
+				setup_tooltips();
+				fetch('/pdf', {
+					method: 'POST'
+				}).then(async (res) => pdfCallback(await res.json()));
+			} else if (typeof currentTableData.pdf_files !== 'undefined') {
+				generate_pdf(pdf_index);
+			}
+			// redraw pdf to fit new viewport dimensions on fullscreen change
+			let elem = document.getElementById('reports');
+			let handlefullscreenchange = function () {
+				window.setTimeout(generate_pdf(currentPdfIndex), 1000);
+			};
+			if (elem.onfullscreenchange !== undefined) {
+				elem.onfullscreenchange = handlefullscreenchange;
+			} else if (elem.mozonfullscreenchange !== undefined) {
+				elem.mozonfullscreenchange = handlefullscreenchange;
+			} else if (elem.MSonfullscreenchange !== undefined) {
+				elem.MSonfullscreenchange = handlefullscreenchange;
+			}
+			break;
+		case 'schedule':
+			fetch('/schedule', {
+				method: 'POST'
+			}).then(async (res) => scheduleCallback(await res.json()));
+			scheduleTable.redraw();
+			break;
+	}
+
+	if (tab_name === 'clock') {
+		document.getElementById('small_clock').style.display = 'none';
+		document.getElementById('small_clock_period').style.display = 'none';
+	} else {
+		document.getElementById('small_clock').style.display = 'block';
+		document.getElementById('small_clock_period').style.display = 'block';
+	}
+
+	if (recentActivity.initialized) recentActivity.redraw();
+	if (recentAttendance.initialized) recentAttendance.redraw();
+	if (categoriesTable.initialized) categoriesTable.redraw();
+}
+
+/**
+ * Expands the side navigation menu and applies a fade effect to the overlay.
+ */
+function openSideNav() {
+	const sidenav = document.getElementById('sidenav');
+	sidenav.style.width = sidenav.clientWidth === 270 ? '0px' : '270px';
+
+	// makes sidenav overlay fade in
+	const sidenavOverlay = document.getElementById('sidenav-overlay');
+	if (sidenavOverlay.classList.contains('fade-out')) {
+		sidenavOverlay.classList.remove('fade-out');
+	}
+	sidenavOverlay.classList.add('fade-in');
+}
+
+/**
+ * Collapses the side navigation menu and removes the overlay fade effect.
+ */
+function closeSideNav() {
+	const sidenav = document.getElementById('sidenav');
+	sidenav.style.width = '0px';
+
+	// makes sidenav overlay fade out
+	const sidenavOverlay = document.getElementById('sidenav-overlay');
+	if (sidenavOverlay.classList.contains('fade-in')) {
+		sidenavOverlay.classList.remove('fade-in');
+	}
+	sidenavOverlay.classList.add('fade-out');
+}
+
 let recentAttendance = new Tabulator('#recentAttendance', {
-	//	height: 400,
 	layout: 'fitColumns',
 	columns: [
 		{ title: 'Date', field: 'date', headerSort: false },
@@ -234,7 +386,6 @@ let recentAttendance = new Tabulator('#recentAttendance', {
 });
 
 let recentActivity = new Tabulator('#recentActivity', {
-	//	height: 400,
 	layout: 'fitColumns',
 	columns: [
 		{ title: 'Date', field: 'date', formatter: rowFormatter },
@@ -253,8 +404,6 @@ let recentActivity = new Tabulator('#recentActivity', {
 		}
 	],
 	rowClick: function (e, row) {
-		//trigger an alert message when the row is clicked
-		// questionable
 		document.getElementById('mostRecentDiv').style.display = 'none';
 		classesTable.selectRow(1);
 
@@ -264,7 +413,6 @@ let recentActivity = new Tabulator('#recentActivity', {
 			cancelable: true,
 			view: window
 		});
-		// If cancelled, don't dispatch our event
 		let canceled = !elem.dispatchEvent(evt);
 
 		assignmentsTable.clearFilter();
@@ -274,9 +422,6 @@ let recentActivity = new Tabulator('#recentActivity', {
 		let tabledata = classesTable.getData();
 		classesTable.deselectRow();
 		classesTable.selectRow(selected_class);
-		//classesTable.getRows()
-		//    .filter(row => row.getData().name === selected_class)
-		//    .forEach(row => row.toggleSelect());
 
 		for (let i in tabledata) {
 			if (tabledata[i].name === row.getData().classname) {
@@ -290,11 +435,7 @@ let recentActivity = new Tabulator('#recentActivity', {
 	}
 });
 
-// Index of the row that's currently selected in the categories table
-// (gets reset to -1 whenever the class is changed)
-let currentFilterRow = -1;
 let categoriesTable = new Tabulator('#categoriesTable', {
-	//	height: 400,
 	selectable: 1,
 	layout: 'fitColumns',
 	layoutColumnsOnNewData: true,
@@ -332,8 +473,6 @@ let categoriesTable = new Tabulator('#categoriesTable', {
 			formatter: rowGradeFormatter,
 			headerSort: false
 		},
-		//filler column to match the assignments table
-		//{title: "", width:1, align:"center", headerSort: false},
 		{
 			title: 'Hide',
 			titleFormatter: () =>
@@ -345,7 +484,6 @@ let categoriesTable = new Tabulator('#categoriesTable', {
 		}
 	],
 	rowClick: function (e, row) {
-		//trigger an alert message when the row is clicked
 		assignmentsTable.clearFilter();
 
 		if (currentFilterRow !== row.getPosition()) {
@@ -382,8 +520,6 @@ let mostRecentTable = new Tabulator('#mostRecentTable', {
 		}
 	],
 	rowClick: function (e, row) {
-		//trigger an alert message when the row is clicked
-
 		classesTable.selectRow(1);
 
 		let elem = document.getElementById('default_open');
@@ -392,7 +528,6 @@ let mostRecentTable = new Tabulator('#mostRecentTable', {
 			cancelable: true,
 			view: window
 		});
-		// If cancelled, don't dispatch our event
 		let canceled = !elem.dispatchEvent(evt);
 
 		assignmentsTable.clearFilter();
@@ -402,9 +537,6 @@ let mostRecentTable = new Tabulator('#mostRecentTable', {
 		let tabledata = classesTable.getData();
 		classesTable.deselectRow();
 		classesTable.selectRow(selected_class);
-		//classesTable.getRows()
-		//    .filter(row => row.getData().name === selected_class)
-		//    .forEach(row => row.toggleSelect());
 
 		for (let i in tabledata) {
 			if (tabledata[i].name === row.getData().classname) {
@@ -417,20 +549,14 @@ let mostRecentTable = new Tabulator('#mostRecentTable', {
 	}
 });
 
-//create Tabulator on DOM element with id "assignmentsTable"
 let assignmentsTable = new Tabulator('#assignmentsTable', {
-	height: 600, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-	//data:tabledata[0].assignments, //assign data to table
-	layout: 'fitColumns', //fit columns to width of table (optional)
-	//rowFormatter: function(row) {
-	//	row.getElement().style.backgroundColor = row.getData().color;
-	//},
+	height: 600,
+	layout: 'fitColumns',
 	dataEdited: editAssignment,
 	tableBuilt: function () {
 		window.addEventListener('resize', () => adjustColumns(this));
 	},
 	columns: [
-		//Define Table Columns
 		{
 			title: 'Assignment',
 			field: 'name',
@@ -483,9 +609,8 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 					? '<i class="fa fa-hammer standard-icon tooltip" aria-hidden="true" tooltip="Revisions"></i>'
 					: '',
 			width: 40,
-			align: 'center',
+			hozAlign: 'center',
 			cellClick: function (e, cell) {
-				console.log(cell);
 				tempCell = cell;
 				showModal('corrections');
 				$('#corrections_modal_input').focus();
@@ -499,15 +624,15 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 				'<i class="material-icons md-18" aria-hidden="true">leaderboard</i>',
 			formatter: (cell) =>
 				isNaN(cell.getRow().getData().score) ||
-				currentTableData.currentTermData.classes[
-					selected_class_i
-				].assignments.filter((value) => !value['placeholder'])[
-					cell.getRow().getPosition()
-				].synthetic
+					currentTableData.currentTermData.classes[
+						selected_class_i
+					].assignments.filter((value) => !value['placeholder'])[
+						cell.getRow().getPosition()
+					].synthetic
 					? ''
 					: '<i class="fa fa-info standard-icon tooltip" aria-hidden="true" tooltip="Info"></i>',
 			width: 40,
-			align: 'center',
+			hozAlign: 'center',
 			cellClick: async function (e, cell) {
 				if (
 					isNaN(cell.getRow().getData().score) ||
@@ -622,8 +747,7 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 
 				$('#stats_plot').css('width', '100%');
 
-				// Get base font size in pixels (= 1rem)
-				// https://stackoverflow.com/a/42769683
+				// get base font size in pixels
 				const baseFontSize = parseFloat(
 					window.getComputedStyle(document.documentElement).fontSize
 				);
@@ -647,21 +771,19 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 
 				plotElem.attr(
 					'viewBox',
-					`${-(0.75 * baseFontSize)} 0 ${
-						plotWidth + 1.5 * baseFontSize
-					} ${
-						0.75 * baseFontSize +
-						plotHeight +
-						0.75 * baseFontSize +
-						20 +
-						baseFontSize
+					`${-(0.75 * baseFontSize)} 0 ${plotWidth + 1.5 * baseFontSize
+					} ${0.75 * baseFontSize +
+					plotHeight +
+					0.75 * baseFontSize +
+					20 +
+					baseFontSize
 					}`
 				);
 
-				// Remove anything lingering from other assignments
+				// remove anything lingering from other assignments
 				plotElem.selectAll('*').remove();
 
-				// Box plot
+				// box plot
 				plotElem
 					.append('g')
 					.attr('class', 'plot')
@@ -670,16 +792,16 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 					.attr('color', '#ff66ff')
 					.attr('style', 'color: #ff66ff;')
 					.call(plot);
-				// Horizontal axis
+                    
+				// horizontal axis
 				plotElem
 					.append('g')
 					.attr('class', 'axis')
 					.attr(
 						'transform',
-						`translate(0, ${
-							0.75 * baseFontSize +
-							plotHeight +
-							0.75 * baseFontSize
+						`translate(0, ${0.75 * baseFontSize +
+						plotHeight +
+						0.75 * baseFontSize
 						})`
 					)
 					.call(d3.axisBottom().scale(x));
@@ -716,9 +838,9 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 						.attr(
 							'y',
 							plotHeight +
-								1.5 * baseFontSize +
-								20 +
-								0.75 * baseFontSize
+							1.5 * baseFontSize +
+							20 +
+							0.75 * baseFontSize
 						)
 						.attr('x', xcoord)
 						.attr('fill', getColor(i))
@@ -727,7 +849,7 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 						.text(getLetterGrade(i));
 				}
 
-				// Add line at mean
+				// add line at mean
 				plotElem
 					.append('line')
 					.attr('class', 'mean-line')
@@ -738,7 +860,7 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 					.attr('stroke', '#888')
 					.attr('stroke-width', '0.2rem');
 
-				// Add line at student's score
+				// add line at student score
 				plotElem
 					.append('line')
 					.attr('class', 'score-line')
@@ -760,7 +882,7 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 			formatter: () =>
 				'<i class="fa fa-times standard-icon tooltip" aria-hidden="true" style="color: #ce1515; font-size: 1.3em" tooltip="Delete Assignment" tooltip-margin="-127px"></i>',
 			width: 40,
-			align: 'center',
+			hozAlign: 'center',
 			cellClick: function (e, cell) {
 				const data = cell.getRow().getData();
 				replaceAssignmentFromID(
@@ -775,16 +897,14 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 						color: 'var(--red1)',
 						textColor: 'var(--white)',
 						buttonText: 'Undo',
-
-						// Replace the assignment with a placeholder that just
-						// contains the assignment ID
+						// replace assignment with placeholder containing assignment id
 						buttonClick: () => {
-							// Get index for splicing and comparing
+							// get index for splicing and comparing
 							index = undoData.findIndex(
 								(a) => a.assignment_id === data.assignment_id
 							);
 							arrData = undoData[index];
-							// Remove snackbar before putting data back
+							// remove snackbar before putting data back
 							arrData.Snackbar = undefined;
 							replaceAssignmentFromID(
 								{
@@ -797,9 +917,7 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 							undoData.splice(index, 1);
 						},
 						timeout: 7500,
-
-						// On either a timeout or a bodyclick removes the
-						// snackbar link
+						// removes snackbar link on timeout or body click
 						timeoutFunction: () => {
 							undoData[
 								undoData
@@ -807,7 +925,6 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 									.indexOf(data.assignment_id)
 							].Snackbar = undefined;
 						},
-
 						bodyClick: () => {
 							undoData[
 								undoData
@@ -828,15 +945,13 @@ let assignmentsTable = new Tabulator('#assignmentsTable', {
 	]
 });
 
-//create Tabulator on DOM element with id "scheduleTable"
 let scheduleTable = new Tabulator('#scheduleTable', {
-	layout: 'fitDataFill', //fit columns to width of table (optional)
+	layout: 'fitDataFill',
 	rowFormatter: function (row) {
 		row.getElement().style.transition = 'all 1s ease';
 		row.getElement().style.backgroundColor = row.getData().color;
 	},
 	columns: [
-		//Define Table Columns
 		{
 			title: 'Period',
 			field: 'period',
@@ -867,12 +982,10 @@ let scheduleTable = new Tabulator('#scheduleTable', {
 });
 
 let classesTable = new Tabulator('#classesTable', {
-	//height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
 	index: 'name',
 	selectable: 1,
-	layout: 'fitColumns', //fit columns to width of table (optional)
+	layout: 'fitColumns',
 	columns: [
-		// Define Table Columns
 		{
 			title: 'Class',
 			field: 'name',
@@ -904,14 +1017,13 @@ let classesTable = new Tabulator('#classesTable', {
 		{
 			title: 'Grade',
 			field: 'grade',
-			align: 'left',
+			hozAlign: 'left',
 			formatter: gradeFormatter,
 			headerSort: false,
 			width: window.matchMedia('(max-width: 576px)').matches ? 100 : ''
 		}
 	],
 	rowClick: function (e, row) {
-		// trigger an alert message when the row is clicked
 		document.getElementById('mostRecentDiv').style.display = 'none';
 		hideModal('stats');
 
@@ -920,101 +1032,38 @@ let classesTable = new Tabulator('#classesTable', {
 
 		document.getElementById('categoriesTable').style.display = 'block';
 		document.getElementById('assignmentsTable').style.display = 'block';
-		selected_class_i = row.getPosition();
-		// console.log("set " + row.getPosition() + "as selected class");
-		let tabledata = classesTable.getData();
-		for (let i in tabledata) {
-			if (tabledata[i].name === row.getData().name) {
-				assignmentsTable.setData(tabledata[i].assignments);
-				categoriesTable.setData(tabledata[i].categoryDisplay);
 
-				//sets up the tooltip margins for the newly created table(s)
-				setup_tooltips();
+		const rowName = row.getData().name;
+		const classesList = currentTableData.currentTermData.classes;
 
-				adjustColumns(assignmentsTable);
-				adjustColumns(categoriesTable);
-				adjustColumns(mostRecentTable);
+		const classIndex = classesList.findIndex((item) => item.name === rowName);
 
-				return;
-			}
+		if (classIndex !== -1) {
+			selected_class_i = classIndex;
+			const selectedClass = classesList[classIndex];
+
+			// safely set table data with empty array fallbacks
+			assignmentsTable.setData(selectedClass.assignments || []);
+			categoriesTable.setData(selectedClass.categoryDisplay || []);
+
+			// sets up tooltip margins for newly created tables
+			setup_tooltips();
+
+			adjustColumns(assignmentsTable);
+			adjustColumns(categoriesTable);
+			adjustColumns(mostRecentTable);
 		}
 	}
 });
 
-//sets up the tooltips in the classes table
-setup_tooltips();
-
-function correct() {
-	const per = parseInt($('#corrections_modal_input').prop('value'));
-	if (per > 0 && per <= 100) {
-		const row = tempCell.getRow();
-		const { score, max_score } = row.getData();
-
-		const diff = max_score - score;
-		const pts_back = (diff * per) / 100;
-		const newScore = score + pts_back;
-		const rowPos = row.getPosition();
-		currentTableData.currentTermData.classes[selected_class_i].assignments[
-			rowPos
-		].score = newScore;
-		row.update({ score: newScore });
-		assignmentsTable.setData(
-			currentTableData.currentTermData.classes[selected_class_i]
-				.assignments
-		);
-
-		editAssignment(
-			currentTableData.currentTermData.classes[selected_class_i]
-				.assignments
-		);
-
-		assignmentsTable.redraw();
-		categoriesTable.redraw();
-		classesTable.redraw();
-	}
-	hideModal('corrections');
-}
-
-// Bind Enter key to "Apply Corrections" button in corrections modal
-$('#corrections_modal_input').keypress(({ which }) => {
-	// 13 is the keycode for Enter
-	if (which === 13) {
-		correct();
-	}
-});
 /**
- * @typedef {object} Classes
- * @param {string} name
- * @param {string} grade
- * @param {object} categories
- * @param {object[]} assignments
- * @param {object} tokens
- *
- * @typedef {object} RecentActivity
- * @param {RecentAttendance[]} recentAttendanceArray
- * @param {RecentAssignments[]} recentActivityArray
- * @param {string} studentName
- *
- * @typedef {object} scrapedStudent
- * @param {Classes[]} response.classes
- * @param {RecentActivity} response.recent
- * @param {Overview[]} response.overview
- * @param {string} response.username
- * @param {string} response.quarter
- *
- * @typedef {object} noLogin response object on no login
- * @oaram {boolean} noLogin.nologin - parameter present on login fail
- */
-/** Callback for response from /data
- *
- * @param {noLogin|scrapedStudent} response
- * @param {(scrapedStudent|string)} includedTerms - optional parameter which contains the terms included in an import (in the case that
- * currentTableData is imported and not all of the terms' data have been put into currentTableData)
+ * Processes the main data payload from the server to populate the global state and initialize tables.
+ * @param {noLogin|scrapedStudent} response The response object.
+ * @param {scrapedStudent|string} includedTerms Optional parameter containing terms included in an import.
  */
 function responseCallback(response, includedTerms) {
-	// console.log(response);
 	if (response.nologin) {
-		tableData = []; // TODO: dont manipulate global state here, return values
+		tableData = []; 
 		currentTableData = undefined;
 		currentTableDataIndex = -1;
 
@@ -1081,7 +1130,7 @@ function responseCallback(response, includedTerms) {
 
 	$('#loader').hide();
 
-	//parsing the data extracted by the scrapers, and getting tableData ready for presentation
+	// parse data extracted by scrapers and get tabledata ready
 	if (typeof currentTableData.terms === 'undefined') {
 		currentTableData.terms = {
 			current: {},
@@ -1098,7 +1147,7 @@ function responseCallback(response, includedTerms) {
 	currentTableData.currentTermData = parseTableData(response);
 	currentTableData.terms[currentTerm] = parseTableData(response);
 
-	//populates the event for each row in the recentAttendance table
+	// populates event for each row in recentattendance table
 	for (
 		let i = 0;
 		i < currentTableData.recent.recentAttendanceArray.length;
@@ -1126,37 +1175,13 @@ function responseCallback(response, includedTerms) {
 		if (currentTableData.recent.recentAttendanceArray[i].tardy === 'true') {
 			currentTableData.recent.recentAttendanceArray[i].event += 'Tardy ';
 		}
-		// addition for COVID
+		// addition for covid
 		if (currentTableData.recent.recentAttendanceArray[i].code === 'VP') {
 			currentTableData.recent.recentAttendanceArray[i].event += 'VP ';
 		}
 	}
 
-	// let activityArray = currentTableData.recent.recentActivityArray;
-	// for (let i = 0; i < activityArray.length; i++) {
-	//         let assignmentName = activityArray[i].assignmentname;
-	//         let className = activityArray[i].classname;
-	//         let temp_classIndex = classIndex(className);
-
-	//         let assignmentIndex = currentTableData.currentTermData
-	//             .classes[temp_classIndex].assignments.map(x => x.name)
-	//             .indexOf(assignmentName);
-	//         if (assignmentIndex < 0) break;
-	//         console.log(assignmentIndex);
-	//         const helper = currentTableData.currentTermData.classes[temp_classIndex].assignments[assignmentIndex];
-	//         currentTableData.recent.recentActivityArray[i] =
-	//         {
-	//             assignmentName,
-	//             className,
-	//             temp_classIndex,
-	//             assignmentIndex,
-	//             max_score: helper.max_score,
-	//             percentage: helper.percentage,
-	//             color: helper.color
-	//         };
-	// }
-
-	// Calculate GPA for current term
+	// calculate gpa for current term
 	currentTableData.terms.current.GPA =
 		response.GPA || computeGPA(currentTableData.terms.current.classes);
 
@@ -1169,7 +1194,7 @@ function responseCallback(response, includedTerms) {
 	document.getElementById('cum_gpa').innerHTML =
 		'Yearly GPA: ' + currentTableData.cumGPA.percent.toFixed(2);
 
-	// Calculate GPA for each quarter
+	// calculate gpa for each quarter
 	for (let i = 1; i <= 4; i++) {
 		currentTableData.terms['q' + i].GPA = computeGPAQuarter(
 			currentTableData.overview,
@@ -1177,11 +1202,8 @@ function responseCallback(response, includedTerms) {
 		);
 	}
 
-	//Stuff to do now that tableData is initialized
-
 	document.getElementById('mostRecentDiv').style.display = 'block';
-	// this is where we decide what goes into most recent activity on grades page (how many assignments)
-	mostRecentTable.setData(currentTableData.recent.recentActivityArray); // .slide(0, i) if we want to limit
+	mostRecentTable.setData(currentTableData.recent.recentActivityArray); 
 
 	initialize_quarter_dropdown(includedTerms);
 	setup_quarter_dropdown();
@@ -1194,14 +1216,9 @@ function responseCallback(response, includedTerms) {
 		initialize_tableData_dropdown();
 	}
 
-	// potentially add loop here to match assignments
-	// if recent assignment id == actual assignment id, add to array
-	// loop over the whole list of assignment ids for the class to match
 	recentActivity.setData(currentTableData.recent.recentActivityArray);
-
 	recentAttendance.setData(currentTableData.recent.recentAttendanceArray);
-
-	classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+	classesTable.setData(response.classes); 
 
 	fetch('/schedule', {
 		method: 'POST'
@@ -1211,6 +1228,10 @@ function responseCallback(response, includedTerms) {
 	setup_tooltips();
 }
 
+/**
+ * Updates the current term data with a partial response from the server and redraws the classes table.
+ * @param {object} response The partial response containing class and overview data.
+ */
 function responseCallbackPartial(response) {
 	$('#loader').hide();
 
@@ -1233,7 +1254,6 @@ function responseCallbackPartial(response) {
 	document.getElementById('cum_gpa').innerHTML =
 		'Yearly GPA: ' + currentTableData.cumGPA.percent.toFixed(2);
 
-	// Calculate GPA for each quarter
 	for (let i = 1; i <= 4; i++) {
 		currentTableData.terms['q' + i].GPA = computeGPAQuarter(
 			currentTableData.overview,
@@ -1241,25 +1261,9 @@ function responseCallbackPartial(response) {
 		);
 	}
 
-	/*
-    if (currentTerm === 'current') {
-        $(".gpa_select-selected").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-        $("#current").html("Current Quarter GPA: " + tableData.currentTermData.GPA.percent);
-        document.getElementById('gpa_select').options[0].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-        document.getElementById('gpa_select').options[1].innerHTML = "Current Quarter GPA: " + tableData.currentTermData.GPA.percent;
-
-    } else {
-        $(".gpa_select-selected").html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
-        $("#q" + termConverter.indexOf(currentTerm)).html("Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent);
-        document.getElementById('gpa_select').options[termConverter.indexOf(currentTerm) + 1].innerHTML ="Q" + termConverter.indexOf(currentTerm) + " GPA: " + tableData.currentTermData.GPA.percent;
-    }
-    */
-
-	// scheduleTable.setData(currentTableData.schedule.black);
-
 	$('#classesTable').show();
 
-	classesTable.setData(response.classes); //set data of classes table to the tableData property of the response json object
+	classesTable.setData(response.classes); 
 	classesTable.redraw();
 
 	termsReset[currentTerm] = JSON.parse(
@@ -1269,14 +1273,16 @@ function responseCallbackPartial(response) {
 	term_dropdown_active = true;
 }
 
-// Callback for response from /schedule
+/**
+ * Formats and applies the schedule data from the server to the schedule table.
+ * @param {object} response The response containing student schedule information.
+ */
 function scheduleCallback(response) {
 	if (!currentTableData.schedule) currentTableData.schedule = response;
 
 	document.getElementById('scheduleTable').style.rowBackgroundColor = 'black';
-	//the following lines are used to set up the schedule table correctly
 
-	// Get lists of properly formatted black/silver periods
+	// get lists of properly formatted black and silver periods
 	const [blackPeriods, silverPeriods] = ['black', 'silver'].map((bs) =>
 		currentTableData.schedule[bs]
 			.slice()
@@ -1316,9 +1322,12 @@ function scheduleCallback(response) {
 	redraw_clock();
 }
 
+/**
+ * Handles the response for PDF generation and triggers the rendering of the document.
+ * @param {object} response The response containing the PDF file information.
+ */
 function pdfCallback(response) {
 	$('#loader').hide();
-	// console.log(response);
 	currentTableData.pdf_files = response;
 
 	initialize_pdf_dropdown();
@@ -1328,150 +1337,86 @@ function pdfCallback(response) {
 		generate_pdf(pdf_index);
 	}
 }
-// default is set as attendance, shows assignments when toggle is checked
-function recent_toggle() {
-	if (!document.getElementById('recent_toggle').checked) {
-		//recentActivity.setData(tableData.recent.recentAttendanceArray);
-		document.getElementById('recentActivity').style.display = 'none';
-		document.getElementById('recentAttendance').style.display = 'block';
-		document.getElementById('recent_title').innerHTML = 'Attendance';
-		recentAttendance.redraw();
-	} else {
-		// recentActivity.setData(tableData.recent.recentActivityArray);
-		document.getElementById('recentActivity').style.display = 'block';
-		document.getElementById('recentAttendance').style.display = 'none';
-		document.getElementById('recent_title').innerHTML = 'Assignments';
-		recentActivity.redraw();
-	}
-}
 
-function schedule_toggle(day) {
-	if (covid_schedule) {
-		selected_day_of_week = parseInt(day);
-	} else {
-		if (document.getElementById('schedule_toggle').checked) {
-			document.getElementById('schedule_title').innerHTML = 'Silver';
+/**
+ * Renders the changelog and release notes while filtering out older versions based on the current version.
+ * @param {string} updates The HTML string containing the application updates and changelog.
+ * @param {string} current_version The semver string representing the currently active version.
+ */
+function updatesCallback(updates, current_version) {
+	document.querySelector('#updates').innerHTML = updates;
+
+	// check if element exists before modifying outerhtml
+	const changelogHeader = document.querySelector('#changelog');
+	if (changelogHeader) {
+		changelogHeader.outerHTML = "<h2 class='info-header'>Version History/What's New:</h2>";
+	}
+
+	// hide all versions prior to current minor version
+	const items = document.querySelectorAll('#updates h2:nth-of-type(n+2)');
+	const [, curMajor, curMinor] = current_version.match(/^v?(\d+)\.(\d+)/);
+	items.forEach((x) => {
+		const [, major, minor] = x.textContent.match(/^v?(\d+)\.(\d+)/);
+		if (
+			parseInt(minor) < parseInt(curMinor) ||
+			parseInt(major) < parseInt(curMajor)
+		) {
+			x.style.setProperty('display', 'none');
+			x.nextElementSibling.style.setProperty('display', 'none');
 		} else {
-			document.getElementById('schedule_title').innerHTML = 'Black';
+			x.classList.add('info-header');
 		}
-	}
-	redraw_clock();
-	update_formattedSchedule();
-	scheduleTable.setData(currentTableData.formattedSchedule);
+	});
+
+	// remove first two paragraphs containing semver information
+	document.querySelectorAll('#updates p:nth-of-type(n-2)').forEach((x) => {
+		x.style.setProperty('display', 'none');
+	});
 }
 
-// for (const tab of document.getElementsByClassName('tablinks')) {
-//     window.addEventListener('click', event => {
-//         openTab(event.target.id);
-//     });
-// }
+// event listeners and initialization
+window.addEventListener('keydown', (e) => {
+	var evtobj = window.event || e;
+	if (evtobj.keyCode == 90 && evtobj.ctrlKey && undoData.length !== 0) {
+		if (undoData[0].Snackbar !== undefined) {
+			undoData[0].Snackbar.destroy();
+			undoData[0].Snackbar = undefined;
+		}
+		replaceAssignmentFromID(
+			{ assignment_id: undoData[0].assignment_id, placeholder: true },
+			undoData[0],
+			undoData[0].selected_class_i
+		);
+		undoData.shift();
+	}
+});
+
+// close modal or dropdown when user clicks outside
+window.addEventListener('click', function (event) {
+	Object.keys(modals).forEach((key) => {
+		if (event.target === modals[key]) {
+			hideModal(key);
+		}
+	});
+	// do not close a dropdown if user clicked to view a tooltip
+	if (!event.target.classList.contains('hastooltip')) {
+		closeAllSelect();
+		pdf_closeAllSelect();
+		tableData_closeAllSelect();
+	}
+});
+
+// update color scheme on page load and system color scheme changes
+window.addEventListener('load', loadMode);
+window
+	.matchMedia('(prefers-color-scheme: dark)')
+	.addEventListener('change', loadMode);
 
 window.onpopstate = (event) => {
 	openTabHelper(event.state);
 };
 
-function openTab(tab_name) {
-	history.pushState(tab_name, '');
-	openTabHelper(tab_name);
-}
-
-function openTabHelper(tab_name) {
-	// Get all elements with class="tabcontent" and hide them
-	// Get all elements with class="tablinks" and remove the class "active"
-	for (const active of document.getElementsByClassName('active')) {
-		active.classList.remove('active');
-		document.getElementById(
-			active.id.substring(0, active.id.length - 5)
-		).style.display = 'none';
-	}
-
-	// Show the current tab contents, and add an "active" class to the button
-	// corresponding to the tab
-	document.getElementById(tab_name).style.display = 'block';
-	document.getElementById(`${tab_name}_open`).classList.add('active');
-
-	switch (tab_name) {
-		case 'grades':
-			document.getElementById('mostRecentDiv').style.display = 'block';
-			mostRecentTable.redraw();
-			classesTable.redraw();
-			assignmentsTable.redraw();
-			break;
-		case 'reports':
-			if (!currentTableData.pdf_files) {
-				$('#loader').show();
-				//sets the margins for the pdf viewer
-				setup_tooltips();
-				fetch('/pdf', {
-					method: 'POST'
-				}).then(async (res) => pdfCallback(await res.json()));
-			} else if (typeof currentTableData.pdf_files !== 'undefined') {
-				generate_pdf(pdf_index);
-			}
-			// Redraw PDF to fit new viewport dimensions when transitioning
-			// in or out of fullscreen
-			let elem = document.getElementById('reports');
-			let handlefullscreenchange = function () {
-				console.log('fullscreen change');
-				window.setTimeout(generate_pdf(currentPdfIndex), 1000);
-			};
-			if (elem.onfullscreenchange !== undefined) {
-				elem.onfullscreenchange = handlefullscreenchange;
-			} else if (elem.mozonfullscreenchange !== undefined) {
-				// Firefox
-				elem.mozonfullscreenchange = handlefullscreenchange;
-			} else if (elem.MSonfullscreenchange !== undefined) {
-				// Internet Explorer
-				elem.MSonfullscreenchange = handlefullscreenchange;
-			}
-			break;
-		case 'schedule':
-			fetch('/schedule', {
-				method: 'POST'
-			}).then(async (res) => scheduleCallback(await res.json()));
-			scheduleTable.redraw();
-			break;
-	}
-
-	if (tab_name === 'clock') {
-		document.getElementById('small_clock').style.display = 'none';
-		document.getElementById('small_clock_period').style.display = 'none';
-	} else {
-		document.getElementById('small_clock').style.display = 'block';
-		document.getElementById('small_clock_period').style.display = 'block';
-	}
-
-	recentActivity.redraw();
-	recentAttendance.redraw();
-
-	categoriesTable.redraw();
-}
-
-function openSideNav() {
-	const sidenav = document.getElementById('sidenav');
-	sidenav.style.width = sidenav.clientWidth === 270 ? '0px' : '270px';
-
-	// makes sidenav overlay fade out
-	const sidenavOverlay = document.getElementById('sidenav-overlay');
-	if (sidenavOverlay.classList.contains('fade-out')) {
-		sidenavOverlay.classList.remove('fade-out');
-	}
-	sidenavOverlay.classList.add('fade-in');
-}
-
-function closeSideNav() {
-	const sidenav = document.getElementById('sidenav');
-	sidenav.style.width = '0px';
-
-	// makes sidenav overlay fade in
-	const sidenavOverlay = document.getElementById('sidenav-overlay');
-	if (sidenavOverlay.classList.contains('fade-in')) {
-		sidenavOverlay.classList.remove('fade-in');
-	}
-	sidenavOverlay.classList.add('fade-out');
-}
-
-//  Allows exiting sidenav by clicking anywhere outside
+// allows exiting sidenav by clicking anywhere outside
 document
 	.getElementById('sidenav-overlay')
 	.addEventListener('click', closeSideNav);
@@ -1513,6 +1458,18 @@ $('#import_button').click(async () => {
 	});
 });
 
+// bind enter key to apply corrections button
+$('#corrections_modal_input').keypress(({ which }) => {
+	if (which === 13) {
+		correct();
+	}
+});
+
+initialize_jquery_prototype();
+initialize_resize_hamburger();
+$('#stats_plot').width(($(window).width() * 7) / 11);
+setup_tooltips();
+
 //#ifndef lite
 fetch('/data', {
 	method: 'POST',
@@ -1521,57 +1478,15 @@ fetch('/data', {
 	},
 	body: JSON.stringify({ quarter: 0, year: 'current' })
 }).then(async (res) => responseCallback(await res.json()));
-//#endif
 
-//#ifdef lite
-/*
-responseCallback({ nologin: true });
-*/
-//#endif
-
-function updatesCallback(updates, current_version) {
-	document.querySelector('#updates').innerHTML = updates;
-	document.querySelector('#changelog').outerHTML =
-		"<h2 class='info-header'>Version History/What's New:</h2>";
-
-	// Hide all versions prior to the current minor version
-	const items = document.querySelectorAll('#updates h2:nth-of-type(n+2)');
-	const [, curMajor, curMinor] = current_version.match(/^v?(\d+)\.(\d+)/);
-	items.forEach((x) => {
-		const [, major, minor] = x.textContent.match(/^v?(\d+)\.(\d+)/);
-		if (
-			parseInt(minor) < parseInt(curMinor) ||
-			parseInt(major) < parseInt(curMajor)
-		) {
-			x.style.setProperty('display', 'none');
-			x.nextElementSibling.style.setProperty('display', 'none');
-		} else {
-			x.classList.add('info-header');
-		}
-	});
-
-	// Remove first two paragraphs with information about semver
-	document.querySelectorAll('#updates p:nth-of-type(n-2)').forEach((x) => {
-		x.style.setProperty('display', 'none');
-	});
-}
-
-//#ifndef lite
 fetch('/version').then(async (res) => {
 	const version = await res.text();
 	document.querySelector('#version').textContent = version;
 	updatesCallback(await (await fetch('/updates')).text(), version);
 });
 //#endif
+
 //#ifdef lite
-/*
-document.querySelector("#version").textContent = (
-//#include VERSION
-);
-updatesCallback((
-//#include CHANGELOG
-), document.querySelector("#version").textContent);
-*/
 //#endif
 
 openTab('grades');

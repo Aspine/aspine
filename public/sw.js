@@ -1,4 +1,4 @@
-const cacheVersion = 'v1';
+const cacheVersion = 'v2';
 
 self.addEventListener('install', (event) => {
 	console.debug('Service worker installed');
@@ -12,7 +12,7 @@ self.addEventListener('install', (event) => {
 				'/manifest.json',
 				'/vendor/tabulator/tabulator.min.js',
 				'/vendor/jquery/jquery.min.js',
-				'/vendor/pdf.js/pdf.min.js',
+				'/vendor/pdf.js/pdf.js',
 				'/vendor/plotly.js/plotly.js',
 				'/vendor/animate/animate.min.css',
 				'/vendor/bootstrap/bootstrap.min.css',

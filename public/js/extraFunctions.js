@@ -1,7 +1,8 @@
-let vip_username_list = ['8006214', '8001874'];
+let vip_username_list = ['8006214', '8001874', '7002249'];
 // Cole: 8006697
 // Tyler: 8006696
 // Max: 2109723
+// Gareth: 7002249
 
 Number.prototype.countDecimals = function () {
 	if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
@@ -777,6 +778,9 @@ function parseTableData({ classes, quarter_oid }) {
 
 		//initialize category grades which will be used for the categoryGrades table
 		classes[i].categoryGrades = {};
+
+		classes[i].assignments = classes[i].assignments || [];
+		classes[i].categoryDisplay = [];
 
 		//determine the number of decimal places each class uses in Aspen so that Aspine can maintain consistency
 		if (!isNaN(parseFloat(classes[i].grade))) {

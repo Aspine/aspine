@@ -130,16 +130,14 @@ let resetTableData = function () {
 		JSON.stringify(termsReset[currentTerm])
 	);
 	currentTableData.currentTermData = currentTableData.terms[currentTerm];
-	if (selected_class_i) {
-		assignmentsTable.setData(
-			currentTableData.currentTermData.classes[selected_class_i]
-				.assignments
-		);
-		categoriesTable.setData(
-			currentTableData.currentTermData.classes[selected_class_i]
-				.categoryDisplay
-		);
-	}
+	if (selected_class_i !== undefined) {
+    assignmentsTable.setData(
+        currentTableData.currentTermData.classes[selected_class_i].assignments
+    );
+    categoriesTable.setData(
+        currentTableData.currentTermData.classes[selected_class_i].categoryDisplay
+    );
+}
 	classesTable.setData(currentTableData.currentTermData.classes);
 
 	currentTableData.currentTermData.calcGPA = computeGPA(

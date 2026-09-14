@@ -7,155 +7,113 @@ let currentPageNum = null;
 let pendingPageNum = null;
 let currentPdfIndex = null;
 
+// Helper to convert base64 strings to Uint8Array for PDF.js
+function base64ToUint8Array(base64) {
+    // Strip data URI header if present
+    const cleanBase64 = base64.replace(/^data:application\/pdf;base64,/, '');
+    const binaryString = window.atob(cleanBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
 let render_page_pdf = function (pageNumber) {
-	pdf.getPage(pageNumber).then(function (page) {
-		// Update page indicator text
-		$('#page-indicator').text(`PAGE ${pageNumber} OF ${pdf.numPages}`);
+    pdf.getPage(pageNumber).then(function (page) {
+        $('#page-indicator').text(`PAGE ${pageNumber} OF ${pdf.numPages}`);
+        $('#pdf_loading_text').hide(); // Hide the loading header once rendered
 
-		scale = 1;
+        scale = 1;
+        let viewport = page.getViewport({ scale });
+        let modifier = $('#pdf-container').width();
 
-		let viewport = page.getViewport({ scale });
+        if ($(window).width() >= 900) {
+            modifier = 900;
+        }
 
-		let modifier = $('#pdf-container').width();
+        adjustedScale = (modifier / viewport.width) * 0.97;
+        controlAdjustedScale = (modifier / viewport.width) * 0.97;
 
-		if ($(window).width() >= 900) {
-			modifier = 900;
-		}
+        viewport = page.getViewport({ scale: adjustedScale });
 
-		adjustedScale = (modifier / viewport.width) * 0.97;
-		controlAdjustedScale = (modifier / viewport.width) * 0.97;
+        let canvas = document.getElementById('pdf-canvas');
+        let context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-		viewport = page.getViewport({ scale: adjustedScale });
+        let renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
 
-		let canvas = document.getElementById('pdf-canvas');
-		let context = canvas.getContext('2d');
-		canvas.width = viewport.width;
-		canvas.height = viewport.height;
-
-		let renderContext = {
-			canvasContext: context,
-			viewport: viewport
-		};
-
-		let renderTask = page.render(renderContext);
-		renderTask.promise.then(function () {
-			pdfrendering = false;
-			// Another page rendering is pending
-			if (pendingPageNum !== null) {
-				render_page_pdf(pendingPageNum);
-				pendingPageNum = null;
-			}
-		});
-	});
+        let renderTask = page.render(renderContext);
+        renderTask.promise.then(function () {
+            pdfrendering = false;
+            if (pendingPageNum !== null) {
+                render_page_pdf(pendingPageNum);
+                pendingPageNum = null;
+            }
+        });
+    });
 };
 
 let generate_pdf = function (index) {
-	if (!pdfrendering) {
-		pdfrendering = true;
-		let adjustedHeight = $(window).height() - 280;
-		if (
-			!document.isFullScreen &&
-			!document.fullscreenElement &&
-			!document.webkitFullscreenElement &&
-			!document.mozFullScreenElement &&
-			!document.msFullscreenElement
-		) {
-			$('#pdf-container').css('height', adjustedHeight + 'px');
-		} else {
-			$('#pdf-container').css('height', $(window).height() + 'px');
-		}
+    if (!pdfrendering) {
+        pdfrendering = true;
+        $('#pdf_loading_text').show();
 
-		let pdfInitParams = { data: currentTableData.pdf_files[index].content };
-		// Store the index of the current PDF in `currentPdfIndex`
-		currentPdfIndex = index;
-		let loadingTask = pdfjsLib.getDocument(pdfInitParams);
-		loadingTask.promise.then(
-			function (pdf_) {
-				pdf = pdf_;
-				currentPageNum = 1;
-				render_page_pdf(1);
-			},
-			function (reason) {
-				console.error(reason);
-			}
-		);
-	}
+        let adjustedHeight = $(window).height() - 280;
+        if (
+            !document.isFullScreen &&
+            !document.fullscreenElement &&
+            !document.webkitFullscreenElement &&
+            !document.mozFullScreenElement &&
+            !document.msFullscreenElement
+        ) {
+            $('#pdf-container').css('height', adjustedHeight + 'px');
+        } else {
+            $('#pdf-container').css('height', $(window).height() + 'px');
+        }
+
+        currentPdfIndex = index;
+        let rawContent = currentTableData.pdf_files[index].content;
+        
+        // Convert base64 data to Uint8Array if necessary
+        let pdfData = typeof rawContent === 'string' ? base64ToUint8Array(rawContent) : rawContent;
+        let pdfInitParams = { data: pdfData };
+
+        let loadingTask = window.pdfjsLib.getDocument(pdfInitParams);
+        loadingTask.promise.then(
+            function (pdf_) {
+                pdf = pdf_;
+                currentPageNum = 1;
+                render_page_pdf(1);
+            },
+            function (reason) {
+                console.error("PDF Loading Error:", reason);
+                $('#pdf_loading_text').text('Failed to load PDF.');
+                pdfrendering = false;
+            }
+        );
+    }
 };
 
 let zoom_in_pdf = function () {
-	if (!pdfrendering) {
-		pdfrendering = true;
-		let pdfInitParams = {
-			data: currentTableData.pdf_files[currentPdfIndex].content
-		};
-		let loadingTask = pdfjsLib.getDocument(pdfInitParams);
-		loadingTask.promise.then(
-			function (pdf) {
-				pdf.getPage(currentPageNum).then(function (page) {
-					adjustedScale += 0.1;
-
-					let viewport = page.getViewport({ scale: adjustedScale });
-
-					let canvas = document.getElementById('pdf-canvas');
-					let context = canvas.getContext('2d');
-
-					canvas.width = viewport.width;
-					canvas.height = viewport.height;
-
-					let renderContext = {
-						canvasContext: context,
-						viewport: viewport
-					};
-
-					let renderTask = page.render(renderContext);
-					renderTask.promise.then(function () {
-						pdfrendering = false;
-					});
-				});
-			},
-			function (reason) {
-				console.error(reason);
-			}
-		);
-	}
+    if (!pdfrendering && pdf) {
+        pdfrendering = true;
+        adjustedScale += 0.1;
+        render_page_pdf(currentPageNum);
+    }
 };
 
 let zoom_out_pdf = function () {
-	if (!pdfrendering) {
-		pdfrendering = true;
-		let pdfInitParams = {
-			data: currentTableData.pdf_files[currentPdfIndex].content
-		};
-		let loadingTask = pdfjsLib.getDocument(pdfInitParams);
-		loadingTask.promise.then(
-			function (pdf) {
-				pdf.getPage(currentPageNum).then(function (page) {
-					adjustedScale -= 0.1;
-
-					let viewport = page.getViewport({ scale: adjustedScale });
-
-					let canvas = document.getElementById('pdf-canvas');
-					let context = canvas.getContext('2d');
-
-					canvas.width = viewport.width;
-					canvas.height = viewport.height;
-
-					let renderContext = {
-						canvasContext: context,
-						viewport: viewport
-					};
-
-					let renderTask = page.render(renderContext);
-					renderTask.promise.then(function () {
-						pdfrendering = false;
-					});
-				});
-			},
-			function (reason) {
-				console.error(reason);
-			}
-		);
-	}
+    if (!pdfrendering && pdf) {
+        pdfrendering = true;
+        adjustedScale -= 0.1;
+        render_page_pdf(currentPageNum);
+    }
 };
 
 // Render a certain page of the PDF or queue it to be rendered

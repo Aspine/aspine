@@ -1,6 +1,5 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
-import fetch, { FetchError } from 'node-fetch';
 import { URLSearchParams } from 'url';
 import { JSDOM } from 'jsdom';
 import puppeteer from 'puppeteer-extra';
@@ -31,19 +30,21 @@ import type {
 	TermSpec
 } from './types-shared';
 
-// Using `import type` with an enum disallows accessing the enum variants
+// using import type with an enum disallows accessing the enum variants
 import { AspineErrorCode } from './types';
 import { Quarter, Year } from './types-shared';
 import { createValidAbsoluteUrl } from 'pdfjs-dist';
+
 const encode = (str: string): string =>
 	Buffer.from(str, 'binary').toString('base64');
+
 export async function get_student(
 	username: string,
 	password: string,
 	quarter: Quarter = Quarter.Current,
 	year: Year = Year.Current
 ): Promise<StudentData> {
-	console.log('get_student');
+	console.log('fetching student data for user:', username);
 	return await get_session(username, password, async (session) => {
 		const { student_name, student_oid } = await get_student_info(session);
 		const quarter_oids = await get_quarter_oids(session, year);
@@ -59,6 +60,8 @@ export async function get_student(
 				get_class_details(session, class_info)
 			)
 		);
+		
+		console.log('assembling overview and fetching assignments');
 		const overview = assemble_overview(class_details);
 		const assignments = await Promise.all(
 			class_details.map(async (details) =>
@@ -73,13 +76,12 @@ export async function get_student(
 		const classes = (
 			await Promise.all(
 				class_details.map(async (details, i) => {
-					// Don't include a class if it does not exist in this quarter
+					// do not include a class if it does not exist in this quarter
 					if (!details.grades.has(quarter)) {
 						return undefined;
 					}
 
-					// For previous-year data, every class is listed under every quarter, so
-					// we need to do an additional check using the "term" attribute
+					// for previous year data every class is listed under every quarter so we need to do an additional check using the term attribute
 					if (
 						year !== Year.Current &&
 						!(await match_termspec(
@@ -92,7 +94,7 @@ export async function get_student(
 						return undefined;
 					}
 
-					// exclude classes that don't recieve grades in Aspen
+					// exclude classes that do not receive grades in aspen
 					if (
 						[
 							'Study Support',
@@ -124,22 +126,22 @@ export async function get_student(
 		).filter(isClass);
 		const quarter_oid = quarter_oids.get(quarter) || 'current';
 
+		console.log('student data successfully retrieved');
 		return { classes, recent, overview, username, quarter, quarter_oid };
 	});
 }
 
-/**
- * Return an array containing all PDF files
- */
+// return an array containing all pdf files
 export async function get_pdf_files(
 	username: string,
 	password: string
 ): Promise<PDFFile[]> {
-	console.log('get pdfs');
+	console.log('fetching pdf files');
 	return await get_session(username, password, async (session) => {
 		const pdf_files = [];
-		// Get PDF files sequentially to avoid rejection of requests
+		// get pdf files sequentially to avoid rejection of requests
 		for (const { id, filename } of await list_pdf_files(session)) {
+			console.log('downloading pdf:', filename);
 			pdf_files.push({
 				title: filename,
 				content: await download_pdf(session, id)
@@ -153,7 +155,7 @@ export async function get_schedule(
 	username: string,
 	password: string
 ): Promise<Schedule> {
-	console.log('get_sechedule');
+	console.log('fetching schedule');
 	return await get_session(username, password, async (session) => {
 		const current_quarter = await get_current_quarter(
 			session,
@@ -175,9 +177,9 @@ export async function get_schedule(
 				}
 			)
 		).text();
-		// This is a term OID that is specific to the schedule view (not the same
-		// as the OIDs in the output of get_quarter_oids)
-		// currently uses semester view to scrape, quarter view behaved weirdly, can switch back easily though
+		
+		// this is a term oid that is specific to the schedule view not the same as the oids in the output of get_quarter_oids
+		// currently uses semester view to scrape since quarter view behaved weirdly but can switch back easily
 		const [, term_oid] = new RegExp(
 			String.raw`<option value="(.+)">S${current_semester}</option>`
 		).exec(initial_page) as RegExpExecArray;
@@ -205,15 +207,13 @@ export async function get_schedule(
 			"table[cellspacing='1'] > tbody > tr:not([class])"
 		);
 
-		// Get a matrix of the cells in the first three columns of the table, then
-		// transpose it to get a list of periods, a list of silver day classes
-		// (from Thursday), and a list of black day classes (from Friday).
-
+		// get a matrix of the cells in the first three columns of the table then transpose it to get a list of periods a list of silver day classes and a list of black day classes
 		const transpose = <T>(matrix: T[][]): T[][] =>
 			matrix[0].map((col, i) => matrix.map((row) => row[i]));
-		// Transpose algorithm: https://stackoverflow.com/a/46805290
+		
+		// transpose algorithm from stack overflow
 
-		// row => [1, 5, 6] will get the periods from column 1 and all the class names from Thursday (row 5) and Friday (row 6)
+		// row to 1 5 6 will get the periods from column 1 and all the class names from thursday and friday
 		const [periods, silver_html, black_html] = transpose(
 			[...rows].map((row) =>
 				[1, 5, 6].map(
@@ -236,7 +236,7 @@ export async function get_schedule(
 					if (x) {
 						const lines = x.split('<br>');
 
-						// Decode HTML entities (https://stackoverflow.com/a/7394787)
+						// decode html entities
 						const textarea = document.createElement('textarea');
 						const [id, name, teacher, room] = lines.map((line) => {
 							textarea.innerHTML = line;
@@ -245,8 +245,8 @@ export async function get_schedule(
 
 						let aspenPeriod = periods[i];
 
-						// Convert aspenPeriod from incorrect to correct period
-						// TODO remove this once Aspen reports periods correctly
+						// convert aspenperiod from incorrect to correct period
+						// remove this once aspen reports periods correctly
 						let [num, per] = aspenPeriod.split('-');
 						let match;
 						if (per === 'CM') {
@@ -270,6 +270,7 @@ export async function get_schedule(
 				})
 				.filter(isScheduleItem)
 		);
+		console.log('schedule successfully retrieved');
 		return { black, silver };
 	});
 }
@@ -283,17 +284,13 @@ export async function get_stats(
 	year: Year,
 	student_oid: String
 ): Promise<Stats | {}> {
-	console.log('get_stats');
+	console.log('fetching stats for assignment:', assignment_id);
 	return await get_session(username, password, async ({ session_id }) => {
-		// The REST API does not expose assignment statistics (as far as we know),
-		// so we need to use the regular Aspen desktop site. Aspen is picky about
-		// the order in which requests are made, so we need to carry out some
-		// preliminaries:
+		// the rest api does not expose assignment statistics so we need to use the regular aspen desktop site which is picky about the order of requests
 
-		// Get list of classes
+		// get list of classes
 		const class_list_page = await (
 			await fetch(
-				// BROKEN
 				`https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?count=25&customParams=selectedYear%7Ccurrent;selectedTerm%7Ccurrent&fieldSetOid=fsnX2ClsMbl+++&filter=%23%23%23all&offset=1&selectedStudent=${student_oid}&sort=default&unique=true`,
 				{
 					headers: {
@@ -303,13 +300,13 @@ export async function get_stats(
 			)
 		).text();
 
-		// Get updated Apache token
+		// get updated apache token
 		const [, apache_token] =
 			/name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
 				class_list_page
 			) as RegExpExecArray;
 
-		// Change term in classes list
+		// change term in classes list
 		await fetch('https://aspen.cpsd.us/aspen/portalClassList.do', {
 			headers: {
 				Cookie: `JSESSIONID=${session_id}; deploymentId=ma-cambridge`
@@ -323,7 +320,7 @@ export async function get_stats(
 			})
 		});
 
-		// Get class details
+		// get class details
 		await fetch('https://aspen.cpsd.us/aspen/portalClassList.do', {
 			headers: {
 				Cookie: `JSESSIONID=${session_id};`
@@ -336,7 +333,7 @@ export async function get_stats(
 			})
 		});
 
-		// Get list of assignments
+		// get list of assignments
 		await fetch(
 			'https://aspen.cpsd.us/aspen/portalAssignmentList.do?navkey=academics.classes.list.gcd',
 			{
@@ -346,7 +343,7 @@ export async function get_stats(
 			}
 		);
 
-		// Change term in assignments list
+		// change term in assignments list
 		await fetch('https://aspen.cpsd.us/aspen/portalAssignmentList.do', {
 			headers: {
 				Cookie: `JSESSIONID=${session_id};`
@@ -359,7 +356,7 @@ export async function get_stats(
 			})
 		});
 
-		// Get assignment statistics
+		// get assignment statistics
 		const stats_page = await (
 			await fetch('https://aspen.cpsd.us/aspen/portalAssignmentList.do', {
 				headers: {
@@ -383,6 +380,7 @@ export async function get_stats(
 		);
 
 		if (rows.length < 4) {
+			console.log('insufficient data to compile stats');
 			return {};
 		}
 
@@ -414,11 +412,13 @@ export async function get_stats(
 			statistics[stat_type] = parseFloat(stat_value);
 		}
 
+		console.log('stats successfully retrieved');
 		return statistics;
 	});
 }
 
 async function get_recent(session: Session): Promise<Recent> {
+	console.log('fetching recent activity');
 	const page = await (
 		await fetch(
 			'https://aspen.cpsd.us/aspen/studentRecentActivityWidget.do?' +
@@ -474,26 +474,21 @@ async function get_recent(session: Session): Promise<Recent> {
 	return { recentAttendanceArray, recentActivityArray };
 }
 
-/**
- * Get the current quarter (Q1, Q2, Q3, Q4). In the absence of the OID of a
- * class (which can be fetched from get_academics), this function makes a
- * request to get the OID of one class.
- */
+// get the current quarter in the absence of the oid of a class this function makes a request to get the oid of one class
 async function get_current_quarter(
 	session: Session,
 	year: Year,
 	class_info?: ClassInfo
 ): Promise<Quarter> {
-	// TODO: this
-	// If not current year, the "current" quarter is undefined and we can just
-	// let it be Q1
+	console.log('determining current quarter');
+	// complete this logic
+	// if not current year the current quarter is undefined and we can let it be q1
 	if (year != Year.Current) {
 		return Quarter.Q1;
 	}
 
 	let oid: string;
 	if (class_info) {
-		console.log('class ifno');
 		({ oid } = class_info);
 	} else {
 		const { student_oid } = await get_student_info(session);
@@ -501,7 +496,6 @@ async function get_current_quarter(
 			selectedStudent: student_oid,
 			customParams: `selectedYear|${year};selectedTerm|all`
 		});
-		// console.log(param);
 		var url =
 			'https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list?count=25&' +
 			param +
@@ -533,10 +527,9 @@ async function get_current_quarter(
 	}
 }
 
-/**
- * Get a list of published reports (PDF files)
- */
+// get a list of published reports
 async function list_pdf_files({ session_id }: Session): Promise<PDFFileInfo[]> {
+	console.log('listing published pdf files');
 	const pdf_files: any[] = await (
 		await fetch('https://aspen.cpsd.us/aspen/rest/reports', {
 			headers: {
@@ -549,26 +542,32 @@ async function list_pdf_files({ session_id }: Session): Promise<PDFFileInfo[]> {
 			({ contentTypeId }) => contentTypeId == 'cttPdf'
 		);
 	} catch (e) {
-		console.log(pdf_files);
+		console.error('error filtering pdf files:', e);
 		return [];
 	}
 }
 
-/**
- * Get name and OID of student
- */
+// get name and oid of student
 async function get_student_info({ session_id }: Session): Promise<{
 	student_name: string;
 	student_oid: string;
 }> {
+	console.log('fetching student name and oid');
 	const a = await fetch('https://aspen.cpsd.us/aspen/rest/users/students', {
 		headers: {
-			Cookie: `JSESSIONID=${session_id}`
+			Cookie: `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`
 		}
 	});
-	console.log(a);
-	const [{ name: student_name, studentOid: student_oid }] = await a.json();
-	console.log(student_name, student_oid);
+
+	const data = await a.json();
+
+	// Guard against non-array error responses from Aspen
+	if (!Array.isArray(data) || data.length === 0) {
+		console.error('Unexpected response from get_student_info:', data);
+		throw new Error(AspineErrorCode.LOGINFAIL);
+	}
+
+	const [{ name: student_name, studentOid: student_oid }] = data;
 	return { student_name, student_oid };
 }
 
@@ -576,6 +575,7 @@ async function get_quarter_oids(
 	session: Session,
 	year: Year
 ): Promise<Map<Quarter, string>> {
+	console.log('fetching quarter oids');
 	const mapping = new Map<Quarter, string>();
 	const terms: { gradeTermId: string; oid: string }[] = await (
 		await fetch(
@@ -601,18 +601,14 @@ async function get_quarter_oids(
 	return mapping;
 }
 
-/**
- * Get basic information (name, grades, teacher, term, and OID) about classes
- */
+// get basic information about classes
 async function get_academics(
 	{ session_id }: Session,
 	student_oid: string,
 	quarter_oids: Map<Quarter, string>,
 	year: Year
 ): Promise<ClassInfo[]> {
-	// ISSUE IS THAT STUDENT_OID = NULL https://aspen.cpsd.us/aspen/rest/users/students?count=25&customParams=selectedYear%7Ccurrent;selectedTerm%7Ccurrent&fieldSetOid=fsnX2ClsMbl+++&filter=%23%23%23all&offset=1&selectedStudent=stdX2002104931&sort=default&unique=true
-	//    "https://aspen.cpsd.us/aspen/rest/lists/academics.classes.list/studentGradeTerms?count=25&customParams=selectedYear%7Ccurrent;selectedTerm%7Ccurrent&fieldSetOid=fsnX2ClsMbl+++&filter=%23%23%23all&offset=1&selectedStudent=stdX2002104931&sort=default&unique=true", {
-
+	console.log('fetching basic academic information');
 	const get_classes = async (quarter_oid: string) =>
 		(await (
 			await fetch(
@@ -631,19 +627,18 @@ async function get_academics(
 			)
 		).json()) as any[];
 
-	// Get classes from all terms in an array
+	// get classes from all terms in an array
 	const all_classes = await get_classes('all');
-	// Set up a mapping from quarters to mappings from OIDs to class info
+	
+	// set up a mapping from quarters to mappings from oids to class info
 	const term_classes_mapping = new Map<Quarter, Map<string, any>>();
 
-	// Populate term_classes_mapping with data from each term
+	// populate term classes mapping with data from each term
 	await Promise.all(
 		[...quarter_oids.entries()].map(async ([quarter, quarter_oid]) =>
 			term_classes_mapping.set(
 				quarter,
-				// Construct a 2D array with elements [oid, rest] where
-				// rest is the object containing class info, then convert that to a
-				// Map<string, any>
+				// construct a 2d array with elements oid and rest where rest is the object containing class info then convert that to a map
 				new Map<string, any>(
 					(await get_classes(quarter_oid)).map(({ oid, ...rest }) => [
 						oid,
@@ -653,7 +648,8 @@ async function get_academics(
 			)
 		)
 	);
-	// For each class, assemble a ClassInfo object
+	
+	// for each class assemble a classinfo object
 	return all_classes.map(
 		({
 			oid,
@@ -661,21 +657,19 @@ async function get_academics(
 			relSscMstOid_mstStaffView: teachers,
 			sscTermView: term
 		}) => {
-			// Mapping the terms in which this class meets to the corresponding term
-			// averages
+			// mapping the terms in which this class meets to the corresponding term averages
 			const grades = new Map<Quarter, string>();
 
 			for (const quarter of Object.values(Quarter)) {
-				// Exclude enum variant names; we just want to iterate over
-				// Current, Q1, Q2, etc.
+				// exclude enum variant names as we iterate over current q1 q2 etc
 				if (typeof quarter !== 'number') continue;
 
 				const term_data = term_classes_mapping.get(quarter)?.get(oid);
-				// We don't want to count this term if the class does not have any data
-				// for this term
+				
+				// do not count this term if the class does not have any data for this term
 				if (!term_data) continue;
 
-				// Enter the grade for this term into the grades mapping
+				// enter the grade for this term into the grades mapping
 				grades.set(quarter, (term_data.cfTermAverage ?? '') as string);
 			}
 
@@ -683,8 +677,7 @@ async function get_academics(
 			try {
 				[{ name: teacher }] = teachers;
 			} catch (e) {
-				// In the case of a TypeError (if the class has no teachers),
-				// let teacher be ""
+				// in the case of a typeerror let teacher be an empty string
 				if (!(e instanceof TypeError)) {
 					throw e;
 				}
@@ -695,13 +688,12 @@ async function get_academics(
 	);
 }
 
-/**
- * Get extended information about a class (attendance, categories)
- */
+// get extended information about a class including attendance and categories
 async function get_class_details(
 	{ session_id }: Session,
 	class_info: ClassInfo
 ): Promise<ClassDetails> {
+	console.log('fetching details for class:', class_info.name);
 	const { averageSummary, attendanceSummary } = await (
 		await fetch(
 			`https://aspen.cpsd.us/aspen/rest/studentSchedule/${class_info.oid}/academics`,
@@ -759,8 +751,8 @@ async function get_assignments(
 	quarter_oids: Map<Quarter, string>,
 	class_details: ClassDetails
 ): Promise<Assignment[]> {
-	// If this class does not exist in the given quarter, then there are no
-	// assignments
+	console.log('fetching assignments for class:', class_details.name);
+	// if this class does not exist in the given quarter then there are no assignments
 	if (!class_details.grades.has(quarter)) {
 		return [];
 	}
@@ -793,7 +785,7 @@ async function get_assignments(
 					oid,
 					scoreElements: [{ score, pointMax }]
 				}) => {
-					// Get category name
+					// get category name
 					let category = '';
 					for (const [cat, { oid }] of class_details.categories) {
 						if (categoryOid === oid) {
@@ -815,19 +807,19 @@ async function get_assignments(
 				}
 			)
 			.sort(({ date_due: d1, name: n1 }, { date_due: d2, name: n2 }) => {
-				// Sort assignments in reverse chronological order by due date
+				// sort assignments in reverse chronological order by due date
 				if (d1 > d2) return -1;
 				if (d1 < d2) return 1;
-				// If same due date, sort by name (case-insensitive)
+				// if same due date sort by name case insensitive
 				const n1u = n1.toUpperCase();
 				const n2u = n2.toUpperCase();
 				if (n1u < n2u) return -1;
 				if (n1u > n2u) return 1;
 
-				// Same due date and same name (up to capitalization differences)
+				// same due date and same name
 				return 0;
 			})
-			// Convert Date objects to strings
+			// convert date objects to strings
 			.map(({ date_assigned: da, date_due: dd, ...rest }) => ({
 				date_assigned: da.toLocaleDateString('en-US'),
 				date_due: dd.toLocaleDateString('en-US'),
@@ -852,14 +844,12 @@ function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
 				Quarter.Q3,
 				Quarter.Q4
 			].map((q) => parseFloat(grades.get(q) ?? ''));
-			// Get all quarter grades that are not NaN, and average them to get the
-			// year-to-date grade
+			// get all quarter grades that are not nan and average them to get the year to date grade
 			const quarter_grades = [q1, q2, q3, q4].filter((x) => !isNaN(x));
 			const ytd = quarter_grades.length
 				? quarter_grades.reduce((a, b) => a + b) / quarter_grades.length
 				: NaN;
-			// Custom function for formatting numbers so that NaN is mapped to the
-			// empty string
+			// custom function for formatting numbers so that nan is mapped to the empty string
 			const format = (x: number) => (isNaN(x) ? '' : x.toString());
 			return {
 				class: name,
@@ -878,35 +868,29 @@ function assemble_overview(class_details: ClassDetails[]): OverviewItem[] {
 	);
 }
 
-/**
- * Download a PDF file by ID (from list_pdf_files)
- */
+// download a pdf file by id
 async function download_pdf(
-	{ session_id }: Session,
-	id: string
+    { session_id }: Session,
+    id: string
 ): Promise<string> {
-	return (
-		await (
-			await fetch(`https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
-				headers: {
-					Cookie: `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`
-				}
-			})
-		).buffer()
-	).toString('binary');
+    console.log('downloading pdf with id:', id);
+    const response = await fetch(`https://aspen.cpsd.us/aspen/rest/reports/${id}/file`, {
+        headers: {
+            Cookie: `JSESSIONID=${session_id}; deploymentId=ma-cambridge; showNavbar=true`
+        }
+    });
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer).toString('base64');
 }
 
-/**
- * Check if a quarter (e.g., Quarter.Q1) matches a term specification (e.g.,
- * "S1")
- */
+// check if a quarter matches a term specification
 async function match_termspec(
 	session: Session,
 	termspec: TermSpec,
 	quarter: Quarter,
 	year: Year
 ): Promise<boolean> {
-	// Make sure that `quarter` is Q1, Q2, Q3, or Q4 and not Current
+	// make sure that quarter is q1 q2 q3 or q4 and not current
 	if (quarter === Quarter.Current) {
 		quarter = await get_current_quarter(session, year);
 	}
@@ -925,179 +909,155 @@ async function match_termspec(
 			return quarter === Quarter.Q3;
 		case 'Q4':
 			return quarter === Quarter.Q4;
-		default: // Fallback in case Aspen gives some other termspec
+		default: 
+			// fallback in case aspen gives some other termspec
 			return true;
 	}
 }
 
-/**
- * Log in to Aspen using a given username and password and execute the given
- * callback within that session, throwing an error upon an invalid login.
- */
-export async function get_session<T>(
-	username: string,
-	password: string,
-	callback: (session: Session) => Promise<T>
-): Promise<any> {
-	// Get a session from Aspen by visiting the login page, and check if Aspen is
-	// currently down
+// Store active sessions and pending session creation promises in memory
+interface ActiveSession {
+	session_id: string;
+	apache_token: string;
+	timestamp: number;
+}
 
-	/*
-new scraping method code from aspine3 by Leo
-look at the aspine3 repo for more information: https://github.com/aspine/aspine3
-  */
-	const headless = true; // if I put /?headless=false then it will have a head, for debugging
-	const userAgent = randomUseragent.getRandom();
+const sessionCache = new Map<string, ActiveSession>();
+const pendingSessions = new Map<string, Promise<ActiveSession>>();
 
-	const browser = await puppeteer.launch({ headless });
+async function create_session(username: string, password: string): Promise<ActiveSession> {
+	console.log('initiating session generation for user:', username);
+	const headless = false;
+	const browser = await puppeteer.launch({
+		headless,
+		args: ['--no-sandbox', '--disable-setuid-sandbox']
+	});
 	const page = await browser.newPage();
 	await page.setViewport({
-		width: 1920 + Math.floor(Math.random() * 100),
-		height: 3000 + Math.floor(Math.random() * 100),
+		width: 1280,
+		height: 800,
 		deviceScaleFactor: 1,
 		hasTouch: false,
-		isLandscape: false,
-		isMobile: true
+		isLandscape: true,
+		isMobile: false
 	});
-	await page.setUserAgent(userAgent);
 	await page.setJavaScriptEnabled(true);
-	// await page.setDefaultNavigationTimeout(0);
-	const url =
-		'https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML';
-	// var windowVar = localStorage.getItem('windowVar')
 
 	try {
-		// console.log(globalThis.window)
-		// let win = globalThis.window?.open(url, '_blank');
-
-		// console.log(win)
-		// window.document.write('<iframe src="https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML"></iframe>');
-		// nice thing of aspen to make a page just to redirect to the write sso link
 		await page.goto(
 			'https://aspen.cpsd.us/aspen/logonSSO.do?deploymentId=ma-cambridge&districtId=*dst&idpName=Cambridge%20Google%20SAML'
 		);
+		page.setDefaultNavigationTimeout(60000);
 
-		await page.setDefaultNavigationTimeout(60000); // increase the timeout cus aspen be slow
-		let waitForSelectorOptions = { visible: true, timeout: 3000 };
-		// because its google sso, input the email
-		await page.waitForSelector('input[type="email"]');
-		// console.log('inputting email:', username);
-		await page.type('input[type="email"]', username);
-		await page.keyboard.press('Enter');
-		// console.log('email entered');
-		// input password once it exists on the page
+		const emailSelector = '#identifierId';
+		await page.waitForSelector(emailSelector, { visible: true, timeout: 15000 });
+		await new Promise((r) => setTimeout(r, 754));
+		await page.click(emailSelector);
+		await new Promise((r) => setTimeout(r, 500));
+		await page.type(emailSelector, username);
+
+		await Promise.all([
+			page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 15000 }),
+			page.keyboard.press('Enter')
+		]);
+
+		const passwordSelector = 'input[type="password"]';
 		try {
-			await page.waitForSelector(
-				'input[type="password"]',
-				waitForSelectorOptions
-			);
+			await page.waitForSelector(passwordSelector, { visible: true, timeout: 15000 });
 		} catch (e) {
-			console.log(e);
-			// for debugging
-			if (false) {
-				let sshot = await page.screenshot();
-				function encode(input: Uint8Array) {
-					var keyStr =
-						'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-					var output = '';
-					var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-					var i = 0;
-
-					while (i < input.length) {
-						chr1 = input[i++];
-						chr2 = i < input.length ? input[i++] : Number.NaN; // Not sure if the index
-						chr3 = i < input.length ? input[i++] : Number.NaN; // checks are needed here
-
-						enc1 = chr1 >> 2;
-						enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-						enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-						enc4 = chr3 & 63;
-
-						if (isNaN(chr2)) {
-							enc3 = enc4 = 64;
-						} else if (isNaN(chr3)) {
-							enc4 = 64;
-						}
-						output +=
-							keyStr.charAt(enc1) +
-							keyStr.charAt(enc2) +
-							keyStr.charAt(enc3) +
-							keyStr.charAt(enc4);
-					}
-					return output;
-				}
-				// let file = new File([new Uint8Array(sshot)], 'screenshot.png', { type: 'png' });
-				let img = 'data:image/png;base64,' + encode(sshot);
-				// console.log(img)
-			}
+			console.log('failed to find password input:', e);
 			throw new Error(AspineErrorCode.LOGINFAIL);
 		}
-		// console.log('inputting password');
-		await page.type('input[type="password"]', password);
-		await page.keyboard.press('Enter');
-		// console.log('password entered');
-		// wait for it to go back to aspen
-		await page.waitForNavigation();
-		await page.waitForNetworkIdle();
-		// console.log('navigated back to aspen');
-		// only work if its cpsd.us, there are some edge cases where it was trying to load the wrong url and hanging
+
+		await page.click(passwordSelector);
+		await new Promise((r) => setTimeout(r, 500));
+		await page.type(passwordSelector, password);
+
+		await Promise.all([
+			page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 }),
+			page.keyboard.press('Enter')
+		]);
+
 		const currentUrl = page.url();
 		if (currentUrl.includes('.cpsd.us')) {
-			// console.log('got aspen');
 			const jsessionid = currentUrl.match(/jsessionid=([^&]*)/)![1];
-
-			// store the session id as a cooky
 			await page.setCookie({
 				name: 'JSESSIONID',
 				value: jsessionid,
 				domain: '.cpsd.us',
 				path: '/'
-				//maxAge: 900 // im guessing 15 min for session length
-			}); // TODO: whenever we need to get something from aspen, if the request fails, expire the cookie
-			// console.log('set cookie')
-			// console.log('JSESSIONID:', jsessionid);
+			});
 			const page_content = await page.content();
 			const [, apache_token] =
-				/name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
+				(/name="org.apache.struts.taglib.html.TOKEN" value="(.+)"/.exec(
 					page_content
-				) as RegExpExecArray;
+				) as RegExpExecArray);
 			await browser.close();
-			// console.log('browser closed');
-			// return the session
-			return callback({ session_id: jsessionid, apache_token });
+
+			console.log('session successfully retrieved');
+			return { session_id: jsessionid, apache_token, timestamp: Date.now() };
 		} else {
-			console.error('not a district domain: ' + currentUrl);
+			console.error('not a district domain:', currentUrl);
 			await browser.close();
-			return new Response(
-				JSON.stringify({ error: 'not a district domain (json)' }),
-				{
-					status: 400,
-					headers: { 'Content-Type': 'application/json' }
-				}
-			);
+			throw new Error('not a district domain');
 		}
 	} catch (error) {
-		console.error('puppet not happy :c so heres the error:', error);
+		console.error('puppet execution failed with error:', error);
 		await browser.close();
-		return new Response(JSON.stringify({ error: 'something went wrong' }), {
-			status: 500,
-			headers: { 'Content-Type': 'application/json' }
-		});
+		throw error;
 	}
 }
 
-// Code for testing purposes
-if (require.main === module) {
-	get_student(
-		process.env.USERNAME || '',
-		process.env.PASSWORD || '',
-		1,
-		Year.Previous
-	).then(console.log, (e) => {
-		if (e.message === AspineErrorCode.LOGINFAIL) {
-			console.error(`Error: ${e.message}`);
-		} else {
-			console.error(e);
+async function obtain_session(username: string, password: string): Promise<ActiveSession> {
+	if (pendingSessions.has(username)) {
+		return await pendingSessions.get(username)!;
+	}
+
+	const cached = sessionCache.get(username);
+	if (cached && Date.now() - cached.timestamp < 15 * 60 * 1000) {
+		return cached;
+	}
+
+	const sessionPromise = create_session(username, password);
+	pendingSessions.set(username, sessionPromise);
+
+	try {
+		const session = await sessionPromise;
+		sessionCache.set(username, session);
+		return session;
+	} catch (e) {
+		sessionCache.delete(username);
+		throw e;
+	} finally {
+		pendingSessions.delete(username);
+	}
+}
+
+export async function get_session<T>(
+	username: string,
+	password: string,
+	callback: (session: Session) => Promise<T>
+): Promise<T> {
+	let activeSession = await obtain_session(username, password);
+
+	try {
+		return await callback({
+			session_id: activeSession.session_id,
+			apache_token: activeSession.apache_token
+		});
+	} catch (error: any) {
+		if (
+			error?.message === AspineErrorCode.LOGINFAIL ||
+			error?.message?.includes('loginfail')
+		) {
+			console.log('Session invalidated by Aspen server. Clearing cache and retrying...');
+			sessionCache.delete(username);
+			activeSession = await obtain_session(username, password);
+			return await callback({
+				session_id: activeSession.session_id,
+				apache_token: activeSession.apache_token
+			});
 		}
-	});
+		throw error;
+	}
 }

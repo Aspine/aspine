@@ -49,10 +49,10 @@ module.exports.files = new Map([
 		'/vendor/tabulator/tabulator.min.js',
 		'/node_modules/tabulator-tables/dist/js/tabulator.min.js'
 	],
-	['/vendor/pdf.js/pdf.min.js', '/node_modules/pdfjs-dist/build/pdf.min.js'],
+	['/vendor/pdf.js/pdf.js', '/node_modules/pdfjs-dist/build/pdf.mjs'],
 	[
-		'/vendor/pdf.js/pdf.worker.min.js',
-		'/node_modules/pdfjs-dist/build/pdf.worker.min.js'
+    	'/vendor/pdf.js/pdf.worker.js',
+    	'/node_modules/pdfjs-dist/build/pdf.worker.mjs'
 	],
 	[
 		'/vendor/file-saver/FileSaver.min.js',
